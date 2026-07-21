@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RCW — Rhino 커튼월 설계·가공 자동화 플러그인</title>
+<style>
+  :root{
+    --brand:#0066cc; --brand-d:#003d80; --ink:#0f172a; --muted:#5b6b80;
+    --line:#e2e8f0; --bg:#f4f6fa; --card:#ffffff; --accent:#f59e0b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Inter','Pretendard','Malgun Gothic','맑은 고딕',sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;font-size:15px}
+  a{color:var(--brand);text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+  /* nav */
+  header.nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{font-weight:800;font-size:19px;color:var(--brand-d);letter-spacing:.5px}
+  .logo span{color:var(--brand)}
+  .nav a{margin-left:18px;color:var(--muted);font-size:14px;font-weight:600}
+  .nav a:hover{color:var(--brand)}
+  .btn{display:inline-block;background:var(--brand);color:#fff;padding:11px 22px;border-radius:8px;font-weight:700;font-size:14px;box-shadow:0 4px 12px rgba(0,102,204,.25);transition:.15s}
+  .btn:hover{background:var(--brand-d);transform:translateY(-1px)}
+  .btn.ghost{background:#fff;color:var(--brand);border:1px solid #b9d3f0;box-shadow:none}
+  /* hero */
+  .hero{background:linear-gradient(135deg,#0b1b3a 0%,#16498c 60%,#1e63b8 100%);color:#fff;padding:62px 0 76px}
+  .hero h1{font-size:38px;font-weight:800;line-height:1.25;margin:0 0 16px}
+  .hero .sub{font-size:17px;color:#d4e3f7;max-width:620px;margin:0 0 26px}
+  .hero .badge{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:5px 13px;border-radius:999px;font-size:12.5px;font-weight:700;margin-bottom:18px}
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:-40px auto 0;position:relative;z-index:5}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 8px 20px rgba(15,23,42,.06)}
+  .stat b{display:block;font-size:25px;color:var(--brand-d);font-weight:800;line-height:1.1}
+  .stat span{font-size:12.5px;color:var(--muted)}
+  /* sections */
+  section{padding:56px 0}
+  .eyebrow{color:var(--brand);font-weight:800;font-size:13px;letter-spacing:1px;text-transform:uppercase;margin:0 0 8px}
+  h2.sec{font-size:27px;font-weight:800;margin:0 0 10px;color:var(--ink)}
+  .lead{color:var(--muted);max-width:700px;margin:0 0 30px}
+  /* value cards */
+  .val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .val{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+  .val .ic{width:42px;height:42px;border-radius:10px;background:#eaf2fd;color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px}
+  .val h3{margin:0 0 6px;font-size:16px}
+  .val p{margin:0;color:var(--muted);font-size:14px}
+  .val .small{font-size:12.5px;color:#94a3b8;margin-top:8px;display:block}
+  /* feature rows */
+  .feat{display:grid;grid-template-columns:1.02fr .98fr;gap:40px;align-items:center;margin-bottom:50px}
+  .feat:nth-child(even) .feat-txt{order:2}
+  .feat h3{font-size:21px;margin:0 0 10px}
+  .feat .prob{color:var(--accent);font-weight:700;font-size:13.5px;margin:0 0 6px}
+  .feat ul{margin:12px 0 0;padding-left:18px;color:var(--muted)}
+  .feat ul li{margin-bottom:6px}
+  .tag{display:inline-block;background:#eaf2fd;color:var(--brand-d);font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+  .pills span{background:#eaf2fd;color:var(--brand-d);font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px}
+  /* workflow */
+  .flow{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;counter-reset:s}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 12px;position:relative}
+  .step:before{counter-increment:s;content:counter(s);position:absolute;top:-12px;left:14px;width:26px;height:26px;background:var(--brand);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .step h4{margin:8px 0 4px;font-size:14px}
+  .step p{margin:0;font-size:12px;color:var(--muted)}
+  /* gallery */
+  .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  /* dark sections */
+  .dark-sec{background:#0b1b3a;color:#fff}
+  .dark-sec h2.sec,.dark-sec .eyebrow{color:#fff}.dark-sec .lead{color:#b9c6da}
+  .dark-sec .val{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+  .dark-sec .val h3{color:#fff}.dark-sec .val p{color:#b9c6da}.dark-sec .val .ic{background:rgba(255,255,255,.1);color:#7fb2f0}
+  /* cta */
+  .cta{background:linear-gradient(135deg,#1e63b8,#0b1b3a);color:#fff;border-radius:16px;padding:44px;text-align:center}
+  .cta h2{font-size:26px;margin:0 0 10px}
+  .cta p{color:#d4e3f7;margin:0 0 22px}
+  /* ===== 이미지 자리(플레이스홀더) ===== */
+  .ph{position:relative;border:2px dashed #b9c6da;border-radius:12px;
+      background:repeating-linear-gradient(45deg,#f4f8fd,#f4f8fd 11px,#eaf1fb 11px,#eaf1fb 22px);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;color:var(--muted)}
+  .ph .ph-id{position:absolute;top:10px;left:10px;background:var(--brand);color:#fff;font-size:11px;font-weight:800;padding:3px 9px;border-radius:6px;letter-spacing:.5px}
+  .ph .ph-ico{font-size:30px;opacity:.45;margin-bottom:6px}
+  .ph .ph-title{font-weight:800;color:var(--brand-d);font-size:15px;margin-bottom:5px}
+  .ph .ph-desc{font-size:12.5px;max-width:320px;line-height:1.55}
+  .ph .ph-ratio{position:absolute;bottom:8px;right:11px;font-size:11px;font-weight:700;color:#9fb0c6}
+  .ph.dark{border-color:rgba(255,255,255,.28);
+      background:repeating-linear-gradient(45deg,rgba(255,255,255,.04),rgba(255,255,255,.04) 11px,rgba(255,255,255,.07) 11px,rgba(255,255,255,.07) 22px);color:#b9c6da}
+  .ph.dark .ph-title{color:#cfe0f5}.ph.dark .ph-ratio{color:#7e93ad}
+  .r169{aspect-ratio:16/9}.r1610{aspect-ratio:16/10}.r43{aspect-ratio:4/3}.r21{aspect-ratio:21/9}
+  footer{padding:30px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--line);text-align:center}
+  @media(max-width:860px){
+    .hero-grid,.feat{grid-template-columns:1fr}.feat:nth-child(even) .feat-txt{order:0}
+    .stats{grid-template-columns:repeat(2,1fr)}.val-grid,.gal{grid-template-columns:1fr}
+    .flow{grid-template-columns:1fr 1fr}.hero h1{font-size:30px}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav"><div class="wrap nav-in">
+  <div class="logo">RCW <span>커튼월 플러그인</span></div>
+  <nav class="nav">
+    <a href="#value">도입 효과</a>
+    <a href="#features">핵심 기능</a>
+    <a href="#gallery">산출물</a>
+    <a href="#flow">워크플로우</a>
+    <a href="features.html">기능 브로셔</a>
+    <a class="btn" href="#contact" style="color:#fff;margin-left:18px">문의하기</a>
+  </nav>
+</div></header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="badge">Rhino · AutoCAD · BricsCAD 지원 · V4.13.3</span>
+      <h1>커튼월 설계부터<br>제작 가공도·NC까지,<br>모델 하나로 자동화</h1>
+      <p class="sub">RCW는 Rhino 기반 커튼월 통합 모델링과 제작 도면·NC 데이터·물량 산출을 자동화하는 전문 플러그인입니다. 반복 작업을 줄이고, 도면 오류를 없애고, 설계–가공 데이터를 하나로 연결합니다.</p>
+      <div class="cta-row">
+        <a class="btn" href="#contact">데모 요청</a>
+        <a class="btn ghost" href="features.html">기능 자세히 보기</a>
+      </div>
+    </div>
+    <div class="ph r169">
+      <span class="ph-id">IMG-01</span>
+      <div class="ph-ico">🖼️</div>
+      <div class="ph-title">메인 비주얼 (Hero)</div>
+      <div class="ph-desc">완성된 커튼월 3D 모델 렌더 <b>또는</b> 완성 가공도 풀샷.<br>가장 “와!” 하는 대표 이미지. 깔끔한 배경.</div>
+      <span class="ph-ratio">16:9 권장</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="wrap"><div class="stats">
+  <div class="stat"><b>~80%↓</b><span>제작 도면 작성 시간<br>(실측치로 교체 예정)</span></div>
+  <div class="stat"><b>1-Click</b><span>모델 → 가공도 자동</span></div>
+  <div class="stat"><b>3 CAD</b><span>Rhino · AutoCAD · BricsCAD</span></div>
+  <div class="stat"><b>NC·BIM</b><span>가공·데이터 연동</span></div>
+</div></div>
+
+<!-- BEFORE / AFTER -->
+<section id="ba"><div class="wrap">
+  <p class="eyebrow">한눈에 보는 차이</p>
+  <h2 class="sec">수작업 도면 vs RCW 자동 도면</h2>
+  <p class="lead">같은 부재를 사람이 그릴 때와 RCW로 생성할 때를 비교합니다. 시간·정확도·일관성의 차이를 한 장으로 보여줍니다.</p>
+  <div class="feat" style="margin-bottom:0">
+    <div class="ph r1610">
+      <span class="ph-id">IMG-02</span>
+      <div class="ph-ico">✋</div>
+      <div class="ph-title">Before — 수작업 도면</div>
+      <div class="ph-desc">기존 방식(빈 모델 또는 손으로 작도 중인 도면). 비교 기준이 되는 “전(前)” 장면.</div>
+      <span class="ph-ratio">16:10</span>
+    </div>
+    <div class="ph r1610">
+      <span class="ph-id">IMG-03</span>
+      <div class="ph-ico">⚡</div>
+      <div class="ph-title">After — RCW 자동 도면</div>
+      <div class="ph-desc">같은 부재를 RCW로 생성한 완성 가공도. IMG-02와 같은 구도/스케일로.</div>
+      <span class="ph-ratio">16:10</span>
+    </div>
+  </div>
+</div></section>
+
+<!-- VALUE -->
+<section id="value" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <p class="eyebrow">왜 RCW인가</p>
+  <h2 class="sec">도입하면 무엇이 달라지나</h2>
+  <p class="lead">반복적인 도면·물량 작업을 자동화해 인력과 시간을 절감하고, 사람이 만들던 오류를 구조적으로 제거합니다. 설계 변경이 가공 데이터까지 일관되게 반영됩니다.</p>
+  <div class="val-grid">
+    <div class="val"><div class="ic">⚡</div><h3>제작 준비 시간 단축</h3><p>모델 한 번으로 입면·단면·치수·홀 정보가 담긴 제작 가공도를 자동 생성. 수작업 작도 대비 대폭 단축됩니다.</p></div>
+    <div class="val"><div class="ic">✓</div><h3>도면 오류 감소</h3><p>치수·홀·물량을 모델에서 직접 산출하므로 옮겨 적다 생기는 실수가 사라지고 도면 일관성이 유지됩니다.</p></div>
+    <div class="val"><div class="ic">🔗</div><h3>설계–가공 데이터 연결</h3><p>NC 홀 좌표, 컷팅·물량 리스트, BIM 데이터, 웹뷰어까지 같은 모델에서 추출해 후공정으로 끊김 없이 전달합니다.</p></div>
+    <div class="val"><div class="ic">🔄</div><h3>변경에 강함</h3><p>설계가 바뀌어도 재모델링 후 가공도를 다시 생성하면 저장된 스타일이 그대로 재현됩니다. 변경분만 반영됩니다.</p></div>
+    <div class="val"><div class="ic">🧩</div><h3>기존 워크플로우와 호환</h3><p>Rhino 결과를 AutoCAD/BricsCAD 작업과 연계. 현장에서 쓰던 CAD 환경을 그대로 활용합니다.</p></div>
+    <div class="val"><div class="ic">📈</div><h3>반복 품목에 강함</h3><p>유닛·멀리언·트랜섬·유리·벤트·그릴·백패널을 규칙으로 모델링해 물량이 많은 프로젝트일수록 효과가 커집니다.</p></div>
+  </div>
+</div></section>
+
+<!-- FEATURES -->
+<section id="features"><div class="wrap">
+  <p class="eyebrow">핵심 기능</p>
+  <h2 class="sec">설계자·가공 담당자를 위한 실무 기능</h2>
+  <p class="lead">실제 제작 현장의 흐름에 맞춰 설계된 기능들입니다. 각 기능을 “문제 → 해결”로 보여줍니다.</p>
+
+  <!-- F1 모델링 -->
+  <div class="feat">
+    <div class="feat-txt">
+      <span class="tag">통합 모델링</span>
+      <p class="prob">문제 — 부재 하나하나 수동 모델링은 느리고, 설계 변경 때마다 다시 만들어야 한다.</p>
+      <h3>커튼월 전체를 규칙으로 모델링</h3>
+      <p>와이어프레임에 단면(Section)을 입히면 유닛 전체가 자동 생성됩니다. 설계 변경은 재모델링으로 일괄 반영됩니다.</p>
+      <ul>
+        <li>프로파일 단면 데이터 기반 유닛 전체 자동 결합</li>
+        <li>설계 변경 시 일괄 반영, 오류 시 RollBack</li>
+        <li>각 구성요소마다 번호·리스트·테이블 자동 연동</li>
+      </ul>
+      <div class="pills"><span>Unit</span><span>Mullion</span><span>Transom</span><span>유리</span><span>벤트</span><span>그릴</span><span>백패널</span></div>
+    </div>
+    <div class="ph r1610">
+      <span class="ph-id">GIF-04</span>
+      <div class="ph-ico">🎬</div>
+      <div class="ph-title">통합 모델링 데모</div>
+      <div class="ph-desc">와이어프레임 → 단면 적용 → 유닛 생성까지. 뷰포트만, 흰 배경, UI 최소화.</div>
+      <span class="ph-ratio">16:10</span>
+    </div>
+  </div>
+
+  <!-- F2 가공도 자동화 -->
+  <div class="feat">
+    <div class="feat-txt">
+      <span class="tag">제작 가공도 자동화</span>
+      <p class="prob">문제 — 같은 단면의 부재마다 도면 스타일을 매번 다시 잡는다.</p>
+      <h3>한 번 만들면, 나머지는 자동 재현</h3>
+      <p>가공도를 한 번 원하는 형태로 완성해 두면(<b>기록</b>), 같은 단면의 다른 부재에 같은 구성·스타일이 그대로 재현됩니다(<b>재생</b>). 첫 도면에만 공들이면 됩니다.</p>
+      <ul>
+        <li>View별 2D·단면·치수·Fab No, 홀 <b>관통 깊이 Hidden Line</b> 표시</li>
+        <li>NC 홀 테이블 · 부속 자재(BOM) 표 · 회사 도면 양식까지 한 장에</li>
+        <li>치수·주석·부속 라벨 위치까지 저장해 다른 부재에 자동 재현</li>
+      </ul>
+      <div class="pills"><span>① 기록</span><span>② 재생</span><span>③ 일괄 재생 (FDDS)</span></div>
+    </div>
+    <div class="ph r1610">
+      <span class="ph-id">GIF-05</span>
+      <div class="ph-ico">🎬</div>
+      <div class="ph-title">FDstyle 기록 → 재생 데모</div>
+      <div class="ph-desc">한 부재 가공도를 잡고, 다른 부재에 자동 재현되는 장면. 가능하면 “기록”과 “재생(FDDS)” 두 컷.</div>
+      <span class="ph-ratio">16:10</span>
+    </div>
+  </div>
+
+  <!-- F3 입면도 -->
+  <div class="feat">
+    <div class="feat-txt">
+      <span class="tag">2D 입면도 · 전개도</span>
+      <p class="prob">문제 — 발주·검토용 2D 도면을 모델과 따로 그리면 불일치가 생긴다.</p>
+      <h3>모델에서 입면도·전개도를 바로 작성</h3>
+      <p>3D 모델을 기준으로 발주·검토용 2D 도면을 자동 생성합니다. 모델과 항상 일치합니다.</p>
+      <ul>
+        <li>유닛 입면·전개·정면·단면 도면을 모델 기준으로 자동 생성</li>
+        <li>프로파일 단면 도면, 도면 세트 구성까지 한 흐름으로</li>
+        <li>입면 제작 리스트 라벨 — <b>입면 번호</b> 또는 <b>TextBox 리더</b> 선택</li>
+      </ul>
+      <div class="pills"><span>UF2d</span><span>U2d</span><span>F2d</span><span>S2d</span><span>Psection</span></div>
+    </div>
+    <div class="ph r1610">
+      <span class="ph-id">GIF-06</span>
+      <div class="ph-ico">🎬</div>
+      <div class="ph-title">입면도·전개도 작성 데모</div>
+      <div class="ph-desc">3D 모델 → UF2d/F2d 등 2D 도면 생성 장면. 뷰포트만, 흰 배경.</div>
+      <span class="ph-ratio">16:10</span>
+    </div>
+  </div>
+
+  <!-- F4 Fablist 라벨 -->
+  <div class="feat">
+    <div class="feat-txt">
+      <span class="tag">제작 리스트 라벨</span>
+      <p class="prob">문제 — 입면 자재 표기 방식이 회사·담당자마다 다르다.</p>
+      <h3>입면에 맞는 표기를 선택 — 입면 번호 / TextBox 리더</h3>
+      <p><b>Fablist</b>는 도면 세트용 제작 리스트 표를 만들고, 입면에는 두 가지 라벨 방식 중 선호하는 것을 표시합니다. 기본값으로 저장하면 이후 자동 적용됩니다.</p>
+      <ul>
+        <li><b>입면 번호(TypeA)</b> — 솔리드마다 원+번호 지시선, 표의 NO와 1:1 대응</li>
+        <li><b>TextBox 리더(TypeB)</b> — 멤버별 ProfileName·Fab번호·수량 미니 테이블</li>
+        <li>글자 크기와 함께 기본값으로 저장 → 이후 자동 적용</li>
+      </ul>
+    </div>
+    <div class="ph r1610">
+      <span class="ph-id">GIF-07 · 08</span>
+      <div class="ph-ico">🎬🎬</div>
+      <div class="ph-title">Fablist 라벨 2종 (번갈아 표시용)</div>
+      <div class="ph-desc"><b>2개</b> 준비 — ①입면 번호(TypeA) ②TextBox 리더(TypeB). 같은 입면을 같은 구도로 각각. (전환 뷰어로 묶을 예정)</div>
+      <span class="ph-ratio">16:10 (동일 구도)</span>
+    </div>
+  </div>
+
+  <!-- F5 NC/물량 -->
+  <div class="feat">
+    <div class="feat-txt">
+      <span class="tag">가공 데이터 · 물량</span>
+      <p class="prob">문제 — 홀 좌표·물량을 도면에서 일일이 옮겨 적다 오류가 난다.</p>
+      <h3>NC 홀 데이터와 리스트 자동 산출</h3>
+      <p>가공·구매에 바로 쓰는 데이터를 모델에서 추출합니다.</p>
+      <ul>
+        <li>NC3~NC6 홀 좌표 테이블(원점·정렬·Gap 옵션, 장공 검출)</li>
+        <li>컷팅 리스트 · 자재(물량) 리스트 · Fab Table 자동 작성</li>
+        <li>레이어별 길이/면적 집계(LSum / ASum)를 도면에 표로</li>
+      </ul>
+      <div class="pills"><span>NC3~NC6</span><span>Cutting List</span><span>Material List</span><span>LSum</span><span>ASum</span></div>
+    </div>
+    <div class="ph r1610">
+      <span class="ph-id">GIF-09</span>
+      <div class="ph-ico">🎬</div>
+      <div class="ph-title">NC·물량 산출 데모</div>
+      <div class="ph-desc">홀 인식 → NC 좌표표 생성 또는 컷팅/물량 리스트 출력 장면.</div>
+      <span class="ph-ratio">16:10</span>
+    </div>
+  </div>
+
+  <!-- F6 BIM/웹 -->
+  <div class="feat">
+    <div class="feat-txt">
+      <span class="tag">데이터 연동 · 공유</span>
+      <p class="prob">문제 — 모델 정보가 후공정·협업으로 매끄럽게 넘어가지 않는다.</p>
+      <h3>BIM 데이터 · 3D 웹뷰어</h3>
+      <p>모델 정보를 후공정·협업으로 확장합니다.</p>
+      <ul>
+        <li>모델 속성 기반 BIM 데이터(FLdata / FLOpt) 추출·관리</li>
+        <li>WebViewer로 3D 모델을 웹에서 공유·확인(속도·용량 개선)</li>
+        <li>AutoCAD / BricsCAD 작업 유틸리티 세트 제공</li>
+      </ul>
+      <div class="pills"><span>FLdata</span><span>FLOpt</span><span>WebV</span><span>ToWebFile</span></div>
+    </div>
+    <div class="ph r1610">
+      <span class="ph-id">GIF-10</span>
+      <div class="ph-ico">🎬</div>
+      <div class="ph-title">웹뷰어 / BIM 데이터 데모</div>
+      <div class="ph-desc">3D 모델을 웹에서 회전·확인하는 장면, 또는 BIM 속성 추출 화면.</div>
+      <span class="ph-ratio">16:10</span>
+    </div>
+  </div>
+</div></section>
+
+<!-- GALLERY (결과물) -->
+<section id="gallery" class="dark-sec"><div class="wrap">
+  <p class="eyebrow">산출물 갤러리</p>
+  <h2 class="sec">RCW가 만들어 주는 결과물</h2>
+  <p class="lead">과정이 아니라 “받게 될 산출물”을 보여줍니다. 각 카드는 실제 출력물 한 장으로 채웁니다. (모두 같은 4:3 구도로 캡처하면 정돈돼 보입니다.)</p>
+  <div class="gal">
+    <div class="ph dark r43"><span class="ph-id">IMG-11</span><div class="ph-ico">📐</div><div class="ph-title">완성 제작 가공도 ★</div><div class="ph-desc">입면+단면+치수+홀+NC표+BOM+양식이 한 장에. 가장 중요한 결과물.</div><span class="ph-ratio">4:3</span></div>
+    <div class="ph dark r43"><span class="ph-id">IMG-12</span><div class="ph-ico">🕳️</div><div class="ph-title">NC 홀 좌표 테이블</div><div class="ph-desc">원점·치수·좌표표가 담긴 NC3~6 결과 (예: 기존 NC 표 이미지 활용 가능).</div><span class="ph-ratio">4:3</span></div>
+    <div class="ph dark r43"><span class="ph-id">IMG-13</span><div class="ph-ico">📋</div><div class="ph-title">부속 자재(BOM) 표</div><div class="ph-desc">bracket·sleeve·attach 집계 표.</div><span class="ph-ratio">4:3</span></div>
+    <div class="ph dark r43"><span class="ph-id">IMG-14</span><div class="ph-ico">✂️</div><div class="ph-title">컷팅 / 물량 리스트</div><div class="ph-desc">프레임 컷팅·자재 물량 리스트 출력.</div><span class="ph-ratio">4:3</span></div>
+    <div class="ph dark r43"><span class="ph-id">IMG-15</span><div class="ph-ico">🏢</div><div class="ph-title">유닛 입면도 / 전개도</div><div class="ph-desc">UF2d/U2d 등 완성 2D 입면 도면.</div><span class="ph-ratio">4:3</span></div>
+    <div class="ph dark r43"><span class="ph-id">IMG-16</span><div class="ph-ico">🏷️</div><div class="ph-title">부속 라벨 상세</div><div class="ph-desc">입면 번호 또는 TextBox 리더 라벨이 적용된 입면 일부 확대.</div><span class="ph-ratio">4:3</span></div>
+  </div>
+</div></section>
+
+<!-- 이형 모델링 -->
+<section id="atypical"><div class="wrap">
+  <p class="eyebrow">이형·비정형 대응</p>
+  <h2 class="sec">정형뿐 아니라 비정형 입면도</h2>
+  <p class="lead">경사·꺾임·단차·각도 변화가 있는 비정형(이형) 커튼월도 규칙 기반으로 모델링하여 가공도·물량까지 동일하게 산출합니다. <span style="color:#94a3b8">(자유곡면(스윕) 대응은 순차 확대 중)</span></p>
+  <div class="feat" style="margin-bottom:0">
+    <div class="ph r43"><span class="ph-id">IMG-17</span><div class="ph-ico">🏗️</div><div class="ph-title">이형 구조 모델 1</div><div class="ph-desc">패널 분할로 구현한 비정형 커튼월 3D (기존 곡면형 모델 활용 가능).</div><span class="ph-ratio">4:3</span></div>
+    <div class="ph r43"><span class="ph-id">IMG-18</span><div class="ph-ico">🏗️</div><div class="ph-title">이형 구조 모델 2</div><div class="ph-desc">다른 각도 또는 다른 비정형 사례.</div><span class="ph-ratio">4:3</span></div>
+  </div>
+</div></section>
+
+<!-- WORKFLOW -->
+<section id="flow" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <p class="eyebrow">워크플로우</p>
+  <h2 class="sec">모델 한 번, 산출물은 자동으로</h2>
+  <p class="lead">와이어프레임에서 가공 데이터까지 하나의 흐름으로 이어집니다.</p>
+  <div class="flow">
+    <div class="step"><h4>Wire Frame</h4><p>Mullion·Transom 배치</p></div>
+    <div class="step"><h4>Section</h4><p>Profile 데이터 입력</p></div>
+    <div class="step"><h4>Section 선택</h4><p>작업 대상 지정(SSP)</p></div>
+    <div class="step"><h4>3D 모델링</h4><p>Frame·Glass·Vent 생성</p></div>
+    <div class="step"><h4>번호 부여</h4><p>FabNo 자동 매기기</p></div>
+    <div class="step"><h4>리스트·도면</h4><p>수량·가공도 출력</p></div>
+  </div>
+</div></section>
+
+<!-- TRUST -->
+<section class="dark-sec"><div class="wrap">
+  <p class="eyebrow">신뢰할 수 있는 이유</p>
+  <h2 class="sec">완성도와 지속성</h2>
+  <p class="lead">단발성 도구가 아니라, 문서·다국어·지속 업데이트를 갖춘 제품입니다.</p>
+  <div class="val-grid">
+    <div class="val"><div class="ic">📚</div><h3>내장 다국어 도움말</h3><p>모든 명령에 한국어·영어 HTML 도움말을 제품에 내장.</p><span class="small">350+ 도움말 페이지 내장</span></div>
+    <div class="val"><div class="ic">🔄</div><h3>지속적인 업데이트</h3><p>기능 추가·오류 수정을 버전별로 관리(현재 V4.13.3). 실행 시 새 기능을 안내합니다.</p></div>
+    <div class="val"><div class="ic">🛠️</div><h3>현장 검증 기능</h3><p>실제 커튼월 제작 흐름(가공도·NC·물량)에 맞춰 설계되어 바로 실무에 투입할 수 있습니다.</p></div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section id="contact"><div class="wrap">
+  <div class="cta">
+    <h2>도입 상담 · 데모를 신청하세요</h2>
+    <p>프로젝트 규모와 사용 환경(Rhino/AutoCAD/BricsCAD)에 맞춰 안내해 드립니다.</p>
+    <a class="btn ghost" href="mailto:beimptech@gmail.com" style="font-size:16px">beimptech@gmail.com</a>
+  </div>
+</div></section>
+
+<footer><div class="wrap">© 2026 RCW. All rights reserved. · Rhino Curtain Wall Plugin V4.13.3</div></footer>
+
+</body>
+</html>

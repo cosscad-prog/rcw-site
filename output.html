@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RCW V5가 하나의 커튼월 3D 모델에서 제작 번호, 자재·절단 리스트, 가공도와 Unit 문서를 만드는 과정을 소개합니다.">
+  <meta name="theme-color" content="#ffffff">
+  <title>RCW V5 — 모델 하나에서 제작에 필요한 자료까지</title>
+  <style>
+    :root {
+      --ink:#101828; --muted:#667085; --line:#e4e7ec; --paper:#fff;
+      --mist:#f7f9fc; --navy:#101f3d; --blue:#2667d9; --blue-dark:#17499e;
+      --sky:#eaf1ff; --mint:#d9fbe8; --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; overflow-x:hidden; color:var(--ink); background:var(--paper); font:16px/1.65 Inter,Pretendard,"Noto Sans KR","Malgun Gothic",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    img { display:block; max-width:100%; }
+    h1,h2,h3,p { margin-top:0; }
+    .wrap { width:min(1140px,calc(100% - 40px)); margin:auto; }
+    .eyebrow { margin:0 0 10px; color:var(--blue); font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h2 { max-width:820px; margin-bottom:14px; font-size:clamp(29px,4vw,46px); line-height:1.13; letter-spacing:-.045em; word-break:keep-all; }
+    .lead { max-width:720px; color:var(--muted); font-size:18px; word-break:keep-all; }
+    .button { display:inline-flex; min-height:48px; align-items:center; justify-content:center; gap:8px; padding:0 20px; border:1px solid transparent; border-radius:10px; background:var(--blue); color:#fff; font-weight:750; transition:.2s ease; cursor:pointer; }
+    .button:hover { transform:translateY(-2px); background:var(--blue-dark); box-shadow:0 12px 28px rgba(38,103,217,.22); }
+    .button.secondary { border-color:#c9d5ed; background:#fff; color:var(--blue-dark); }
+    .button.secondary:hover { background:var(--sky); box-shadow:none; }
+
+    .nav { position:sticky; top:0; z-index:20; border-bottom:1px solid rgba(228,231,236,.8); background:rgba(255,255,255,.9); backdrop-filter:blur(14px); }
+    .nav-inner { display:flex; height:66px; align-items:center; justify-content:space-between; gap:18px; }
+    .wordmark { display:flex; align-items:center; gap:9px; font-size:18px; font-weight:850; letter-spacing:-.03em; }
+    .mark { display:grid; width:29px; height:29px; place-items:center; border-radius:8px; background:var(--blue); color:#fff; font-size:11px; letter-spacing:-.07em; }
+    .nav-links { display:flex; align-items:center; gap:22px; color:#475467; font-size:14px; font-weight:650; }
+    .nav-links a:hover { color:var(--blue); }
+    .nav-right { display:flex; align-items:center; gap:11px; }
+    .nav .button { min-height:38px; padding:0 15px; font-size:13px; }
+    .lang { min-width:54px; height:36px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:#344054; font:750 12px/1 inherit; cursor:pointer; transition:.15s; }
+    .lang:hover { border-color:#b9cbee; color:var(--blue); }
+
+    .hero { overflow:hidden; padding:72px 0 56px; background:radial-gradient(circle at 87% 8%,#dce9ff 0,transparent 29%),linear-gradient(180deg,#f9fbff 0%,#fff 90%); }
+    .hero-grid { display:grid; grid-template-columns:.95fr 1.05fr; align-items:center; gap:56px; }
+    .hero-grid > * { min-width:0; }
+    .pill { display:inline-flex; align-items:center; gap:8px; margin-bottom:19px; padding:6px 11px; border:1px solid #cad8f4; border-radius:999px; background:#fff; color:#315b9d; font-size:12px; font-weight:800; }
+    .pill::before { width:7px; height:7px; border-radius:50%; background:#20a864; content:""; }
+    h1 { margin-bottom:19px; font-size:clamp(42px,5.4vw,68px); line-height:1.03; letter-spacing:-.065em; word-break:keep-all; }
+    .hero h1 em { color:var(--blue); font-style:normal; }
+    .hero-copy { max-width:610px; margin-bottom:27px; color:#475467; font-size:18px; word-break:keep-all; }
+    .button-row { display:flex; flex-wrap:wrap; gap:11px; }
+    .micro { margin:14px 0 0; color:#667085; font-size:12px; }
+    .hero-art { position:relative; min-height:470px; }
+    .hero-image { position:absolute; inset:0 0 16px; width:100%; height:100%; object-fit:contain; padding:12px; border:1px solid #d8e1f0; border-radius:var(--radius); background:#f4f6f8; box-shadow:0 22px 50px rgba(16,31,61,.17); }
+    .hero-card { position:absolute; right:-14px; bottom:-4px; width:min(300px,69%); padding:16px; border:1px solid #dbe3f0; border-radius:14px; background:rgba(255,255,255,.95); box-shadow:0 16px 32px rgba(16,31,61,.14); backdrop-filter:blur(8px); }
+    .hero-card b { display:block; margin-bottom:2px; font-size:14px; word-break:keep-all; }
+    .hero-card span { display:block; color:var(--muted); font-size:12.5px; word-break:keep-all; }
+
+    .strip { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:#fff; }
+    .strip-grid { display:grid; grid-template-columns:repeat(4,1fr); }
+    .strip-item { min-height:104px; padding:25px 24px; border-right:1px solid var(--line); }
+    .strip-item:last-child { border:0; }
+    .strip-item b { display:block; margin-bottom:2px; font-size:17px; letter-spacing:-.02em; }
+    .strip-item span { color:var(--muted); font-size:13px; }
+
+    section { padding:104px 0; }
+    .benefits { background:var(--mist); }
+    .benefit-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:34px; }
+    .benefit { min-height:220px; padding:26px; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .icon { display:grid; width:43px; height:43px; place-items:center; margin-bottom:20px; border-radius:11px; background:var(--sky); color:var(--blue); font-size:15px; font-weight:850; }
+    .benefit h3 { margin-bottom:8px; font-size:18px; letter-spacing:-.025em; word-break:keep-all; }
+    .benefit p { margin:0; color:var(--muted); font-size:14px; word-break:keep-all; }
+
+    .feature-head { margin-bottom:70px; }
+    .feature { display:grid; grid-template-columns:1fr 1fr; gap:62px; align-items:center; margin-bottom:112px; }
+    .feature:last-child { margin-bottom:0; }
+    .feature.reverse .feature-copy { order:2; }
+    .feature figure { position:relative; margin:0; overflow:hidden; border:1px solid #dce3ee; border-radius:15px; background:#f1f5fb; box-shadow:0 16px 38px rgba(16,31,61,.08); }
+    .feature figure img { width:100%; aspect-ratio:16/10; object-fit:cover; background:#60666c; }
+    .feature figure.contain img { object-fit:contain; padding:12px; background:#f5f7fa; }
+    .feature figcaption { min-height:48px; padding:11px 14px; color:#667085; background:#fff; font-size:12px; word-break:keep-all; }
+    .feature h3 { margin-bottom:12px; font-size:31px; line-height:1.15; letter-spacing:-.04em; word-break:keep-all; }
+    .feature p { color:var(--muted); word-break:keep-all; }
+    .feature ul { margin:17px 0 0; padding:0; list-style:none; }
+    .feature li { position:relative; margin:10px 0; padding-left:25px; color:#475467; word-break:keep-all; }
+    .feature li::before { position:absolute; top:5px; left:0; width:14px; height:14px; border-radius:50%; background:var(--mint); color:#07844b; content:"✓"; font-size:10px; font-weight:900; line-height:14px; text-align:center; }
+    .tag { display:inline-block; margin-bottom:11px; padding:4px 9px; border-radius:6px; background:var(--sky); color:#315b9d; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .cmd-row { display:flex; flex-wrap:wrap; gap:7px; margin-top:20px; }
+    .cmd { padding:5px 8px; border-radius:5px; background:#f2f4f7; color:#344054; font:750 11px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace; }
+
+    .workflow { background:var(--navy); color:#fff; }
+    .workflow .eyebrow { color:#9cbdf8; }
+    .workflow .lead { color:#c4d0e4; }
+    .steps { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:40px; }
+    .step { min-height:205px; padding:21px 18px; border:1px solid rgba(255,255,255,.13); border-radius:12px; background:rgba(255,255,255,.055); }
+    .step-num { display:block; margin-bottom:24px; color:#82adff; font:800 12px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .step b { display:block; margin-bottom:7px; font-size:16px; }
+    .step p { margin:0; color:#bdc9dc; font-size:13px; word-break:keep-all; }
+
+    .deliverables { background:var(--mist); }
+    .deliverable-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:36px; }
+    .deliverable-card { overflow:hidden; border:1px solid var(--line); border-radius:15px; background:#fff; }
+    .deliverable-card figure { height:250px; margin:0; overflow:hidden; background:#656565; }
+    .deliverable-card img { width:100%; height:100%; object-fit:cover; }
+    .deliverable-copy { padding:19px 18px 22px; }
+    .deliverable-copy span { color:var(--blue); font:800 10px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .deliverable-copy h3 { margin:6px 0; font-size:18px; }
+    .deliverable-copy p { margin:0; color:var(--muted); font-size:13px; word-break:keep-all; }
+
+    .repeat-grid { display:grid; grid-template-columns:.92fr 1.08fr; gap:54px; align-items:center; }
+    .repeat-copy h2 { margin-bottom:17px; }
+    .repeat-copy p { color:var(--muted); word-break:keep-all; }
+    .repeat-steps { display:grid; gap:10px; margin-top:24px; }
+    .repeat-step { display:grid; grid-template-columns:36px 1fr; gap:12px; align-items:start; padding:15px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+    .repeat-step i { display:grid; width:30px; height:30px; place-items:center; border-radius:8px; background:var(--sky); color:var(--blue); font-style:normal; font-size:11px; font-weight:850; }
+    .repeat-step b { display:block; font-size:14px; }
+    .repeat-step span { color:var(--muted); font-size:12px; word-break:keep-all; }
+    .repeat-media { overflow:hidden; border:1px solid #dce3ee; border-radius:15px; background:#60666c; box-shadow:0 18px 42px rgba(16,31,61,.12); }
+    .repeat-media img { width:100%; aspect-ratio:16/10; object-fit:cover; }
+    .repeat-media p { margin:0; padding:12px 15px; color:var(--muted); background:#fff; font-size:12px; word-break:keep-all; }
+
+    .next { padding:86px 0; }
+    .next-box { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; padding:43px; border:1px solid #cfdcf4; border-radius:20px; background:linear-gradient(135deg,#eaf1ff,#f8fbff); }
+    .next-box h2 { margin:0 0 8px; font-size:33px; }
+    .next-box p { max-width:720px; margin:0; color:#52637c; word-break:keep-all; }
+    .next-actions { display:flex; flex-direction:column; align-items:stretch; gap:10px; min-width:220px; }
+    .next-note { color:#667085; font-size:11px; text-align:center; }
+    footer { padding:33px 0; border-top:1px solid var(--line); color:#667085; font-size:12px; }
+    .footer-row { display:flex; justify-content:space-between; gap:18px; }
+
+    @media (max-width:900px) {
+      .nav-links a:not(.button) { display:none; }
+      .hero-grid,.feature,.repeat-grid,.next-box { grid-template-columns:1fr; gap:32px; }
+      .hero { padding-top:52px; }
+      .hero-art { min-height:390px; }
+      .hero-card { right:8px; }
+      .strip-grid,.benefit-grid,.deliverable-grid { grid-template-columns:1fr 1fr; }
+      .strip-item:nth-child(2) { border-right:0; }
+      .strip-item { border-bottom:1px solid var(--line); }
+      .feature.reverse .feature-copy { order:0; }
+      .steps { grid-template-columns:1fr 1fr; }
+      .next-actions { min-width:0; }
+      .footer-row { flex-direction:column; }
+      section { padding:74px 0; }
+    }
+    @media (max-width:540px) {
+      .wrap { width:min(calc(100% - 28px),1140px); }
+      .wordmark { font-size:16px; }
+      .nav .button { padding:0 12px; }
+      h1 { font-size:43px; word-break:normal; }
+      h2 { word-break:normal; }
+      .hero-copy,.lead,.feature p,.feature li,.benefit p,.step p,.deliverable-copy p,.repeat-copy p,.next-box p { word-break:normal; overflow-wrap:anywhere; }
+      .strip-grid,.benefit-grid,.deliverable-grid,.steps { grid-template-columns:1fr; }
+      .strip-item { border-right:0; }
+      .hero-art { min-height:320px; }
+      .hero-image { padding:6px; }
+      .hero-card { width:82%; }
+      .feature-head { margin-bottom:50px; }
+      .feature { margin-bottom:78px; }
+      .feature h3 { font-size:27px; }
+      .deliverable-card figure { height:310px; }
+      .next-box { padding:28px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="wordmark" href="index.html"><span class="mark">RCW</span> RCW V5</a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="index.html" data-en="Overview">전체 소개</a>
+        <a href="modeling.html" data-en="Modeling">모델링</a>
+        <a href="#deliverables" data-en="Deliverables">결과물</a>
+        <a href="#repeat" data-en="Automation">반복 자동화</a>
+        <a href="contact.html" data-en="Contact">문의</a>
+      </nav>
+      <div class="nav-right">
+        <button class="lang" type="button" data-lang-toggle aria-label="언어 전환">ENGLISH</button>
+        <a class="button" href="#drawing-demo" data-en="Drawing demo">가공도 데모</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="pill">Stage 02 · Production information</span>
+          <h1 data-en="From one model,<br><em>to everything the factory needs.</em>">모델 하나에서,<br><em>제작에 필요한 자료까지.</em></h1>
+          <p class="hero-copy" data-en="RCW V5 analyzes the geometry and data of the finished 3D model to assign fabrication numbers, and produces material / cutting lists, fabrication drawings and unit elevations and sections from the same basis.">RCW V5는 완성된 3D 모델의 형상과 데이터를 분석해 제작 번호를 부여하고, 자재·절단 리스트, 가공도, Unit 입면과 단면을 같은 기준에서 만듭니다.</p>
+          <div class="button-row">
+            <a class="button" href="#drawing-demo" data-en="See drawings generated →">가공도 생성 보기 →</a>
+            <a class="button secondary" href="#features" data-en="Check the whole flow">전체 흐름 확인</a>
+          </div>
+          <p class="micro" data-en="A reviewed model is never redrawn across document after document.">한 번 확인한 모델을 여러 문서에 다시 옮겨 그리지 않습니다.</p>
+        </div>
+        <div class="hero-art">
+          <img class="hero-image" src="img/FDwg.gif" alt="RCW가 3D Frame에서 제작 가공도를 생성하는 데모">
+          <div class="hero-card"><b data-en="Geometry and documents share the same model.">형상과 문서가 같은 모델을 기준으로 합니다.</b><span data-en="Less rewriting of dimension, section, hole and quantity information.">치수·단면·홀·수량 정보를 따로 다시 작성하는 일을 줄입니다.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="strip">
+      <div class="wrap strip-grid">
+        <div class="strip-item"><b data-en="01 / Fabrication numbers">01 / 제작 번호</b><span data-en="Group identical members with FabNo">FabNo로 동일 부재 분류</span></div>
+        <div class="strip-item"><b data-en="02 / Material &amp; cutting lists">02 / 자재·절단 리스트</b><span>Molist·PMolist·Cuttinglist</span></div>
+        <div class="strip-item"><b data-en="03 / Fabrication drawings">03 / 제작 가공도</b><span>FDwg·FDDS·FDstyle</span></div>
+        <div class="strip-item"><b data-en="04 / Unit documents">04 / Unit 문서</b><span>U2D·UF2D·Fablist</span></div>
+      </div>
+    </div>
+
+    <section class="benefits" id="why">
+      <div class="wrap">
+        <p class="eyebrow">Why one source matters</p>
+        <h2 data-en="The more you re-enter the same information into each drawing and table, the more errors creep in.">같은 정보를 도면과 표마다 다시 작성할수록 오류 가능성은 커집니다.</h2>
+        <p class="lead" data-en="RCW uses the 3D model as the common basis for production information. Numbers, lengths, quantities, dimensions and sections are connected so they are not managed separately in different documents.">RCW는 3D 모델을 제작 정보의 공통 기준으로 사용합니다. 번호, 길이, 수량, 치수와 단면이 서로 다른 문서에서 따로 관리되지 않도록 연결합니다.</p>
+        <div class="benefit-grid">
+          <article class="benefit"><div class="icon">01</div><h3 data-en="Less transcription">옮겨 적는 작업을 줄입니다</h3><p data-en="Profile and block data recorded in the model is analyzed and reused, not re-typed into number tables, material tables and fabrication drawings.">모델에 기록된 Profile과 Block 정보를 번호표, 자재표, 가공도에 다시 입력하지 않고 분석해 사용합니다.</p></article>
+          <article class="benefit"><div class="icon">02</div><h3 data-en="One basis across documents">문서 사이의 기준을 맞춥니다</h3><p data-en="The same Fab No and ProfileData become the shared basis for lists and drawings, making members easy to trace and review.">같은 Fab No와 ProfileData가 리스트와 도면의 공통 기준이 되어 부재를 추적하고 검토하기 쉬워집니다.</p></article>
+          <article class="benefit"><div class="icon">03</div><h3 data-en="Rebuild after changes">변경 후 다시 만들 수 있습니다</h3><p data-en="After editing the model, apply the same commands and the recorded drawing style to reflect the changes in new documents.">모델을 수정한 뒤 동일한 명령과 기록된 가공도 스타일을 적용해 변경 내용을 새 문서에 반영할 수 있습니다.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="wrap">
+        <div class="feature-head">
+          <p class="eyebrow">From model to production package</p>
+          <h2 data-en="First distinguish members, then connect the material you need by the same number.">먼저 부재를 구분하고, 같은 번호로 필요한 자료를 연결합니다.</h2>
+          <p class="lead" data-en="Once each member in the model has a fabrication number, you can total quantities and lengths, and turn that member's geometry and machining information into drawings.">모델의 각 부재에 제작 번호가 생기면 수량과 길이를 집계하고, 해당 부재의 형상과 가공 정보를 도면으로 만들 수 있습니다.</p>
+        </div>
+
+        <article class="feature">
+          <div class="feature-copy"><span class="tag">01 / Fabrication numbering</span><h3 data-en="Identical members are grouped under the same fabrication number.">동일한 부재는 같은 제작 번호로 묶습니다.</h3><p data-en="FabNo compares the profile name and shape conditions of the selected frame Breps and blocks and records a fabrication number. Lists and drawings then distinguish the same members by that number.">FabNo는 선택한 Frame Brep과 Block의 Profile 이름과 형상 조건을 비교해 제작 번호를 기록합니다. 이후 리스트와 가공도는 이 번호를 기준으로 같은 부재를 구분합니다.</p><ul><li data-en="Compare identical profile names and shape conditions">동일 Profile 이름과 형상 조건 비교</li><li data-en="Analyze frames, general blocks and NBlocks together">Frame·일반 Block·NBlock 함께 분석</li><li data-en="Record ProfileData and Fab No for member traceability">부재 추적을 위한 ProfileData와 Fab No 기록</li></ul><div class="cmd-row"><span class="cmd">FabNo</span><span class="cmd">PROFILE DATA</span><span class="cmd">FAB NO</span></div></div>
+          <figure><img src="img/FabNo_demo.gif" alt="3D Frame 부재에 제작 번호를 부여하는 FabNo 데모"><figcaption data-en="FabNo compares model members and assigns the same fabrication number to members with identical conditions.">FabNo는 모델 부재를 비교해 동일 조건의 부재에 같은 제작 번호를 부여합니다.</figcaption></figure>
+        </article>
+
+        <article class="feature reverse">
+          <div class="feature-copy"><span class="tag">02 / Material &amp; cutting lists</span><h3 data-en="Count quantities, then calculate cut lengths and loss.">수량을 세고, 절단 길이와 Loss를 계산합니다.</h3><p data-en="Molist and PMolist total the model's ProfileData and block information into material tables. Cuttinglist calculates stock-bar lengths and loss from the required cut lengths and builds a cutting plan.">Molist와 PMolist는 모델의 ProfileData와 Block 정보를 집계해 자재표를 만듭니다. Cuttinglist는 필요한 절단 길이를 바탕으로 장바 길이와 Loss를 계산하고 절단 계획을 작성합니다.</p><ul><li data-en="Total frame and block material quantities in one list">Frame·Block 자재 수량을 하나의 리스트로 집계</li><li data-en="Separate profile-centered quantity and weight data">Profile 중심 수량·중량 자료 별도 작성</li><li data-en="Provide a cutting plan and five optimal stock-bar length candidates">절단 계획과 최적 5개 장바 길이 후보 제공</li></ul><div class="cmd-row"><span class="cmd">Molist</span><span class="cmd">PMolist</span><span class="cmd">Cuttinglist</span></div></div>
+          <figure><img src="img/Cuttinglist_demo.gif" alt="Frame 모델에서 절단 계획을 만드는 Cuttinglist 데모"><figcaption data-en="Cuttinglist totals member lengths and calculates stock-bar use and loss to organize a cutting plan.">Cuttinglist는 부재 길이를 집계하고 장바 사용과 Loss를 계산해 절단 계획으로 정리합니다.</figcaption></figure>
+        </article>
+
+        <article class="feature" id="drawing-demo">
+          <div class="feature-copy"><span class="tag">03 / Fabrication drawing</span><h3 data-en="Create fabrication drawings from the frame geometry.">Frame 형상에서 제작 가공도를 만듭니다.</h3><p data-en="FDwg and FDDS analyze the selected frame group and place front / section 2D lines, hole diameters, overall / center / angle dimensions, and Fab No, quantity and Unit No information.">FDwg와 FDDS는 선택한 Frame 그룹을 분석해 정면·단면 2D 선, 홀 직경, 전체·중심·각도 치수와 Fab No·수량·Unit No 정보를 배치합니다.</p><ul><li data-en="Generate front and section views, dimensions and hole data">정면과 단면 View, 치수, 홀 정보 생성</li><li data-en="Select many members to batch-create drawings">다수 부재를 선택해 가공도 일괄 작성</li><li data-en="Add accessory tables and detail 3D views">Accessory 표와 Detail 3D View 추가 가능</li></ul><div class="cmd-row"><span class="cmd">FDwg</span><span class="cmd">FDDS</span><span class="cmd">FabTable</span><span class="cmd">FabBomTable</span></div></div>
+          <figure><img src="img/FDDS_demo.gif" alt="여러 Frame의 제작 가공도를 만드는 FDDS 데모"><figcaption data-en="FDDS generates fabrication drawings of the selected members using the set views and dimension standards.">FDDS는 선택한 여러 부재의 제작 가공도를 설정된 View와 치수 기준으로 생성합니다.</figcaption></figure>
+        </article>
+
+        <article class="feature reverse">
+          <div class="feature-copy"><span class="tag">04 / Unit documentation</span><h3 data-en="Produce unit sections, elevations and parts lists together.">Unit 단면·입면과 부품 리스트를 함께 만듭니다.</h3><p data-en="U2D creates the section 2D and Fablist of the selected solid unit at once. UF2D adds the front elevation and dimensions to form a unit document set for fabrication, assembly and review.">U2D는 선택한 Solid Unit의 단면 2D와 Fablist를 한 번에 생성합니다. UF2D는 여기에 정면 입면과 치수를 더해 제작·조립·검토에 필요한 Unit 문서 세트를 구성합니다.</p><ul><li data-en="Auto-create Top / Right sections and dimensions">Top·Right Section과 치수 자동 작성</li><li data-en="List profiles, blocks, glass and back panels within the unit">Unit 내 Profile·Block·Glass·BackPanel 목록화</li><li data-en="Generate the front elevation with Fablist labels">Front Elevation과 Fablist 라벨 함께 생성</li></ul><div class="cmd-row"><span class="cmd">U2D</span><span class="cmd">UF2D</span><span class="cmd">Fablist</span><span class="cmd">F2d</span></div></div>
+          <figure><img src="img/U2D_demo.gif" alt="Solid Unit에서 단면 2D와 Fablist를 만드는 U2D 데모"><figcaption data-en="U2D creates sections, dimensions and the fabrication parts list from a selected unit in one run.">U2D는 선택한 Unit에서 단면과 치수, 제작 부품 리스트를 같은 실행 흐름으로 만듭니다.</figcaption></figure>
+        </article>
+      </div>
+    </section>
+
+    <section class="workflow" id="workflow">
+      <div class="wrap">
+        <p class="eyebrow">A connected production path</p>
+        <h2 data-en="From a verified model, numbers, lists, drawings and unit documents follow.">확인된 모델에서 번호, 리스트, 가공도, Unit 문서가 이어집니다.</h2>
+        <p class="lead" data-en="Every output reads the model's geometry and ProfileData. The numbers and data set in the previous step become the basis for the next document.">모든 결과물은 모델의 형상과 ProfileData를 읽습니다. 앞 단계에서 정한 번호와 데이터가 다음 문서의 기준이 됩니다.</p>
+        <div class="steps">
+          <article class="step"><span class="step-num">01 / VERIFY</span><b data-en="Check the model">모델 확인</b><p data-en="Review member geometry, blocks, ProfileData and unit groups.">부재 형상, Block, ProfileData와 Unit 그룹을 검토합니다.</p></article>
+          <article class="step"><span class="step-num">02 / NUMBER</span><b data-en="Assign Fab No">Fab No 부여</b><p data-en="Analyze identical profiles and shape conditions to record fabrication numbers.">동일한 Profile과 형상 조건을 분석해 제작 번호를 기록합니다.</p></article>
+          <article class="step"><span class="step-num">03 / SUMMARIZE</span><b data-en="Total quantities &amp; cuts">수량·절단 집계</b><p data-en="Turn material quantity, weight, cut lengths and loss into tables.">자재 수량, 중량, 절단 길이와 Loss를 표로 만듭니다.</p></article>
+          <article class="step"><span class="step-num">04 / DRAW</span><b data-en="Generate drawings">가공도 생성</b><p data-en="Place geometry, sections, dimensions, holes and accessory data on fabrication drawings.">형상, 단면, 치수, 홀과 부속 정보를 제작 도면에 배치합니다.</p></article>
+          <article class="step"><span class="step-num">05 / DOCUMENT</span><b data-en="Compose unit documents">Unit 문서 작성</b><p data-en="Compose elevations, sections, dimensions and Fablist as assembly and review material.">입면·단면·치수·Fablist를 조립과 검토 자료로 구성합니다.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="deliverables" id="deliverables">
+      <div class="wrap">
+        <p class="eyebrow">More deliverables from the same model</p>
+        <h2 data-en="Beyond frames, glass, back panels and accessories are organized to their own formats.">Frame뿐 아니라 Glass, BackPanel, 부속 자재도 각 형식에 맞게 정리합니다.</h2>
+        <p class="lead" data-en="Each component needs a different drawing and table format. RCW reads the types and data recorded in the model to produce the production material for each part group.">구성요소마다 필요한 도면과 표의 형식은 다릅니다. RCW는 모델에 기록된 타입과 데이터를 읽어 각 부품군의 제작 자료를 만듭니다.</p>
+        <div class="deliverable-grid">
+          <article class="deliverable-card"><figure><img src="img/FabTable_demo.gif" alt="Frame 제작 번호와 수량을 정리한 FabTable"></figure><div class="deliverable-copy"><span>FabTable</span><h3 data-en="Frame number table">Frame 제작 번호표</h3><p data-en="Arranges member shape, quantity and length by profile name and Fab No in a table.">Profile 이름과 Fab No별로 부재 형상, 수량과 길이를 표로 배치합니다.</p></div></article>
+          <article class="deliverable-card"><figure><img src="img/GsFd_demo.gif" alt="Glass 모델에서 생성한 제작 도면"></figure><div class="deliverable-copy"><span>GsFd · GsTable</span><h3 data-en="Glass production data">Glass 제작 자료</h3><p data-en="Creates production drawings and per-type tables based on the glass solid's shape and type.">Glass Solid의 형상과 타입을 기준으로 제작 도면과 타입별 표를 작성합니다.</p></div></article>
+          <article class="deliverable-card"><figure><img src="img/BpFd_demo.gif" alt="BackPanel 모델에서 생성한 제작 도면"></figure><div class="deliverable-copy"><span>BpFd · BpTable</span><h3 data-en="BackPanel production data">BackPanel 제작 자료</h3><p data-en="Generates front / side / top views and the required dimensions from the back-panel solid.">BackPanel Solid에서 정면·측면·상부 View와 필요한 치수를 생성합니다.</p></div></article>
+          <article class="deliverable-card"><figure><img src="img/FabBomTable.gif" alt="제작 가공도에 배치된 Accessory 부품표"></figure><div class="deliverable-copy"><span>FabBomTable</span><h3 data-en="Accessory parts table">Accessory 부품표</h3><p data-en="Organizes the accessory data collected in the drawing into a table showing part names and quantities.">가공도에 수집된 부속 데이터를 부품명과 수량이 보이는 표로 정리합니다.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="repeat">
+      <div class="wrap repeat-grid">
+        <div class="repeat-copy">
+          <p class="eyebrow">Record once, reproduce consistently</p>
+          <h2 data-en="Apply one reviewed drawing setup to every matching profile.">한 번 검토한 가공도 구성을 같은 Profile에 다시 적용합니다.</h2>
+          <p data-en="FDstyle records and replays the options and extra edits of FDwg / FDDS by profile. The dimensions, NC tables, annotations, accessory tables, detail views and forms reviewed in the first drawing are reproduced on repeat members to the same standard.">FDstyle은 FDwg·FDDS의 옵션과 추가 작업을 Profile별로 기록하고 재생합니다. 처음 가공도에서 검토한 치수, NC 표, 주석, 부속표, Detail View와 양식을 반복 부재에 같은 기준으로 재현합니다.</p>
+          <div class="repeat-steps">
+            <div class="repeat-step"><i>01</i><div><b>Record</b><span data-en="Save drawing options and extra edits by profile.">가공도 옵션과 추가 편집 결과를 Profile별로 저장합니다.</span></div></div>
+            <div class="repeat-step"><i>02</i><div><b>Playback</b><span data-en="Auto-reproduce the saved setup on other members of the same profile.">동일 Profile의 다른 부재에 저장된 구성을 자동 재현합니다.</span></div></div>
+            <div class="repeat-step"><i>03</i><div><b>Batch</b><span data-en="Use FDDS to batch-generate many members to the recorded standard.">FDDS로 여러 부재를 선택해 기록된 기준으로 일괄 생성합니다.</span></div></div>
+          </div>
+        </div>
+        <figure class="repeat-media"><img src="img/FDstyle.gif" alt="가공도 구성을 기록하고 재생하는 FDstyle 데모"><p data-en="FDstyle Record / Playback — save and reuse a reviewed drawing standard per profile.">FDstyle Record / Playback — 검토한 가공도 표준을 Profile 단위로 저장하고 재사용합니다.</p></figure>
+      </div>
+    </section>
+
+    <section class="next">
+      <div class="wrap next-box">
+        <div><h2 data-en="The point of building a model is to make the material you need faster and more consistently.">모델을 만드는 목적은, 필요한 자료를 더 빠르고 일관되게 만드는 것입니다.</h2><p data-en="RCW connects the 3D model to fabrication numbers, material / cutting lists, drawings and unit documents. Explore the full workflow from the overview, or go back to stage 1 modeling.">RCW는 3D 모델을 제작 번호, 자재·절단 리스트, 가공도와 Unit 문서로 연결합니다. 전체 흐름은 소개 페이지에서, 모델링 과정은 1단계에서 다시 볼 수 있습니다.</p></div>
+        <div class="next-actions"><a class="button" href="modeling.html" data-en="← See stage 1 — modeling">← 1단계 모델링 보기</a><a class="button secondary" href="index.html" data-en="Back to overview">전체 소개로</a><span class="next-note">Stage 02 · Production outputs</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap footer-row"><span>© 2026 Beimptech · RCW V5</span><span data-en="Rhino is a registered trademark of Robert McNeel &amp; Associates.">Rhino는 Robert McNeel &amp; Associates의 등록 상표입니다.</span></div></footer>
+
+  <script>
+  (function(){
+    var KEY='rcw-lang';
+    function apply(l){
+      var n=document.querySelectorAll('[data-en]');
+      for(var i=0;i<n.length;i++){var el=n[i];
+        if(el.dataset.ko===undefined)el.dataset.ko=el.innerHTML;
+        el.innerHTML=(l==='en')?el.dataset.en:el.dataset.ko;}
+      document.documentElement.lang=(l==='en')?'en':'ko';
+      var b=document.querySelectorAll('[data-lang-toggle]');
+      for(var j=0;j<b.length;j++){b[j].textContent=(l==='en')?'한국어':'ENGLISH';}
+      try{localStorage.setItem(KEY,l);}catch(e){}
+    }
+    function cur(){try{return localStorage.getItem(KEY)||'ko';}catch(e){return 'ko';}}
+    function init(){apply(cur());
+      document.addEventListener('click',function(e){
+        var t=e.target.closest?e.target.closest('[data-lang-toggle]'):null;
+        if(!t)return;e.preventDefault();apply(cur()==='ko'?'en':'ko');});}
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+  })();
+  </script>
+</body>
+</html>

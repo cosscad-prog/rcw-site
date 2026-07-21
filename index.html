@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RCW V5 — 커튼월 단면과 와이어프레임으로 실제 제작용 3D 모델을 만들고, 그 모델에서 정확한 가공도와 부품 리스트를 생성하는 Rhino 플러그인.">
+  <meta name="theme-color" content="#ffffff">
+  <title>RCW V5 — 제작을 위한 실용적인 커튼월 3D 모델링</title>
+  <style>
+    :root {
+      --ink:#101828; --muted:#667085; --line:#e4e7ec; --paper:#fff;
+      --mist:#f7f9fc; --navy:#101f3d; --blue:#2667d9; --blue-dark:#17499e;
+      --sky:#eaf1ff; --mint:#d9fbe8; --amber:#fff5e6; --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; overflow-x:hidden; color:var(--ink); background:var(--paper); font:16px/1.6 Inter,Pretendard,"Noto Sans KR","Malgun Gothic",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    img { display:block; max-width:100%; }
+    .wrap { width:min(1140px,calc(100% - 40px)); margin:auto; }
+    .eyebrow { margin:0 0 10px; color:var(--blue); font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h1,h2,h3,p { margin-top:0; }
+    h2 { max-width:800px; margin-bottom:14px; font-size:clamp(29px,4vw,46px); line-height:1.13; letter-spacing:-.04em; word-break:keep-all; }
+    .lead { max-width:680px; color:var(--muted); font-size:18px; word-break:keep-all; }
+    .button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:48px; padding:0 20px; border:1px solid transparent; border-radius:10px; background:var(--blue); color:#fff; font-weight:750; transition:.2s ease; cursor:pointer; }
+    .button:hover { transform:translateY(-2px); background:var(--blue-dark); box-shadow:0 12px 28px rgba(38,103,217,.22); }
+    .button.secondary { border-color:#c9d5ed; background:#fff; color:var(--blue-dark); }
+    .button.secondary:hover { background:var(--sky); box-shadow:none; }
+
+    .nav { position:sticky; top:0; z-index:20; border-bottom:1px solid rgba(228,231,236,.8); background:rgba(255,255,255,.88); backdrop-filter:blur(14px); }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; height:66px; gap:18px; }
+    .wordmark { display:flex; align-items:center; gap:9px; font-size:18px; font-weight:850; letter-spacing:-.03em; }
+    .mark { display:grid; width:29px; height:29px; place-items:center; border-radius:8px; background:var(--blue); color:#fff; font-size:11px; letter-spacing:-.07em; }
+    .nav-links { display:flex; align-items:center; gap:22px; color:#475467; font-size:14px; font-weight:650; }
+    .nav-links a:hover { color:var(--blue); }
+    .nav-right { display:flex; align-items:center; gap:11px; }
+    .nav .button { min-height:38px; padding:0 15px; font-size:13px; }
+    .lang { min-width:54px; height:36px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:#344054; font:750 12px/1 inherit; cursor:pointer; transition:.15s; }
+    .lang:hover { border-color:#b9cbee; color:var(--blue); }
+
+    .hero { overflow:hidden; padding:72px 0 56px; background:radial-gradient(circle at 87% 8%,#dce9ff 0,transparent 29%),linear-gradient(180deg,#f9fbff 0%,#fff 90%); }
+    .hero-grid { display:grid; grid-template-columns:.95fr 1.05fr; align-items:center; gap:56px; }
+    .hero-grid > * { min-width:0; }
+    .pill { display:inline-flex; align-items:center; gap:8px; margin-bottom:19px; padding:6px 11px; border:1px solid #cad8f4; border-radius:999px; background:#fff; color:#315b9d; font-size:12px; font-weight:800; }
+    .pill::before { width:7px; height:7px; border-radius:50%; background:#20a864; content:""; }
+    h1 { margin-bottom:19px; font-size:clamp(42px,5.4vw,66px); line-height:1.03; letter-spacing:-.06em; word-break:keep-all; }
+    .hero h1 em { color:var(--blue); font-style:normal; }
+    .hero-copy { max-width:580px; margin-bottom:27px; color:#475467; font-size:18px; word-break:keep-all; }
+    .button-row { display:flex; flex-wrap:wrap; gap:11px; }
+    .micro { margin:14px 0 0; color:#667085; font-size:12px; }
+    .hero-art { position:relative; min-height:470px; }
+    .hero-image { position:absolute; inset:0 0 16px 0; width:100%; height:100%; object-fit:cover; border:1px solid #d8e1f0; border-radius:var(--radius); box-shadow:0 22px 50px rgba(16,31,61,.17); }
+    .hero-card { position:absolute; right:-14px; bottom:-4px; width:min(285px,66%); padding:16px; border:1px solid #dbe3f0; border-radius:14px; background:rgba(255,255,255,.94); box-shadow:0 16px 32px rgba(16,31,61,.14); backdrop-filter:blur(8px); }
+    .hero-card b { display:block; margin-bottom:2px; font-size:14px; word-break:keep-all; }
+    .hero-card span { display:block; color:var(--muted); font-size:12.5px; word-break:keep-all; }
+
+    .strip { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:#fff; }
+    .strip-grid { display:grid; grid-template-columns:repeat(4,1fr); }
+    .strip-item { min-height:104px; padding:25px 24px; border-right:1px solid var(--line); }
+    .strip-item:last-child { border:0; }
+    .strip-item b { display:block; margin-bottom:2px; font-size:17px; letter-spacing:-.02em; }
+    .strip-item span { color:var(--muted); font-size:13px; word-break:keep-all; }
+
+    section { padding:104px 0; }
+    .benefits { background:var(--mist); }
+    .benefit-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:34px; }
+    .benefit { min-height:220px; padding:26px; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .icon { display:grid; width:43px; height:43px; place-items:center; margin-bottom:20px; border-radius:11px; background:var(--sky); color:var(--blue); font-size:15px; font-weight:850; }
+    .benefit h3 { margin-bottom:8px; font-size:18px; letter-spacing:-.025em; word-break:keep-all; }
+    .benefit p { margin:0; color:var(--muted); font-size:14px; word-break:keep-all; }
+
+    .feature { display:grid; grid-template-columns:1fr 1fr; gap:62px; align-items:center; margin:0 0 112px; }
+    .feature:last-child { margin-bottom:0; }
+    .feature.reverse .feature-copy { order:2; }
+    .feature figure { position:relative; margin:0; overflow:hidden; border:1px solid #dce3ee; border-radius:15px; background:#f1f5fb; box-shadow:0 16px 38px rgba(16,31,61,.08); }
+    .feature figure img { width:100%; aspect-ratio:16/10; object-fit:cover; }
+    .feature figcaption { padding:11px 14px; color:#667085; background:#fff; font-size:12px; word-break:keep-all; }
+    .feature h3 { margin-bottom:12px; font-size:31px; line-height:1.15; letter-spacing:-.04em; word-break:keep-all; }
+    .feature p { color:var(--muted); word-break:keep-all; }
+    .feature ul { margin:17px 0 0; padding:0; list-style:none; }
+    .feature li { position:relative; margin:10px 0; padding-left:25px; color:#475467; word-break:keep-all; }
+    .feature li::before { position:absolute; top:5px; left:0; width:14px; height:14px; border-radius:50%; background:var(--mint); color:#07844b; content:"✓"; font-size:10px; font-weight:900; line-height:14px; text-align:center; }
+    .tag { display:inline-block; margin-bottom:11px; padding:4px 9px; border-radius:6px; background:var(--sky); color:#315b9d; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+
+    .workflow { background:var(--navy); color:#fff; }
+    .workflow .eyebrow { color:#9cbdf8; }
+    .workflow .lead { color:#c4d0e4; }
+    .steps { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:40px; }
+    .step { min-height:185px; padding:21px 18px; border:1px solid rgba(255,255,255,.13); border-radius:12px; background:rgba(255,255,255,.055); }
+    .step-num { display:block; margin-bottom:24px; color:#82adff; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; font-weight:800; }
+    .step b { display:block; margin-bottom:7px; font-size:16px; }
+    .step p { margin:0; color:#bdc9dc; font-size:13px; word-break:keep-all; }
+
+    .proof { background:var(--mist); }
+    .proof-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:22px; margin-top:34px; }
+    .proof-card { overflow:hidden; border:1px solid var(--line); border-radius:15px; background:#fff; }
+    .proof-card img { width:100%; aspect-ratio:16/10; object-fit:cover; }
+    .proof-card .caption { padding:17px 18px 19px; }
+    .proof-card b { display:block; margin-bottom:3px; font-size:16px; }
+    .proof-card p { margin:0; color:var(--muted); font-size:13px; word-break:keep-all; }
+    .specs { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:22px; }
+    .spec { padding:16px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+    .spec b { display:block; margin-bottom:3px; font-size:14px; }
+    .spec span { color:var(--muted); font-size:12.5px; word-break:keep-all; }
+
+    /* editions / comparison */
+    .editions { padding:60px 0; background:#fff; }
+    .table-wrap { margin-top:20px; overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:#fff; }
+    table { width:100%; min-width:680px; border-collapse:collapse; font-size:13.5px; }
+    thead th { position:sticky; top:0; padding:11px 14px; border-bottom:1px solid var(--line); background:#fff; text-align:center; vertical-align:bottom; }
+    thead th:first-child { text-align:left; }
+    th .plan { display:block; font-size:15.5px; font-weight:850; letter-spacing:-.03em; }
+    th .plan-sub { display:block; margin-top:2px; color:var(--muted); font-size:11px; font-weight:600; word-break:keep-all; }
+    th.hi { background:var(--sky); }
+    tbody th { padding:7px 14px; color:#475467; font-weight:600; text-align:left; word-break:keep-all; font-size:13px; }
+    tbody td { padding:7px 12px; text-align:center; color:#475467; }
+    tbody tr { border-top:1px solid #eef1f5; }
+    tbody tr.group th { padding-top:13px; padding-bottom:2px; color:var(--ink); font-size:10.5px; font-weight:850; letter-spacing:.1em; text-transform:uppercase; }
+    td.hi { background:rgba(234,241,255,.5); }
+    .yes { color:#0a8a52; font-weight:900; }
+    .no { color:#c3ccd8; font-weight:800; }
+    .soon { display:inline-block; padding:3px 9px; border-radius:999px; background:var(--amber); color:#b25e00; font-size:11px; font-weight:800; }
+    .plan-cta { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+    .plan-card { padding:16px 18px; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .plan-card.hi { border-color:#b9cbee; background:var(--sky); }
+    .plan-card .ptop { display:flex; align-items:center; justify-content:space-between; margin-bottom:5px; }
+    .plan-card b { font-size:15px; }
+    .plan-card .badge { padding:3px 9px; border-radius:999px; background:var(--blue); color:#fff; font-size:10.5px; font-weight:800; }
+    .plan-card p { margin:0 0 12px; color:var(--muted); font-size:12.5px; word-break:keep-all; }
+
+    .buy { padding:86px 0; }
+    .buy-box { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; padding:43px; border-radius:20px; background:linear-gradient(135deg,#eaf1ff,#f8fbff); border:1px solid #cfdcf4; }
+    .buy-box h2 { margin:0 0 8px; font-size:33px; }
+    .buy-box p { margin:0; color:#52637c; word-break:keep-all; }
+    .buy-actions { display:flex; flex-direction:column; align-items:stretch; gap:10px; min-width:230px; }
+    .checkout-note { color:#667085; font-size:11px; text-align:center; word-break:keep-all; }
+    footer { padding:33px 0; border-top:1px solid var(--line); color:#667085; font-size:12px; }
+    .footer-row { display:flex; justify-content:space-between; gap:18px; }
+    @media (max-width:840px) {
+      .nav-links a:not(.button) { display:none; }
+      .hero-grid,.feature,.proof-grid,.buy-box { grid-template-columns:1fr; gap:32px; }
+      .hero { padding-top:52px; } .hero-art { min-height:370px; } .hero-card { right:8px; }
+      .strip-grid,.benefit-grid,.plan-cta { grid-template-columns:1fr 1fr; } .strip-item:nth-child(2) { border-right:0; } .strip-item { border-bottom:1px solid var(--line); }
+      .feature.reverse .feature-copy { order:0; } .steps { grid-template-columns:1fr 1fr; } .buy-actions { min-width:0; } .footer-row { flex-direction:column; }
+      section { padding:74px 0; }
+    }
+    @media (max-width:500px) { .wrap { width:min(100% - 28px,1140px); } .strip-grid,.benefit-grid,.steps,.specs,.plan-cta { grid-template-columns:1fr; } .strip-item { border-right:0; } .hero-art { min-height:300px; } .hero-card { width:78%; } .buy-box { padding:28px; } }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="wordmark" href="#top"><span class="mark">RCW</span> RCW V5</a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="modeling.html" data-en="Modeling">모델링</a>
+        <a href="output.html" data-en="Output">산출물</a>
+        <a href="#workflow" data-en="Workflow">작동 흐름</a>
+        <a href="#editions" data-en="Editions">버전 비교</a>
+        <a href="contact.html" data-en="Contact">문의</a>
+      </nav>
+      <div class="nav-right">
+        <button class="lang" type="button" data-lang-toggle aria-label="언어 전환">ENGLISH</button>
+        <a class="button" href="#checkout" data-en="Get RCW V5">RCW V5 구매</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="pill">Windows · Rhino 7 &amp; Rhino 8</span>
+          <h1 data-en="Make the 3D model <em>easy enough to use</em>.">3D 모델을,<br><em>실제로 쓸 만큼 쉽게.</em></h1>
+          <p class="hero-copy" data-en="RCW V5 turns curtain-wall sections and wireframes into a practical production model—then uses that model to create the fabrication drawings and parts lists the factory needs.">RCW V5는 커튼월 단면과 와이어프레임을 실제 제작용 모델로 바꾸고, 그 모델로 공장이 필요로 하는 가공도와 부품 리스트를 만듭니다.</p>
+          <div class="button-row">
+            <a class="button" href="#checkout" data-en="Get RCW V5 →">RCW V5 구매 →</a>
+            <a class="button secondary" href="#features" data-en="See how it works">작동 방식 보기</a>
+          </div>
+          <p class="micro" data-en="A Rhino workflow for the work between design intent and fabrication.">설계 의도와 제작 사이의 작업을 위한 Rhino 워크플로우.</p>
+        </div>
+        <div class="hero-art">
+          <img class="hero-image" src="img/case_hero.jpg" alt="커튼월 프로젝트 비주얼">
+          <div class="hero-card"><b data-en="Built for fabrication—not 3D modeling for its own sake.">3D 모델링 자체가 아니라, 제작을 위한 도구입니다.</b><span data-en="Make a model quickly enough to improve the drawing work that follows.">이후 도면 작업을 개선할 만큼 빠르게 모델을 만듭니다.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="strip">
+      <div class="wrap strip-grid">
+        <div class="strip-item"><b data-en="01 / Model simply">01 / 간단한 모델링</b><span data-en="Start from sections and wireframe information.">단면과 와이어프레임 정보에서 시작합니다.</span></div>
+        <div class="strip-item"><b data-en="02 / Check visibly">02 / 눈으로 확인</b><span data-en="See the components before they become parts.">부품이 되기 전에 구성요소를 확인합니다.</span></div>
+        <div class="strip-item"><b data-en="03 / Draw accurately">03 / 정확한 도면</b><span data-en="Generate fabrication information from the model.">모델에서 제작 정보를 생성합니다.</span></div>
+        <div class="strip-item"><b data-en="04 / List clearly">04 / 명확한 리스트</b><span data-en="Prepare parts information from the same source.">같은 기준에서 부품 정보를 준비합니다.</span></div>
+      </div>
+    </div>
+
+    <section class="benefits">
+      <div class="wrap">
+        <p class="eyebrow" data-en="The problem RCW solves">RCW가 푸는 문제</p>
+        <h2 data-en="3D modeling must be easier than the manual work it replaces.">3D 모델링은, 그것이 대체하는 수작업보다 쉬워야 합니다.</h2>
+        <p class="lead" data-en="Curtain-wall professionals know that conventional 3D modeling can take too much time and specialised effort. If it takes longer to make a model than to draft by hand, there is no reason to change the workflow. RCW starts by making the model practical.">커튼월 실무자는 일반적인 3D 모델링이 얼마나 많은 시간과 전문적인 노력을 요구하는지 압니다. 모델을 만드는 데 손으로 그리는 것보다 오래 걸린다면 작업 방식을 바꿀 이유가 없습니다. RCW는 모델을 실용적으로 만드는 것에서 시작합니다.</p>
+        <div class="benefit-grid">
+          <article class="benefit"><div class="icon">01</div><h3 data-en="Remove the fear of 3D modeling">3D 모델링의 공포를 없앱니다</h3><p data-en="Use the familiar logic of curtain-wall sections and wireframes instead of building every object with general-purpose 3D commands.">모든 객체를 범용 3D 명령으로 하나씩 만드는 대신, 커튼월 단면과 와이어프레임이라는 익숙한 논리를 사용합니다.</p></article>
+          <article class="benefit"><div class="icon">02</div><h3 data-en="Make drawing time worth the model">모델을 만든 만큼 도면이 쉬워집니다</h3><p data-en="Once the model is made, generate and review production information from it instead of recreating the same decisions in every drawing.">모델이 만들어지면, 같은 판단을 도면마다 반복하는 대신 그 모델에서 제작 정보를 생성하고 검토합니다.</p></article>
+          <article class="benefit"><div class="icon">03</div><h3 data-en="Protect expensive project work">값비싼 프로젝트 작업을 보호합니다</h3><p data-en="Large projects demand months of careful drawing work. A visible model and connected output help catch problems before an incorrect part reaches the factory or site.">대형 프로젝트는 수개월의 신중한 도면 작업을 요구합니다. 눈에 보이는 모델과 연결된 산출물은 잘못된 부재가 공장이나 현장에 도착하기 전에 문제를 잡아냅니다.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="wrap">
+        <p class="eyebrow" data-en="Two reasons to adopt RCW">RCW를 선택하는 두 가지 이유</p>
+        <h2 data-en="First, make the model quickly. Then, make the drawing work dependable.">먼저 모델을 빠르게 만들고, 그다음 도면 작업을 믿을 수 있게 만듭니다.</h2>
+        <p class="lead" data-en="RCW is not a general-purpose visualization tool. Its value is measured by two outcomes: a model that is quick enough for day-to-day curtain-wall design, and fabrication output reliable enough to issue.">RCW는 범용 시각화 도구가 아닙니다. 그 가치는 두 가지 결과로 측정됩니다. 매일의 커튼월 설계에 충분히 빠른 모델, 그리고 그대로 발행할 만큼 믿을 수 있는 제작 산출물입니다.</p>
+
+        <article class="feature">
+          <div class="feature-copy"><span class="tag" data-en="01 / Easy modeling">01 / 쉬운 모델링</span><h3 data-en="Model as a curtain-wall designer—not as a 3D specialist.">3D 전문가가 아니라, 커튼월 설계자의 방식으로 모델링합니다.</h3><p data-en="RCW begins with the information a curtain-wall designer already has: sections, profiles, and wireframes. It guides that information into organized units and components, so the model becomes a working tool rather than an additional project to manage.">RCW는 커튼월 설계자가 이미 가진 정보 — 단면, 프로파일, 와이어프레임 — 에서 시작합니다. 그 정보를 정돈된 Unit과 구성요소로 이끌어, 모델이 또 하나의 관리 대상이 아니라 실제 작업 도구가 되게 합니다.</p><ul><li data-en="Build from sections, profiles, and wireframe information">단면·프로파일·와이어프레임 정보로 구성</li><li data-en="Create units, mullions, transoms, glass, vents, grilles, and back panels in a dedicated workflow">Unit·멀리언·트랜섬·유리·창호·그릴·백패널을 전용 흐름으로 생성</li><li data-en="Keep typical, curved, and irregular layouts in one practical modeling approach">정형·곡면·비정형 배치를 하나의 실용적 방식으로 처리</li></ul></div>
+          <figure><img src="img/model_curved_a.png" alt="RCW로 만든 복합 곡면 커튼월 모델"><figcaption data-en="The key proof to show here: section and wireframe information becoming a complete unit model in a few clear steps.">여기서 보여줄 핵심: 단면과 와이어프레임 정보가 몇 단계 만에 완성된 Unit 모델이 되는 과정.</figcaption></figure>
+        </article>
+
+        <article class="feature reverse">
+          <div class="feature-copy"><span class="tag" data-en="02 / Dependable fabrication drawings">02 / 믿을 수 있는 가공도</span><h3 data-en="Turn one verified model into a production drawing standard.">검증된 모델 하나를 제작 도면 표준으로 만듭니다.</h3><p data-en="Fabrication drawings are not a simple output. On large projects they require experienced people, careful review, and a great deal of time. RCW uses the model for the geometry, then FDStyle records the proven drawing setup for each profile so repeat work follows the same standard.">가공도는 단순한 출력물이 아닙니다. 대형 프로젝트에서는 숙련된 인력과 신중한 검토, 그리고 많은 시간이 필요합니다. RCW는 형상을 모델에서 가져오고, FDStyle이 프로파일별로 검증된 도면 구성을 기록해 반복 작업이 같은 표준을 따르게 합니다.</p><ul><li data-en="Review geometry, relationships, holes, and accessories in the model before issuing output">발행 전에 형상·관계·홀·부속을 모델에서 검토</li><li data-en="Record and replay fabrication-drawing options by profile">가공도 옵션을 프로파일별로 기록하고 재생</li><li data-en="Preserve annotations, leaders, accessory tables, detail views, and form settings">주석·지시선·부속표·상세 뷰·양식 설정을 보존</li></ul></div>
+          <figure><img src="img/FDstyle.gif" alt="FDStyle 기록·재생 워크플로우"><figcaption data-en="FDStyle records a reviewed fabrication-drawing setup and replays it for matching profiles.">FDStyle은 검토한 가공도 구성을 기록해 동일 프로파일에 재생합니다.</figcaption></figure>
+        </article>
+
+        <article class="feature">
+          <div class="feature-copy"><span class="tag" data-en="Production package">제작 패키지</span><h3 data-en="Move from a good drawing to a clear manufacturing package.">좋은 도면에서, 명확한 제작 패키지로.</h3><p data-en="After the fabrication drawing is generated, the same model supports unit 2D, elevation information, and parts lists. The result gives the factory a clearer definition of what to make and gives the project team a traceable basis for review.">가공도가 생성된 뒤에도 같은 모델이 Unit 2D, 입면 정보, 부품 리스트를 뒷받침합니다. 그 결과 공장은 무엇을 만들지 더 명확히 알고, 프로젝트 팀은 추적 가능한 검토 기준을 갖게 됩니다.</p><ul><li data-en="FDwg and FDDS fabrication-drawing workflows">FDwg·FDDS 가공도 작업 흐름</li><li data-en="2D views, dimensions, hole data, NC tables, and drawing forms">2D 뷰·치수·홀 데이터·NC 표·도면 양식</li><li data-en="Unit section and front-elevation output with Fablist and accessory-list information">Fablist·부속 리스트와 함께 Unit 단면·정면 입면 산출</li></ul></div>
+          <figure><img src="img/FDwg.gif" alt="RCW의 가공도 작업 흐름"><figcaption data-en="Fabrication drawings turn the reviewed model into production information for the factory.">가공도는 검토된 모델을 공장을 위한 제작 정보로 바꿉니다.</figcaption></figure>
+        </article>
+      </div>
+    </section>
+
+    <section class="workflow" id="workflow">
+      <div class="wrap">
+        <p class="eyebrow" data-en="From model to output">모델에서 산출물까지</p>
+        <h2 data-en="One connected path—from familiar inputs to dependable drawings.">익숙한 입력에서 믿을 수 있는 도면까지, 하나로 이어진 경로.</h2>
+        <p class="lead" data-en="RCW keeps the work in the order designers need it: model quickly, check clearly, then issue information for fabrication.">RCW는 설계자가 필요로 하는 순서 그대로 작업을 유지합니다. 빠르게 모델링하고, 명확히 확인한 뒤, 제작 정보를 발행합니다.</p>
+        <div class="steps">
+          <article class="step"><span class="step-num">01 / INPUT</span><b data-en="Read the design basis">설계 기준 읽기</b><p data-en="Start with the sections and wireframes that define the façade.">파사드를 정의하는 단면과 와이어프레임에서 시작합니다.</p></article>
+          <article class="step"><span class="step-num">02 / MODEL</span><b data-en="Build the unit quickly">Unit 빠르게 생성</b><p data-en="Turn familiar design information into organized components in Rhino.">익숙한 설계 정보를 Rhino 안에서 정돈된 구성요소로 바꿉니다.</p></article>
+          <article class="step"><span class="step-num">03 / CHECK</span><b data-en="Review what will be made">만들 것을 검토</b><p data-en="Use the visible model to check parts and relationships before output.">눈에 보이는 모델로 부재와 관계를 산출 전에 확인합니다.</p></article>
+          <article class="step"><span class="step-num">04 / DRAW</span><b data-en="Generate with the standard">표준으로 생성</b><p data-en="Apply proven drawing rules to create fabrication information.">검증된 도면 규칙을 적용해 제작 정보를 만듭니다.</p></article>
+          <article class="step"><span class="step-num">05 / LIST</span><b data-en="Issue the required parts">필요한 부품 발행</b><p data-en="Prepare unit information and parts lists from the same model.">같은 모델에서 Unit 정보와 부품 리스트를 준비합니다.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof">
+      <div class="wrap">
+        <p class="eyebrow" data-en="The deliverables">결과물</p>
+        <h2 data-en="The outputs that make the model worthwhile.">모델을 가치 있게 만드는 산출물.</h2>
+        <p class="lead" data-en="The model earns its place when it produces work the factory can use: clear unit information, fabrication drawings, and lists of the parts that complete the assembly.">모델은 공장이 실제로 쓸 수 있는 결과 — 명확한 Unit 정보, 가공도, 조립을 완성하는 부품 리스트 — 를 만들어낼 때 비로소 제 값을 합니다.</p>
+        <div class="proof-grid">
+          <article class="proof-card"><img src="img/U2D_demo.gif" alt="RCW가 생성한 Unit 2D와 Fablist"><div class="caption"><b data-en="Unit elevations and Fablist">Unit 입면과 Fablist</b><p data-en="Create section output and Fablist information together for the selected solid unit.">선택한 Solid Unit에 대해 단면 산출과 Fablist 정보를 함께 만듭니다.</p></div></article>
+          <article class="proof-card"><img src="img/FabBomTable.gif" alt="RCW가 생성한 부속 자재 BOM"><div class="caption"><b data-en="Accessory parts list">부속 부품 리스트</b><p data-en="Use the collected accessory data in a fabrication drawing to show the parts and quantities that complete the assembly.">가공도에 수집된 부속 데이터로 조립을 완성하는 부품과 수량을 보여줍니다.</p></div></article>
+        </div>
+        <div class="specs" id="requirements">
+          <div class="spec"><b data-en="Host application">호스트 프로그램</b><span data-en="Rhino 7 or Rhino 8 for Windows.">Windows용 Rhino 7 또는 Rhino 8.</span></div>
+          <div class="spec"><b data-en="Language">언어</b><span data-en="Separate Korean and English installers and help.">한국어·영어 설치본과 도움말 분리 제공.</span></div>
+          <div class="spec"><b data-en="License">라이선스</b><span data-en="Machine-bound license issued for one workstation.">워크스테이션 1대에 발급되는 기기 고정 라이선스.</span></div>
+          <div class="spec"><b data-en="Support material">지원 자료</b><span data-en="Built-in HTML help and workflow-focused panels.">내장 HTML 도움말과 작업 흐름 중심 패널.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDITIONS / COMPARISON -->
+    <section class="editions" id="editions">
+      <div class="wrap">
+        <p class="eyebrow" data-en="Editions">버전 비교</p>
+        <h2 data-en="Which edition fits your work?">어떤 버전이 필요하신가요?</h2>
+        <p class="lead" data-en="Core covers the full frame-and-glass workflow — modeling, numbering, lists, fabrication drawings, 2D and NC. Standard adds vents, grills, back panels, BIM data and the AutoCAD-side utilities. Professional adds curved transom geometry for non-orthogonal and free-form facades.">Core는 프레임과 유리의 전체 흐름 — 모델링·번호·리스트·가공도·2D·NC — 을 모두 담습니다. Standard는 여기에 창호·그릴·백패널·BIM 데이터와 AutoCAD 유틸리티를 더합니다. Professional은 비직교·자유곡면 파사드를 위한 트랜섬 곡선 모델링을 더합니다.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><span class="plan" data-en="Feature">기능</span></th>
+                <th><span class="plan">Core</span><span class="plan-sub" data-en="Frame &amp; glass workflow">프레임·유리 전 과정</span></th>
+                <th class="hi"><span class="plan">Standard</span><span class="plan-sub" data-en="Full command set">전체 명령 세트</span></th>
+                <th><span class="plan">Professional</span><span class="plan-sub" data-en="Curved geometry">곡면 형상</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group"><th colspan="4" data-en="Modeling">모델링</th></tr>
+              <tr><th data-en="Wireframe &amp; section definition">와이어프레임·단면 정의</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Frame (mullion / transom) modeling — UMD">프레임(멀리언·트랜섬) 유닛 모델링 — UMD</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Glass modeling, numbering, lists">유리 모델링·번호·리스트</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Vent (operable window) modeling">창호(Vent) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Grill modeling">그릴(Grill) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Back panel modeling">백패널(BackPanel) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Curved transom geometry">트랜섬 곡선(커브드) 모델링</th><td class="no">—</td><td class="hi no">—</td><td class="yes">✓</td></tr>
+
+              <tr class="group"><th colspan="4" data-en="Documents &amp; quantities">도면 · 물량</th></tr>
+              <tr><th data-en="Automatic profile numbering — FabNo, GsNo">프로파일 자동 번호 — FabNo · GsNo</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Fabrication drawings — FDwg, FDDS, FDstyle">가공도 — FDwg · FDDS · FDstyle</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Fab / accessory tables — FabTable, FabBomTable">부재·부속 표 — FabTable · FabBomTable</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Cutting &amp; material list — Cuttinglist, Molist">컷팅리스트·물량 — Cuttinglist · Molist</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="2D output — F2d, S2d, U2D, Fablist">2D 산출 — F2d · S2d · U2D · Fablist</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="NC data — NC3~NC6">NC 데이터 — NC3~NC6</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="User bar list — UBarList">사용자 바리스트 — UBarList</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="BIM data export — FLOpt, FLdata">BIM 데이터 — FLOpt · FLdata</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+
+              <tr class="group"><th colspan="4" data-en="Tools &amp; environment">도구 · 환경</th></tr>
+              <tr><th data-en="Layer, block, text, dimension utilities">레이어·블록·텍스트·치수 유틸리티</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Web viewer — WebV, ToWebFile">웹뷰어 — WebV · ToWebFile</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Surface / DotText / angle / cylinder tools">서피스·DotText·각도·실린더 도구</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="AutoCAD utilities &amp; tools">AutoCAD 유틸리티·도구</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="Rhino 7 &amp; Rhino 8">Rhino 7 · Rhino 8</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th data-en="License">라이선스</th><td data-en="Perpetual">영구</td><td class="hi" data-en="Perpetual">영구</td><td data-en="Perpetual">영구</td></tr>
+              <tr><th data-en="90-day trial">90일 트라이얼</th><td class="yes">✓</td><td class="hi" data-en="Core scope">Core 범위</td><td class="no">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="plan-cta">
+          <div class="plan-card">
+            <div class="ptop"><b>Core</b></div>
+            <p data-en="Choose this if your work is stick / unitized frame and glass: model, number, list, draw and cut.">프레임과 유리 중심의 작업이라면 Core로 충분합니다. 모델링·번호·리스트·가공도·컷팅까지 포함됩니다.</p>
+            <a class="button secondary" href="#checkout" data-en="Ask about Core">Core 문의</a>
+          </div>
+          <div class="plan-card hi">
+            <div class="ptop"><b>Standard</b><span class="badge" data-en="Most complete">가장 완전</span></div>
+            <p data-en="Choose this if you also handle vents, grills, back panels, BIM data or AutoCAD deliverables.">창호·그릴·백패널·BIM 데이터나 AutoCAD 산출물까지 다룬다면 Standard를 권합니다.</p>
+            <a class="button" href="#checkout" data-en="Ask about Standard">Standard 문의</a>
+          </div>
+          <div class="plan-card">
+            <div class="ptop"><b>Professional</b></div>
+            <p data-en="Choose this if your facades include curved transom geometry — non-orthogonal and free-form surfaces.">파사드에 비직교·자유곡면 트랜섬 곡선 형상이 포함된다면 Professional을 선택하세요.</p>
+            <a class="button secondary" href="#checkout" data-en="Ask about Professional">Professional 문의</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="buy" id="checkout">
+      <div class="wrap"><div class="buy-box">
+        <div><h2 data-en="Ready to make 3D modeling practical for fabrication?">제작을 위한 3D 모델링, 이제 실용적으로 시작할 준비가 되셨나요?</h2><p data-en="RCW V5 connects an approachable curtain-wall modeling workflow with the accurate fabrication drawings and parts information your team needs to issue with confidence.">RCW V5는 접근하기 쉬운 커튼월 모델링 흐름을, 팀이 자신 있게 발행할 수 있는 정확한 가공도·부품 정보와 연결합니다.</p></div>
+        <div class="buy-actions">
+          <!-- TODO: 정식 출시 시 실제 다운로드 링크로 교체 -->
+          <a class="button" href="mailto:beimptech@gmail.com?subject=RCW%20V5%20Trial%20%EC%8B%A0%EC%B2%AD" data-en="Request the trial →">Trial 신청하기 →</a>
+          <a class="button secondary" href="contact.html" data-en="Ask a product question">제품 문의하기</a>
+          <span class="checkout-note" data-en="Trial downloads open at the official launch. Email us and we will send you the details.">Trial 다운로드는 정식 출시 시 열립니다. 메일 주시면 안내드리겠습니다.</span>
+        </div>
+      </div></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap footer-row"><span>© 2026 Beimptech · RCW V5</span><span data-en="Rhino is a registered trademark of Robert McNeel &amp; Associates.">Rhino는 Robert McNeel &amp; Associates의 등록 상표입니다.</span></div></footer>
+
+  <script>
+  (function(){
+    var KEY='rcw-lang';
+    function apply(l){
+      var n=document.querySelectorAll('[data-en]');
+      for(var i=0;i<n.length;i++){var el=n[i];
+        if(el.dataset.ko===undefined)el.dataset.ko=el.innerHTML;
+        el.innerHTML=(l==='en')?el.dataset.en:el.dataset.ko;}
+      document.documentElement.lang=(l==='en')?'en':'ko';
+      var b=document.querySelectorAll('[data-lang-toggle]');
+      for(var j=0;j<b.length;j++){b[j].textContent=(l==='en')?'한국어':'ENGLISH';}
+      try{localStorage.setItem(KEY,l);}catch(e){}
+    }
+    function cur(){try{return localStorage.getItem(KEY)||'ko';}catch(e){return 'ko';}}
+    function init(){apply(cur());
+      document.addEventListener('click',function(e){
+        var t=e.target.closest?e.target.closest('[data-lang-toggle]'):null;
+        if(!t)return;e.preventDefault();apply(cur()==='ko'?'en':'ko');});}
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+  })();
+  </script>
+</body>
+</html>

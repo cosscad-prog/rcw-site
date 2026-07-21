@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="RCW(Rhino Curtainwall Plugin) — 단면과 와이어프레임만으로 커튼월 3D 모델을 만들고, 그 모델에서 가공도·부품리스트·컷팅리스트·NC 데이터를 자동으로 산출합니다.">
+<meta name="theme-color" content="#070b17">
+<title>RCW — Rhino Curtainwall Plugin</title>
+<link rel="stylesheet" href="assets/rcw.css?v=5">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="wordmark" href="index.html"><span class="mark">RCW</span> RCW <span style="color:var(--blue-2)">V5</span></a>
+    <nav class="nav-links">
+      <a href="#pipeline" data-en="How it works">작동 원리</a>
+      <a href="modeling.html" data-en="Modeling">모델링</a>
+      <a href="output.html" data-en="Output">산출물</a>
+      <a href="#editions" data-en="Editions">버전</a>
+    </nav>
+    <div class="nav-right">
+      <button class="lang" type="button" data-lang-toggle aria-label="Switch language">ENGLISH</button>
+      <a class="button" href="#contact" data-en="Get in touch">문의하기</a>
+      <button class="burger" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu">
+    <div class="mm-inner">
+      <a href="#pipeline" data-en="How it works">작동 원리</a>
+      <a href="modeling.html" data-en="Modeling">모델링</a>
+      <a href="output.html" data-en="Output">산출물</a>
+      <a href="#editions" data-en="Editions">버전 비교</a>
+      <a class="button" href="#contact" data-en="Get in touch">문의하기</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="aurora a"></div><div class="aurora b"></div><div class="aurora c"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill" data-en="Curtain wall automation for Rhino 7 &amp; 8">Rhino 7 · 8 커튼월 자동화</span>
+      <h1><span data-en="Draw the section.">단면을 그리면,</span><br><em data-en="Ship the drawings.">가공도가 나옵니다.</em></h1>
+      <p class="hero-copy" data-en="RCW is a Rhino plugin for curtain wall engineering. Build the 3D model from nothing but a wireframe and your profile sections — then let the computer read that model and produce fabrication drawings, part lists, cutting lists and NC data automatically.">
+        RCW(Rhino Curtainwall Plugin)는 커튼월 설계·제작을 위한 라이노 플러그인입니다.
+        와이어프레임과 단면만으로 3D 모델을 만들고, 그 모델을 컴퓨터가 읽어
+        가공도·부품리스트·컷팅리스트·NC 데이터를 자동으로 만들어 냅니다.
+      </p>
+      <div class="button-row">
+        <a class="button lg" href="modeling.html" data-en="① See how easy modeling is">① 모델링이 얼마나 쉬운가
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="button secondary lg" href="output.html" data-en="② See what it produces">② 무엇을 만드는가</a>
+      </div>
+      <p class="micro" data-en="Core &amp; Standard perpetual licenses · 90-day trial · Rhino 7 and 8">Core · Standard 영구 라이선스 · 90일 트라이얼 · Rhino 7·8</p>
+    </div>
+    <div class="hero-art">
+      <div class="hero-badge one"><span class="dot"></span><span data-en="2 inputs only">입력은 단 2가지</span></div>
+      <figure class="hero-card">
+        <img src="../New_Img/IMG-01.png" alt="RCW 커튼월 3D 모델과 자동 산출물">
+        <figcaption data-en="One model — 3D unit, elevation, fabrication drawing and quantities stay in sync.">하나의 모델에서 3D 유닛·입면·가공도·물량이 함께 움직입니다.</figcaption>
+      </figure>
+      <div class="hero-badge two"><b data-en="Auto">자동</b>&nbsp;<span data-en="drawings + BOM + NC">도면 · BOM · NC</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAT STRIP ============ -->
+<div class="strip">
+  <div class="wrap strip-grid">
+    <div class="strip-item" data-reveal><b><span class="grad-text" data-count="2">2</span></b><span data-en="The only inputs modeling needs — wireframe + section">모델링에 필요한 입력 — 와이어프레임 + 단면</span></div>
+    <div class="strip-item" data-reveal data-delay="1"><b><span class="grad-text" data-count="90" data-suffix="%">90%</span></b><span data-en="Of the fabrication package derived straight from the model">제작 서류를 모델에서 그대로 산출</span></div>
+    <div class="strip-item" data-reveal data-delay="2"><b><span class="grad-text" data-count="1">1</span></b><span data-en="One model becomes every drawing, table and list">하나의 모델이 모든 도면·표·리스트로</span></div>
+    <div class="strip-item" data-reveal data-delay="3"><b><span class="grad-text">R7·8</span></b><span data-en="Runs inside Rhino 7 and Rhino 8">Rhino 7과 8에서 그대로 실행</span></div>
+  </div>
+</div>
+
+<!-- ============ WHY (owner-level problem framing) ============ -->
+<section id="why">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-en="Why it matters">왜 중요한가</p>
+      <h2 data-en="One wrong part can stop an entire site.">부품 하나가 틀리면 현장 전체가 멈춥니다.</h2>
+      <p class="lead" data-en="A curtain wall package is thousands of interdependent parts. Today most of it is drawn and counted by hand while imagining three dimensions — slow, and a single miss turns into a stopped crew, idle equipment and a slipped schedule.">
+        커튼월 한 세트는 서로 맞물린 수천 개의 부품입니다. 지금도 대부분은 머릿속으로 3차원을 그려가며 손으로
+        도면을 그리고 물량을 셉니다. 느리고, 단 한 번의 실수가 인력 대기·장비 유휴·일정 지연으로 이어집니다.
+      </p>
+    </div>
+    <div class="grid-3">
+      <article class="card" data-reveal>
+        <div class="icon warn">01</div>
+        <h3 data-en="Time you cannot get back">돌아오지 않는 시간</h3>
+        <p data-en="Every sheet is drawn slowly and checked twice because a mistake is unforgivable. The care is necessary — the manual labour is not.">실수하면 안 되기에 한 장 한 장 신중히 그리고 두 번 확인합니다. 신중함은 필요하지만, 수작업은 필요하지 않습니다.</p>
+      </article>
+      <article class="card" data-reveal data-delay="1">
+        <div class="icon warn">02</div>
+        <h3 data-en="Errors born in the head">머릿속에서 생기는 오류</h3>
+        <p data-en="Holding a 3D assembly in your imagination while drawing 2D is where most mistakes begin. Seeing the model removes the guesswork.">2D를 그리며 3D 조립을 상상해야 하는 지점에서 대부분의 실수가 시작됩니다. 모델을 눈으로 보면 추측이 사라집니다.</p>
+      </article>
+      <article class="card" data-reveal data-delay="2">
+        <div class="icon warn">03</div>
+        <h3 data-en="Thousands of dollars per part">부품 하나에 수천 달러</h3>
+        <p data-en="A wrong member delivered to site halts the crew, idles the equipment and pushes the schedule. Every one of those is a hard cost.">잘못된 부재가 현장에 도착하면 인력은 대기하고 장비는 놀며 일정은 밀립니다. 그 전부가 실비용입니다.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PIPELINE — how the product is composed ============ -->
+<section id="pipeline" class="mist">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-en="How RCW is built">RCW의 구성</p>
+      <h2 data-en="Section → Model → Documents. One continuous line.">단면 → 모델링 → 산출물. 하나로 이어진 흐름.</h2>
+      <p class="lead" data-en="RCW is not a collection of unrelated tools. It is a single pipeline: you feed it the inputs you already draw, it builds the model, and it reads that model back out as everything the factory and the site need.">
+        RCW는 서로 무관한 도구 모음이 아닙니다. 하나의 파이프라인입니다. 평소 그리던 입력을 넣으면 모델을 만들고,
+        그 모델을 다시 읽어 공장과 현장에 필요한 모든 것을 뽑아냅니다.
+      </p>
+    </div>
+
+    <div class="pipeline">
+      <article class="pipe-node" data-reveal>
+        <span class="kbd">Input · 01</span>
+        <h3 data-en="Section &amp; Wireframe">단면 · 와이어프레임</h3>
+        <p data-en="Mullion / transom lines plus the profile sections you already draw in 2D. Nothing new to learn.">멀리언·트랜섬 라인과, 평소 2D로 그리던 프로파일 단면. 새로 배울 것이 없습니다.</p>
+        <div class="tags"><span class="chip">Pname</span><span class="chip">Dtable</span><span class="chip">Mullion_Line</span></div>
+      </article>
+      <div class="pipe-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <span class="lbl" data-en="assemble">자동 조립</span>
+      </div>
+      <article class="pipe-node" data-reveal data-delay="1">
+        <span class="kbd">Model · 02</span>
+        <h3 data-en="3D Unit Model">3D 유닛 모델</h3>
+        <p data-en="RCW places every profile along the frame, resolves the joints and assembles the unit — glass, vents and panels included.">프레임을 따라 프로파일을 배치하고 접합부를 정리해 유닛을 조립합니다. 유리·창호·패널까지 포함됩니다.</p>
+        <div class="tags"><span class="chip">UMD</span><span class="chip">Gmd</span><span class="chip">FabNo</span></div>
+      </article>
+      <div class="pipe-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <span class="lbl" data-en="read out">자동 산출</span>
+      </div>
+      <article class="pipe-node" data-reveal data-delay="2">
+        <span class="kbd">Output · 03</span>
+        <h3 data-en="Drawings &amp; Quantities">도면 · 물량</h3>
+        <p data-en="The model is read back as fabrication drawings, BOM, cutting lists, elevations, 2D and NC — all in agreement.">모델을 다시 읽어 가공도·BOM·컷팅리스트·입면도·2D·NC로 산출합니다. 서로 어긋나지 않습니다.</p>
+        <div class="tags"><span class="chip">FDwg</span><span class="chip">FabBomTable</span><span class="chip">NC3~6</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TWO DETAIL PATHS ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-en="Two things to show you">보여드리고 싶은 두 가지</p>
+      <h2 data-en="Easy to model. Powerful to output.">모델링은 쉽게, 산출은 강력하게.</h2>
+    </div>
+    <div class="grid-2">
+      <article class="card" style="padding:0;overflow:hidden" data-reveal>
+        <figure style="margin:0"><img src="../img/case_hero.jpg" alt="커튼월 3D 모델링" style="width:100%;aspect-ratio:16/10;object-fit:cover"></figure>
+        <div style="padding:30px">
+          <span class="tag" data-en="Detail 1">상세 페이지 1</span>
+          <h3 style="font-size:25px;margin:14px 0 10px" data-en="3D modeling is not the hard part anymore">3D 모델링은 더 이상 어렵지 않습니다</h3>
+          <p style="color:var(--muted);margin-bottom:22px" data-en="Engineers know what a 3D model costs. RCW removes that fear: wireframe in, unit out — and a mistake is fixed by editing a single line.">
+            실무자는 3D 모델링의 비용을 압니다. RCW는 그 공포를 없앱니다. 와이어프레임을 넣으면 유닛이 나오고,
+            틀렸다면 선 하나만 고쳐 다시 만들면 됩니다.
+          </p>
+          <a class="arrow-link" href="modeling.html" data-en="See the modeling flow">모델링 과정 보기
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </article>
+      <article class="card" style="padding:0;overflow:hidden" data-reveal data-delay="1">
+        <figure style="margin:0"><img src="../img/FDwg.gif" alt="가공도 자동 작성" style="width:100%;aspect-ratio:16/10;object-fit:cover"></figure>
+        <div style="padding:30px">
+          <span class="tag" data-en="Detail 2">상세 페이지 2</span>
+          <h3 style="font-size:25px;margin:14px 0 10px" data-en="Everything the factory and the site ask for">공장과 현장이 요구하는 모든 것</h3>
+          <p style="color:var(--muted);margin-bottom:22px" data-en="Fabrication drawings with holes and NC, accessory BOM, cutting and bar lists, assembly elevations, unit 2D and a web viewer — all read from the same model.">
+            홀·NC가 포함된 가공도, 부속자재 BOM, 컷팅·바 리스트, 조립 입면도, 유닛 2D, 웹뷰어까지
+            모두 같은 모델에서 나옵니다.
+          </p>
+          <a class="arrow-link" href="output.html" data-en="See what you can produce">산출물 보기
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT IT PRODUCES — bento overview ============ -->
+<section class="dark">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-en="At a glance">한눈에 보기</p>
+      <h2 data-en="What comes out of one model">하나의 모델에서 나오는 것들</h2>
+      <p class="lead" data-en="Every deliverable below is derived from the same 3D unit, so they agree with each other by construction. Change the model and the changes propagate — no chasing edits across a dozen files.">
+        아래 모든 산출물은 같은 3D 유닛에서 파생되므로 서로 어긋날 수 없습니다. 모델을 고치면 변경이 전파되어,
+        여러 파일을 쫓아다니며 맞출 필요가 없습니다.
+      </p>
+    </div>
+    <div class="bento">
+      <div class="bento-cell feature-cell" data-reveal>
+        <span class="kbd">FDwg · FDDS · FDstyle</span>
+        <h3 data-en="Fabrication drawings">가공도</h3>
+        <p data-en="Elevation, section, hole positions and NC marks per profile, laid out on your own sheet form. FDstyle records one layout and replays it across the whole project.">프로파일별 입면·단면·홀 위치·NC 표기를 자사 양식에 배치합니다. FDstyle은 한 번의 구성을 기록해 프로젝트 전체에 재생합니다.</p>
+        <div class="grow"></div>
+        <div class="tags foot"><span class="chip">holes</span><span class="chip">NC marks</span><span class="chip">record &amp; replay</span></div>
+      </div>
+      <div class="bento-cell w3" data-reveal data-delay="1">
+        <span class="kbd">FabBomTable</span>
+        <h3 data-en="Accessory BOM">부속자재 BOM</h3>
+        <p data-en="Hardware, anchors, brackets, bolts, screws, gaskets and polyamide — counted from what is actually in the model.">하드웨어·앵커·브라켓·볼트·스크류·가스켓·폴리아미드를 모델에 실제로 들어간 대로 집계합니다.</p>
+      </div>
+      <div class="bento-cell w3" data-reveal>
+        <span class="kbd">Cuttinglist · Molist</span>
+        <h3 data-en="Cutting &amp; material lists">컷팅리스트 · 물량</h3>
+        <p data-en="Optimized cutting and bar lists with per-profile quantities, ready for the shop floor.">프로파일별 물량과 함께 최적화된 컷팅·바 리스트를 공장에 바로 넘길 수 있는 형태로.</p>
+      </div>
+      <div class="bento-cell" data-reveal data-delay="1">
+        <span class="kbd">U2D · F2d · S2d</span>
+        <h3 data-en="2D &amp; elevations">2D · 입면</h3>
+        <p data-en="Assembly elevations and section drawings taken straight from the 3D unit.">3D 유닛에서 바로 뽑은 조립 입면도·단면도.</p>
+      </div>
+      <div class="bento-cell" data-reveal data-delay="2">
+        <span class="kbd">NC3 ~ NC6</span>
+        <h3 data-en="NC machine data">NC 가공 데이터</h3>
+        <p data-en="Hole and processing coordinates for the cutting and machining centre.">절단·가공 센터로 넘기는 홀·가공 좌표.</p>
+      </div>
+      <div class="bento-cell" data-reveal data-delay="3">
+        <span class="kbd">WebV · FLdata</span>
+        <h3 data-en="Web viewer &amp; BIM">웹뷰어 · BIM</h3>
+        <p data-en="Share the unit in a browser and export data for BIM workflows.">유닛을 브라우저로 공유하고 BIM용 데이터를 내보냅니다.</p>
+      </div>
+    </div>
+    <div class="button-row" data-reveal>
+      <a class="button ghost" href="output.html" data-en="Explore every deliverable in detail">모든 산출물 자세히 보기
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCOPE / RANGE ============ -->
+<section>
+  <div class="wrap">
+    <div class="feature" style="margin-bottom:0">
+      <div class="feature-copy" data-reveal>
+        <span class="tag" data-en="Scope">적용 범위</span>
+        <h3 data-en="From a flat stick wall to a leaning tower">평면 스틱월부터 기울어진 타워까지</h3>
+        <p data-en="Unitized and stick systems, sloped and stepped facades, tower massing and complex geometry — the workflow never changes, because the input is always a wireframe and a section.">
+          유니타이즈드와 스틱 시스템, 경사·단차 파사드, 타워 매싱과 복합 형상까지.
+          입력이 언제나 와이어프레임과 단면이기 때문에 작업 흐름은 바뀌지 않습니다.
+        </p>
+        <ul class="check">
+          <li data-en="Unitized &amp; stick systems">유니타이즈드 · 스틱 시스템</li>
+          <li data-en="Sloped &amp; stepped facades">경사 · 단차 파사드</li>
+          <li data-en="Tower massing &amp; complex geometry">타워 매싱 · 복합 형상</li>
+          <li data-en="Curved transom — Professional (planned)">트랜섬 곡선 — Professional 예정</li>
+        </ul>
+      </div>
+      <div class="grid-2" style="grid-template-columns:1fr 1fr;gap:16px;margin-top:0" data-reveal data-delay="1">
+        <figure class="frame"><img src="../img/case_tower_dusk.jpg" alt="타워 케이스"></figure>
+        <figure class="frame"><img src="../img/case_complex.jpg" alt="복합 형상 케이스"></figure>
+        <figure class="frame"><img src="../img/case_site_glass.jpg" alt="유리 파사드 현장"></figure>
+        <figure class="frame"><img src="../img/model_curved_a.png" alt="곡면 모델"></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EDITIONS ============ -->
+<section id="editions" class="mist">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-en="Editions">버전 비교</p>
+      <h2 data-en="Which edition fits your work?">어떤 버전이 필요하신가요?</h2>
+      <p class="lead" data-en="Core covers the full frame-and-glass workflow — modeling, numbering, lists, fabrication drawings, 2D and NC. Standard adds vent, grill, back panel, extraction, BIM data and the AutoCAD-side utilities. Professional will add curved transom geometry.">
+        Core는 프레임과 유리의 전체 흐름 — 모델링·번호·리스트·가공도·2D·NC — 을 모두 담습니다.
+        Standard는 여기에 창호·그릴·백패널·추출·BIM 데이터와 AutoCAD 유틸리티를 더합니다.
+        Professional에서는 트랜섬 곡선 모델링이 추가될 예정입니다.
+      </p>
+    </div>
+
+    <div class="table-wrap" data-reveal>
+      <table>
+        <thead>
+          <tr>
+            <th><span class="plan" data-en="Feature">기능</span></th>
+            <th><span class="plan">Core</span><span class="plan-sub" data-en="Frame &amp; glass workflow">프레임·유리 전 과정</span></th>
+            <th class="hi"><span class="plan">Standard</span><span class="plan-sub" data-en="Full command set">전체 명령 세트</span></th>
+            <th><span class="plan">Professional</span><span class="plan-sub" data-en="Planned">출시 예정</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group"><th colspan="4" data-en="Modeling">모델링</th></tr>
+          <tr><th data-en="Wireframe &amp; section definition">와이어프레임·단면 정의</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Frame (mullion / transom) modeling — UMD">프레임(멀리언·트랜섬) 유닛 모델링 — UMD</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Glass modeling, numbering, lists">유리 모델링·번호·리스트</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Vent (operable window) modeling">창호(Vent) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Grill modeling">그릴(Grill) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Back panel modeling">백패널(BackPanel) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Xtract / sheet extraction">Xtract · 시트 추출</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Curved transom geometry">트랜섬 곡선(커브드) 모델링</th><td class="no">—</td><td class="hi no">—</td><td><span class="soon" data-en="Planned">예정</span></td></tr>
+
+          <tr class="group"><th colspan="4" data-en="Documents &amp; quantities">도면 · 물량</th></tr>
+          <tr><th data-en="Automatic profile numbering — FabNo, GsNo">프로파일 자동 번호 — FabNo · GsNo</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Fabrication drawings — FDwg, FDDS, FDstyle">가공도 — FDwg · FDDS · FDstyle</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Fab / accessory tables — FabTable, FabBomTable">부재·부속 표 — FabTable · FabBomTable</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Cutting &amp; material list — Cuttinglist, Molist">컷팅리스트·물량 — Cuttinglist · Molist</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="2D output — F2d, S2d, U2D, Fablist">2D 산출 — F2d · S2d · U2D · Fablist</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="NC data — NC3~NC6">NC 데이터 — NC3~NC6</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="User bar list — UBarList">사용자 바리스트 — UBarList</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="BIM data export — FLOpt, FLdata">BIM 데이터 — FLOpt · FLdata</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+
+          <tr class="group"><th colspan="4" data-en="Tools &amp; environment">도구 · 환경</th></tr>
+          <tr><th data-en="Layer, block, text, dimension utilities">레이어·블록·텍스트·치수 유틸리티</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Web viewer — WebV, ToWebFile">웹뷰어 — WebV · ToWebFile</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Surface / DotText / angle / cylinder tools">서피스·DotText·각도·실린더 도구</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="AutoCAD utilities &amp; tools">AutoCAD 유틸리티·도구</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="Rhino 7 &amp; Rhino 8">Rhino 7 · Rhino 8</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th data-en="License">라이선스</th><td data-en="Perpetual">영구</td><td class="hi" data-en="Perpetual">영구</td><td data-en="TBA">추후 안내</td></tr>
+          <tr><th data-en="90-day trial">90일 트라이얼</th><td class="yes">✓</td><td data-en="Core scope" class="hi">Core 범위</td><td class="no">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="plan-cta">
+      <div class="plan-card" data-reveal>
+        <div class="ptop"><b>Core</b></div>
+        <p data-en="Choose this if your work is stick / unitized frame and glass: model, number, list, draw and cut.">프레임과 유리 중심의 작업이라면 Core로 충분합니다. 모델링·번호·리스트·가공도·컷팅까지 포함됩니다.</p>
+        <a class="button secondary" href="#contact" data-en="Ask about Core">Core 문의</a>
+      </div>
+      <div class="plan-card hi" data-reveal data-delay="1">
+        <div class="ptop"><b>Standard</b><span class="badge" data-en="Most complete">가장 완전</span></div>
+        <p data-en="Choose this if you also handle vents, grills, back panels, extraction, BIM data or AutoCAD deliverables.">창호·그릴·백패널·추출·BIM 데이터나 AutoCAD 산출물까지 다룬다면 Standard를 권합니다.</p>
+        <a class="button" href="#contact" data-en="Ask about Standard">Standard 문의</a>
+      </div>
+      <div class="plan-card" data-reveal data-delay="2">
+        <div class="ptop"><b>Professional</b><span class="soon" data-en="In development">개발 중</span></div>
+        <p data-en="In development. Adds curved transom geometry for non-orthogonal and free-form facades.">개발 중입니다. 비직교·자유곡면 파사드를 위한 트랜섬 곡선 모델링이 추가됩니다.</p>
+        <a class="button secondary" href="#contact" data-en="Join the waitlist">출시 알림 신청</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="contact">
+  <div class="aurora a"></div><div class="aurora b"></div>
+  <div class="wrap">
+    <p class="eyebrow center" data-en="Get started">시작하기</p>
+    <h2 data-en="Try it on a real unit of your own.">직접 맡고 계신 유닛으로 확인해 보세요.</h2>
+    <p class="lead center" data-en="A 90-day trial covers the Core command set. Send us a typical section and wireframe, and we will walk through the entire workflow with your own project.">
+      90일 트라이얼은 Core 명령 세트를 그대로 제공합니다. 대표 단면과 와이어프레임을 보내주시면
+      실제 프로젝트로 전체 흐름을 함께 확인해 드립니다.
+    </p>
+    <div class="button-row">
+      <a class="button lg" href="mailto:beimptech@gmail.com" data-en="Request a trial">트라이얼 신청</a>
+      <a class="button ghost lg" href="modeling.html" data-en="See how modeling works">모델링 과정 보기</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand"><span class="mark">RCW</span> RCW V5</div>
+        <p style="max-width:34ch;margin-top:12px" data-en="Rhino Curtainwall Plugin — model the unit, generate the fabrication package.">Rhino Curtainwall Plugin — 유닛을 모델링하고, 제작 서류를 자동으로.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <b data-en="Product">제품</b>
+          <a href="modeling.html" data-en="Modeling">모델링</a>
+          <a href="output.html" data-en="Output">산출물</a>
+          <a href="#editions" data-en="Editions">버전 비교</a>
+        </div>
+        <div class="foot-col">
+          <b data-en="Get in touch">문의</b>
+          <a href="mailto:beimptech@gmail.com">beimptech@gmail.com</a>
+          <a href="#contact" data-en="Request a trial">트라이얼 신청</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-en="© RCW — Rhino Curtainwall Plugin for Rhino 7 &amp; 8">© RCW — Rhino 7·8용 커튼월 플러그인</span>
+      <span data-en="Built for curtain wall engineers">커튼월 설계 실무자를 위해</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/lang.js?v=5"></script>
+<script src="assets/ui.js?v=5"></script>
+</body>
+</html>

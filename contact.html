@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RCW V5 제품 문의 — 이름, 회사, 연락처, 이메일과 궁금하신 내용을 남겨주시면 확인 후 답변드립니다.">
+  <meta name="theme-color" content="#ffffff">
+  <title>제품 문의 — RCW V5</title>
+  <style>
+    :root {
+      --ink:#101828; --muted:#667085; --line:#e4e7ec; --paper:#fff;
+      --mist:#f7f9fc; --navy:#101f3d; --blue:#2667d9; --blue-dark:#17499e;
+      --sky:#eaf1ff; --mint:#d9fbe8; --danger:#b42318; --danger-bg:#fef3f2; --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; overflow-x:hidden; color:var(--ink); background:var(--paper); font:16px/1.65 Inter,Pretendard,"Noto Sans KR","Malgun Gothic",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    img { display:block; max-width:100%; }
+    h1,h2,h3,p { margin-top:0; }
+    .wrap { width:min(760px,calc(100% - 40px)); margin:auto; }
+    .eyebrow { margin:0 0 10px; color:var(--blue); font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { margin-bottom:14px; font-size:clamp(29px,4vw,42px); line-height:1.15; letter-spacing:-.04em; word-break:keep-all; }
+    .lead { max-width:600px; color:var(--muted); font-size:17px; word-break:keep-all; }
+    .button { display:inline-flex; min-height:48px; align-items:center; justify-content:center; gap:8px; padding:0 20px; border:1px solid transparent; border-radius:10px; background:var(--blue); color:#fff; font-weight:750; font-size:15px; transition:.2s ease; cursor:pointer; }
+    .button:hover { transform:translateY(-2px); background:var(--blue-dark); box-shadow:0 12px 28px rgba(38,103,217,.22); }
+    .button:disabled { opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+    .button.secondary { border-color:#c9d5ed; background:#fff; color:var(--blue-dark); }
+    .button.secondary:hover { background:var(--sky); box-shadow:none; }
+
+    .nav { position:sticky; top:0; z-index:20; border-bottom:1px solid rgba(228,231,236,.8); background:rgba(255,255,255,.9); backdrop-filter:blur(14px); }
+    .nav-inner { display:flex; height:66px; align-items:center; justify-content:space-between; gap:18px; width:min(1140px,calc(100% - 40px)); margin:auto; }
+    .wordmark { display:flex; align-items:center; gap:9px; font-size:18px; font-weight:850; letter-spacing:-.03em; }
+    .mark { display:grid; width:29px; height:29px; place-items:center; border-radius:8px; background:var(--blue); color:#fff; font-size:11px; letter-spacing:-.07em; }
+    .nav-links { display:flex; align-items:center; gap:22px; color:#475467; font-size:14px; font-weight:650; }
+    .nav-links a:hover { color:var(--blue); }
+    .nav-right { display:flex; align-items:center; gap:11px; }
+    .lang { min-width:54px; height:36px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:#344054; font:750 12px/1 inherit; cursor:pointer; transition:.15s; }
+    .lang:hover { border-color:#b9cbee; color:var(--blue); }
+
+    .intro { padding:60px 0 8px; background:radial-gradient(circle at 87% 0%,#dce9ff 0,transparent 32%),linear-gradient(180deg,#f9fbff 0%,#fff 90%); }
+    main { padding:40px 0 100px; }
+
+    .form-card { margin-top:8px; padding:34px; border:1px solid var(--line); border-radius:var(--radius); background:#fff; box-shadow:0 18px 42px rgba(16,31,61,.08); }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .field { margin-bottom:18px; }
+    .field label { display:block; margin-bottom:7px; font-size:13.5px; font-weight:700; color:#344054; }
+    .field label .req { margin-left:3px; color:var(--blue); }
+    .field label .opt { margin-left:6px; color:var(--muted); font-weight:500; font-size:12px; }
+    .field input, .field textarea {
+      width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:10px; background:#fbfcfe;
+      font:15px/1.5 inherit; color:var(--ink); transition:.15s;
+    }
+    .field input:focus, .field textarea:focus { outline:none; border-color:var(--blue); background:#fff; box-shadow:0 0 0 3px rgba(38,103,217,.12); }
+    .field textarea { resize:vertical; min-height:130px; }
+    .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+    .form-actions { display:flex; align-items:center; gap:14px; margin-top:6px; }
+    .form-note { color:var(--muted); font-size:12px; word-break:keep-all; }
+
+    .alert { display:none; margin-top:18px; padding:14px 16px; border-radius:12px; font-size:14px; word-break:keep-all; }
+    .alert.show { display:block; }
+    .alert.success { border:1px solid #b4e3c8; background:var(--mint); color:#0a6b3f; }
+    .alert.error { border:1px solid #f3c6c1; background:var(--danger-bg); color:var(--danger); }
+    .alert b { display:block; margin-bottom:3px; }
+
+    .why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:26px 0 0; }
+    .why-item { padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--mist); }
+    .why-item b { display:block; margin-bottom:3px; font-size:14px; }
+    .why-item span { color:var(--muted); font-size:12.5px; word-break:keep-all; }
+
+    footer { padding:33px 0; border-top:1px solid var(--line); color:#667085; font-size:12px; }
+    .footer-row { display:flex; justify-content:space-between; gap:18px; width:min(1140px,calc(100% - 40px)); margin:auto; }
+
+    @media (max-width:720px) {
+      .nav-links { display:none; }
+      .field-row, .why-grid { grid-template-columns:1fr; }
+      .form-card { padding:24px; }
+      .footer-row { flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="wordmark" href="index.html"><span class="mark">RCW</span> RCW V5</a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="index.html" data-en="Overview">전체 소개</a>
+        <a href="modeling.html" data-en="Modeling">모델링</a>
+        <a href="output.html" data-en="Output">산출물</a>
+      </nav>
+      <div class="nav-right">
+        <button class="lang" type="button" data-lang-toggle aria-label="언어 전환">ENGLISH</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="intro">
+    <div class="wrap">
+      <p class="eyebrow" data-en="Get in touch">문의하기</p>
+      <h1 data-en="Ask us anything about RCW V5.">RCW V5에 대해 무엇이든 물어보세요.</h1>
+      <p class="lead" data-en="Leave your name, company, contact info and a short note about what you need. We read every message and reply directly.">이름, 회사, 연락처와 궁금하신 내용을 남겨주시면 직접 확인 후 답변드립니다.</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="wrap">
+      <form class="form-card" id="contact-form" method="POST" action="https://formspree.io/f/YOUR_FORM_ID">
+        <!-- honeypot: 스팸 봇 방지용 숨김 필드, 사람은 채우지 않음 -->
+        <div class="hp" aria-hidden="true">
+          <label for="company-website">Website</label>
+          <input id="company-website" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+        </div>
+        <input type="hidden" name="_subject" value="RCW V5 제품 문의">
+
+        <div class="field-row">
+          <div class="field">
+            <label for="f-name" data-en="Name<span class=&quot;req&quot;>*</span>">이름<span class="req">*</span></label>
+            <input id="f-name" name="name" type="text" required autocomplete="name" placeholder="홍길동" data-en-placeholder="Jane Doe">
+          </div>
+          <div class="field">
+            <label for="f-company" data-en="Company<span class=&quot;opt&quot;>(optional)</span>">회사<span class="opt">(선택)</span></label>
+            <input id="f-company" name="company" type="text" autocomplete="organization" placeholder="회사명" data-en-placeholder="Company name">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="f-phone" data-en="Phone<span class=&quot;opt&quot;>(optional)</span>">연락처<span class="opt">(선택)</span></label>
+            <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="010-0000-0000" data-en-placeholder="+1 555-000-0000">
+          </div>
+          <div class="field">
+            <label for="f-email" data-en="Email<span class=&quot;req&quot;>*</span>">이메일<span class="req">*</span></label>
+            <input id="f-email" name="email" type="email" required autocomplete="email" placeholder="name@company.com">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-message" data-en="What would you like to know?<span class=&quot;req&quot;>*</span>">궁금하신 내용<span class="req">*</span></label>
+          <textarea id="f-message" name="message" required placeholder="프로젝트 규모, 필요한 기능, Core/Standard 중 궁금한 점 등을 자유롭게 남겨주세요." data-en-placeholder="Project size, features you need, questions about Core vs. Standard — anything is welcome."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="button" type="submit" id="submit-btn" data-en="Send message">문의 보내기</button>
+          <span class="form-note" data-en="We usually reply within 1–2 business days.">보통 영업일 기준 1~2일 내 답변드립니다.</span>
+        </div>
+
+        <div class="alert success" id="alert-success" role="status">
+          <b data-en="Thank you — your message has been sent.">감사합니다 — 문의가 정상적으로 전송되었습니다.</b>
+          <span data-en="We will get back to you at the email address you provided.">남겨주신 이메일 주소로 답변드리겠습니다.</span>
+        </div>
+        <div class="alert error" id="alert-error" role="alert">
+          <b data-en="Something went wrong.">전송 중 문제가 발생했습니다.</b>
+          <span data-en="Please try again, or email us directly at">다시 시도해 주시거나, 아래 주소로 직접 메일 보내주세요:</span>
+          <a href="mailto:beimptech@gmail.com">beimptech@gmail.com</a>
+        </div>
+      </form>
+
+      <div class="why-grid">
+        <div class="why-item"><b data-en="Trial &amp; pricing">트라이얼·가격</b><span data-en="Ask about the 90-day trial or Core / Standard pricing.">90일 트라이얼이나 Core·Standard 가격이 궁금하신가요?</span></div>
+        <div class="why-item"><b data-en="Feature fit">기능 적합성</b><span data-en="Tell us your project type and we'll confirm what RCW covers.">프로젝트 유형을 알려주시면 RCW가 커버하는 범위를 확인해 드립니다.</span></div>
+        <div class="why-item"><b data-en="Support">지원</b><span data-en="Already using RCW? Send installation or licensing questions here too.">이미 RCW를 사용 중이시라면 설치·라이선스 문의도 이곳으로 남겨주세요.</span></div>
+      </div>
+    </div>
+  </main>
+
+  <footer><div class="footer-row"><span>© 2026 Beimptech · RCW V5</span><span data-en="Rhino is a registered trademark of Robert McNeel &amp; Associates.">Rhino는 Robert McNeel &amp; Associates의 등록 상표입니다.</span></div></footer>
+
+  <script>
+  (function(){
+    var KEY='rcw-lang';
+    function apply(l){
+      var n=document.querySelectorAll('[data-en]');
+      for(var i=0;i<n.length;i++){var el=n[i];
+        if(el.dataset.ko===undefined)el.dataset.ko=el.innerHTML;
+        el.innerHTML=(l==='en')?el.dataset.en:el.dataset.ko;}
+      var ph=document.querySelectorAll('[data-en-placeholder]');
+      for(var k=0;k<ph.length;k++){var pe=ph[k];
+        if(pe.dataset.koPlaceholder===undefined)pe.dataset.koPlaceholder=pe.getAttribute('placeholder')||'';
+        pe.setAttribute('placeholder',(l==='en')?pe.dataset.enPlaceholder:pe.dataset.koPlaceholder);}
+      document.documentElement.lang=(l==='en')?'en':'ko';
+      var b=document.querySelectorAll('[data-lang-toggle]');
+      for(var j=0;j<b.length;j++){b[j].textContent=(l==='en')?'한국어':'ENGLISH';}
+      try{localStorage.setItem(KEY,l);}catch(e){}
+    }
+    function cur(){try{return localStorage.getItem(KEY)||'ko';}catch(e){return 'ko';}}
+    function initLang(){apply(cur());
+      document.addEventListener('click',function(e){
+        var t=e.target.closest?e.target.closest('[data-lang-toggle]'):null;
+        if(!t)return;e.preventDefault();apply(cur()==='ko'?'en':'ko');});}
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initLang);else initLang();
+  })();
+  </script>
+
+  <script>
+  (function(){
+    var form = document.getElementById('contact-form');
+    var btn = document.getElementById('submit-btn');
+    var okBox = document.getElementById('alert-success');
+    var errBox = document.getElementById('alert-error');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      okBox.classList.remove('show');
+      errBox.classList.remove('show');
+      btn.disabled = true;
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (res) {
+        if (res.ok) {
+          okBox.classList.add('show');
+          form.reset();
+          okBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          return res.json().then(function (data) { throw data; });
+        }
+      }).catch(function () {
+        errBox.classList.add('show');
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }).finally(function () {
+        btn.disabled = false;
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="RCW가 3D 모델을 분석해 만들어 내는 것들 — 가공도, 부속자재 BOM, 컷팅리스트, 조립 입면도, NC 데이터, 웹뷰어. 손으로 입력하지 않고 모델에서 산출합니다.">
+<meta name="theme-color" content="#070b17">
+<title>산출물 — RCW V5</title>
+<link rel="stylesheet" href="assets/rcw.css?v=5">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="wordmark" href="index.html"><span class="mark">RCW</span> RCW <span style="color:var(--blue-2)">V5</span></a>
+    <nav class="nav-links">
+      <a href="index.html" data-en="Overview">전체 소개</a>
+      <a href="modeling.html" data-en="Modeling">모델링</a>
+      <a href="output.html" class="active" data-en="Output">산출물</a>
+      <a href="index.html#editions" data-en="Editions">버전</a>
+    </nav>
+    <div class="nav-right">
+      <button class="lang" type="button" data-lang-toggle aria-label="Switch language">ENGLISH</button>
+      <a class="button" href="index.html#contact" data-en="Get in touch">문의하기</a>
+      <button class="burger" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu">
+    <div class="mm-inner">
+      <a href="index.html" data-en="Overview">전체 소개</a>
+      <a href="modeling.html" data-en="Modeling">모델링</a>
+      <a href="output.html" data-en="Output">산출물</a>
+      <a href="index.html#editions" data-en="Editions">버전 비교</a>
+      <a class="button" href="index.html#contact" data-en="Get in touch">문의하기</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="aurora a"></div><div class="aurora b"></div><div class="aurora c"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill" data-en="Detail 2 · Output">상세 2 · 산출물</span>
+      <h1><span data-en="The model">모델이 곧</span><br><em data-en="is the paperwork.">서류입니다.</em></h1>
+      <p class="hero-copy" data-en="Once a correct unit exists, RCW reads it: every profile is named and numbered, then the fabrication drawings, tables, lists and machine data are written from that same source. One model, one truth.">
+        정확한 유닛이 만들어지면 RCW가 그것을 읽습니다. 프로파일마다 이름과 번호가 붙고,
+        같은 원본에서 가공도·표·리스트·기계 데이터가 작성됩니다. 모델은 하나, 기준도 하나입니다.
+      </p>
+      <div class="button-row">
+        <a class="button lg" href="#deliverables" data-en="See the deliverables">산출물 목록 보기
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="button secondary lg" href="modeling.html" data-en="Back to modeling">모델링으로 돌아가기</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="hero-badge one"><span class="dot"></span><span data-en="Generated, not typed">입력이 아니라 생성</span></div>
+      <figure class="hero-card">
+        <img src="../img/FabTable_demo.gif" alt="부재 표 자동 작성" style="object-fit:cover;padding:0;aspect-ratio:16/12">
+        <figcaption data-en="Tables and drawings are generated from model data, not typed in.">표와 도면은 손으로 입력하는 것이 아니라 모델 데이터에서 생성됩니다.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUMBERING STRIP ============ -->
+<div class="strip">
+  <div class="wrap strip-grid">
+    <div class="strip-item" data-reveal><b style="font-size:22px" data-en="Name + number">이름 + 번호</b><span data-en="Every profile identified — FabNo · GsNo">모든 프로파일에 식별자 — FabNo · GsNo</span></div>
+    <div class="strip-item" data-reveal data-delay="1"><b style="font-size:22px" data-en="Drawings">도면</b><span data-en="Fab drawings · elevations · unit 2D">가공도 · 입면도 · 유닛 2D</span></div>
+    <div class="strip-item" data-reveal data-delay="2"><b style="font-size:22px" data-en="Quantities">물량</b><span data-en="BOM · cutting list · bar list">BOM · 컷팅리스트 · 바리스트</span></div>
+    <div class="strip-item" data-reveal data-delay="3"><b style="font-size:22px" data-en="Machine data">기계 데이터</b><span data-en="NC3~NC6 hole &amp; cut data">NC3~NC6 홀·가공 데이터</span></div>
+  </div>
+</div>
+
+<!-- ============ DELIVERABLES ============ -->
+<section id="deliverables">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-en="Deliverables">산출물</p>
+      <h2 data-en="What the factory and the site receive">공장과 현장이 받게 되는 것</h2>
+      <p class="lead" data-en="These are read from the model, so they agree with each other by construction. A change to the model propagates instead of being chased across a dozen files.">
+        모두 모델에서 읽어낸 것이므로 서로 어긋나지 않습니다. 모델을 고치면 변경이 전파되며,
+        여러 파일을 쫓아다니며 맞출 필요가 없습니다.
+      </p>
+    </div>
+
+    <div class="grid-3">
+      <article class="card" style="padding:0;overflow:hidden" data-reveal>
+        <figure style="margin:0"><img src="../img/FDwg.gif" alt="가공도" style="width:100%;aspect-ratio:16/10;object-fit:cover"></figure>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">FDwg · FDDS</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="Fabrication drawings">가공도</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Elevation, section, hole positions and processing marks for each profile — laid out on your own sheet form.">프로파일마다 입면·단면·홀 위치·가공 표기를 담은 도면을 자사 양식에 맞춰 작성합니다.</p>
+        </div>
+      </article>
+
+      <article class="card" style="padding:0;overflow:hidden" data-reveal data-delay="1">
+        <figure style="margin:0"><img src="../img/FDstyle.gif" alt="가공도 기록·재생" style="width:100%;aspect-ratio:16/10;object-fit:cover"></figure>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">FDstyle</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="Recorded drawing style">가공도 기록·재생</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Record how one drawing was composed and replay it on the rest, keeping the whole package consistent.">한 장의 구성을 기록해 나머지에 재생함으로써 도면 세트 전체의 형식을 일정하게 유지합니다.</p>
+        </div>
+      </article>
+
+      <article class="card" style="padding:0;overflow:hidden" data-reveal data-delay="2">
+        <figure style="margin:0"><img src="../img/FabTable_demo.gif" alt="부재 표" style="width:100%;aspect-ratio:16/10;object-fit:cover"></figure>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">FabTable</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="Member tables">부재 표</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Per-profile fabrication tables — lengths, cuts and processing in one sheet.">모델에서 생성되는 프로파일별 제작 표. 길이·절단·가공 정보가 한 장에 정리됩니다.</p>
+        </div>
+      </article>
+
+      <article class="card" style="padding:0;overflow:hidden" data-reveal>
+        <figure style="margin:0"><img src="../img/FabBomTable.gif" alt="부속자재 BOM" style="width:100%;aspect-ratio:16/10;object-fit:cover"></figure>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">FabBomTable</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="Accessory BOM">부속자재 BOM</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Hardware, anchors, brackets, bolts, screws, gaskets and polyamide — counted from what is actually in the model.">하드웨어·앵커·브라켓·볼트·스크류·가스켓·폴리아미드를 모델에 실제로 들어간 대로 집계합니다.</p>
+        </div>
+      </article>
+
+      <article class="card" style="padding:0;overflow:hidden" data-reveal data-delay="1">
+        <figure style="margin:0"><img src="../img/U2D_demo.gif" alt="유닛 2D 전개" style="width:100%;aspect-ratio:16/10;object-fit:cover"></figure>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">U2D · UF2D · F2d · S2d</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="2D elevations &amp; sections">2D 입면·단면</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Assembly elevations, unit front views and section drawings taken straight from the 3D unit.">3D 유닛에서 그대로 뽑아낸 조립 입면도·유닛 정면도·단면도입니다.</p>
+        </div>
+      </article>
+
+      <article class="card" style="padding:0;overflow:hidden" data-reveal data-delay="2">
+        <div class="slot" style="border-radius:0;border:0;border-bottom:1.5px dashed #c4d2ea;aspect-ratio:16/10">
+          <span class="ratio">4:3</span>
+          <span class="txt" data-en="Screenshot slot — cutting list / material list table.">이미지 자리 — 컷팅리스트·물량 표.</span>
+        </div>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">Cuttinglist · Molist · PMolist</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="Cutting &amp; material lists">컷팅리스트·물량</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Optimized cutting and bar lists with material quantities per profile, ready for the shop floor.">프로파일별 물량과 함께 최적화된 컷팅·바 리스트를 공장에 바로 넘길 수 있는 형태로 만듭니다.</p>
+        </div>
+      </article>
+
+      <article class="card" style="padding:0;overflow:hidden" data-reveal>
+        <div class="slot" style="border-radius:0;border:0;border-bottom:1.5px dashed #c4d2ea;aspect-ratio:16/10">
+          <span class="ratio">4:3</span>
+          <span class="txt" data-en="Screenshot slot — NC hole &amp; processing coordinate table.">이미지 자리 — NC 홀·가공 좌표 테이블.</span>
+        </div>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">NC3 ~ NC6</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="NC machine data">NC 가공 데이터</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Hole and processing coordinates exported for the cutting and machining centre.">절단·가공 센터로 넘길 홀 및 가공 좌표 데이터를 내보냅니다.</p>
+        </div>
+      </article>
+
+      <article class="card" style="padding:0;overflow:hidden" data-reveal data-delay="1">
+        <div class="slot" style="border-radius:0;border:0;border-bottom:1.5px dashed #c4d2ea;aspect-ratio:16/10">
+          <span class="ratio">16:10</span>
+          <span class="txt" data-en="Screenshot slot — Fablist labels: elevation number type &amp; text-box type.">이미지 자리 — Fablist 라벨: 입면번호형·텍스트박스형.</span>
+        </div>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">Fablist · TextBoxLeaderMove</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="Fabrication list &amp; labels">제작 리스트·라벨</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Fabrication lists tied to elevation numbers, with movable labels so the sheet stays readable.">입면 번호와 연결된 제작 리스트. 라벨을 옮길 수 있어 도면 가독성이 유지됩니다.</p>
+        </div>
+      </article>
+
+      <article class="card" style="padding:0;overflow:hidden" data-reveal data-delay="2">
+        <div class="slot" style="border-radius:0;border:0;border-bottom:1.5px dashed #c4d2ea;aspect-ratio:16/10">
+          <span class="ratio">16:10</span>
+          <span class="txt" data-en="Screenshot slot — web viewer in a browser / BIM data export.">이미지 자리 — 브라우저 웹뷰어 / BIM 데이터 내보내기.</span>
+        </div>
+        <div style="padding:26px">
+          <span class="kbd" style="font:800 11px/1 var(--mono);color:var(--blue-2);letter-spacing:.08em">WebV · ToWebFile · FLdata</span>
+          <h3 style="margin:10px 0 8px;font-size:19px" data-en="Web viewer &amp; BIM data">웹뷰어·BIM 데이터</h3>
+          <p style="color:var(--muted);font-size:14px" data-en="Share the unit in a browser for review, and export model data for BIM workflows (BIM data: Standard).">유닛을 브라우저로 공유해 검토하고, BIM 워크플로용 데이터를 내보냅니다. (BIM 데이터는 Standard)</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE COMPLETE SHEET (feature spotlight) ============ -->
+<section class="mist">
+  <div class="wrap">
+    <div class="feature" style="margin-bottom:0" data-reveal>
+      <div class="feature-copy">
+        <span class="tag" data-en="One sheet, everything">한 장에 전부</span>
+        <h3 data-en="A fabrication sheet that assembles itself">스스로 완성되는 가공도 한 장</h3>
+        <p data-en="A single FDwg / FDDS sheet carries the elevation, the section, hole dimensions, notch and slot marks, NC callouts, the BOM and your title block — each element placed from model data, not drawn by hand. FDstyle then replays that exact composition on every remaining profile.">
+          한 장의 FDwg·FDDS에는 입면, 단면, 홀 치수, 노치·장공 표기, NC 콜아웃, BOM, 그리고 타이틀 블록이 함께 들어갑니다.
+          각 요소는 손으로 그리는 것이 아니라 모델 데이터에서 배치됩니다. 이후 FDstyle이 이 구성을 나머지 프로파일에 그대로 재생합니다.
+        </p>
+        <ul class="check">
+          <li data-en="Elevation + section + hole dimensions in one view">한 뷰에 입면 + 단면 + 홀 치수</li>
+          <li data-en="Notch, slot and NC marks placed automatically">노치·장공·NC 표기 자동 배치</li>
+          <li data-en="Your own title block and sheet form">자사 타이틀 블록·양식 그대로</li>
+          <li data-en="Replayed across the whole project by FDstyle">FDstyle로 프로젝트 전체에 재생</li>
+        </ul>
+      </div>
+      <div class="slot" data-reveal data-delay="1" style="aspect-ratio:4/3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg>
+        <span class="ratio">4:3 · ★★</span>
+        <span class="txt" data-en="Highest-impact image — a full finished fabrication sheet (elevation + section + holes + NC + BOM + title block). This single image is worth more than several GIFs.">가장 임팩트 큰 이미지 — 완성된 가공도 풀샷(입면+단면+홀+NC+BOM+양식). 이 한 장이 여러 GIF보다 강력합니다.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACCURACY ============ -->
+<section class="dark">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-en="Accuracy">정확도</p>
+      <h2 data-en="Fewer places for a mistake to hide">실수가 숨을 자리를 줄입니다</h2>
+      <p class="lead" data-en="Manual packages fail where documents disagree — a length in the cutting list that no longer matches the drawing, an accessory nobody counted. When everything is derived from one model, that entire class of error largely disappears.">
+        수작업 산출물은 서류끼리 어긋나는 지점에서 무너집니다. 도면과 맞지 않는 컷팅 길이, 아무도 세지 않은 부속자재 같은 것들입니다.
+        모든 것이 하나의 모델에서 파생되면 이런 종류의 오류는 대부분 사라집니다.
+      </p>
+    </div>
+    <div class="steps">
+      <article class="step" data-reveal>
+        <span class="step-num">CHECK</span>
+        <b data-en="Profile data validation">프로파일 데이터 검증</b>
+        <p data-en="CheckPfData flags profiles whose data is missing or inconsistent before drawings are issued.">CheckPfData가 데이터가 없거나 어긋난 프로파일을 도면 작성 전에 잡아냅니다.</p>
+      </article>
+      <article class="step" data-reveal data-delay="1">
+        <span class="step-num">SEE</span>
+        <b data-en="Visual confirmation">눈으로 확인</b>
+        <p data-en="You are looking at the actual assembly, not imagining it. What is wrong is visible.">조립 상태를 상상하는 것이 아니라 실제로 보고 있습니다. 잘못된 부분이 눈에 보입니다.</p>
+      </article>
+      <article class="step" data-reveal data-delay="2">
+        <span class="step-num">SYNC</span>
+        <b data-en="One source, many documents">하나의 원본, 여러 서류</b>
+        <p data-en="Drawing, table, list and NC data all come from the same model, so they cannot drift apart silently.">도면·표·리스트·NC가 모두 같은 모델에서 나오므로 조용히 어긋나는 일이 없습니다.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EFFECT ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-en="The effect">효과</p>
+      <h2 data-en="What this changes in practice">실무에서 무엇이 달라지는가</h2>
+    </div>
+    <div class="grid-3">
+      <article class="card" data-reveal>
+        <div class="icon">01</div>
+        <h3 data-en="Time returns to design">시간이 설계로 돌아옵니다</h3>
+        <p data-en="The hours previously spent drafting sheets and counting parts go back into detailing, coordination and the things that actually need judgement.">도면을 그리고 부품을 세던 시간이 디테일 검토와 조정, 정말 판단이 필요한 일에 다시 쓰입니다.</p>
+      </article>
+      <article class="card" data-reveal data-delay="1">
+        <div class="icon">02</div>
+        <h3 data-en="Cost avoided, not recovered">비용은 만회가 아니라 예방</h3>
+        <p data-en="A wrong member found on screen costs minutes. The same member found on site costs a stopped crew, idle equipment and a slipped schedule.">화면에서 발견한 오류는 몇 분이면 끝납니다. 같은 오류를 현장에서 발견하면 인력 대기·장비 유휴·일정 지연이 따라옵니다.</p>
+      </article>
+      <article class="card" data-reveal data-delay="2">
+        <div class="icon">03</div>
+        <h3 data-en="Predictable assembly units">예측 가능한 조립 단위</h3>
+        <p data-en="Because the unit is modeled explicitly, what arrives at site is known in advance — clearer units mean faster, safer installation.">유닛이 명시적으로 모델링되므로 현장에 무엇이 어떤 단위로 도착할지 미리 알 수 있습니다. 단위가 명확할수록 시공은 빠르고 안전해집니다.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta">
+  <div class="aurora a"></div><div class="aurora b"></div>
+  <div class="wrap">
+    <p class="eyebrow center" data-en="Get started">시작하기</p>
+    <h2 data-en="Run it on one of your own units.">직접 맡고 계신 유닛으로 돌려보세요.</h2>
+    <p class="lead center" data-en="Send a typical section and wireframe. We will model it and hand back the drawings, tables and lists it produces.">
+      대표 단면과 와이어프레임을 보내주시면, 모델링한 뒤 그로부터 나오는 도면과 표·리스트를 그대로 보여드립니다.
+    </p>
+    <div class="button-row">
+      <a class="button lg" href="mailto:beimptech@gmail.com" data-en="Request a trial">트라이얼 신청</a>
+      <a class="button ghost lg" href="index.html#editions" data-en="Compare editions">버전 비교 보기</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand"><span class="mark">RCW</span> RCW V5</div>
+        <p style="max-width:34ch;margin-top:12px" data-en="Rhino Curtainwall Plugin — model the unit, generate the fabrication package.">Rhino Curtainwall Plugin — 유닛을 모델링하고, 제작 서류를 자동으로.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <b data-en="Product">제품</b>
+          <a href="index.html" data-en="Overview">전체 소개</a>
+          <a href="modeling.html" data-en="Modeling">모델링</a>
+          <a href="output.html" data-en="Output">산출물</a>
+          <a href="index.html#editions" data-en="Editions">버전 비교</a>
+        </div>
+        <div class="foot-col">
+          <b data-en="Get in touch">문의</b>
+          <a href="mailto:beimptech@gmail.com">beimptech@gmail.com</a>
+          <a href="index.html#contact" data-en="Request a trial">트라이얼 신청</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-en="© RCW — Rhino Curtainwall Plugin for Rhino 7 &amp; 8">© RCW — Rhino 7·8용 커튼월 플러그인</span>
+      <span data-en="Built for curtain wall engineers">커튼월 설계 실무자를 위해</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/lang.js?v=5"></script>
+<script src="assets/ui.js?v=5"></script>
+</body>
+</html>

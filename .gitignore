@@ -1,0 +1,30 @@
+# 빌드 산출물 / 로컬
+.DS_Store
+Thumbs.db
+node_modules/
+.vercel
+.env*
+
+# img/ 는 실제 사용 중인 파일만 추적한다.
+# (폴더에는 help 문서용 이미지 236개가 함께 있으나 사이트는 아래 20개만 사용)
+img/*
+!img/BP1_demo.gif
+!img/BpFd_demo.gif
+!img/Cuttinglist_demo.gif
+!img/FDDS_demo.gif
+!img/FDstyle.gif
+!img/FDwg.gif
+!img/FabBomTable.gif
+!img/FabNo_demo.gif
+!img/FabTable_demo.gif
+!img/GR1_demo.gif
+!img/GS1_modeling_step.png
+!img/GsFd_demo.gif
+!img/IMG-01.png
+!img/Mullion_Line.png
+!img/Section_Surface.png
+!img/U2D_demo.gif
+!img/UMD_demo.gif
+!img/VT1_demo.gif
+!img/case_hero.jpg
+!img/model_curved_a.png

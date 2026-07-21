@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RCW V5가 Wire Frame과 Section으로 커튼월 3D 모델을 빠르고 실용적으로 만드는 과정을 소개합니다.">
+  <meta name="theme-color" content="#ffffff">
+  <title>RCW V5 — 커튼월을 아는 방식으로 만드는 3D 모델</title>
+  <style>
+    :root {
+      --ink:#101828; --muted:#667085; --line:#e4e7ec; --paper:#fff;
+      --mist:#f7f9fc; --navy:#101f3d; --blue:#2667d9; --blue-dark:#17499e;
+      --sky:#eaf1ff; --mint:#d9fbe8; --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; overflow-x:hidden; color:var(--ink); background:var(--paper); font:16px/1.65 Inter,Pretendard,"Noto Sans KR","Malgun Gothic",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    img { display:block; max-width:100%; }
+    h1,h2,h3,p { margin-top:0; }
+    .wrap { width:min(1140px,calc(100% - 40px)); margin:auto; }
+    .eyebrow { margin:0 0 10px; color:var(--blue); font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h2 { max-width:800px; margin-bottom:14px; font-size:clamp(29px,4vw,46px); line-height:1.13; letter-spacing:-.045em; word-break:keep-all; }
+    .lead { max-width:700px; color:var(--muted); font-size:18px; word-break:keep-all; }
+    .button { display:inline-flex; min-height:48px; align-items:center; justify-content:center; gap:8px; padding:0 20px; border:1px solid transparent; border-radius:10px; background:var(--blue); color:#fff; font-weight:750; transition:.2s ease; cursor:pointer; }
+    .button:hover { transform:translateY(-2px); background:var(--blue-dark); box-shadow:0 12px 28px rgba(38,103,217,.22); }
+    .button.secondary { border-color:#c9d5ed; background:#fff; color:var(--blue-dark); }
+    .button.secondary:hover { background:var(--sky); box-shadow:none; }
+
+    .nav { position:sticky; top:0; z-index:20; border-bottom:1px solid rgba(228,231,236,.8); background:rgba(255,255,255,.9); backdrop-filter:blur(14px); }
+    .nav-inner { display:flex; height:66px; align-items:center; justify-content:space-between; gap:18px; }
+    .wordmark { display:flex; align-items:center; gap:9px; font-size:18px; font-weight:850; letter-spacing:-.03em; }
+    .mark { display:grid; width:29px; height:29px; place-items:center; border-radius:8px; background:var(--blue); color:#fff; font-size:11px; letter-spacing:-.07em; }
+    .nav-links { display:flex; align-items:center; gap:22px; color:#475467; font-size:14px; font-weight:650; }
+    .nav-links a:hover { color:var(--blue); }
+    .nav-right { display:flex; align-items:center; gap:11px; }
+    .nav .button { min-height:38px; padding:0 15px; font-size:13px; }
+    .lang { min-width:54px; height:36px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:#344054; font:750 12px/1 inherit; cursor:pointer; transition:.15s; }
+    .lang:hover { border-color:#b9cbee; color:var(--blue); }
+
+    .hero { overflow:hidden; padding:72px 0 56px; background:radial-gradient(circle at 87% 8%,#dce9ff 0,transparent 29%),linear-gradient(180deg,#f9fbff 0%,#fff 90%); }
+    .hero-grid { display:grid; grid-template-columns:.95fr 1.05fr; align-items:center; gap:56px; }
+    .hero-grid > * { min-width:0; }
+    .pill { display:inline-flex; align-items:center; gap:8px; margin-bottom:19px; padding:6px 11px; border:1px solid #cad8f4; border-radius:999px; background:#fff; color:#315b9d; font-size:12px; font-weight:800; }
+    .pill::before { width:7px; height:7px; border-radius:50%; background:#20a864; content:""; }
+    h1 { margin-bottom:19px; font-size:clamp(42px,5.4vw,68px); line-height:1.03; letter-spacing:-.065em; word-break:keep-all; }
+    .hero h1 em { color:var(--blue); font-style:normal; }
+    .hero-copy { max-width:590px; margin-bottom:27px; color:#475467; font-size:18px; word-break:keep-all; }
+    .button-row { display:flex; flex-wrap:wrap; gap:11px; }
+    .micro { margin:14px 0 0; color:#667085; font-size:12px; }
+    .hero-art { position:relative; min-height:470px; }
+    .hero-image { position:absolute; inset:0 0 16px; width:100%; height:100%; object-fit:contain; padding:20px; border:1px solid #d8e1f0; border-radius:var(--radius); background:#fff; box-shadow:0 22px 50px rgba(16,31,61,.17); }
+    .hero-card { position:absolute; right:-14px; bottom:-4px; width:min(295px,68%); padding:16px; border:1px solid #dbe3f0; border-radius:14px; background:rgba(255,255,255,.95); box-shadow:0 16px 32px rgba(16,31,61,.14); backdrop-filter:blur(8px); }
+    .hero-card b { display:block; margin-bottom:2px; font-size:14px; word-break:keep-all; }
+    .hero-card span { display:block; color:var(--muted); font-size:12.5px; word-break:keep-all; }
+
+    .strip { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:#fff; }
+    .strip-grid { display:grid; grid-template-columns:repeat(4,1fr); }
+    .strip-item { min-height:104px; padding:25px 24px; border-right:1px solid var(--line); }
+    .strip-item:last-child { border:0; }
+    .strip-item b { display:block; margin-bottom:2px; font-size:17px; letter-spacing:-.02em; }
+    .strip-item span { color:var(--muted); font-size:13px; }
+
+    section { padding:104px 0; }
+    .benefits { background:var(--mist); }
+    .benefit-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:34px; }
+    .benefit { min-height:220px; padding:26px; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .icon { display:grid; width:43px; height:43px; place-items:center; margin-bottom:20px; border-radius:11px; background:var(--sky); color:var(--blue); font-size:15px; font-weight:850; }
+    .benefit h3 { margin-bottom:8px; font-size:18px; letter-spacing:-.025em; word-break:keep-all; }
+    .benefit p { margin:0; color:var(--muted); font-size:14px; word-break:keep-all; }
+
+    .feature-head { margin-bottom:70px; }
+    .feature { display:grid; grid-template-columns:1fr 1fr; gap:62px; align-items:center; margin-bottom:112px; }
+    .feature:last-child { margin-bottom:0; }
+    .feature.reverse .feature-copy { order:2; }
+    .feature figure { position:relative; margin:0; overflow:hidden; border:1px solid #dce3ee; border-radius:15px; background:#f1f5fb; box-shadow:0 16px 38px rgba(16,31,61,.08); }
+    .feature figure img { width:100%; aspect-ratio:16/10; object-fit:contain; background:#f6f8fb; }
+    .feature figure.demo img { object-fit:cover; background:#656565; }
+    .feature figcaption { min-height:48px; padding:11px 14px; color:#667085; background:#fff; font-size:12px; word-break:keep-all; }
+    .feature h3 { margin-bottom:12px; font-size:31px; line-height:1.15; letter-spacing:-.04em; word-break:keep-all; }
+    .feature p { color:var(--muted); word-break:keep-all; }
+    .feature ul { margin:17px 0 0; padding:0; list-style:none; }
+    .feature li { position:relative; margin:10px 0; padding-left:25px; color:#475467; word-break:keep-all; }
+    .feature li::before { position:absolute; top:5px; left:0; width:14px; height:14px; border-radius:50%; background:var(--mint); color:#07844b; content:"✓"; font-size:10px; font-weight:900; line-height:14px; text-align:center; }
+    .tag { display:inline-block; margin-bottom:11px; padding:4px 9px; border-radius:6px; background:var(--sky); color:#315b9d; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .cmd-row { display:flex; flex-wrap:wrap; gap:7px; margin-top:20px; }
+    .cmd { padding:5px 8px; border-radius:5px; background:#f2f4f7; color:#344054; font:750 11px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace; }
+
+    .workflow { background:var(--navy); color:#fff; }
+    .workflow .eyebrow { color:#9cbdf8; }
+    .workflow .lead { color:#c4d0e4; }
+    .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:40px; }
+    .step { min-height:198px; padding:21px 18px; border:1px solid rgba(255,255,255,.13); border-radius:12px; background:rgba(255,255,255,.055); }
+    .step-num { display:block; margin-bottom:24px; color:#82adff; font:800 12px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .step b { display:block; margin-bottom:7px; font-size:16px; }
+    .step p { margin:0; color:#bdc9dc; font-size:13px; word-break:keep-all; }
+
+    .components { background:var(--mist); }
+    .component-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:36px; }
+    .component-card { overflow:hidden; border:1px solid var(--line); border-radius:15px; background:#fff; }
+    .component-card figure { height:250px; margin:0; overflow:hidden; background:#656565; }
+    .component-card img { width:100%; height:100%; object-fit:cover; }
+    .component-card.glass img { object-fit:contain; padding:12px; background:#f3f6fa; }
+    .component-copy { padding:19px 18px 22px; }
+    .component-copy span { color:var(--blue); font:800 10px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .component-copy h3 { margin:6px 0; font-size:18px; }
+    .component-copy p { margin:0; color:var(--muted); font-size:13px; word-break:keep-all; }
+
+    .range-grid { display:grid; grid-template-columns:.9fr 1.1fr; gap:54px; align-items:center; }
+    .range-copy h2 { margin-bottom:17px; }
+    .range-copy p { color:var(--muted); word-break:keep-all; }
+    .range-list { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:24px; }
+    .range-item { padding:16px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+    .range-item b { display:block; font-size:14px; }
+    .range-item span { color:var(--muted); font-size:12px; }
+    .range-media { overflow:hidden; border:1px solid #dce3ee; border-radius:15px; background:#000; box-shadow:0 18px 42px rgba(16,31,61,.12); }
+    .range-media img { width:100%; aspect-ratio:4/3; object-fit:contain; }
+    .range-media p { margin:0; padding:12px 15px; color:var(--muted); background:#fff; font-size:12px; word-break:keep-all; }
+
+    .next { padding:86px 0; }
+    .next-box { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; padding:43px; border:1px solid #cfdcf4; border-radius:20px; background:linear-gradient(135deg,#eaf1ff,#f8fbff); }
+    .next-box h2 { margin:0 0 8px; font-size:33px; }
+    .next-box p { max-width:720px; margin:0; color:#52637c; word-break:keep-all; }
+    .next-actions { display:flex; flex-direction:column; align-items:stretch; gap:10px; min-width:220px; }
+    .next-note { color:#667085; font-size:11px; text-align:center; }
+    footer { padding:33px 0; border-top:1px solid var(--line); color:#667085; font-size:12px; }
+    .footer-row { display:flex; justify-content:space-between; gap:18px; }
+
+    @media (max-width:900px) {
+      .nav-links a:not(.button) { display:none; }
+      .hero-grid,.feature,.range-grid,.next-box { grid-template-columns:1fr; gap:32px; }
+      .hero { padding-top:52px; }
+      .hero-art { min-height:390px; }
+      .hero-card { right:8px; }
+      .strip-grid,.benefit-grid,.component-grid { grid-template-columns:1fr 1fr; }
+      .strip-item:nth-child(2) { border-right:0; }
+      .strip-item { border-bottom:1px solid var(--line); }
+      .feature.reverse .feature-copy { order:0; }
+      .steps { grid-template-columns:1fr 1fr; }
+      .next-actions { min-width:0; }
+      .footer-row { flex-direction:column; }
+      section { padding:74px 0; }
+    }
+    @media (max-width:540px) {
+      .wrap { width:min(calc(100% - 28px),1140px); }
+      .wordmark { font-size:16px; }
+      .nav .button { padding:0 12px; }
+      h1 { font-size:43px; word-break:normal; }
+      h2 { word-break:normal; }
+      .hero-copy,.lead,.feature p,.feature li,.benefit p,.step p,.component-copy p,.range-copy p,.next-box p { word-break:normal; overflow-wrap:anywhere; }
+      .strip-grid,.benefit-grid,.component-grid,.steps,.range-list { grid-template-columns:1fr; }
+      .strip-item { border-right:0; }
+      .hero-art { min-height:320px; }
+      .hero-image { padding:8px; }
+      .hero-card { width:80%; }
+      .feature-head { margin-bottom:50px; }
+      .feature { margin-bottom:78px; }
+      .feature h3 { font-size:27px; }
+      .component-card figure { height:310px; }
+      .next-box { padding:28px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="wordmark" href="index.html"><span class="mark">RCW</span> RCW V5</a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="index.html" data-en="Overview">전체 소개</a>
+        <a href="output.html" data-en="Output">산출물</a>
+        <a href="#components" data-en="Components">구성요소</a>
+        <a href="#range" data-en="Scope">적용 범위</a>
+        <a href="contact.html" data-en="Contact">문의</a>
+      </nav>
+      <div class="nav-right">
+        <button class="lang" type="button" data-lang-toggle aria-label="언어 전환">ENGLISH</button>
+        <a class="button" href="output.html" data-en="See output →">산출물 보기 →</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="pill">Windows · Rhino 7 &amp; Rhino 8</span>
+          <h1 data-en="3D modeling,<br><em>the way you know curtain walls.</em>">3D 모델링,<br><em>커튼월을 아는 방식으로.</em></h1>
+          <p class="hero-copy" data-en="RCW V5 reads your wireframe and real sections to generate mullion and transom frames as complete units. Instead of building members one by one, you prepare the basis the model is built from.">RCW V5는 Wire Frame과 실제 Section을 읽어 Mullion·Transom Frame을 Unit 단위로 자동 생성합니다. 부재를 하나씩 만드는 대신, 모델이 만들어질 기준을 준비합니다.</p>
+          <div class="button-row">
+            <a class="button" href="#demo" data-en="See real modeling →">실제 모델링 보기 →</a>
+            <a class="button secondary" href="#features" data-en="Check the steps">작업 순서 확인</a>
+          </div>
+          <p class="micro" data-en="Your curtain-wall design information becomes the model's input, directly.">커튼월 설계 정보가 그대로 3D 모델의 입력이 됩니다.</p>
+        </div>
+        <div class="hero-art">
+          <img class="hero-image" src="img/IMG-01.png" alt="RCW에서 구성한 커튼월 Unit Wire Frame과 면 모델">
+          <div class="hero-card"><b data-en="The time you spend building the model yourself drops.">모델을 직접 만드는 시간이 줄어듭니다.</b><span data-en="The wireframe carries position; the section carries the real shape and properties.">Wire Frame은 위치를, Section은 실제 형상과 속성을 전달합니다.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="strip">
+      <div class="wrap strip-grid">
+        <div class="strip-item"><b data-en="01 / Set the base lines">01 / 기준선 준비</b><span data-en="Mullion · Transom wireframe">Mullion·Transom Wire Frame</span></div>
+        <div class="strip-item"><b data-en="02 / Connect sections">02 / 단면 연결</b><span data-en="Profile · Block · Surface data">Profile·Block·Surface 정보</span></div>
+        <div class="strip-item"><b data-en="03 / Build the unit">03 / Unit 생성</b><span data-en="UMD automatic frame modeling">UMD Frame 자동 모델링</span></div>
+        <div class="strip-item"><b data-en="04 / Fill components">04 / 구성요소 채우기</b><span data-en="Glass · Vent · Grill · BackPanel">Glass·Vent·Grill·BackPanel</span></div>
+      </div>
+    </div>
+
+    <section class="benefits" id="why">
+      <div class="wrap">
+        <p class="eyebrow">Why RCW modeling</p>
+        <h2 data-en="3D modeling was hard because you had to build every member yourself.">3D 모델링이 어려웠던 이유는 모든 부재를 직접 만들어야 했기 때문입니다.</h2>
+        <p class="lead" data-en="RCW does not hide the modeling process. It converts the work into the base lines, sections and unit relationships a curtain-wall designer already knows, and leaves the repetition to the computer.">RCW는 모델링 과정을 감추지 않습니다. 커튼월 설계자가 이미 알고 있는 기준선, 단면, Unit의 관계로 바꿔 반복 작업을 컴퓨터에 맡깁니다.</p>
+        <div class="benefit-grid">
+          <article class="benefit"><div class="icon">01</div><h3 data-en="Familiar design information over new 3D syntax">새로운 3D 문법보다 익숙한 설계 정보</h3><p data-en="Instead of building each member with general 3D commands, you use mullion/transom center lines and real sections.">일반 3D 명령으로 부재를 하나씩 만드는 대신 Mullion·Transom 중심선과 실제 Section을 사용합니다.</p></article>
+          <article class="benefit"><div class="icon">02</div><h3 data-en="One defined rule over repeated placement">반복 배치보다 한 번 정의한 규칙</h3><p data-en="Once Profile, Block and Surface data are organized into a section, the same basis applies everywhere that member is placed.">Profile, Block, Surface 정보를 Section에 정리하면 해당 부재가 놓이는 위치마다 같은 기준이 적용됩니다.</p></article>
+          <article class="benefit"><div class="icon">03</div><h3 data-en="On-screen checks over mental ones">머릿속 검토보다 화면에서 확인</h3><p data-en="Check member direction, section relationships and block/unit composition in 3D, so you can find problems before the drawing work begins.">부재 방향, 단면 관계, Block과 Unit 구성을 3D로 확인해 다음 도면 작업 전에 문제를 찾을 수 있습니다.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="wrap">
+        <div class="feature-head">
+          <p class="eyebrow">Three inputs, one practical model</p>
+          <h2 data-en="It is clear what you prepare and what RCW builds.">무엇을 준비하고, RCW가 무엇을 만드는지 명확합니다.</h2>
+          <p class="lead" data-en="Work proceeds as wireframe, section, then unit selection. The input and result of each step are separated, so even first-time users know where to look.">작업은 Wire Frame, Section, Unit 선택 순서로 진행됩니다. 각 단계의 입력과 결과가 분리되어 있어 처음 사용자도 어디를 확인해야 하는지 알 수 있습니다.</p>
+        </div>
+
+        <article class="feature">
+          <div class="feature-copy"><span class="tag">01 / Wire Frame</span><h3 data-en="Define only the position and direction of members — precisely.">부재의 위치와 방향만 정확히 정합니다.</h3><p data-en="Mullions are grouped under M_Center, transoms under T_Center. The start-to-end direction of each line becomes the basis for member order and section placement, and can be verified on screen with WVector and Ldir.">Mullion은 M_Center, Transom은 T_Center 계열로 구분합니다. 선의 시작과 끝 방향은 부재 순서와 Section 배치의 기준이 되며, WVector와 Ldir로 화면에서 확인할 수 있습니다.</p><ul><li data-en="Separate mullion/transom base lines by layer">Mullion·Transom 기준선을 Layer로 구분</li><li data-en="Manage unit numbers and direction points together within a group">Unit 번호와 방향점을 그룹 안에서 함께 관리</li><li data-en="Apply the same principle to typical, sloped and irregular units">정형·경사·비정형 Unit에 동일한 원리 적용</li></ul><div class="cmd-row"><span class="cmd">MC1~MCXX</span><span class="cmd">TC1~TCXX</span><span class="cmd">WVector</span><span class="cmd">Ldir</span></div></div>
+          <figure><img src="img/Mullion_Line.png" alt="Mullion Wire Frame의 Layer와 진행 방향"><figcaption data-en="The wireframe carries not the finished shape, but where and in which direction members are generated.">Wire Frame은 완성 형상이 아니라, 부재가 생성될 위치와 방향을 전달합니다.</figcaption></figure>
+        </article>
+
+        <article class="feature reverse">
+          <div class="feature-copy"><span class="tag">02 / Section Data</span><h3 data-en="Put the modeling rules into the real section.">실제 단면에 모델링 규칙을 담습니다.</h3><p data-en="A section can hold not only a simple profile but center lines, polylines, surfaces, blocks and material / purpose / extra-length data. That information becomes the basis for frame solids and related blocks.">Section에는 단순한 Profile 외에도 Center Line, Polyline, Surface, Block과 재료·용도·추가 길이 정보를 기록할 수 있습니다. 이 정보가 Frame Solid와 관련 Block을 만드는 기준이 됩니다.</p><ul><li data-en="Assign the profile name and mullion/transom purpose">Profile 이름과 Mullion·Transom 용도 지정</li><li data-en="Define the generation position and direction of blocks and surfaces">Block과 Surface의 생성 위치·방향 정의</li><li data-en="Reuse section data once it has been reviewed">한 번 검토한 Section 데이터를 반복 사용</li></ul><div class="cmd-row"><span class="cmd">Pname</span><span class="cmd">MakeM</span><span class="cmd">MakeT</span><span class="cmd">SSP</span></div></div>
+          <figure><img src="img/Section_Surface.png" alt="Mullion과 Transom Section에 입력된 Surface 정보"><figcaption data-en="A section carries not only the member's shape but its purpose and properties.">Section은 부재의 모양뿐 아니라 생성 목적과 속성을 함께 전달합니다.</figcaption></figure>
+        </article>
+
+        <article class="feature" id="demo">
+          <div class="feature-copy"><span class="tag">03 / UMD</span><h3 data-en="Select a unit, and the frame model is built.">Unit을 선택하면 Frame 모델이 만들어집니다.</h3><p data-en="UMD analyzes the base lines of the selected unit group and generates mullion and transom solids. Related block placement, bracket re-machining and result-group cleanup are handled in the same run.">UMD는 선택한 Unit 그룹의 기준선을 분석해 Mullion과 Transom Solid를 생성합니다. 관련 Block 배치, Bracket 재가공, 결과 그룹 정리도 같은 실행 흐름에서 처리합니다.</p><ul><li data-en="Automatic mullion / transom frame solids">Mullion·Transom Frame Solid 자동 생성</li><li data-en="Blocks, subtract shapes and machining relationships applied">Block·Subtract Shape·가공 관계 반영</li><li data-en="Results and reference objects organized into a unit group">생성 결과와 기준 객체를 Unit 그룹으로 정리</li></ul><div class="cmd-row"><span class="cmd">UMD</span><span class="cmd">UNIT MODELING</span></div></div>
+          <figure class="demo"><img src="img/UMD_demo.gif" alt="Wire Frame과 Section으로 Frame Solid를 생성하는 UMD 데모"><figcaption data-en="Actual help demo — a prepared wireframe and section becoming a unit frame model.">실제 도움말 데모 — 준비된 Wire Frame과 Section이 Unit Frame 모델로 바뀌는 과정입니다.</figcaption></figure>
+        </article>
+      </div>
+    </section>
+
+    <section class="workflow" id="workflow">
+      <div class="wrap">
+        <p class="eyebrow">A connected modeling path</p>
+        <h2 data-en="Start from lines, finish with a unit you can review.">선에서 시작해, 검토 가능한 Unit으로 완성됩니다.</h2>
+        <p class="lead" data-en="You never redraw the same design information as steps change. Each step's result becomes the next step's input.">단계가 바뀌어도 같은 설계 정보를 다시 그리지 않습니다. 앞 단계의 결과가 다음 단계의 입력이 됩니다.</p>
+        <div class="steps">
+          <article class="step"><span class="step-num">01 / DEFINE</span><b data-en="Draw the wireframe">Wire Frame 작성</b><p data-en="Set the position, order and direction of mullions and transoms.">Mullion과 Transom의 위치, 순서, 진행 방향을 정합니다.</p></article>
+          <article class="step"><span class="step-num">02 / CONNECT</span><b data-en="Connect sections">Section 연결</b><p data-en="Link real profile, block and surface data to the base lines.">실제 Profile과 Block, Surface 정보를 기준선에 연결합니다.</p></article>
+          <article class="step"><span class="step-num">03 / BUILD</span><b data-en="Run UMD">UMD 실행</b><p data-en="Generate frame solids and organize related objects by unit.">Frame Solid를 생성하고 관련 객체를 Unit 단위로 정리합니다.</p></article>
+          <article class="step"><span class="step-num">04 / COMPLETE</span><b data-en="Add face components">면 구성요소 추가</b><p data-en="Apply glass, vent, grill and back-panel types to the selected faces.">선택한 면에 Glass, Vent, Grill, BackPanel 타입을 적용합니다.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="components" id="components">
+      <div class="wrap">
+        <p class="eyebrow">Complete the unit</p>
+        <h2 data-en="Once the frame exists, select the faces you need and fill in the components.">Frame이 만들어지면, 필요한 면을 선택해 구성요소를 채웁니다.</h2>
+        <p class="lead" data-en="Preset your common specifications as types and apply them to the faces you need. Different specs within a project are quickly distinguished by command number.">자주 사용하는 사양을 타입으로 미리 설정하고 필요한 Face에 적용합니다. 프로젝트 안의 서로 다른 사양도 명령 번호로 빠르게 구분할 수 있습니다.</p>
+        <div class="component-grid">
+          <article class="component-card glass"><figure><img src="img/GS1_modeling_step.png" alt="Glass를 생성할 커튼월 Face 선택"></figure><div class="component-copy"><span>GS1 ~ GS9</span><h3>Glass</h3><p data-en="Creates a glass solid on the selected face using the section basis and the set thickness / spec.">Section 기준과 설정된 두께·사양으로 선택한 Face에 Glass Solid를 만듭니다.</p></div></article>
+          <article class="component-card"><figure><img src="img/VT1_demo.gif" alt="선택한 면에 Vent Frame을 생성하는 데모"></figure><div class="component-copy"><span>VT1 ~ VT9</span><h3>Vent</h3><p data-en="Builds left / right / top / bottom vent frames as a group based on the selected face.">선택한 면을 기준으로 Left·Right·Top·Bottom Vent Frame을 그룹으로 만듭니다.</p></div></article>
+          <article class="component-card"><figure><img src="img/GR1_demo.gif" alt="선택한 면에 Grill과 Blade를 생성하는 데모"></figure><div class="component-copy"><span>GR1 ~ GR5</span><h3>Grill</h3><p data-en="Automatically composes the outer frame and inner blades to the set section and spacing.">외곽 Frame과 내부 Blade를 설정된 Section과 간격에 맞춰 자동 구성합니다.</p></div></article>
+          <article class="component-card"><figure><img src="img/BP1_demo.gif" alt="Glass Surface 기준 BackPanel 생성 데모"></figure><div class="component-copy"><span>BP1 ~ BP5</span><h3>BackPanel</h3><p data-en="Generates a sheet / panel / insulation solid structure based on the glass surface.">Glass Surface를 기준으로 Sheet·Panel·Insulation 구조의 Solid를 생성합니다.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="range">
+      <div class="wrap range-grid">
+        <div class="range-copy">
+          <p class="eyebrow">From typical to complex</p>
+          <h2 data-en="From typical units to curved and irregular curtain walls.">정형 Unit에서 곡면과 비정형 커튼월까지.</h2>
+          <p data-en="The shape changes, but the principle does not. The wireframe sets position and direction; the section sets the real member's shape and properties. RCW applies this relationship repeatedly, so even large projects are built with the same system.">형태가 달라져도 기본 원리는 같습니다. Wire Frame이 위치와 방향을 정하고, Section이 실제 부재의 형상과 속성을 정합니다. RCW는 이 관계를 반복 적용해 규모가 큰 프로젝트도 같은 체계로 구성합니다.</p>
+          <div class="range-list">
+            <div class="range-item"><b>Typical Unit</b><span data-en="Repeated typical units">반복되는 정형 Unit</span></div>
+            <div class="range-item"><b>Sloped Unit</b><span data-en="Sloped and non-orthogonal faces">경사와 비직교 Face</span></div>
+            <div class="range-item"><b>Curved Façade</b><span data-en="Members following a curved surface">곡면을 따라가는 부재</span></div>
+            <div class="range-item"><b>Mixed Components</b><span data-en="Mixed glass / panel / vent">Glass·Panel·Vent 혼합</span></div>
+          </div>
+        </div>
+        <figure class="range-media"><img src="img/model_curved_a.png" alt="RCW로 모델링한 대형 곡면 커튼월 프로젝트"><p data-en="A project example composing a curved envelope, an interior atrium, and many units and profiles within one modeling system.">곡면 외피, 내부 아트리움, 다수의 Unit과 Profile을 하나의 모델링 체계로 구성한 프로젝트 예시</p></figure>
+      </div>
+    </section>
+
+    <section class="next">
+      <div class="wrap next-box">
+        <div><h2 data-en="Modeling is not the end — it is the start of accurate production information.">모델링은 결과가 아니라, 정확한 제작 정보의 시작입니다.</h2><p data-en="A finished RCW model can be reviewed by eye, and it also becomes the basis for profile numbers, material / cutting lists, unit 2D, fabrication drawings and production elevations. The next stage shows what materials one model produces.">완성된 RCW 모델은 눈으로 검토할 수 있을 뿐 아니라 Profile 번호, 자재·절단 리스트, Unit 2D, 가공도와 제작 입면도의 기준이 됩니다. 다음 단계에서는 하나의 모델에서 어떤 자료가 만들어지는지 보여줍니다.</p></div>
+        <div class="next-actions"><a class="button" href="output.html" data-en="See stage 2 — output →">2단계 결과물 보기 →</a><a class="button secondary" href="#top" data-en="Back to the top">처음부터 다시 보기</a><span class="next-note">Stage 01 · Easy 3D modeling</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap footer-row"><span>© 2026 Beimptech · RCW V5</span><span data-en="Rhino is a registered trademark of Robert McNeel &amp; Associates.">Rhino는 Robert McNeel &amp; Associates의 등록 상표입니다.</span></div></footer>
+
+  <script>
+  (function(){
+    var KEY='rcw-lang';
+    function apply(l){
+      var n=document.querySelectorAll('[data-en]');
+      for(var i=0;i<n.length;i++){var el=n[i];
+        if(el.dataset.ko===undefined)el.dataset.ko=el.innerHTML;
+        el.innerHTML=(l==='en')?el.dataset.en:el.dataset.ko;}
+      document.documentElement.lang=(l==='en')?'en':'ko';
+      var b=document.querySelectorAll('[data-lang-toggle]');
+      for(var j=0;j<b.length;j++){b[j].textContent=(l==='en')?'한국어':'ENGLISH';}
+      try{localStorage.setItem(KEY,l);}catch(e){}
+    }
+    function cur(){try{return localStorage.getItem(KEY)||'ko';}catch(e){return 'ko';}}
+    function init(){apply(cur());
+      document.addEventListener('click',function(e){
+        var t=e.target.closest?e.target.closest('[data-lang-toggle]'):null;
+        if(!t)return;e.preventDefault();apply(cur()==='ko'?'en':'ko');});}
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+  })();
+  </script>
+</body>
+</html>
