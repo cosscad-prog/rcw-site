@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="RCW V5 제품 문의 — 이름, 회사, 연락처, 이메일과 궁금하신 내용을 남겨주시면 확인 후 답변드립니다.">
+  <meta name="description" content="RCW V5 Trial 신청 — 이름, 회사, 이메일을 남겨주시면 정식 출시 시 다운로드 안내를 보내드립니다.">
   <meta name="theme-color" content="#ffffff">
-  <title>제품 문의 — RCW V5</title>
+  <title>Trial 신청 — RCW V5</title>
   <style>
     :root {
       --ink:#101828; --muted:#667085; --line:#e4e7ec; --paper:#fff;
@@ -41,39 +41,43 @@
     .intro { padding:60px 0 8px; background:radial-gradient(circle at 87% 0%,#dce9ff 0,transparent 32%),linear-gradient(180deg,#f9fbff 0%,#fff 90%); }
     main { padding:40px 0 100px; }
 
-    .form-card { margin-top:8px; padding:34px; border:1px solid var(--line); border-radius:var(--radius); background:#fff; box-shadow:0 18px 42px rgba(16,31,61,.08); }
+    .notice { display:flex; gap:12px; margin-top:22px; padding:15px 17px; border:1px solid #cfdcf4; border-radius:13px; background:var(--sky); }
+    .notice i { flex:none; display:grid; width:22px; height:22px; place-items:center; border-radius:50%; background:var(--blue); color:#fff; font-style:normal; font-size:12px; font-weight:900; }
+    .notice p { margin:0; color:#2c4470; font-size:13.5px; word-break:keep-all; }
+
+    .form-card { margin-top:20px; padding:34px; border:1px solid var(--line); border-radius:var(--radius); background:#fff; box-shadow:0 18px 42px rgba(16,31,61,.08); }
     .field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
     .field { margin-bottom:18px; }
     .field label { display:block; margin-bottom:7px; font-size:13.5px; font-weight:700; color:#344054; }
     .field label .req { margin-left:3px; color:var(--blue); }
     .field label .opt { margin-left:6px; color:var(--muted); font-weight:500; font-size:12px; }
-    .field input, .field textarea {
+    .field input, .field textarea, .field select {
       width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:10px; background:#fbfcfe;
       font:15px/1.5 inherit; color:var(--ink); transition:.15s;
     }
-    .field input:focus, .field textarea:focus { outline:none; border-color:var(--blue); background:#fff; box-shadow:0 0 0 3px rgba(38,103,217,.12); }
-    .field textarea { resize:vertical; min-height:130px; }
+    .field input:focus, .field textarea:focus, .field select:focus { outline:none; border-color:var(--blue); background:#fff; box-shadow:0 0 0 3px rgba(38,103,217,.12); }
+    .field textarea { resize:vertical; min-height:110px; }
     .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
     .form-actions { display:flex; align-items:center; gap:14px; margin-top:6px; }
     .form-note { color:var(--muted); font-size:12px; word-break:keep-all; }
 
-    .alert { display:none; margin-top:18px; padding:14px 16px; border-radius:12px; font-size:14px; word-break:keep-all; }
+    .alert { display:none; margin-top:18px; padding:16px 18px; border-radius:12px; font-size:14px; word-break:keep-all; }
     .alert.show { display:block; }
     .alert.success { border:1px solid #b4e3c8; background:var(--mint); color:#0a6b3f; }
     .alert.error { border:1px solid #f3c6c1; background:var(--danger-bg); color:var(--danger); }
-    .alert b { display:block; margin-bottom:3px; }
+    .alert b { display:block; margin-bottom:4px; font-size:15px; }
 
-    .why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:26px 0 0; }
-    .why-item { padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--mist); }
-    .why-item b { display:block; margin-bottom:3px; font-size:14px; }
-    .why-item span { color:var(--muted); font-size:12.5px; word-break:keep-all; }
+    .spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:26px 0 0; }
+    .spec-item { padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--mist); }
+    .spec-item b { display:block; margin-bottom:3px; font-size:14px; }
+    .spec-item span { color:var(--muted); font-size:12.5px; word-break:keep-all; }
 
     footer { padding:33px 0; border-top:1px solid var(--line); color:#667085; font-size:12px; }
     .footer-row { display:flex; justify-content:space-between; gap:18px; width:min(1140px,calc(100% - 40px)); margin:auto; }
 
     @media (max-width:720px) {
       .nav-links { display:none; }
-      .field-row, .why-grid { grid-template-columns:1fr; }
+      .field-row, .spec-grid { grid-template-columns:1fr; }
       .form-card { padding:24px; }
       .footer-row { flex-direction:column; }
     }
@@ -87,6 +91,7 @@
         <a href="index.html" data-en="Overview">전체 소개</a>
         <a href="modeling.html" data-en="Modeling">모델링</a>
         <a href="output.html" data-en="Output">산출물</a>
+        <a href="contact.html" data-en="Contact">문의</a>
       </nav>
       <div class="nav-right">
         <button class="lang" type="button" data-lang-toggle aria-label="언어 전환">ENGLISH</button>
@@ -96,15 +101,20 @@
 
   <section class="intro">
     <div class="wrap">
-      <p class="eyebrow" data-en="Get in touch">문의하기</p>
-      <h1 data-en="Ask us anything about RCW V5.">RCW V5에 대해 무엇이든 물어보세요.</h1>
-      <p class="lead" data-en="Leave your name, company, contact info and a short note about what you need. We read every message and reply directly.">이름, 회사, 연락처와 궁금하신 내용을 남겨주시면 직접 확인 후 답변드립니다.</p>
+      <p class="eyebrow" data-en="Trial">트라이얼</p>
+      <h1 data-en="Try RCW V5 on your own project.">RCW V5를 직접 프로젝트에 써보세요.</h1>
+      <p class="lead" data-en="Leave your name, company and email. We will send the download link and setup guide as soon as the official release is out.">이름, 회사, 이메일을 남겨주시면 정식 출시와 동시에 다운로드 링크와 설치 안내를 보내드립니다.</p>
+
+      <div class="notice">
+        <i>!</i>
+        <p data-en="RCW V5 is preparing for its official release. Trial downloads are not open yet — if you register now, you will be among the first to be notified.">RCW V5는 현재 정식 출시를 준비하고 있습니다. Trial 다운로드는 아직 열리지 않았으며, 지금 신청해 주시면 준비되는 대로 가장 먼저 안내드립니다.</p>
+      </div>
     </div>
   </section>
 
   <main>
     <div class="wrap">
-      <form class="form-card" id="contact-form">
+      <form class="form-card" id="trial-form">
         <!-- honeypot: 스팸 봇 방지용 숨김 필드, 사람은 채우지 않음 -->
         <div class="hp" aria-hidden="true">
           <label for="company-website">Website</label>
@@ -124,28 +134,35 @@
 
         <div class="field-row">
           <div class="field">
-            <label for="f-phone" data-en="Phone<span class=&quot;opt&quot;>(optional)</span>">연락처<span class="opt">(선택)</span></label>
-            <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="010-0000-0000" data-en-placeholder="+1 555-000-0000">
-          </div>
-          <div class="field">
             <label for="f-email" data-en="Email<span class=&quot;req&quot;>*</span>">이메일<span class="req">*</span></label>
             <input id="f-email" name="email" type="email" required autocomplete="email" placeholder="name@company.com">
+          </div>
+          <div class="field">
+            <label for="f-scale" data-en="Project type<span class=&quot;opt&quot;>(optional)</span>">주로 다루는 프로젝트<span class="opt">(선택)</span></label>
+            <select id="f-scale" name="project_scale">
+              <option value="" data-en="Please select">선택해 주세요</option>
+              <option value="stick" data-en="Stick system">Stick 시스템</option>
+              <option value="unitized" data-en="Unitized system">Unitized 시스템</option>
+              <option value="both" data-en="Both">두 가지 모두</option>
+              <option value="curved" data-en="Curved / free-form facades">곡면·비정형 파사드</option>
+              <option value="other" data-en="Other">기타</option>
+            </select>
           </div>
         </div>
 
         <div class="field">
-          <label for="f-message" data-en="What would you like to know?<span class=&quot;req&quot;>*</span>">궁금하신 내용<span class="req">*</span></label>
-          <textarea id="f-message" name="message" required placeholder="프로젝트 규모, 필요한 기능, Core/Standard 중 궁금한 점 등을 자유롭게 남겨주세요." data-en-placeholder="Project size, features you need, questions about Core vs. Standard — anything is welcome."></textarea>
+          <label for="f-purpose" data-en="What would you like to check with the trial?<span class=&quot;opt&quot;>(optional)</span>">트라이얼로 확인해 보고 싶은 점<span class="opt">(선택)</span></label>
+          <textarea id="f-purpose" name="purpose" placeholder="현재 작업에서 가장 시간이 많이 걸리는 부분, 확인해 보고 싶은 기능 등을 남겨주시면 안내에 참고하겠습니다." data-en-placeholder="Tell us which part of your current work takes the most time, or which features you want to test."></textarea>
         </div>
 
         <div class="form-actions">
-          <button class="button" type="submit" id="submit-btn" data-en="Send message">문의 보내기</button>
-          <span class="form-note" data-en="We usually reply within 1–2 business days.">보통 영업일 기준 1~2일 내 답변드립니다.</span>
+          <button class="button" type="submit" id="submit-btn" data-en="Register for the trial">Trial 신청하기</button>
+          <span class="form-note" data-en="We only use your details to send the trial guide.">알려주신 정보는 트라이얼 안내 목적으로만 사용합니다.</span>
         </div>
 
         <div class="alert success" id="alert-success" role="status">
-          <b data-en="Thank you — your message has been sent.">감사합니다 — 문의가 정상적으로 전송되었습니다.</b>
-          <span data-en="We will get back to you at the email address you provided.">남겨주신 이메일 주소로 답변드리겠습니다.</span>
+          <b data-en="Registered — thank you.">신청이 접수되었습니다.</b>
+          <span data-en="We will email you the download link and setup guide as soon as the release is ready.">출시 준비가 끝나는 대로 남겨주신 이메일로 다운로드 링크와 설치 안내를 보내드리겠습니다.</span>
         </div>
         <div class="alert error" id="alert-error" role="alert">
           <b data-en="Something went wrong.">전송 중 문제가 발생했습니다.</b>
@@ -154,10 +171,10 @@
         </div>
       </form>
 
-      <div class="why-grid">
-        <div class="why-item"><b data-en="Trial &amp; pricing">트라이얼·가격</b><span data-en="Ask about the 90-day trial or Core / Standard pricing.">90일 트라이얼이나 Core·Standard 가격이 궁금하신가요?</span></div>
-        <div class="why-item"><b data-en="Feature fit">기능 적합성</b><span data-en="Tell us your project type and we'll confirm what RCW covers.">프로젝트 유형을 알려주시면 RCW가 커버하는 범위를 확인해 드립니다.</span></div>
-        <div class="why-item"><b data-en="Support">지원</b><span data-en="Already using RCW? Send installation or licensing questions here too.">이미 RCW를 사용 중이시라면 설치·라이선스 문의도 이곳으로 남겨주세요.</span></div>
+      <div class="spec-grid">
+        <div class="spec-item"><b data-en="Host application">호스트 프로그램</b><span data-en="Rhino 7 or Rhino 8 for Windows.">Windows용 Rhino 7 또는 Rhino 8.</span></div>
+        <div class="spec-item"><b data-en="Trial period">트라이얼 기간</b><span data-en="90 days, covering the Core feature scope.">90일, Core 기능 범위로 제공됩니다.</span></div>
+        <div class="spec-item"><b data-en="Language">언어</b><span data-en="Separate Korean and English builds and help.">한국어·영어 설치본과 도움말 분리 제공.</span></div>
       </div>
     </div>
   </main>
@@ -192,18 +209,20 @@
 
   <script>
   /* ------------------------------------------------------------------
-     문의 폼 → Supabase
+     Trial 신청 → Supabase (trial_requests 테이블)
 
-     아래 키는 공개용(publishable)이다. 이 키로 할 수 있는 일은
-     DB 의 RLS 정책이 허용한 범위 — contacts 테이블에 INSERT 하는 것뿐이며,
-     저장된 문의를 읽거나 지울 수는 없다.
-     설정 내용은 docs/SUPABASE.md 와 docs/supabase-setup.sql 참조.
+     아래 키는 공개용(publishable)이다. RLS 정책상 INSERT 만 가능하며
+     저장된 신청 내역을 읽거나 지울 수는 없다.
+
+     TODO: 설치 파일이 준비되면 성공 문구를 다운로드 링크로 교체한다.
+           GitHub Releases 에 올린 뒤, alert-success 영역에
+           릴리스 URL 을 가리키는 다운로드 버튼을 추가하면 된다.
   ------------------------------------------------------------------ */
   (function(){
     var SUPABASE_URL = 'https://hzqbhxewftjkolwebkgy.supabase.co';
     var SUPABASE_KEY = 'sb_publishable_QQ0M4AO9cIqf6pvBHCXuVA_AVehhSwC';
 
-    var form   = document.getElementById('contact-form');
+    var form   = document.getElementById('trial-form');
     var btn    = document.getElementById('submit-btn');
     var okBox  = document.getElementById('alert-success');
     var errBox = document.getElementById('alert-error');
@@ -223,7 +242,7 @@
 
       btn.disabled = true;
 
-      fetch(SUPABASE_URL + '/rest/v1/contacts', {
+      fetch(SUPABASE_URL + '/rest/v1/trial_requests', {
         method: 'POST',
         headers: {
           'apikey': SUPABASE_KEY,
@@ -232,12 +251,11 @@
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify({
-          name:        val('name'),
-          company:     val('company'),
-          phone:       val('phone'),
-          email:       val('email'),
-          message:     val('message'),
-          source_page: location.pathname
+          name:          val('name'),
+          company:       val('company'),
+          email:         val('email'),
+          project_scale: val('project_scale'),
+          purpose:       val('purpose')
         })
       }).then(function (res) {
         if (!res.ok) return res.text().then(function (t) { throw new Error(res.status + ' ' + t); });
@@ -245,7 +263,7 @@
         form.reset();
         okBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }).catch(function (err) {
-        console.error('[contact] 전송 실패:', err);
+        console.error('[trial] 전송 실패:', err);
         errBox.classList.add('show');
         errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }).finally(function () {
