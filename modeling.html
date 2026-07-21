@@ -148,15 +148,29 @@
       h1 { font-size:43px; word-break:normal; }
       h2 { word-break:normal; }
       .hero-copy,.lead,.feature p,.feature li,.benefit p,.step p,.component-copy p,.range-copy p,.next-box p { word-break:normal; overflow-wrap:anywhere; }
-      .strip-grid,.benefit-grid,.component-grid,.steps,.range-list { grid-template-columns:1fr; }
-      .strip-item { border-right:0; }
+      /* 문장이 긴 카드만 1열, 짧은 항목은 2열을 유지해 세로 길이를 줄인다 */
+      .benefit-grid,.component-grid { grid-template-columns:1fr; }
+      .strip-grid,.steps,.range-list { grid-template-columns:1fr 1fr; }
+      .strip-item { border-right:1px solid var(--line); }
+      .strip-item:nth-child(2n) { border-right:0; }
+      .strip-item:nth-last-child(-n+2) { border-bottom:0; }
+      /* PC 정렬용 고정 높이는 1열에서 의미가 없으므로 해제 */
+      .strip-item,.benefit,.step { min-height:0; }
+      .strip-item { padding:18px 16px; }
+      .benefit { padding:22px; }
+      .icon { width:38px; height:38px; margin-bottom:13px; }
+      .step { padding:17px 15px; }
+      .step-num { margin-bottom:13px; }
+      section { padding:56px 0; }
       .hero-art { min-height:320px; }
       .hero-image { padding:8px; }
       .hero-card { width:80%; }
-      .feature-head { margin-bottom:50px; }
-      .feature { margin-bottom:78px; }
+      .feature-head { margin-bottom:40px; }
+      .feature { margin-bottom:56px; }
       .feature h3 { font-size:27px; }
-      .component-card figure { height:310px; }
+      .component-card figure { height:220px; }
+      .component-copy { padding:16px 16px 18px; }
+      .next { padding:56px 0; }
       .next-box { padding:28px; }
     }
   </style>
