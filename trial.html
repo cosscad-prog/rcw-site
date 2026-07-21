@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="RCW V5 Trial 신청 — 이름, 회사, 이메일을 남겨주시면 정식 출시 시 다운로드 안내를 보내드립니다.">
+  <meta name="description" content="RCW V5 Trial 다운로드 — Rhino 7·8용 90일 트라이얼. 이름, 회사, 이메일을 남기시면 바로 내려받으실 수 있습니다.">
   <meta name="theme-color" content="#ffffff">
-  <title>Trial 신청 — RCW V5</title>
+  <title>Trial 다운로드 — RCW V5</title>
   <style>
     :root {
       --ink:#101828; --muted:#667085; --line:#e4e7ec; --paper:#fff;
@@ -67,6 +67,16 @@
     .alert.error { border:1px solid #f3c6c1; background:var(--danger-bg); color:var(--danger); }
     .alert b { display:block; margin-bottom:4px; font-size:15px; }
 
+    /* 신청 성공 후 나타나는 다운로드 영역 */
+    .dl { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0 0; }
+    .dl-group { padding:14px 15px; border:1px solid #b4e3c8; border-radius:11px; background:#fff; }
+    .dl-group h4 { margin:0 0 9px; color:var(--ink); font-size:13px; font-weight:850; letter-spacing:-.02em; }
+    .dl-btn { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:7px; padding:10px 12px; border:1px solid var(--line); border-radius:9px; background:var(--mist); color:var(--ink); font-size:13.5px; font-weight:700; transition:.15s; }
+    .dl-btn:hover { border-color:var(--blue); background:var(--sky); color:var(--blue-dark); }
+    .dl-btn em { color:var(--muted); font-style:normal; font-size:11.5px; font-weight:600; }
+    .dl-note { margin:13px 0 0; color:#3f7359; font-size:12.5px; word-break:keep-all; }
+    .dl-note a { color:var(--blue-dark); font-weight:700; text-decoration:underline; }
+
     .spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:26px 0 0; }
     .spec-item { padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--mist); }
     .spec-item b { display:block; margin-bottom:3px; font-size:14px; }
@@ -103,11 +113,11 @@
     <div class="wrap">
       <p class="eyebrow" data-en="Trial">트라이얼</p>
       <h1 data-en="Try RCW V5 on your own project.">RCW V5를 직접 프로젝트에 써보세요.</h1>
-      <p class="lead" data-en="Leave your name, company and email. We will send the download link and setup guide as soon as the official release is out.">이름, 회사, 이메일을 남겨주시면 정식 출시와 동시에 다운로드 링크와 설치 안내를 보내드립니다.</p>
+      <p class="lead" data-en="Leave your name, company and email, and the download will open right away. The trial runs for 90 days with the Core feature scope.">이름, 회사, 이메일을 남겨주시면 바로 다운로드하실 수 있습니다. 트라이얼은 Core 기능 범위로 90일간 사용하실 수 있습니다.</p>
 
       <div class="notice">
-        <i>!</i>
-        <p data-en="RCW V5 is preparing for its official release. Trial downloads are not open yet — if you register now, you will be among the first to be notified.">RCW V5는 현재 정식 출시를 준비하고 있습니다. Trial 다운로드는 아직 열리지 않았으며, 지금 신청해 주시면 준비되는 대로 가장 먼저 안내드립니다.</p>
+        <i>i</i>
+        <p data-en="Installers are provided separately for Rhino 7 / Rhino 8 and for Korean / English. Windows only. No activation code is required for the trial.">설치 파일은 Rhino 7·Rhino 8, 한국어·영어로 각각 제공됩니다. Windows 전용이며, 트라이얼은 별도의 인증 코드 없이 바로 사용하실 수 있습니다.</p>
       </div>
     </div>
   </section>
@@ -156,13 +166,29 @@
         </div>
 
         <div class="form-actions">
-          <button class="button" type="submit" id="submit-btn" data-en="Register for the trial">Trial 신청하기</button>
-          <span class="form-note" data-en="We only use your details to send the trial guide.">알려주신 정보는 트라이얼 안내 목적으로만 사용합니다.</span>
+          <button class="button" type="submit" id="submit-btn" data-en="Get the download">다운로드 받기</button>
+          <span class="form-note" data-en="We only use your details to send trial-related guidance.">알려주신 정보는 트라이얼 안내 목적으로만 사용합니다.</span>
         </div>
 
         <div class="alert success" id="alert-success" role="status">
-          <b data-en="Registered — thank you.">신청이 접수되었습니다.</b>
-          <span data-en="We will email you the download link and setup guide as soon as the release is ready.">출시 준비가 끝나는 대로 남겨주신 이메일로 다운로드 링크와 설치 안내를 보내드리겠습니다.</span>
+          <b data-en="Registered — download below.">신청이 접수되었습니다. 아래에서 내려받으세요.</b>
+          <span data-en="Choose the installer that matches your Rhino version. The trial runs for 90 days with the Core feature scope.">사용 중인 Rhino 버전에 맞는 설치 파일을 선택하세요. 트라이얼은 Core 기능 범위로 90일간 사용하실 수 있습니다.</span>
+
+          <div class="dl">
+            <div class="dl-group">
+              <h4>Rhino 8</h4>
+              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/download/v5.0.0-trial/RCW_V5_Trial_Rhino8_ko-KR.exe"><span data-en="Korean">한국어</span><em>92 MB</em></a>
+              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/download/v5.0.0-trial/RCW_V5_Trial_Rhino8_en-US.exe"><span>English</span><em>92 MB</em></a>
+            </div>
+            <div class="dl-group">
+              <h4>Rhino 7</h4>
+              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/download/v5.0.0-trial/RCW_V5_Trial_Rhino7_ko-KR.exe"><span data-en="Korean">한국어</span><em>92 MB</em></a>
+              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/download/v5.0.0-trial/RCW_V5_Trial_Rhino7_en-US.exe"><span>English</span><em>92 MB</em></a>
+            </div>
+          </div>
+
+          <p class="dl-note" data-en="Installation and activation guide — <a href=&quot;guide-en.html&quot;>English</a> · <a href=&quot;guide-ko.html&quot;>한국어</a>">설치 및 활성화 안내 — <a href="guide-ko.html">한국어</a> · <a href="guide-en.html">English</a></p>
+          <p class="dl-note" data-en="If Windows shows a &quot;Windows protected your PC&quot; message when you run the installer, choose More info → Run anyway.">설치 파일 실행 시 Windows에서 “PC 보호” 메시지가 나타나면 <b>추가 정보 → 실행</b>을 선택하시면 됩니다.</p>
         </div>
         <div class="alert error" id="alert-error" role="alert">
           <b data-en="Something went wrong.">전송 중 문제가 발생했습니다.</b>

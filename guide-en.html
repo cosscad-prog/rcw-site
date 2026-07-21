@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RCW V5 Installation & Activation Guide</title>
+<style>
+  @page { size: A4; margin: 18mm; }
+  :root { --ink:#172033; --blue:#165e9f; --line:#d8e1ec; --soft:#f4f8fc; --note:#fff8e8; }
+  * { box-sizing:border-box; } body { max-width:820px; margin:0 auto; color:var(--ink); font:15px/1.65 Calibri,"Segoe UI",sans-serif; }
+  h1 { margin:0; font-size:30px; color:#0b2545; line-height:1.25; } h2 { margin:30px 0 10px; padding-bottom:6px; color:var(--blue); font-size:20px; border-bottom:2px solid var(--line); }
+  p { margin:7px 0; } .eyebrow { margin:0 0 8px; color:var(--blue); font-size:12px; font-weight:700; letter-spacing:.08em; }
+  .lead { margin:8px 0 18px; color:#536277; } .box { margin:14px 0; padding:13px 16px; border:1px solid var(--line); border-radius:8px; background:var(--soft); }
+  .warning { background:var(--note); border-color:#eedca5; } ol,ul { margin:7px 0 7px 23px; padding:0; } li { margin:6px 0; } code { padding:1px 5px; border-radius:4px; background:#e9eff6; color:#123b63; font:600 .93em Consolas,monospace; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; } th,td { padding:9px 10px; border:1px solid var(--line); text-align:left; vertical-align:top; } th { width:30%; background:#e9f1f9; color:#123b63; }
+  .footer { margin-top:34px; padding-top:10px; border-top:1px solid var(--line); color:#68768a; font-size:12px; } @media print { body { max-width:none; } h2 { break-after:avoid; } .box,table { break-inside:avoid; } }
+</style>
+</head>
+<body>
+  <p class="eyebrow">RCW V5 · CUSTOMER QUICK START</p>
+  <h1>Installation & Activation Guide</h1>
+  <p class="lead">Core · Standard · Trial | From installation to local help</p>
+  <div class="box"><strong>Before you begin:</strong> Choose one installer that matches your edition (Core or Standard), Rhino version (7 or 8), and language. Close Rhino before installation. This guide opens automatically when installation finishes.</div>
+  <h2>1. Install</h2>
+  <ol><li>Run the supplied RCW V5 installer (<code>.exe</code>).</li><li>Approve Windows administrator access if requested and complete installation.</li><li>Start Rhino. Trial runs for 90 days from this first successful load.</li></ol>
+  <table><tr><th>Core</th><td>Perpetual commercial edition with the Core command scope</td></tr><tr><th>Standard</th><td>Perpetual commercial edition with the full general command scope</td></tr><tr><th>Trial</th><td>90-day evaluation edition using the Core command scope; no license file is required.</td></tr></table>
+  <h2>2. Activate Core / Standard</h2>
+  <ol><li>When Rhino first starts without a license file, it automatically displays and copies the machine code, then opens this guide. You can also run <code>RCWMachineCode</code> manually.</li><li>Send the displayed machine code to the seller or support contact.</li><li>Save the individually issued license file (<code>.lic</code>) in a safe location.</li><li>Run <code>RCWLicense</code> in Rhino and select the received <code>.lic</code> file.</li><li>Confirm the success message and restart Rhino.</li></ol>
+  <div class="box"><strong>Machine-code request template</strong><br>Company: ____________________<br>Contact: ____________________<br>Order number: ____________________<br>Purchased edition: Core / Standard<br>Rhino version: 7 / 8<br>Machine code: RCW5-CO-... or RCW5-ST-...</div>
+  <div class="box warning"><strong>Important:</strong> Do not manually copy a license file into Program Files. Always import it with <code>RCWLicense</code>. A new license must be issued after replacing the PC or changing the machine code.</div>
+  <h2>3. Trial</h2>
+  <ul><li>Trial uses the Core command scope.</li><li>The 90-day period begins at the first successful load and keeps that start date when reinstalled under the same Windows user account.</li><li>After Trial, purchase Core or Standard and follow the activation procedure above.</li></ul>
+  <h2>4. Help and support</h2>
+  <ul><li>Run <code>RcwHelp</code> in Rhino to open the installed local help.</li><li>If you change between Korean and English installers, import the same <code>.lic</code> file again with <code>RCWLicense</code>.</li><li>For support, include the installer filename, Rhino version, Windows user name, error text, and a screenshot when available.</li></ul>
+  <p class="footer">RCW V5 Installation & Activation Guide | Beimptech</p>
+</body>
+</html>
