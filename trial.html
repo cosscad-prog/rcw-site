@@ -61,6 +61,12 @@
     .form-actions { display:flex; align-items:center; gap:14px; margin-top:6px; }
     .form-note { color:var(--muted); font-size:12px; word-break:keep-all; }
 
+    /* 제출이 끝나면 입력 항목을 감춘다. 빈 칸을 남겨두면 입력이 사라진 것처럼 보인다 */
+    .form-card.done .field-row,
+    .form-card.done .field,
+    .form-card.done .form-actions { display:none; }
+    .form-card.done { padding:22px; }
+
     .alert { display:none; margin-top:18px; padding:16px 18px; border-radius:12px; font-size:14px; word-break:keep-all; }
     .alert.show { display:block; }
     .alert.success { border:1px solid #b4e3c8; background:var(--mint); color:#0a6b3f; }
@@ -279,7 +285,7 @@
       errBox.classList.remove('show');
 
       // honeypot 이 채워져 있으면 봇이다. 성공한 것처럼 보이게 하고 저장하지 않는다
-      if (val('_gotcha')) { okBox.classList.add('show'); form.reset(); return; }
+      if (val('_gotcha')) { form.classList.add('done'); okBox.classList.add('show'); return; }
 
       btn.disabled = true;
 
@@ -300,9 +306,10 @@
         })
       }).then(function (res) {
         if (!res.ok) return res.text().then(function (t) { throw new Error(res.status + ' ' + t); });
+        // 입력 항목을 감추고 다운로드만 남긴다 (reset 하면 빈 칸이 남아 혼란스럽다)
+        form.classList.add('done');
         okBox.classList.add('show');
-        form.reset();
-        okBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        okBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }).catch(function (err) {
         console.error('[trial] 전송 실패:', err);
         errBox.classList.add('show');
