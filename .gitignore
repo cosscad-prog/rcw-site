@@ -28,3 +28,7 @@ img/*
 !img/VT1_demo.gif
 !img/case_hero.jpg
 !img/model_curved_a.png
+
+# 백업 CSV — 개인정보가 담기므로 절대 커밋하지 않는다 (아티팩트로만 보관)
+backup/
+*.csv

@@ -1,0 +1,95 @@
+# Supabase 자동 백업 + 일시정지 방지
+#
+# 무료 플랜은 7일간 API 요청이 없으면 프로젝트를 일시정지한다.
+# 정지 상태에서 방문자가 폼을 제출하면 실패하므로, 3일마다 요청을 보내 깨워 둔다.
+# 같은 실행에서 신청 명단을 CSV 로 내려받아 아티팩트로 보관한다.
+#
+# 준비: 저장소 Settings → Secrets and variables → Actions 에 아래 두 개 등록
+#   SUPABASE_URL          https://hzqbhxewftjkolwebkgy.supabase.co
+#   SUPABASE_SERVICE_KEY  Project Settings → API → Secret keys 의 sb_secret_... 값
+#
+# service_role(secret) 키는 RLS 를 우회하므로 전체 조회가 가능하다.
+# GitHub Secrets 는 암호화되어 저장되고 로그에도 마스킹된다. 절대 코드에 직접 쓰지 말 것.
+
+name: Supabase 백업
+
+on:
+  schedule:
+    - cron: '0 21 */3 * *'    # 3일마다 06:00 KST (UTC 21:00)
+  workflow_dispatch:           # Actions 탭에서 수동 실행도 가능
+
+permissions:
+  contents: write              # 마지막 실행 기록 커밋용
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Supabase 에서 CSV 내보내기
+        env:
+          URL: ${{ secrets.SUPABASE_URL }}
+          KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p backup
+
+          if [ -z "${URL:-}" ] || [ -z "${KEY:-}" ]; then
+            echo "::error::SUPABASE_URL 또는 SUPABASE_SERVICE_KEY 시크릿이 설정되지 않았습니다."
+            exit 1
+          fi
+
+          fetch () {  # $1 = 테이블 이름
+            local code
+            code=$(curl -sS -w '%{http_code}' -o "backup/$1.csv" \
+              "$URL/rest/v1/$1?select=*&order=created_at.desc" \
+              -H "apikey: $KEY" \
+              -H "Authorization: Bearer $KEY" \
+              -H "Accept: text/csv")
+            if [ "$code" != "200" ]; then
+              echo "::error::$1 조회 실패 (HTTP $code)"
+              cat "backup/$1.csv" || true
+              exit 1
+            fi
+            # 헤더 줄을 제외한 데이터 행 수
+            local rows=$(( $(wc -l < "backup/$1.csv") - 1 ))
+            [ "$rows" -lt 0 ] && rows=0
+            echo "$1: ${rows}건"
+            echo "${1}_rows=${rows}" >> "$GITHUB_ENV"
+          }
+
+          fetch contacts
+          fetch trial_requests
+
+      - name: CSV 아티팩트 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ github.run_number }}
+          path: backup/*.csv
+          retention-days: 90
+
+      # 저장소에 커밋이 60일간 없으면 GitHub 이 예약 워크플로를 자동 비활성화한다.
+      # 개인정보가 없는 실행 기록만 남겨 스케줄러를 살려 둔다. CSV 는 커밋하지 않는다.
+      - name: 실행 기록 갱신
+        run: |
+          set -euo pipefail
+          mkdir -p docs
+          {
+            echo "# Supabase 백업 실행 기록"
+            echo
+            echo "이 파일은 워크플로가 자동으로 갱신합니다. 직접 수정하지 마세요."
+            echo "예약 워크플로가 비활성화되지 않도록 저장소 활동을 유지하는 용도입니다."
+            echo
+            echo "- 마지막 실행: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo "- 문의(contacts): ${contacts_rows}건"
+            echo "- Trial 신청(trial_requests): ${trial_requests_rows}건"
+            echo
+            echo "CSV 는 Actions 탭의 해당 실행 → Artifacts 에서 내려받습니다. (90일 보관)"
+          } > docs/_backup-status.md
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/_backup-status.md
+          git diff --staged --quiet || git commit -m "백업 실행 기록 갱신 (문의 ${contacts_rows} / 신청 ${trial_requests_rows})"
+          git push
