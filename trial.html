@@ -77,6 +77,15 @@
     .dl-note { margin:13px 0 0; color:#3f7359; font-size:12.5px; word-break:keep-all; }
     .dl-note a { color:var(--blue-dark); font-weight:700; text-decoration:underline; }
 
+    /* 코드 서명 미적용 안내 — 눈에 띄어야 하므로 별도 색을 쓴다 */
+    .warn { margin:16px 0 0; padding:15px 17px; border:1px solid #f0cf95; border-radius:12px; background:#fffaf0; color:#7a4c10; }
+    .warn b { display:block; margin-bottom:6px; color:#8a4b08; font-size:13.5px; }
+    .warn p { margin:0 0 8px; font-size:12.8px; line-height:1.6; word-break:keep-all; }
+    .warn p:last-child { margin-bottom:0; }
+    .warn kbd { display:inline-block; padding:1px 6px; border:1px solid #e3c48d; border-radius:5px; background:#fff; font:700 11.5px/1.5 inherit; color:#7a4c10; }
+    .warn code { padding:1px 5px; border-radius:4px; background:#f4ece0; font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace; word-break:break-all; }
+    .warn a { color:#8a4b08; font-weight:700; text-decoration:underline; }
+
     .spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:26px 0 0; }
     .spec-item { padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--mist); }
     .spec-item b { display:block; margin-bottom:3px; font-size:14px; }
@@ -188,7 +197,13 @@
           </div>
 
           <p class="dl-note" data-en="Installation and activation guide — <a href=&quot;guide-en.html&quot;>English</a> · <a href=&quot;guide-ko.html&quot;>한국어</a>">설치 및 활성화 안내 — <a href="guide-ko.html">한국어</a> · <a href="guide-en.html">English</a></p>
-          <p class="dl-note" data-en="If Windows shows a &quot;Windows protected your PC&quot; message when you run the installer, choose More info → Run anyway.">설치 파일 실행 시 Windows에서 “PC 보호” 메시지가 나타나면 <b>추가 정보 → 실행</b>을 선택하시면 됩니다.</p>
+
+          <div class="warn">
+            <b data-en="Windows will show a warning when you run the installer">설치 파일을 실행하면 Windows 경고가 표시됩니다</b>
+            <p data-en="RCW V5 is in its trial release stage and the installer does not yet carry a code-signing certificate. Windows SmartScreen shows a warning for any unsigned installer regardless of its contents, so this message does not indicate a problem with the file itself. A certificate will be applied for the official release.">RCW V5는 현재 트라이얼 배포 단계로, 설치 파일에 <b>코드 서명 인증서가 아직 적용되지 않았습니다.</b> Windows SmartScreen은 서명이 없는 설치 파일에 대해 내용과 무관하게 경고를 표시하므로, 파일 자체에 문제가 있다는 뜻은 아닙니다. 정식 출시 시에는 인증서를 적용할 예정입니다.</p>
+            <p data-en="When the &quot;Windows protected your PC&quot; dialog appears, click <kbd>More info</kbd> and then <kbd>Run anyway</kbd>.">“Windows의 PC 보호” 창이 나타나면 <kbd>추가 정보</kbd> 를 누른 뒤 <kbd>실행</kbd> 을 선택하시면 설치가 진행됩니다.</p>
+            <p data-en="If you would like to verify the file first, compare its SHA-256 hash with the value shown on the <a href=&quot;https://github.com/cosscad-prog/rcw-releases/releases/latest&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>release page</a>. In PowerShell: <code>Get-FileHash 파일이름.exe</code>">파일을 직접 확인하고 싶으시면 <a href="https://github.com/cosscad-prog/rcw-releases/releases/latest" target="_blank" rel="noopener">릴리스 페이지</a>에 공개된 SHA-256 값과 대조해 보실 수 있습니다. PowerShell에서 <code>Get-FileHash 파일이름.exe</code> 를 실행하면 됩니다.</p>
+          </div>
         </div>
         <div class="alert error" id="alert-error" role="alert">
           <b data-en="Something went wrong.">전송 중 문제가 발생했습니다.</b>
