@@ -76,6 +76,8 @@
     .feature figure { position:relative; margin:0; overflow:hidden; border:1px solid #dce3ee; border-radius:15px; background:#f1f5fb; box-shadow:0 16px 38px rgba(16,31,61,.08); }
     .feature figure img { width:100%; aspect-ratio:16/10; object-fit:cover; background:#60666c; }
     .feature figure.contain img { object-fit:contain; padding:12px; background:#f5f7fa; }
+    /* 세로가 긴 소스: 상단(명령어 입력부)만 잘리고 입면도 전체가 보이도록 하단 기준 크롭 */
+    .feature figure.tall-top-crop img { aspect-ratio:6/5; object-position:center bottom; }
     .feature figcaption { min-height:48px; padding:11px 14px; color:#667085; background:#fff; font-size:12px; word-break:keep-all; }
     .feature h3 { margin-bottom:12px; font-size:31px; line-height:1.15; letter-spacing:-.04em; word-break:keep-all; }
     .feature p { color:var(--muted); word-break:keep-all; }
@@ -207,7 +209,7 @@
           <p class="micro" data-en="A reviewed model is never redrawn across document after document.">한 번 확인한 모델을 여러 문서에 다시 옮겨 그리지 않습니다.</p>
         </div>
         <div class="hero-art">
-          <img class="hero-image" src="img/FDwg.gif" alt="RCW가 3D Frame에서 제작 가공도를 생성하는 데모">
+          <img class="hero-image" src="img/FDwg.gif?v=20260724" alt="RCW가 3D Frame에서 제작 가공도를 생성하는 데모">
           <div class="hero-card"><b data-en="Geometry and documents share the same model.">형상과 문서가 같은 모델을 기준으로 합니다.</b><span data-en="Less rewriting of dimension, section, hole and quantity information.">치수·단면·홀·수량 정보를 따로 다시 작성하는 일을 줄입니다.</span></div>
         </div>
       </div>
@@ -260,7 +262,7 @@
 
         <article class="feature reverse">
           <div class="feature-copy"><span class="tag">04 / Unit documentation</span><h3 data-en="Produce unit sections, elevations and parts lists together.">Unit 단면·입면과 부품 리스트를 함께 만듭니다.</h3><p data-en="U2D creates the section 2D and Fablist of the selected solid unit at once. UF2D adds the front elevation and dimensions to form a unit document set for fabrication, assembly and review.">U2D는 선택한 Solid Unit의 단면 2D와 Fablist를 한 번에 생성합니다. UF2D는 여기에 정면 입면과 치수를 더해 제작·조립·검토에 필요한 Unit 문서 세트를 구성합니다.</p><ul><li data-en="Auto-create Top / Right sections and dimensions">Top·Right Section과 치수 자동 작성</li><li data-en="List profiles, blocks, glass and back panels within the unit">Unit 내 Profile·Block·Glass·BackPanel 목록화</li><li data-en="Generate the front elevation with Fablist labels">Front Elevation과 Fablist 라벨 함께 생성</li></ul><div class="cmd-row"><span class="cmd">U2D</span><span class="cmd">UF2D</span><span class="cmd">Fablist</span><span class="cmd">F2d</span></div></div>
-          <figure><img src="img/U2D_demo.gif" alt="Solid Unit에서 단면 2D와 Fablist를 만드는 U2D 데모"><figcaption data-en="U2D creates sections, dimensions and the fabrication parts list from a selected unit in one run.">U2D는 선택한 Unit에서 단면과 치수, 제작 부품 리스트를 같은 실행 흐름으로 만듭니다.</figcaption></figure>
+          <figure class="tall-top-crop"><img src="img/UF2D_demo.gif" alt="Solid Unit에서 정면 입면과 단면·부품 리스트를 만드는 UF2D 데모"><figcaption data-en="U2D creates sections, dimensions and the fabrication parts list from a selected unit in one run.">U2D는 선택한 Unit에서 단면과 치수, 제작 부품 리스트를 같은 실행 흐름으로 만듭니다.</figcaption></figure>
         </article>
       </div>
     </section>
