@@ -83,13 +83,29 @@ RCW V5 90일 트라이얼 — Core 기능 범위
 
     Write-Host "`n릴리스 $tag 발행 중... (수백 MB 업로드라 몇 분 걸립니다)" -ForegroundColor Yellow
 
-    gh release create $tag @($files.FullName) `
-        --repo  $Repo `
-        --title "RCW V5 Trial $Version" `
-        --notes $notes `
-        --latest
+    # gh 는 경로에 '#' 가 들어가면 인자를 그 지점에서 잘라버린다(기본 SourceDir 이
+    # C:\std\C#_Utils\... 라 여기에 걸린다). 업로드 직전에 '#' 없는 임시 폴더로 복사해
+    # 그 경로로 올린다. 발행이 끝나면(성공/실패 무관) 임시 폴더는 지운다.
+    $uploadDir = Join-Path ([System.IO.Path]::GetTempPath()) "rcw-trial-upload-$([Guid]::NewGuid().ToString('N'))"
+    New-Item -ItemType Directory -Path $uploadDir | Out-Null
+    try {
+        $uploadFiles = foreach ($f in $files) {
+            $dest = Join-Path $uploadDir $f.Name
+            Copy-Item -LiteralPath $f.FullName -Destination $dest -Force
+            $dest
+        }
 
-    if ($LASTEXITCODE -ne 0) { throw "릴리스 발행에 실패했습니다." }
+        gh release create $tag @($uploadFiles) `
+            --repo  $Repo `
+            --title "RCW V5 Trial $Version" `
+            --notes $notes `
+            --latest
+
+        if ($LASTEXITCODE -ne 0) { throw "릴리스 발행에 실패했습니다." }
+    }
+    finally {
+        Remove-Item -LiteralPath $uploadDir -Recurse -Force -ErrorAction SilentlyContinue
+    }
 
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"
