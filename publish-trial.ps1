@@ -21,7 +21,7 @@ param(
     [ValidatePattern('^\d+\.\d+\.\d+$')]
     [string] $Version,
 
-    [string] $SourceDir = 'C:\std\C#_Utils\RCW_V4_13.3\artifacts\RCW_V5\Trial',
+    [string] $SourceDir = 'C:\std\RCW_V4_13.3\artifacts\RCW_V5\Trial',
     [string] $Repo      = 'cosscad-prog/rcw-releases'
 )
 
@@ -83,9 +83,9 @@ RCW V5 90일 트라이얼 — Core 기능 범위
 
     Write-Host "`n릴리스 $tag 발행 중... (수백 MB 업로드라 몇 분 걸립니다)" -ForegroundColor Yellow
 
-    # gh 는 경로에 '#' 가 들어가면 인자를 그 지점에서 잘라버린다(기본 SourceDir 이
-    # C:\std\C#_Utils\... 라 여기에 걸린다). 업로드 직전에 '#' 없는 임시 폴더로 복사해
-    # 그 경로로 올린다. 발행이 끝나면(성공/실패 무관) 임시 폴더는 지운다.
+    # gh 는 경로에 '#' 가 들어가면 인자를 그 지점에서 잘라버린다. 지금 SourceDir 은
+    # '#' 이 없지만, 방어적으로 업로드 직전에 '#' 없는 임시 폴더로 복사해 그 경로로
+    # 올린다. 발행이 끝나면(성공/실패 무관) 임시 폴더는 지운다.
     $uploadDir = Join-Path ([System.IO.Path]::GetTempPath()) "rcw-trial-upload-$([Guid]::NewGuid().ToString('N'))"
     New-Item -ItemType Directory -Path $uploadDir | Out-Null
     try {

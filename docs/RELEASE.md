@@ -50,7 +50,7 @@ RCW V5 90일 트라이얼 (Core 기능 범위)
 영역에 아래 4개 파일을 끌어다 놓는다.
 
 ```
-C:\std\C#_Utils\RCW_V4_13.3\artifacts\RCW_V5\Trial\
+C:\std\RCW_V4_13.3\artifacts\RCW_V5\Trial\
 ├── RCW_V5_Trial_Rhino7_ko-KR.exe
 ├── RCW_V5_Trial_Rhino7_en-US.exe
 ├── RCW_V5_Trial_Rhino8_ko-KR.exe
@@ -177,7 +177,7 @@ GitHub 릴리스 페이지는 각 파일의 SHA-256 을 자동으로 표시한�
 로컬 파일과 대조하려면
 
 ```powershell
-Get-FileHash "C:\std\C#_Utils\RCW_V4_13.3\artifacts\RCW_V5\Trial\RCW_V5_Trial_Rhino8_ko-KR.exe"
+Get-FileHash "C:\std\RCW_V4_13.3\artifacts\RCW_V5\Trial\RCW_V5_Trial_Rhino8_ko-KR.exe"
 ```
 
 ---
@@ -190,3 +190,4 @@ Get-FileHash "C:\std\C#_Utils\RCW_V4_13.3\artifacts\RCW_V5\Trial\RCW_V5_Trial_Rh
 파일 주소 자체는 공개이므로 폼을 거치지 않고 받는 것도 가능하다.
 완전히 막으려면 서버를 두어야 하는데, 명단 수집이 목적이라면
 현재 방식(폼 제출 → 다운로드 표시)으로 충분하다.
+
