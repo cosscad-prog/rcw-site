@@ -301,6 +301,16 @@
       return el && el.value.trim() ? el.value.trim() : null;
     }
 
+    // 신청 행의 id 를 브라우저에서 만든다. 저장 후 되읽기(return=representation)는
+    // 익명에게 조회 권한이 없어 RLS 에 막히므로, id 를 미리 정해 보내고 그대로 쓴다.
+    function newUuid(){
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       okBox.classList.remove('show');
@@ -310,6 +320,7 @@
       if (val('_gotcha')) { form.classList.add('done'); okBox.classList.add('show'); return; }
 
       btn.disabled = true;
+      var requestId = newUuid();
 
       fetch(SUPABASE_URL + '/rest/v1/trial_requests', {
         method: 'POST',
@@ -317,9 +328,10 @@
           'apikey': SUPABASE_KEY,
           'Authorization': 'Bearer ' + SUPABASE_KEY,
           'Content-Type': 'application/json',
-          'Prefer': 'return=representation'
+          'Prefer': 'return=minimal'
         },
         body: JSON.stringify({
+          id:            requestId,
           name:          val('name'),
           company:       val('company'),
           email:         val('email'),
@@ -329,11 +341,10 @@
         })
       }).then(function (res) {
         if (!res.ok) return res.text().then(function (t) { throw new Error(res.status + ' ' + t); });
-        return res.json().catch(function () { return null; });
-      }).then(function (rows) {
-        // 다운로드 클릭을 이 신청과 연결하기 위해 방금 저장된 행을 기억해 둔다
+        // 다운로드 클릭을 이 신청과 연결하기 위해 방금 저장한 내용을 기억해 둔다.
+        // id 는 저장 전에 만들어 보냈으므로 되읽기가 필요 없다.
         submitted = {
-          request_id: (rows && rows[0] && rows[0].id) || null,
+          request_id: requestId,
           name:       val('name'),
           company:    val('company'),
           phone:      val('phone'),
