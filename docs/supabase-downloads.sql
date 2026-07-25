@@ -45,7 +45,6 @@ create table if not exists public.downloads (
 );
 
 comment on table  public.downloads is 'RCW V5 트라이얼 다운로드 버튼 클릭 기록';
-comment on column public.downloads is null;
 comment on column public.downloads.request_id is '같은 방문에서 제출한 trial_requests 행';
 
 -- 관리자 화면은 항상 최신순으로 읽고, 재다운로드 판정은 이메일로 한다
