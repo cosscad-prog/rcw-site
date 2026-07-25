@@ -1,0 +1,44 @@
+# 하루 다운로드 요약 메일
+#
+# 매일 밤 9시(KST)에 그날의 트라이얼 신청·다운로드를 모아 관리자 메일로 보낸다.
+# 활동이 없는 날은 보내지 않는다 — 매일 오는 빈 메일은 곧 안 보게 되기 때문이다.
+# 매일 받고 싶으면 아래 SEND_WHEN_EMPTY 를 'true' 로 바꾼다.
+#
+# 준비: 저장소 Settings → Secrets and variables → Actions 에 아래를 등록
+#   SUPABASE_URL          (백업 워크플로에서 이미 쓰는 값)
+#   SUPABASE_SERVICE_KEY  (동일)
+#   MAIL_USERNAME         보내는 Gmail 주소
+#   MAIL_APP_PASSWORD     Gmail 앱 비밀번호 16자리 (계정 비밀번호가 아니다)
+#   MAIL_TO               받는 주소 (생략하면 MAIL_USERNAME 으로 보낸다)
+#
+# 앱 비밀번호 만들기: Google 계정 → 보안 → 2단계 인증을 켠 뒤 "앱 비밀번호" 생성.
+# 2단계 인증이 꺼져 있으면 앱 비밀번호 메뉴가 보이지 않는다.
+
+name: 하루 다운로드 요약 메일
+
+on:
+  schedule:
+    - cron: '0 12 * * *'     # 매일 21:00 KST (UTC 12:00)
+  workflow_dispatch:          # Actions 탭에서 수동 실행
+    inputs:
+      send_when_empty:
+        description: '활동이 없어도 메일 보내기'
+        type: boolean
+        default: true
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 요약 메일 보내기
+        env:
+          SUPABASE_URL:         ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          MAIL_USERNAME:        ${{ secrets.MAIL_USERNAME }}
+          MAIL_APP_PASSWORD:    ${{ secrets.MAIL_APP_PASSWORD }}
+          MAIL_TO:              ${{ secrets.MAIL_TO }}
+          # 수동 실행이면 입력값을, 예약 실행이면 false(활동 있는 날만 발송)
+          SEND_WHEN_EMPTY:      ${{ github.event_name == 'workflow_dispatch' && inputs.send_when_empty || 'false' }}
+        run: python .github/scripts/daily_report.py
