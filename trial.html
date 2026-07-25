@@ -218,7 +218,11 @@
             <b data-en="Windows will show a warning when you run the installer">설치 파일을 실행하면 Windows 경고가 표시됩니다</b>
             <p data-en="RCW V5 is in its trial release stage and the installer does not yet carry a code-signing certificate. Windows SmartScreen shows a warning for any unsigned installer regardless of its contents, so this message does not indicate a problem with the file itself. A certificate will be applied for the official release.">RCW V5는 현재 트라이얼 배포 단계로, 설치 파일에 <b>코드 서명 인증서가 아직 적용되지 않았습니다.</b> Windows SmartScreen은 서명이 없는 설치 파일에 대해 내용과 무관하게 경고를 표시하므로, 파일 자체에 문제가 있다는 뜻은 아닙니다. 정식 출시 시에는 인증서를 적용할 예정입니다.</p>
             <p data-en="When the &quot;Windows protected your PC&quot; dialog appears, click <kbd>More info</kbd> and then <kbd>Run anyway</kbd>.">“Windows의 PC 보호” 창이 나타나면 <kbd>추가 정보</kbd> 를 누른 뒤 <kbd>실행</kbd> 을 선택하시면 설치가 진행됩니다.</p>
+            <!-- SHA-256 대조 안내는 국내 사용자에게 혼란만 주어 2026-07-26 부터 감춘다.
+                 해시는 릴리스 노트에 그대로 실리므로, 검증을 요청하는 사용자에게는 개별 안내한다.
+                 해외 정식 배포 때 코드 서명을 받으면 위의 SmartScreen 안내와 함께 정리할 것.
             <p data-en="If you would like to verify the file first, compare its SHA-256 hash with the value shown on the <a href=&quot;https://github.com/cosscad-prog/rcw-releases/releases/latest&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>release page</a>. In PowerShell: <code>Get-FileHash 파일이름.exe</code>">파일을 직접 확인하고 싶으시면 <a href="https://github.com/cosscad-prog/rcw-releases/releases/latest" target="_blank" rel="noopener">릴리스 페이지</a>에 공개된 SHA-256 값과 대조해 보실 수 있습니다. PowerShell에서 <code>Get-FileHash 파일이름.exe</code> 를 실행하면 됩니다.</p>
+            -->
           </div>
         </div>
         <div class="alert error" id="alert-error" role="alert">
