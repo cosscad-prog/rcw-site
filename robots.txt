@@ -1,0 +1,6 @@
+# 관리자 페이지는 검색엔진에 올리지 않는다.
+# robots.txt 는 크롤러에 대한 요청일 뿐 접근 제어가 아니다 —
+# 실제 차단은 Supabase 로그인과 RLS 정책이 담당한다.
+User-agent: *
+Disallow: /admin
+Disallow: /admin.html

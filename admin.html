@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>RCW 관리자 — 다운로드 기록</title>
+<style>
+  :root {
+    --ink:#12212c; --muted:#61737f; --line:#dfe6eb; --mist:#f5f8fa;
+    --blue:#2f7ec4; --blue-dark:#1f5c94; --sky:#eaf3fb;
+    --green:#2f8f5b; --amber:#b8720f;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:0; background:#eef2f5; color:var(--ink);
+         font:14px/1.55 -apple-system, "Segoe UI", "Malgun Gothic", sans-serif; }
+  a { color:var(--blue-dark); }
+
+  .wrap { max-width:1180px; margin:0 auto; padding:22px 18px 60px; }
+  header.bar { display:flex; align-items:center; justify-content:space-between; gap:14px;
+               padding:14px 18px; background:#fff; border:1px solid var(--line); border-radius:12px; }
+  header.bar h1 { margin:0; font-size:16px; letter-spacing:-.02em; }
+  header.bar .who { color:var(--muted); font-size:12.5px; }
+  .btn { padding:8px 13px; border:1px solid var(--line); border-radius:8px; background:var(--mist);
+         color:var(--ink); font-size:13px; font-weight:700; cursor:pointer; }
+  .btn:hover { border-color:var(--blue); background:var(--sky); color:var(--blue-dark); }
+  .btn.primary { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .btn.primary:hover { background:var(--blue-dark); }
+
+  /* 로그인 */
+  .login { max-width:340px; margin:14vh auto 0; padding:26px 24px; background:#fff;
+           border:1px solid var(--line); border-radius:14px; }
+  .login h1 { margin:0 0 4px; font-size:17px; }
+  .login p  { margin:0 0 18px; color:var(--muted); font-size:12.5px; }
+  .login label { display:block; margin:0 0 5px; font-size:12.5px; font-weight:700; }
+  .login input { width:100%; margin:0 0 13px; padding:9px 11px; border:1px solid var(--line);
+                 border-radius:8px; font-size:14px; }
+  .login .btn { width:100%; padding:10px; }
+  .err { margin:12px 0 0; padding:10px 12px; border:1px solid #f0b9b9; border-radius:8px;
+         background:#fdf3f3; color:#a33; font-size:12.5px; }
+
+  /* 요약 */
+  .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:16px 0 0; }
+  .card { padding:14px 16px; background:#fff; border:1px solid var(--line); border-radius:12px; }
+  .card b { display:block; font-size:23px; letter-spacing:-.03em; }
+  .card span { color:var(--muted); font-size:12px; }
+
+  /* 표 */
+  .tools { display:flex; align-items:center; gap:10px; margin:18px 0 10px; }
+  .tools input { flex:1; padding:9px 12px; border:1px solid var(--line); border-radius:9px; font-size:13.5px; }
+  table { width:100%; border-collapse:collapse; background:#fff;
+          border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  th, td { padding:10px 12px; text-align:left; font-size:13px; vertical-align:top; }
+  th { background:var(--mist); color:var(--muted); font-size:11.5px; font-weight:800;
+       letter-spacing:.02em; border-bottom:1px solid var(--line); white-space:nowrap; }
+  tbody tr { border-top:1px solid #eef2f5; }
+  tbody tr:hover { background:#fafcfd; }
+  td.when { white-space:nowrap; color:var(--muted); font-variant-numeric:tabular-nums; }
+  td.when b { display:block; color:var(--ink); font-size:13.5px; }
+  td.ver { white-space:nowrap; font-weight:700; }
+  .tag { display:inline-block; margin:0 0 0 6px; padding:1px 7px; border-radius:999px;
+         font-size:11px; font-weight:800; vertical-align:middle; }
+  .tag.repeat { background:#fff3e0; color:var(--amber); border:1px solid #f0d3a5; }
+  .tag.core { background:var(--sky); color:var(--blue-dark); }
+  .tag.std  { background:#e9f6ee; color:var(--green); }
+  .prev { margin:6px 0 0; padding:7px 10px; border-left:3px solid #e3ecf2;
+          background:#fbfdfe; color:var(--muted); font-size:12px; }
+  .prev div { white-space:nowrap; }
+  .empty { padding:40px 0; text-align:center; color:var(--muted); }
+  .note { margin:14px 0 0; color:var(--muted); font-size:12px; }
+</style>
+</head>
+<body>
+
+<!-- 로그인 화면 -->
+<div class="login" id="login">
+  <h1>RCW 관리자</h1>
+  <p>다운로드 기록을 보려면 로그인하세요.</p>
+  <form id="login-form">
+    <label for="a-email">이메일</label>
+    <input id="a-email" type="email" required autocomplete="username">
+    <label for="a-pw">비밀번호</label>
+    <input id="a-pw" type="password" required autocomplete="current-password">
+    <button class="btn primary" type="submit" id="login-btn">로그인</button>
+  </form>
+  <div class="err" id="login-err" style="display:none"></div>
+</div>
+
+<!-- 본문 -->
+<div class="wrap" id="app" style="display:none">
+  <header class="bar">
+    <h1>트라이얼 다운로드 기록</h1>
+    <div>
+      <span class="who" id="who"></span>
+      <button class="btn" id="csv-btn">CSV 내려받기</button>
+      <button class="btn" id="reload-btn">새로고침</button>
+      <button class="btn" id="logout-btn">로그아웃</button>
+    </div>
+  </header>
+
+  <div class="cards">
+    <div class="card"><b id="c-today">0</b><span>오늘 다운로드</span></div>
+    <div class="card"><b id="c-week">0</b><span>최근 7일</span></div>
+    <div class="card"><b id="c-total">0</b><span>전체 다운로드</span></div>
+    <div class="card"><b id="c-people">0</b><span>받아간 사람(이메일 기준)</span></div>
+  </div>
+
+  <div class="tools">
+    <input id="q" type="search" placeholder="이름 · 회사 · 전화 · 이메일로 검색">
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>날짜</th><th>이름</th><th>회사</th><th>전화번호</th><th>이메일</th><th>다운로드 버전</th>
+      </tr>
+    </thead>
+    <tbody id="rows"><tr><td colspan="6" class="empty">불러오는 중…</td></tr></tbody>
+  </table>
+
+  <p class="note">
+    같은 이메일이 다시 받으면 <span class="tag repeat">N회차</span> 를 붙이고 그 아래에 이전 기록을 함께 보여줍니다.
+    기록은 다운로드 <b>버튼을 누른 시점</b>이며, 내려받기 완료 여부까지는 알 수 없습니다.
+  </p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // 브라우저에 두는 공개 키. 이 키로는 조회가 안 되고(RLS), 로그인해야 열린다.
+  var SUPABASE_URL = 'https://hzqbhxewftjkolwebkgy.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_QQ0M4AO9cIqf6pvBHCXuVA_AVehhSwC';
+  var TOKEN_KEY    = 'rcw_admin_token';
+
+  var loginBox = document.getElementById('login');
+  var app      = document.getElementById('app');
+  var rowsEl   = document.getElementById('rows');
+  var qEl      = document.getElementById('q');
+  var token    = null;
+  var all      = [];
+
+  function api(path, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + (opts.useAnon ? SUPABASE_KEY : token),
+      'Content-Type': 'application/json'
+    }, opts.headers || {});
+    return fetch(SUPABASE_URL + path, opts).then(function (res) {
+      if (!res.ok) return res.text().then(function (t) { throw new Error(res.status + ' ' + t); });
+      return res.status === 204 ? null : res.json();
+    });
+  }
+
+  // ── 로그인 ────────────────────────────────────────────────
+  document.getElementById('login-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var errEl = document.getElementById('login-err');
+    var btn   = document.getElementById('login-btn');
+    errEl.style.display = 'none';
+    btn.disabled = true;
+
+    api('/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      useAnon: true,
+      body: JSON.stringify({
+        email:    document.getElementById('a-email').value.trim(),
+        password: document.getElementById('a-pw').value
+      })
+    }).then(function (data) {
+      token = data.access_token;
+      try { sessionStorage.setItem(TOKEN_KEY, token); } catch (_) {}
+      document.getElementById('who').textContent = data.user && data.user.email ? data.user.email : '';
+      start();
+    }).catch(function () {
+      errEl.textContent = '로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.';
+      errEl.style.display = 'block';
+    }).finally(function () { btn.disabled = false; });
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', function () {
+    try { sessionStorage.removeItem(TOKEN_KEY); } catch (_) {}
+    location.reload();
+  });
+  document.getElementById('reload-btn').addEventListener('click', load);
+
+  // ── 데이터 ────────────────────────────────────────────────
+  function start() {
+    loginBox.style.display = 'none';
+    app.style.display = 'block';
+    load();
+  }
+
+  function load() {
+    rowsEl.innerHTML = '<tr><td colspan="6" class="empty">불러오는 중…</td></tr>';
+    api('/rest/v1/downloads?select=*&order=created_at.desc&limit=2000')
+      .then(function (data) {
+        all = data || [];
+        summarize();
+        render();
+      })
+      .catch(function (err) {
+        console.error(err);
+        rowsEl.innerHTML = '<tr><td colspan="6" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
+      });
+  }
+
+  function keyOf(r) { return (r.email || '').trim().toLowerCase(); }
+
+  function summarize() {
+    var now = new Date();
+    var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    var weekAgo = startOfToday - 6 * 86400000;
+    var today = 0, week = 0, people = {};
+
+    all.forEach(function (r) {
+      var t = new Date(r.created_at).getTime();
+      if (t >= startOfToday) today++;
+      if (t >= weekAgo) week++;
+      people[keyOf(r)] = 1;
+    });
+
+    document.getElementById('c-today').textContent  = today;
+    document.getElementById('c-week').textContent   = week;
+    document.getElementById('c-total').textContent  = all.length;
+    document.getElementById('c-people').textContent = Object.keys(people).length;
+  }
+
+  function fmt(ts, withTime) {
+    var d = new Date(ts), p = function (n) { return (n < 10 ? '0' : '') + n; };
+    var day = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+    return withTime ? day + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) : day;
+  }
+
+  function verLabel(r) {
+    var cls = r.edition === 'Standard' ? 'std' : 'core';
+    return '<span class="tag ' + cls + '">' + r.edition + '</span> Rhino ' + r.rhino +
+           ' · ' + (r.lang === 'ko-KR' ? '한국어' : 'English');
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function render() {
+    var q = qEl.value.trim().toLowerCase();
+    // 최신순 목록. 같은 이메일의 이전 기록은 그 행 아래에 함께 보여준다.
+    var seen = {};   // 이메일 → 아직 안 쓴 이전 기록들
+    all.forEach(function (r) {
+      var k = keyOf(r);
+      (seen[k] = seen[k] || []).push(r);
+    });
+
+    var html = '';
+    var shown = 0;
+    all.forEach(function (r) {
+      var hay = [r.name, r.company, r.phone, r.email].join(' ').toLowerCase();
+      if (q && hay.indexOf(q) === -1) return;
+
+      var mine  = seen[keyOf(r)] || [];
+      var idx   = mine.indexOf(r);                 // 0 = 가장 최근
+      var count = mine.length - idx;               // 이 사람의 몇 번째 다운로드인가
+      var prev  = mine.slice(idx + 1);             // 이 행보다 앞선 기록
+
+      var prevHtml = '';
+      if (prev.length) {
+        prevHtml = '<div class="prev">이전 ' + prev.length + '건' +
+          prev.map(function (p) {
+            return '<div>' + fmt(p.created_at, true) + ' · ' + p.edition +
+                   ' Rhino ' + p.rhino + ' · ' + (p.lang === 'ko-KR' ? '한국어' : 'English') + '</div>';
+          }).join('') + '</div>';
+      }
+
+      html += '<tr>' +
+        '<td class="when"><b>' + fmt(r.created_at) + '</b>' + fmt(r.created_at, true).slice(11) +
+          (count > 1 ? '<span class="tag repeat">' + count + '회차</span>' : '') + '</td>' +
+        '<td>' + esc(r.name) + '</td>' +
+        '<td>' + esc(r.company) + '</td>' +
+        '<td>' + esc(r.phone) + '</td>' +
+        '<td>' + esc(r.email) + '</td>' +
+        '<td class="ver">' + verLabel(r) + prevHtml + '</td>' +
+        '</tr>';
+      shown++;
+    });
+
+    rowsEl.innerHTML = html || '<tr><td colspan="6" class="empty">' +
+      (all.length ? '검색 결과가 없습니다.' : '아직 다운로드 기록이 없습니다.') + '</td></tr>';
+  }
+
+  qEl.addEventListener('input', render);
+
+  // ── CSV ───────────────────────────────────────────────────
+  document.getElementById('csv-btn').addEventListener('click', function () {
+    var head = ['날짜', '이름', '회사', '전화번호', '이메일', '에디션', 'Rhino', '언어', '파일명'];
+    var lines = [head.join(',')];
+    all.forEach(function (r) {
+      lines.push([
+        fmt(r.created_at, true), r.name, r.company, r.phone, r.email,
+        r.edition, r.rhino, r.lang, r.file_name
+      ].map(function (v) {
+        v = String(v == null ? '' : v);
+        return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }).join(','));
+    });
+    // 엑셀이 한글을 깨뜨리지 않도록 BOM 을 붙인다
+    var blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'rcw-downloads-' + fmt(Date.now()) + '.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  // 새로고침해도 다시 로그인하지 않도록 세션에 보관한 토큰을 쓴다(탭을 닫으면 사라짐)
+  try {
+    var saved = sessionStorage.getItem(TOKEN_KEY);
+    if (saved) { token = saved; start(); }
+  } catch (_) {}
+})();
+</script>
+</body>
+</html>

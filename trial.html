@@ -163,6 +163,13 @@
             <input id="f-email" name="email" type="email" required autocomplete="email" placeholder="name@company.com">
           </div>
           <div class="field">
+            <label for="f-phone" data-en="Phone<span class=&quot;req&quot;>*</span>">전화번호<span class="req">*</span></label>
+            <input id="f-phone" name="phone" type="tel" required autocomplete="tel" placeholder="010-1234-5678" data-en-placeholder="+82 10-1234-5678">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
             <label for="f-scale" data-en="Project type<span class=&quot;opt&quot;>(optional)</span>">주로 다루는 프로젝트<span class="opt">(선택)</span></label>
             <select id="f-scale" name="project_scale">
               <option value="" data-en="Please select">선택해 주세요</option>
@@ -283,6 +290,7 @@
     var SUPABASE_URL = 'https://hzqbhxewftjkolwebkgy.supabase.co';
     var SUPABASE_KEY = 'sb_publishable_QQ0M4AO9cIqf6pvBHCXuVA_AVehhSwC';
 
+    var submitted = null;   // 신청 저장 후의 { request_id, name, company, phone, email }
     var form   = document.getElementById('trial-form');
     var btn    = document.getElementById('submit-btn');
     var okBox  = document.getElementById('alert-success');
@@ -309,17 +317,28 @@
           'apikey': SUPABASE_KEY,
           'Authorization': 'Bearer ' + SUPABASE_KEY,
           'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
+          'Prefer': 'return=representation'
         },
         body: JSON.stringify({
           name:          val('name'),
           company:       val('company'),
           email:         val('email'),
+          phone:         val('phone'),
           project_scale: val('project_scale'),
           purpose:       val('purpose')
         })
       }).then(function (res) {
         if (!res.ok) return res.text().then(function (t) { throw new Error(res.status + ' ' + t); });
+        return res.json().catch(function () { return null; });
+      }).then(function (rows) {
+        // 다운로드 클릭을 이 신청과 연결하기 위해 방금 저장된 행을 기억해 둔다
+        submitted = {
+          request_id: (rows && rows[0] && rows[0].id) || null,
+          name:       val('name'),
+          company:    val('company'),
+          phone:      val('phone'),
+          email:      val('email')
+        };
         // 입력 항목을 감추고 다운로드만 남긴다 (reset 하면 빈 칸이 남아 혼란스럽다)
         form.classList.add('done');
         okBox.classList.add('show');
@@ -332,6 +351,48 @@
         btn.disabled = false;
       });
     });
+
+    // ── 다운로드 클릭 기록 ────────────────────────────────────────────
+    // 파일은 GitHub 에서 바로 내려받으므로 "완료"는 알 수 없다. 여기서 남기는 것은
+    // "신청한 사람이 어떤 설치 파일을 눌렀는가" 이고, 관리자 페이지가 이것을 읽는다.
+    // keepalive 를 켜 두면 페이지가 다운로드로 넘어가도 요청이 끊기지 않는다.
+    function recordDownload(fileName) {
+      if (!submitted) return;                       // 신청 없이 눌렀다면 남기지 않는다
+      var m = /^RCW_V5_(Core|Standard)_Trial_Rhino([78])_(ko-KR|en-US)\.exe$/.exec(fileName);
+      if (!m) return;
+
+      fetch(SUPABASE_URL + '/rest/v1/downloads', {
+        method: 'POST',
+        keepalive: true,
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          request_id: submitted.request_id,
+          name:       submitted.name,
+          company:    submitted.company,
+          phone:      submitted.phone,
+          email:      submitted.email,
+          edition:    m[1],
+          rhino:      m[2],
+          lang:       m[3],
+          file_name:  fileName
+        })
+      }).catch(function (err) {
+        // 기록 실패가 다운로드를 막아서는 안 된다
+        console.error('[trial] 다운로드 기록 실패:', err);
+      });
+    }
+
+    var dlLinks = document.querySelectorAll('.dl-btn');
+    for (var i = 0; i < dlLinks.length; i++) {
+      dlLinks[i].addEventListener('click', function () {
+        recordDownload(this.getAttribute('href').split('/').pop());
+      });
+    }
   })();
   </script>
 </body>
