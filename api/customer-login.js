@@ -64,7 +64,11 @@ async function db(path, init = {}) {
     }
   });
   if (!res.ok) throw new Error('supabase ' + res.status + ' ' + (await res.text()));
-  return res.status === 204 ? null : res.json();
+
+  // Prefer: return=minimal 이면 INSERT 는 201 + 빈 본문, PATCH 는 204 를 준다.
+  // 상태코드로 빈 본문을 가리면 201 을 놓친다. 본문이 비었는지로 판단한다.
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
 }
 
 /** 기록은 실패해도 로그인을 막지 않는다. 기록 때문에 고객이 못 들어가면 본말전도다. */
