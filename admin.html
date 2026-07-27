@@ -68,6 +68,24 @@
   .prev div { white-space:nowrap; }
   .empty { padding:40px 0; text-align:center; color:var(--muted); }
   .note { margin:14px 0 0; color:var(--muted); font-size:12px; }
+
+  /* 탭 */
+  .tabs { display:flex; gap:6px; margin:16px 0 0; }
+  .tabs button { padding:9px 16px; border:1px solid var(--line); border-bottom:none;
+                 border-radius:10px 10px 0 0; background:var(--mist); color:var(--muted);
+                 font-size:13.5px; font-weight:750; cursor:pointer; }
+  .tabs button.on { background:#fff; color:var(--ink); box-shadow:inset 0 3px 0 var(--blue); }
+  .tabs .count { margin-left:6px; color:var(--muted); font-weight:600; font-size:12px; }
+
+  /* 고객 상태 */
+  .st { display:inline-block; padding:2px 9px; border-radius:999px;
+        font-size:11.5px; font-weight:800; white-space:nowrap; }
+  .st.done { background:#e9f6ee; color:var(--green); }        /* 라이선스까지 끝 */
+  .st.wait { background:#fff3e0; color:var(--amber); }        /* 머신코드 회신 대기 */
+  .st.none { background:#eef2f5; color:var(--muted); }        /* 아직 안 들어옴 */
+  .st.stop { background:#fdf3f3; color:#a33; }                /* 중지 */
+  tr.attn td { background:#fffdf7; }
+  td.mono { font-family:ui-monospace,Consolas,monospace; font-size:12px; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -89,7 +107,7 @@
 <!-- 본문 -->
 <div class="wrap" id="app" style="display:none">
   <header class="bar">
-    <h1>트라이얼 다운로드 기록</h1>
+    <h1 id="view-title">고객</h1>
     <div>
       <span class="who" id="who"></span>
       <button class="btn" id="csv-btn">CSV 내려받기</button>
@@ -98,6 +116,44 @@
     </div>
   </header>
 
+  <div class="tabs">
+    <button id="tab-cust" class="on">고객<span class="count" id="tab-cust-n"></span></button>
+    <button id="tab-trial">트라이얼 다운로드<span class="count" id="tab-trial-n"></span></button>
+  </div>
+
+<!-- ── 고객 ───────────────────────────────────────────────── -->
+<div id="view-cust">
+  <div class="cards">
+    <div class="card"><b id="k-total">0</b><span>전체 고객</span></div>
+    <div class="card"><b id="k-wait">0</b><span>머신코드 회신 대기</span></div>
+    <div class="card"><b id="k-none">0</b><span>아직 안 들어옴</span></div>
+    <div class="card"><b id="k-done">0</b><span>라이선스 발급됨</span></div>
+  </div>
+
+  <div class="tools">
+    <input id="kq" type="search" placeholder="회사 · 담당자 · 이메일 · 코드로 검색">
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th>
+        <th>연락처</th><th>이메일</th><th>정보확인</th><th>코드</th>
+      </tr>
+    </thead>
+    <tbody id="krows"><tr><td colspan="8" class="empty">불러오는 중…</td></tr></tbody>
+  </table>
+
+  <p class="note">
+    <span class="st wait">회신 대기</span> 는 정보를 확인하고 내려받았지만 아직 라이선스를 발급하지 않은 고객입니다.
+    <b>지금 머신코드를 기다리고 있는 사람</b>이라 먼저 챙기시면 됩니다.
+    <span class="st none">미접속</span> 은 안내 메일을 받고도 아직 들어오지 않은 고객입니다.
+    라이선스를 발급하면 발급기가 새 행을 하나 더 만들고, 그 행이 <span class="st done">발급됨</span> 이 됩니다.
+  </p>
+</div>
+
+<!-- ── 트라이얼 다운로드(기존) ─────────────────────────────── -->
+<div id="view-trial" style="display:none">
   <div class="cards">
     <div class="card"><b id="c-today">0</b><span>오늘 다운로드</span></div>
     <div class="card"><b id="c-week">0</b><span>최근 7일</span></div>
@@ -122,6 +178,7 @@
     같은 이메일이 다시 받으면 <span class="tag repeat">N회차</span> 를 붙이고 그 아래에 이전 기록을 함께 보여줍니다.
     기록은 다운로드 <b>버튼을 누른 시점</b>이며, 내려받기 완료 여부까지는 알 수 없습니다.
   </p>
+</div>
 </div>
 
 <script>
@@ -183,13 +240,31 @@
     try { sessionStorage.removeItem(TOKEN_KEY); } catch (_) {}
     location.reload();
   });
-  document.getElementById('reload-btn').addEventListener('click', load);
+  document.getElementById('reload-btn').addEventListener('click', function () {
+    load();
+    loadCustomers();
+  });
+
+  // ── 탭 ────────────────────────────────────────────────────
+  var view = 'cust';
+  function switchView(next) {
+    view = next;
+    document.getElementById('view-cust').style.display  = next === 'cust'  ? 'block' : 'none';
+    document.getElementById('view-trial').style.display = next === 'trial' ? 'block' : 'none';
+    document.getElementById('tab-cust').classList.toggle('on', next === 'cust');
+    document.getElementById('tab-trial').classList.toggle('on', next === 'trial');
+    document.getElementById('view-title').textContent = next === 'cust' ? '고객' : '트라이얼 다운로드 기록';
+  }
+  document.getElementById('tab-cust').addEventListener('click', function () { switchView('cust'); });
+  document.getElementById('tab-trial').addEventListener('click', function () { switchView('trial'); });
 
   // ── 데이터 ────────────────────────────────────────────────
   function start() {
     loginBox.style.display = 'none';
     app.style.display = 'block';
+    switchView('cust');
     load();
+    loadCustomers();
   }
 
   function load() {
@@ -205,6 +280,88 @@
         rowsEl.innerHTML = '<tr><td colspan="6" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
       });
   }
+
+  // ── 고객 ──────────────────────────────────────────────────
+  var customers = [];
+  var kRowsEl = document.getElementById('krows');
+  var kqEl    = document.getElementById('kq');
+
+  function loadCustomers() {
+    kRowsEl.innerHTML = '<tr><td colspan="8" class="empty">불러오는 중…</td></tr>';
+    api('/rest/v1/customers?select=*&order=company.asc&limit=2000')
+      .then(function (data) {
+        customers = data || [];
+        summarizeCustomers();
+        renderCustomers();
+      })
+      .catch(function (err) {
+        console.error(err);
+        kRowsEl.innerHTML = '<tr><td colspan="8" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
+      });
+  }
+
+  /* 상태는 이 순서로 정한다.
+       machine_code 있음      → 라이선스까지 끝난 행(발급기가 만든 행)
+       info_confirmed_at 있음 → 받아갔고 지금 머신코드 회신을 기다리는 중
+       그 외                  → 안내는 갔는데 아직 안 들어온 고객
+     중지된 고객은 위 무엇이든 앞서 표시한다. */
+  function statusOf(c) {
+    if (c.status !== 'active')  return { cls: 'stop', label: '중지' };
+    if (c.machine_code)         return { cls: 'done', label: '발급됨' };
+    if (c.info_confirmed_at)    return { cls: 'wait', label: '회신 대기' };
+    return { cls: 'none', label: '미접속' };
+  }
+
+  function summarizeCustomers() {
+    var n = { total: customers.length, wait: 0, none: 0, done: 0 };
+    customers.forEach(function (c) {
+      var s = statusOf(c).cls;
+      if (s === 'wait') n.wait++;
+      else if (s === 'none') n.none++;
+      else if (s === 'done') n.done++;
+    });
+    document.getElementById('k-total').textContent = n.total;
+    document.getElementById('k-wait').textContent  = n.wait;
+    document.getElementById('k-none').textContent  = n.none;
+    document.getElementById('k-done').textContent  = n.done;
+    document.getElementById('tab-cust-n').textContent  = n.total ? '(' + n.total + ')' : '';
+    document.getElementById('tab-trial-n').textContent = all.length ? '(' + all.length + ')' : '';
+  }
+
+  function renderCustomers() {
+    var q = kqEl.value.trim().toLowerCase();
+
+    // 챙겨야 할 사람이 위로 오게: 회신 대기 → 미접속 → 발급됨 → 중지
+    var order = { wait: 0, none: 1, done: 2, stop: 3 };
+    var list = customers.slice().sort(function (a, b) {
+      var d = order[statusOf(a).cls] - order[statusOf(b).cls];
+      return d !== 0 ? d : String(a.company || '').localeCompare(String(b.company || ''));
+    });
+
+    var html = '';
+    list.forEach(function (c) {
+      var hay = [c.company, c.name, c.email, c.phone, c.license_id].join(' ').toLowerCase();
+      if (q && hay.indexOf(q) === -1) return;
+
+      var s = statusOf(c);
+      var ed = '<span class="tag ' + (c.edition === 'Standard' ? 'std' : 'core') + '">' + esc(c.edition) + '</span>';
+      html += '<tr' + (s.cls === 'wait' ? ' class="attn"' : '') + '>' +
+        '<td><span class="st ' + s.cls + '">' + s.label + '</span></td>' +
+        '<td>' + esc(c.company) + '</td>' +
+        '<td>' + esc(c.name) + '</td>' +
+        '<td>' + ed + '</td>' +
+        '<td>' + esc(c.phone) + '</td>' +
+        '<td>' + esc(c.email) + '</td>' +
+        '<td class="when">' + (c.info_confirmed_at ? fmt(c.info_confirmed_at, true) : '—') + '</td>' +
+        '<td class="mono">' + esc(c.license_id) + '</td>' +
+        '</tr>';
+    });
+
+    kRowsEl.innerHTML = html || '<tr><td colspan="8" class="empty">' +
+      (customers.length ? '검색 결과가 없습니다.' : '아직 등록된 고객이 없습니다.') + '</td></tr>';
+  }
+
+  kqEl.addEventListener('input', renderCustomers);
 
   function keyOf(r) { return (r.email || '').trim().toLowerCase(); }
 
@@ -293,25 +450,45 @@
   qEl.addEventListener('input', render);
 
   // ── CSV ───────────────────────────────────────────────────
+  function csvCell(v) {
+    v = String(v == null ? '' : v);
+    return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
+
+  function download(name, lines) {
+    // 엑셀이 한글을 깨뜨리지 않도록 BOM 을 붙인다
+    var blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // 보고 있는 탭의 내용을 내려받는다
   document.getElementById('csv-btn').addEventListener('click', function () {
+    if (view === 'cust') {
+      var kHead = ['상태', '회사', '담당자', '에디션', '전화번호', '이메일', '정보확인', '코드', '기기코드'];
+      var kLines = [kHead.join(',')];
+      customers.forEach(function (c) {
+        kLines.push([
+          statusOf(c).label, c.company, c.name, c.edition, c.phone, c.email,
+          c.info_confirmed_at ? fmt(c.info_confirmed_at, true) : '', c.license_id, c.machine_code
+        ].map(csvCell).join(','));
+      });
+      download('rcw-customers-' + fmt(Date.now()) + '.csv', kLines);
+      return;
+    }
+
     var head = ['날짜', '이름', '회사', '전화번호', '이메일', '에디션', 'Rhino', '언어', '파일명'];
     var lines = [head.join(',')];
     all.forEach(function (r) {
       lines.push([
         fmt(r.created_at, true), r.name, r.company, r.phone, r.email,
         r.edition, r.rhino, r.lang, r.file_name
-      ].map(function (v) {
-        v = String(v == null ? '' : v);
-        return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
-      }).join(','));
+      ].map(csvCell).join(','));
     });
-    // 엑셀이 한글을 깨뜨리지 않도록 BOM 을 붙인다
-    var blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'rcw-downloads-' + fmt(Date.now()) + '.csv';
-    a.click();
-    URL.revokeObjectURL(a.href);
+    download('rcw-downloads-' + fmt(Date.now()) + '.csv', lines);
   });
 
   // 새로고침해도 다시 로그인하지 않도록 세션에 보관한 토큰을 쓴다(탭을 닫으면 사라짐)
