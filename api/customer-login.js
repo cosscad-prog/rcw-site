@@ -152,7 +152,7 @@ module.exports = async function handler(req, res) {
     }
 
     const rows = await db(
-      'customers?select=id,license_id,name,company,phone,email,edition,issued_on,expires_on,status' +
+      'customers?select=id,license_id,name,company,phone,email,edition,issued_on,expires_on,status,info_confirmed_at' +
       `&code_key=eq.${encodeURIComponent(codeKey)}&limit=1`
     );
     const customer = Array.isArray(rows) && rows.length ? rows[0] : null;
@@ -181,6 +181,9 @@ module.exports = async function handler(req, res) {
         expires_on: customer.expires_on,
         status: customer.status
       },
+      // 아직 정보를 확인한 적이 없으면 다운로드 전에 확인 화면을 한 번 거친다.
+      // 두 번째 방문부터는 이 값이 false 라 곧바로 다운로드로 간다.
+      needs_info: !customer.info_confirmed_at,
       files: suspended ? [] : fileList(customer.edition),
       release
     });

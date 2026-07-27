@@ -55,6 +55,12 @@ create table if not exists public.customers (
 alter table public.customers
   add column if not exists machine_code text check (char_length(machine_code) <= 60);
 
+-- 고객이 다운로드 페이지에서 자기 정보를 확인·수정한 시각.
+-- 비어 있으면 아직 안 받아간 고객이다. 기존 고객 이전(마이그레이션) 때
+-- "누가 아직 안 왔는지" 보는 값이기도 하다.
+alter table public.customers
+  add column if not exists info_confirmed_at timestamptz;
+
 comment on table  public.customers            is 'RCW V5 유료 고객 명부. 라이선스 코드로 다운로드 페이지에 로그인한다';
 comment on column public.customers.code_key   is '조회용 정규화 코드(영숫자 대문자). 입력값도 같은 방식으로 정규화해 비교한다';
 comment on column public.customers.license_id is '표시용 원본 코드 V5KO-XXXXXXXXXXXX';
@@ -71,7 +77,7 @@ create table if not exists public.customer_access (
   created_at  timestamptz not null default now(),
 
   customer_id uuid        references public.customers(id) on delete set null,
-  action      text        not null check (action in ('login', 'login_failed', 'download')),
+  action      text        not null check (action in ('login', 'login_failed', 'download', 'profile')),
 
   -- 실패한 시도는 어떤 코드가 들어왔는지 남긴다(오타인지 공격인지 구분).
   -- 성공한 시도는 customer_id 로 알 수 있으므로 비워 둔다.
@@ -81,7 +87,13 @@ create table if not exists public.customer_access (
   file_name   text                 check (char_length(file_name)  <= 200)
 );
 
-comment on table public.customer_access is '고객 페이지 로그인·다운로드 기록';
+comment on table public.customer_access is '고객 페이지 로그인·정보확인·다운로드 기록';
+
+-- action 에 'profile' 을 나중에 추가했다. 테이블이 이미 있는 환경에서는
+-- create table if not exists 가 아무 일도 하지 않으므로 제약을 직접 갈아준다.
+alter table public.customer_access drop constraint if exists customer_access_action_check;
+alter table public.customer_access add constraint customer_access_action_check
+  check (action in ('login', 'login_failed', 'download', 'profile'));
 
 create index if not exists customer_access_created_at_idx on public.customer_access (created_at desc);
 create index if not exists customer_access_customer_idx   on public.customer_access (customer_id, created_at desc);

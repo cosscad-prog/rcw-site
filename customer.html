@@ -138,6 +138,48 @@
       </div>
     </section>
 
+    <!-- 처음 들어온 고객: 정보 확인 (info_confirmed_at 이 비어 있을 때만) -->
+    <section id="profile-view" class="hidden">
+      <div class="notice">
+        <i>i</i>
+        <p data-en="Please check your details once before downloading. We use them to send your license file. This screen appears only the first time.">다운로드 전에 정보를 한 번만 확인해 주세요. 라이선스 파일을 보내드릴 때 사용합니다. 이 화면은 처음 한 번만 나옵니다.</p>
+      </div>
+
+      <form class="form-card" id="profile-form" novalidate>
+        <div class="field">
+          <label for="p-company" data-en="Company">회사</label>
+          <input id="p-company" name="company" type="text" autocomplete="organization" placeholder="(주)회사명" data-en-placeholder="Company name">
+        </div>
+        <div class="field">
+          <label for="p-name" data-en="Contact person">담당자</label>
+          <input id="p-name" name="name" type="text" autocomplete="name" placeholder="홍길동" data-en-placeholder="Jane Doe">
+        </div>
+        <div class="field">
+          <label for="p-phone" data-en="Phone">연락처</label>
+          <input id="p-phone" name="phone" type="tel" autocomplete="tel" placeholder="010-1234-5678" data-en-placeholder="+82 10-1234-5678">
+        </div>
+        <div class="field">
+          <label for="p-email" data-en="Email (required)">이메일 (필수)</label>
+          <input id="p-email" name="email" type="email" required autocomplete="email" placeholder="name@company.com">
+        </div>
+
+        <div class="form-actions">
+          <button class="button" type="submit" id="profile-btn" data-en="Save and continue">저장하고 계속</button>
+          <span class="form-note" data-en="The license file is sent to this address, so please keep it current.">라이선스 파일을 이 주소로 보내드리니 최신 주소를 남겨주세요.</span>
+        </div>
+
+        <div class="alert error" id="alert-email" role="alert">
+          <b data-en="Please check the email address.">이메일 주소를 확인해 주세요.</b>
+        </div>
+        <div class="alert error" id="alert-who" role="alert">
+          <b data-en="Please enter a company or a contact name.">회사명 또는 담당자 이름을 입력해 주세요.</b>
+        </div>
+        <div class="alert error" id="alert-save" role="alert">
+          <b data-en="Could not save. Please try again in a moment.">저장하지 못했습니다. 잠시 후 다시 시도해 주세요.</b>
+        </div>
+      </form>
+    </section>
+
     <!-- 로그인 후 -->
     <section id="download-view" class="hidden">
       <div class="who">
@@ -228,18 +270,28 @@
   var form   = document.getElementById('login-form');
   var btn    = document.getElementById('login-btn');
   var input  = document.getElementById('f-code');
-  var loginView = document.getElementById('login-view');
-  var dlView    = document.getElementById('download-view');
+  var loginView   = document.getElementById('login-view');
+  var profileView = document.getElementById('profile-view');
+  var dlView      = document.getElementById('download-view');
   var alerts = {
     invalid: document.getElementById('alert-invalid'),
+    machine: document.getElementById('alert-machine'),
     limit:   document.getElementById('alert-limit'),
     server:  document.getElementById('alert-server')
   };
   var session = null;
+  var lastCode = '';          // 정보 저장 때 다시 보낼 코드(서버가 이걸로 본인 확인)
 
   function hideAlerts(){ for(var k in alerts) alerts[k].classList.remove('show'); }
   function showAlert(k){ hideAlerts(); alerts[k].classList.add('show'); }
   function text(id, v){ document.getElementById(id).textContent = v || '—'; }
+  function show(view){
+    loginView.classList.add('hidden');
+    profileView.classList.add('hidden');
+    dlView.classList.add('hidden');
+    view.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
@@ -247,6 +299,11 @@
     var code = input.value.trim();
     if (!code) { input.focus(); return; }
 
+    // 고객은 기기 코드와 라이선스 코드를 둘 다 가지고 있어 바꿔 넣기 쉽다.
+    // 서버에 물어보기 전에 여기서 알려 준다.
+    if (/^\s*RCW5[-\s]/i.test(code)) { showAlert('machine'); return; }
+
+    lastCode = code;
     btn.disabled = true;
     fetch('/api/customer-login', {
       method: 'POST',
@@ -269,6 +326,16 @@
 
   function render(data){
     session = data.customer;
+
+    // 처음 들어온 고객이면 정보 확인부터. 아는 값은 미리 채워 두고 고치기만 하게 한다.
+    if (data.needs_info) {
+      document.getElementById('p-company').value = session.company || '';
+      document.getElementById('p-name').value    = session.name || '';
+      document.getElementById('p-phone').value   = session.phone || '';
+      document.getElementById('p-email').value   = session.email || '';
+      show(profileView);
+      return;
+    }
 
     text('v-company', session.company);
     text('v-name',    session.name);
@@ -298,10 +365,61 @@
     document.getElementById('dl-rhino8').style.display = has(data.files,'8') ? '' : 'none';
     document.getElementById('dl-rhino7').style.display = has(data.files,'7') ? '' : 'none';
 
-    loginView.classList.add('hidden');
-    dlView.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    show(dlView);
   }
+
+  /* 정보 확인 화면 저장 → 저장되면 같은 코드로 다시 로그인해 다운로드로 넘어간다.
+     파일 목록을 여기서 또 만들지 않고 로그인 응답 하나만 믿기 위해서다. */
+  var pForm = document.getElementById('profile-form');
+  var pBtn  = document.getElementById('profile-btn');
+  var pAlerts = {
+    email: document.getElementById('alert-email'),
+    who:   document.getElementById('alert-who'),
+    save:  document.getElementById('alert-save')
+  };
+  function hidePAlerts(){ for (var k in pAlerts) pAlerts[k].classList.remove('show'); }
+
+  pForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    hidePAlerts();
+
+    var payload = {
+      code:    lastCode,
+      company: document.getElementById('p-company').value,
+      name:    document.getElementById('p-name').value,
+      phone:   document.getElementById('p-phone').value,
+      email:   document.getElementById('p-email').value
+    };
+
+    pBtn.disabled = true;
+    fetch('/api/customer-profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(res){
+      if (res.status === 400) {
+        return res.json().then(function(d){
+          pAlerts[d.field === 'email' ? 'email' : 'who'].classList.add('show');
+          return null;
+        });
+      }
+      if (!res.ok) { pAlerts.save.classList.add('show'); return null; }
+      return res.json();
+    }).then(function(saved){
+      if (!saved) return;
+      return fetch('/api/customer-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: lastCode })
+      }).then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(data){ if (data) render(data); else pAlerts.save.classList.add('show'); });
+    }).catch(function(err){
+      console.error('[customer] 정보 저장 실패:', err);
+      pAlerts.save.classList.add('show');
+    }).finally(function(){
+      pBtn.disabled = false;
+    });
+  });
 
   function has(files, rhino){
     for (var i=0;i<files.length;i++) if (files[i].rhino === rhino) return true;
@@ -339,10 +457,10 @@
 
   document.getElementById('logout-btn').addEventListener('click', function(){
     session = null;
+    lastCode = '';
     input.value = '';
-    dlView.classList.add('hidden');
-    loginView.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    hideAlerts();
+    show(loginView);
   });
 })();
 </script>
