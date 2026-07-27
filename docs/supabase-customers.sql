@@ -103,14 +103,63 @@ create index if not exists customer_access_fail_idx
 
 
 -- ------------------------------------------------------------
+-- 2-2. 라이선스 요청 (고객이 머신코드를 넣으면 한 줄 생긴다)
+--
+--    ★ 서명은 여기서 하지 않는다. 개인키는 발급 PC 밖으로 나가지 않는다.
+--    이 표는 우편함일 뿐이다 — 고객이 머신코드를 넣어두면, 발급 PC 의
+--    발급기가 대기 모드에서 가져가 로컬에서 서명하고 결과를 다시 채운다.
+--    발급기가 꺼져 있으면 아무것도 발급되지 않는다(그게 잠금 장치다).
+-- ------------------------------------------------------------
+create table if not exists public.license_requests (
+  id           uuid        primary key default gen_random_uuid(),
+  created_at   timestamptz not null default now(),
+
+  customer_id  uuid        not null references public.customers(id) on delete cascade,
+
+  -- RCW5-CO-… (Core) / RCW5-ST-… (Standard). 형식은 서버에서 한 번 더 본다.
+  machine_code text        not null check (machine_code ~ '^RCW5-(CO|ST)-[A-F0-9]{32}$'),
+
+  --   pending : 발급 대기
+  --   issued  : 발급 완료(license_file 에 .lic 내용)
+  --   held    : 사람이 봐야 하는 건(예: 같은 고객이 다른 PC 로 재요청)
+  status       text        not null default 'pending'
+               check (status in ('pending', 'issued', 'held')),
+
+  license_id   text                 check (char_length(license_id) <= 60),
+  license_file text,                          -- 서명된 .lic 본문(JSON)
+  issued_at    timestamptz,
+  hold_reason  text,
+
+  ip           text                 check (char_length(ip) <= 60),
+  user_agent   text                 check (char_length(user_agent) <= 300)
+);
+
+comment on table public.license_requests is '고객이 올린 머신코드와 그에 대해 발급된 라이선스';
+
+-- 같은 고객이 같은 PC 로 여러 번 눌러도 줄이 늘지 않게 한다.
+create unique index if not exists license_requests_one_per_machine_idx
+  on public.license_requests (customer_id, machine_code);
+create index if not exists license_requests_pending_idx
+  on public.license_requests (created_at) where status = 'pending';
+
+
+-- ------------------------------------------------------------
 -- 3. 접근 권한
 --
 --    anon 정책 없음 = 브라우저의 공개키로는 아무것도 못 한다(조회도 등록도).
 --    서버리스 함수만 service key 로 접근한다.
 --    관리자(authenticated)는 admin 화면에서 조회만 한다.
 -- ------------------------------------------------------------
-alter table public.customers      enable row level security;
-alter table public.customer_access enable row level security;
+alter table public.customers        enable row level security;
+alter table public.customer_access  enable row level security;
+alter table public.license_requests enable row level security;
+
+drop policy if exists "admin can read license requests" on public.license_requests;
+create policy "admin can read license requests"
+  on public.license_requests
+  for select
+  to authenticated
+  using (true);
 
 drop policy if exists "admin can read customers" on public.customers;
 create policy "admin can read customers"
@@ -139,7 +188,7 @@ select
   coalesce(string_agg(p.polname, ', ' order by p.polname), '(없음)') as policies
 from pg_class c
 left join pg_policy p on p.polrelid = c.oid
-where c.relname in ('customers', 'customer_access')
+where c.relname in ('customers', 'customer_access', 'license_requests')
 group by c.relname, c.relrowsecurity;
 
 
