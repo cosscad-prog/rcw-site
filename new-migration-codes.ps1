@@ -38,14 +38,26 @@ param(
     [string] $CsvPath,
 
     # 생성 결과를 남길 파일(선택). 메일 발송용 대조표.
-    [string] $OutCsv
+    [string] $OutCsv,
+
+    # Excel 에서 그냥 "CSV" 로 저장하면 한글이 UTF-8 이 아니라 949(ANSI)로 들어간다.
+    # 그때 -Encoding ansi 를 준다. "CSV UTF-8" 로 저장했다면 기본값 그대로 둔다.
+    # (PowerShell 7 에서 'Default' 는 ANSI 가 아니라 UTF-8 을 뜻하므로 쓰지 않는다.)
+    [ValidateSet('UTF8', 'ansi', 'oem', 'Unicode')]
+    [string] $Encoding = 'UTF8'
 )
 
 $ErrorActionPreference = 'Stop'
 
 if (-not (Test-Path -LiteralPath $CsvPath)) { throw "고객 목록 파일이 없습니다: $CsvPath" }
 
-$rows = @(Import-Csv -LiteralPath $CsvPath)
+$rows = @(Import-Csv -LiteralPath $CsvPath -Encoding $Encoding)
+
+# 한글이 깨진 채 진행하면 명부에 깨진 이름이 들어간다. 먼저 잡는다.
+$sample = ($rows | ForEach-Object { "$($_.company)$($_.name)" }) -join ''
+if ($sample -match '[�]|[À-ÿ]{3,}') {
+    throw "CSV 한글이 깨져 읽힙니다. Excel 이면 'CSV UTF-8' 로 다시 저장하거나 -Encoding ansi 를 주고 실행하세요."
+}
 if ($rows.Count -eq 0) { throw "고객 목록이 비어 있습니다." }
 
 $plan = foreach ($r in $rows) {
