@@ -51,7 +51,26 @@ $ErrorActionPreference = 'Stop'
 
 if (-not (Test-Path -LiteralPath $CsvPath)) { throw "고객 목록 파일이 없습니다: $CsvPath" }
 
+# 결과표를 입력 파일에 쓰면 고객 목록이 통째로 사라진다. 아무 일도 하기 전에 막는다.
+if ($OutCsv) {
+    $inFull  = (Resolve-Path -LiteralPath $CsvPath).Path
+    $outFull = if ([System.IO.Path]::IsPathRooted($OutCsv)) { [System.IO.Path]::GetFullPath($OutCsv) }
+               else { [System.IO.Path]::GetFullPath((Join-Path (Get-Location).Path $OutCsv)) }
+    if ($inFull -eq $outFull) {
+        throw "-OutCsv 가 입력 파일과 같습니다($OutCsv). 그대로 두면 고객 목록이 덮어써집니다. 다른 이름을 주세요 (예: .\보낸코드.csv)."
+    }
+}
+
 $rows = @(Import-Csv -LiteralPath $CsvPath -Encoding $Encoding)
+
+# 머리글 줄이 없으면 첫 고객이 열 이름으로 먹히고, 그 고객만 조용히 빠진다.
+# 값이 이상하다는 오류보다 원인을 바로 알려주는 편이 낫다.
+$requiredColumns = @('company', 'name', 'phone', 'email', 'edition')
+$haveColumns = if ($rows.Count -gt 0) { @($rows[0].PSObject.Properties.Name) } else { @() }
+$missingColumns = @($requiredColumns | Where-Object { $_ -notin $haveColumns })
+if ($missingColumns.Count -gt 0) {
+    throw "머리글 줄이 없거나 열 이름이 다릅니다(없는 열: $($missingColumns -join ', ')). 파일 맨 첫 줄에 정확히 이 한 줄을 넣으세요:`n`ncompany,name,phone,email,edition"
+}
 
 # 한글이 깨진 채 진행하면 명부에 깨진 이름이 들어간다. 먼저 잡는다.
 $sample = ($rows | ForEach-Object { "$($_.company)$($_.name)" }) -join ''

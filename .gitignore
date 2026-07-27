@@ -35,3 +35,7 @@ img/*
 # 백업 CSV — 개인정보가 담기므로 절대 커밋하지 않는다 (아티팩트로만 보관)
 backup/
 *.csv
+
+# 고객 목록 백업 — *.csv 만으로는 .bak 이 걸러지지 않는다
+*.bak
+customers.csv*
