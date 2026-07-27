@@ -71,14 +71,66 @@ RCW_V5_Core_Rhino8_en-US.exe        RCW_V5_Standard_Rhino8_en-US.exe
 있다.** 그래도 라이선스가 실사용을 막으므로 이 정도로 둔다. 더 조이려면
 Cloudflare R2 + 10분짜리 서명 URL 로 바꾸면 되고, 함수의 `fileList()` 한 곳만 고치면 된다.
 
-## 고객 등록
+## 고객 등록 — 발급기가 자동으로 한다
 
-라이선스를 발급할 때마다 한 행을 넣는다. `docs/supabase-customers.sql` 맨 아래에
-그대로 쓸 수 있는 INSERT 예시가 있다. `code_key` 는 직접 만들지 말고 예시처럼
-`upper(regexp_replace(...))` 식으로 넣으면 된다.
+`RCWLicenseIssuer` 가 라이선스를 만들고 원장에 기록한 뒤, `/api/customer-upsert` 를
+호출해 명부에도 올린다. 발급 화면 마지막 줄에 결과가 나온다.
 
-발급 이력은 `RCWLicenseIssuer` 옆의 `license-ledger.json` 에도 남는다. 둘이 어긋나지
-않도록, 발급 → DB 등록을 한 흐름으로 처리하는 것이 다음 과제다.
+```
+Created perpetual license: V5KO-…
+C:\Users\…\V5KO-….lic
+Customer portal: customer added.
+```
+
+### 왜 발급기가 Supabase 를 직접 쓰지 않나
+
+그러려면 service key 가 데스크톱 exe 안에 있어야 한다. 그 키는 RLS 를 우회해 모든
+데이터를 읽고 지울 수 있다. 대신 등록 전용 엔드포인트만 열고, 발급기에는 거기에만
+통하는 토큰을 준다. 토큰이 새더라도 할 수 있는 일은 고객 행 하나를 추가·갱신하는
+것뿐이다.
+
+### 설정 (한 번만)
+
+**1) 토큰 만들기** — 아무 긴 무작위 문자열이면 된다.
+
+```powershell
+[Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+```
+
+**2) Vercel 환경변수**에 `CUSTOMER_ADMIN_TOKEN` 으로 등록하고 재배포한다.
+
+**3) 발급기 옆에 `portal-config.json`** 을 만든다. `RCW_V5_License_Issuer.exe` 와
+같은 폴더다.
+
+```json
+{
+  "endpoint": "https://rcw-site.vercel.app/api/customer-upsert",
+  "adminToken": "2단계에서 만든 그 값"
+}
+```
+
+이 파일은 발급 PC 에만 둔다. 소스에는 토큰이 들어 있지 않고, 파일이 없으면 발급기는
+등록을 건너뛰고 그렇게 알려 준다(발급 자체는 정상 진행된다).
+
+### 실패했을 때
+
+사이트가 닫혀 있거나 토큰이 틀리면 발급 화면에 이유가 뜬다. **라이선스 발급은 그대로
+끝난 것이다** — 파일도 원장도 남는다. 명부만 나중에 손으로 채우면 된다.
+`docs/supabase-customers.sql` 맨 아래에 그대로 쓸 수 있는 INSERT 예시가 있다.
+
+### 갱신 규칙
+
+같은 코드가 이미 있으면 **라이선스에서 나오는 값만** 덮어쓴다(에디션·기기코드·발급일).
+관리자가 Table Editor 에서 채워 넣은 회사·전화·이메일은 건드리지 않는다.
+
+발급기는 "받는 사람 또는 회사" 한 칸만 받으므로 그 값이 `name` 에 들어간다.
+회사·전화·이메일은 등록 후 Table Editor 에서 채우면 된다.
+
+### 라이선스를 교체했을 때
+
+새 기기로 재발급하면 원장의 옛 항목은 `Replaced` 가 되지만, **명부의 옛 행은 그대로
+둔다.** 같은 고객이므로 옛 코드로 들어와도 받을 수 있게 하는 편이 낫다. 정말 막아야
+하면 그 행의 `status` 를 `suspended` 로 바꾼다.
 
 중지하려면 `status` 를 `suspended` 로 바꾼다. 로그인은 되지만 다운로드 버튼이 사라지고
 문의 안내가 뜬다.

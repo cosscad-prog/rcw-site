@@ -49,6 +49,12 @@ create table if not exists public.customers (
   note        text
 );
 
+-- 발급기가 함께 보내는 기기 코드(RCW5-CO-… / RCW5-ST-…).
+-- 어느 PC 에 묶인 라이선스인지 지원 문의 때 대조하는 용도다.
+-- 2026-07-27 추가 — 이 줄이 있어 스크립트를 다시 실행해도 안전하다.
+alter table public.customers
+  add column if not exists machine_code text check (char_length(machine_code) <= 60);
+
 comment on table  public.customers            is 'RCW V5 유료 고객 명부. 라이선스 코드로 다운로드 페이지에 로그인한다';
 comment on column public.customers.code_key   is '조회용 정규화 코드(영숫자 대문자). 입력값도 같은 방식으로 정규화해 비교한다';
 comment on column public.customers.license_id is '표시용 원본 코드 V5KO-XXXXXXXXXXXX';
