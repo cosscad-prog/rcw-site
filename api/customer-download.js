@@ -8,6 +8,15 @@
    응답 : 204 (항상). 기록 실패가 다운로드를 막아서는 안 된다.
 ------------------------------------------------------------------ */
 
+/** customer-login.js 와 같은 이유로, .../rest/v1/ 까지 붙은 값도 받아들인다. */
+function supabaseBase() {
+  return String(process.env.SUPABASE_URL || '')
+    .trim()
+    .replace(/\/+$/, '')
+    .replace(/\/rest\/v1$/i, '')
+    .replace(/\/+$/, '');
+}
+
 function clientIp(req) {
   const fwd = req.headers['x-forwarded-for'];
   if (typeof fwd === 'string' && fwd.length) return fwd.split(',')[0].trim().slice(0, 60);
@@ -32,7 +41,7 @@ module.exports = async function handler(req, res) {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(customerId || ''));
 
     if (ok && isUuid) {
-      const url = process.env.SUPABASE_URL;
+      const url = supabaseBase();
       const key = process.env.SUPABASE_SERVICE_KEY;
       if (url && key) {
         await fetch(url + '/rest/v1/customer_access', {

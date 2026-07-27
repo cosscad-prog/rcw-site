@@ -34,9 +34,23 @@ function clientIp(req) {
   return (req.socket && req.socket.remoteAddress ? req.socket.remoteAddress : '').slice(0, 60);
 }
 
+/**
+ * SUPABASE_URL 을 프로젝트 주소만 남긴 형태로 정리한다.
+ * Supabase 대시보드의 "API URL" 은 .../rest/v1/ 까지 붙어 있어 그대로 복사하기 쉽다.
+ * 그걸 그대로 쓰면 /rest/v1/rest/v1/... 이 되어 404 가 나는데, 화면에는 그냥
+ * "일시적인 오류" 로만 보여 원인을 찾기 어렵다. 어느 쪽을 넣어도 동작하게 한다.
+ */
+function supabaseBase() {
+  return String(process.env.SUPABASE_URL || '')
+    .trim()
+    .replace(/\/+$/, '')
+    .replace(/\/rest\/v1$/i, '')
+    .replace(/\/+$/, '');
+}
+
 /** Supabase REST 호출. service key 라 RLS 를 통과한다. */
 async function db(path, init = {}) {
-  const url = process.env.SUPABASE_URL;
+  const url = supabaseBase();
   const key = process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) throw new Error('SUPABASE_URL / SUPABASE_SERVICE_KEY 환경변수가 없습니다.');
 
