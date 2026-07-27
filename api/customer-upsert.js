@@ -12,8 +12,13 @@
      SUPABASE_URL / SUPABASE_SERVICE_KEY  (다른 함수와 공용)
 
    요청 : POST  헤더 x-rcw-admin-token
-          { license_id, edition, issued_to, machine_code, issued_on, expires_on }
+          { license_id, edition, issued_to, machine_code, issued_on, expires_on,
+            company, phone, email, note }
    응답 : 200 { ok:true, action:"inserted"|"updated" } | 401 | 400 | 500
+
+   뒤의 네 칸(company·phone·email·note)은 **새로 만들 때만** 쓴다. 발급기의
+   "신규 코드 발급" 이 고객 정보를 함께 보내는 용도이며, 이미 있는 행이면 무시한다.
+   손으로 채워 둔 연락처를 라이선스 발급이 덮어쓰면 안 되기 때문이다.
 
    갱신 규칙
      같은 코드가 이미 있으면 라이선스에서 나오는 값(edition·machine_code·발급일)만
@@ -116,15 +121,29 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, action: 'updated' });
     }
 
+    // 새로 만들 때만 받는 값들. 발급기의 "신규 코드 발급" 이 함께 보낸다.
+    const trim = (v, max) => {
+      const s = String(v == null ? '' : v).trim();
+      return s ? s.slice(0, max) : null;
+    };
+    const company = trim(body.company, 200);
+    const phone = trim(body.phone, 50);
+    const email = trim(body.email, 200);
+    const note = trim(body.note, 500);
+
     await db('customers', {
       method: 'POST',
       headers: { Prefer: 'return=minimal' },
       body: JSON.stringify({
         code_key: codeKey,
         license_id: licenseId,
-        // 발급기는 "받는 사람 또는 회사" 한 칸만 받는다. 우선 이름 칸에 넣고,
-        // 회사·전화·이메일은 관리자가 나중에 채운다.
-        name: issuedTo || null,
+        // 회사를 따로 받았으면 issued_to 는 담당자 이름으로 본다.
+        // 회사만 있으면 이름 칸은 비워 두고 관리자나 고객이 채우게 한다.
+        name: company ? (issuedTo && issuedTo !== company ? issuedTo : null) : (issuedTo || null),
+        company,
+        phone,
+        email,
+        note,
         edition,
         machine_code: machineCode || null,
         issued_on: issuedOn || null,
