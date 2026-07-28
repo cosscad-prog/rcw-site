@@ -31,7 +31,11 @@ param(
     [string] $Version,
 
     [string] $SourceDir = 'C:\std\RCW_V4_13.3\artifacts\RCW_V5',
-    [string] $Repo      = 'cosscad-prog/rcw-customer-releases'
+    [string] $Repo      = 'cosscad-prog/rcw-customer-releases',
+
+    # 서명 없는 파일을 그대로 올린다. 인증서를 아직 못 받은 동안에만 쓴다.
+    # 서명 없이 올리면 SmartScreen 평판이 릴리스마다 0 에서 다시 시작한다.
+    [switch] $AllowUnsigned
 )
 
 $ErrorActionPreference = 'Stop'
@@ -74,6 +78,7 @@ $plan = foreach ($e in $editions) {
                 SizeMB     = [math]::Round($item.Length / 1MB, 1)
                 Built      = $item.LastWriteTime
                 Sha256     = (Get-FileHash -Path $item.FullName -Algorithm SHA256).Hash
+                Signature  = (Get-AuthenticodeSignature -FilePath $item.FullName).Status
             }
         }
     }
@@ -89,6 +94,26 @@ Write-Host ("합계 {0:N0} MB" -f ($plan | Measure-Object SizeMB -Sum).Sum) -For
 $span = $plan | Measure-Object Built -Maximum -Minimum
 if (($span.Maximum - $span.Minimum).TotalHours -gt 24) {
     Write-Warning "파일들의 빌드 시각이 24시간 이상 차이납니다. 모두 같은 버전이 맞는지 확인하세요."
+}
+
+# 서명 확인. 서명 없이 올리면 SmartScreen 평판이 이 릴리스에서 0 으로 되돌아가고,
+# 앞선 버전이 쌓아둔 평판은 이어지지 않는다. 800MB 를 올린 뒤에 알아차리면 늦다.
+$unsigned = @($plan | Where-Object { $_.Signature -ne 'Valid' })
+if ($unsigned.Count -gt 0) {
+    Write-Host "`n서명되지 않은 파일 $($unsigned.Count) 개" -ForegroundColor Yellow
+    $unsigned | ForEach-Object { '  {0,-42} {1}' -f $_.UploadName, $_.Signature }
+    if (-not $AllowUnsigned) {
+        throw @"
+서명되지 않은 파일이 있습니다.
+
+  먼저 서명하세요:  .\sign-installers.ps1 -Version $Version
+  인증서가 아직 없으면:  .\publish-customer.ps1 -Version $Version -AllowUnsigned
+
+서명 없이 올리면 이 릴리스는 SmartScreen 평판을 처음부터 다시 쌓아야 하며,
+고객은 "Windows의 PC 보호" 경고를 그대로 만납니다.
+"@
+    }
+    Write-Warning "-AllowUnsigned 로 서명 없이 발행합니다. 고객 안내 문구가 배포되어 있는지 확인하세요."
 }
 
 $tag = "v$Version"
