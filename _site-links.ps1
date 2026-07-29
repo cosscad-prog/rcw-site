@@ -78,6 +78,17 @@ function Update-SiteDownloadLinks {
         git commit -q -m $CommitMessage
         if ($LASTEXITCODE -ne 0) { throw "git commit 실패" }
 
+        # 이 저장소에는 백업 기록 같은 커밋이 자동으로 올라오므로, 발행할 때마다
+        # 원격이 앞서 있을 수 있다. 받아서 얹은 다음 올린다.
+        git fetch -q origin
+        if ($LASTEXITCODE -ne 0) { throw "git fetch 실패" }
+
+        git rebase -q origin/main
+        if ($LASTEXITCODE -ne 0) {
+            git rebase --abort
+            throw "git rebase 실패 — 사이트 저장소를 직접 정리한 뒤 push 하세요."
+        }
+
         git push -q origin main
         if ($LASTEXITCODE -ne 0) { throw "git push 실패 — 사이트가 옛 링크를 가리킨 채 남아 있습니다. 직접 push 하세요." }
 
