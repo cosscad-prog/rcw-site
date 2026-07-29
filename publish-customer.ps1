@@ -2,16 +2,18 @@
   RCW V5 유료판 릴리스 발행 스크립트
 
   artifacts\RCW_V5 의 Core · Standard 설치 파일 8종을 하나의 GitHub 릴리스로 올린다.
-  고객 페이지(/customer)는 항상 "최신 릴리스"의 고정 파일명을 가리키므로,
-  이 스크립트를 실행하고 나면 사이트는 손대지 않아도 된다.
+  올린 뒤 고객 페이지의 링크까지 이 스크립트가 고쳐 커밋·푸시하므로,
+  사이트를 따로 손댈 일은 없다.
 
   ★ 평가판(publish-trial.ps1)과 저장소가 다르다.
       평가판  cosscad-prog/rcw-releases           (홈페이지에서 공개 안내)
       유료판  cosscad-prog/rcw-customer-releases  (어디에도 링크하지 않음)
 
-  ★ 업로드 이름에서 버전을 뗀다.
-    releases/latest/download/<파일명> 링크가 동작하려면 파일명이 버전마다 바뀌면
-    안 되기 때문이다. 어느 빌드인지는 태그와 릴리스 노트의 SHA-256 으로 확인한다.
+  ★ 업로드 이름에도 버전이 들어간다.
+    받는 사람의 다운로드 폴더에서 어느 빌드인지 보이지 않으면 지원할 때 파일을
+    특정할 수 없다. 파일명이 릴리스마다 바뀌므로 고객 페이지가 만드는 링크도 같이
+    바뀌어야 하는데, 그 일은 이 스크립트가 api/customer-login.js 의
+    RELEASE_VERSION 을 고쳐 커밋·푸시하는 것으로 처리한다.
 
   ★ 저장소는 공개다.
     비공개 저장소의 릴리스 파일은 토큰 없이 내려받을 수 없어 링크가 동작하지 않는다.
@@ -73,7 +75,7 @@ $plan = foreach ($e in $editions) {
             $item = Get-Item $localPath
             [pscustomobject]@{
                 Edition    = $e.Label
-                UploadName = "{0}_{1}_{2}.exe" -f $e.Prefix, $t, $l
+                UploadName = $localName
                 Path       = $item.FullName
                 SizeMB     = [math]::Round($item.Length / 1MB, 1)
                 Built      = $item.LastWriteTime
@@ -153,7 +155,7 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
     Write-Host "`n릴리스 $tag 발행 중... (800MB 가까운 업로드라 몇 분 걸립니다)" -ForegroundColor Yellow
 
     # gh 는 경로에 '#' 가 들어가면 인자를 그 지점에서 잘라버린다. 업로드용 임시 폴더에
-    # 버전을 뗀 이름으로 복사해 그 경로로 올린다. 끝나면(성공/실패 무관) 지운다.
+    # 복사해 그 경로로 올린다. 끝나면(성공/실패 무관) 지운다.
     $uploadDir = Join-Path ([System.IO.Path]::GetTempPath()) "rcw-customer-upload-$([Guid]::NewGuid().ToString('N'))"
     New-Item -ItemType Directory -Path $uploadDir | Out-Null
     try {
@@ -174,6 +176,13 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
     finally {
         Remove-Item -LiteralPath $uploadDir -Recurse -Force -ErrorAction SilentlyContinue
     }
+
+    Write-Host "`n고객 페이지 링크 갱신" -ForegroundColor Cyan
+    . (Join-Path $PSScriptRoot '_site-links.ps1')
+    Update-SiteDownloadLinks -Version $Version `
+        -RelativePath 'api/customer-login.js' `
+        -ConstantPrefix "const RELEASE_VERSION = '" `
+        -CommitMessage "Point the customer downloads at $Version"
 
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"

@@ -51,7 +51,10 @@ if (-not (Test-Path $SourceDir)) {
     throw "릴리스 폴더를 찾을 수 없습니다: $SourceDir"
 }
 
-# 로컬 파일(버전 포함) → 업로드 이름(버전 제거) 대응표
+# 업로드 이름에도 버전을 남긴다. 받는 사람의 다운로드 폴더에서 어느 빌드인지
+# 보이지 않으면 지원할 때 파일을 특정할 수 없기 때문이다. 파일명이 릴리스마다
+# 바뀌므로 사이트의 링크도 같이 고쳐야 하는데, 그 일은 이 스크립트가 아래에서
+# 직접 한다(Update-SiteLinks).
 $plan = foreach ($e in $editions) {
     foreach ($t in $targets) {
         foreach ($l in $langs) {
@@ -62,7 +65,7 @@ $plan = foreach ($e in $editions) {
             [pscustomobject]@{
                 Edition    = $e.Label
                 Days       = $e.Days
-                UploadName = "{0}_{1}_{2}.exe" -f $e.Prefix, $t, $l
+                UploadName = $localName
                 Path       = $item.FullName
                 SizeMB     = [math]::Round($item.Length / 1MB, 1)
                 Built      = $item.LastWriteTime
@@ -124,7 +127,7 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
     Write-Host "`n릴리스 $tag 발행 중... (800MB 가까운 업로드라 몇 분 걸립니다)" -ForegroundColor Yellow
 
     # gh 는 경로에 '#' 가 들어가면 인자를 그 지점에서 잘라버린다. 업로드용 임시 폴더에
-    # 버전을 뗀 이름으로 복사해 그 경로로 올린다. 끝나면(성공/실패 무관) 지운다.
+    # 복사해 그 경로로 올린다. 끝나면(성공/실패 무관) 지운다.
     $uploadDir = Join-Path ([System.IO.Path]::GetTempPath()) "rcw-trial-upload-$([Guid]::NewGuid().ToString('N'))"
     New-Item -ItemType Directory -Path $uploadDir | Out-Null
     try {
@@ -146,8 +149,14 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
         Remove-Item -LiteralPath $uploadDir -Recurse -Force -ErrorAction SilentlyContinue
     }
 
+    Write-Host "`n사이트 링크 갱신" -ForegroundColor Cyan
+    . (Join-Path $PSScriptRoot '_site-links.ps1')
+    Update-SiteDownloadLinks -Version $Version `
+        -RelativePath 'trial.html' `
+        -NamePattern 'RCW_V5_(?:Core|Standard)_Trial_Rhino[78]_(?:ko-KR|en-US)' `
+        -CommitMessage "Point the trial downloads at $Version"
+
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"
     Write-Host "  사이트   https://rcw-site.vercel.app/trial"
-    Write-Host "`n사이트는 항상 최신 릴리스를 가리키므로 별도 수정이 필요 없습니다." -ForegroundColor DarkGray
 }
