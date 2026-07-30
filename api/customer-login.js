@@ -102,7 +102,7 @@ async function latestRelease() {
 
 // 설치 파일 이름에 들어가는 패치 버전. publish-customer.ps1 이 발행할 때마다
 // 이 줄을 고쳐 커밋한다 — 손으로 바꾸지 말 것.
-const RELEASE_VERSION = '5.0.6';
+const RELEASE_VERSION = '5.0.7';
 
 /**
  * 고객 에디션에 맞는 설치 파일 목록.
