@@ -80,6 +80,10 @@
     .dl-btn { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:7px; padding:10px 12px; border:1px solid var(--line); border-radius:9px; background:var(--mist); color:var(--ink); font-size:13.5px; font-weight:700; transition:.15s; }
     .dl-btn:hover { border-color:var(--blue); background:var(--sky); color:var(--blue-dark); }
     .dl-btn em { color:var(--muted); font-style:normal; font-size:11.5px; font-weight:600; }
+    /* 파일명에 버전이 없으니 어느 빌드인지는 이 줄이 알린다 */
+    .dl-ver { display:flex; align-items:center; gap:8px; margin:12px 0 0; color:#3f7359; font-size:12.5px; }
+    .dl-ver b { color:#0a6b3f; font-size:13px; }
+    .dl-ver a { color:var(--blue-dark); font-weight:700; text-decoration:underline; }
     .dl-note { margin:13px 0 0; color:#3f7359; font-size:12.5px; word-break:keep-all; }
     .dl-note a { color:var(--blue-dark); font-weight:700; text-decoration:underline; }
     /* Rhino 7 은 접어 둔다. 필요한 사람은 찾을 수 있고, 주력 다운로드는 흐려지지 않는다. */
@@ -207,16 +211,24 @@
           <b data-en="Registered — download below.">신청이 접수되었습니다. 아래에서 내려받으세요.</b>
           <span data-en="Pick an edition. Core runs for 90 days; Standard adds the full command set for 30 days. Korean and English are both inside the installer — Setup asks which one to use.">에디션을 선택하세요. Core는 90일, Standard는 전체 기능을 30일간 사용하실 수 있습니다. 한국어·영어가 설치 파일 하나에 들어 있어 설치할 때 고르시면 됩니다.</span>
 
+          <!-- 파일명에는 버전을 넣지 않는다(2026-07-30 결정). 대신 어느 빌드인지는
+               아래 버전 줄로 알린다 — publish-trial.ps1 이 TRIAL_VERSION 을 갱신한다. -->
           <div class="dl">
             <div class="dl-group">
               <h4 data-en="Core Trial · 90 days">Core 트라이얼 · 90일</h4>
-              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Core_Trial_Rhino8_5.0.7.exe"><span data-en="Download for Rhino 8">Rhino 8 용 내려받기</span><em>95 MB</em></a>
+              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Core_Trial_Rhino8.exe"><span data-en="Download for Rhino 8">Rhino 8 용 내려받기</span><em>95 MB</em></a>
             </div>
             <div class="dl-group">
               <h4 data-en="Standard Trial · 30 days">Standard 트라이얼 · 30일</h4>
-              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Standard_Trial_Rhino8_5.0.7.exe"><span data-en="Download for Rhino 8">Rhino 8 용 내려받기</span><em>95 MB</em></a>
+              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Standard_Trial_Rhino8.exe"><span data-en="Download for Rhino 8">Rhino 8 용 내려받기</span><em>95 MB</em></a>
             </div>
           </div>
+
+          <p class="dl-ver">
+            <span data-en="Current version">현재 버전</span>
+            <b id="rel-version">5.0.7</b>
+            <a id="rel-notes" href="https://github.com/cosscad-prog/rcw-releases/releases/latest" target="_blank" rel="noopener" data-en="what changed">변경 내용</a>
+          </p>
 
           <!-- Rhino 7 은 정리 대상이다(2026-07-30 결정). 아직 쓰는 분이 있어 파일은
                계속 만들지만, 앞세우지 않고 접어 둔다. 주력 다운로드가 한곳에 모여야
@@ -226,11 +238,11 @@
             <div class="dl">
               <div class="dl-group">
                 <h4 data-en="Core Trial · 90 days · Rhino 7">Core 트라이얼 · 90일 · Rhino 7</h4>
-                <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Core_Trial_Rhino7_5.0.7.exe"><span data-en="Download for Rhino 7">Rhino 7 용 내려받기</span><em>95 MB</em></a>
+                <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Core_Trial_Rhino7.exe"><span data-en="Download for Rhino 7">Rhino 7 용 내려받기</span><em>95 MB</em></a>
               </div>
               <div class="dl-group">
                 <h4 data-en="Standard Trial · 30 days · Rhino 7">Standard 트라이얼 · 30일 · Rhino 7</h4>
-                <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Standard_Trial_Rhino7_5.0.7.exe"><span data-en="Download for Rhino 7">Rhino 7 용 내려받기</span><em>95 MB</em></a>
+                <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Standard_Trial_Rhino7.exe"><span data-en="Download for Rhino 7">Rhino 7 용 내려받기</span><em>95 MB</em></a>
               </div>
             </div>
             <p class="dl-note" data-en="New work is being moved to Rhino 8. Rhino 7 builds are still made, but Rhino 8 is the version we test first.">신규 작업은 Rhino 8 을 기준으로 옮겨가고 있습니다. Rhino 7 설치 파일도 계속 만들지만, 먼저 검증하는 쪽은 Rhino 8 입니다.</p>
@@ -380,6 +392,15 @@
         btn.disabled = false;
       });
     });
+
+    // ── 배포 중인 버전 ────────────────────────────────────────────────
+    // 파일명에 버전이 없으므로(2026-07-30) 받는 사람이 어느 빌드인지 아는 길은
+    // 이 표시뿐이다. publish-trial.ps1 이 발행할 때 이 한 줄을 갱신한다.
+    var TRIAL_VERSION = '5.0.7';
+    (function () {
+      var el = document.getElementById('rel-version');
+      if (el) el.textContent = TRIAL_VERSION;
+    })();
 
     // ── 다운로드 클릭 기록 ────────────────────────────────────────────
     // 파일은 GitHub 에서 바로 내려받으므로 "완료"는 알 수 없다. 여기서 남기는 것은

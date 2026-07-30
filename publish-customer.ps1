@@ -3,18 +3,16 @@
 
   artifacts\RCW_V5 의 Core · Standard 설치 파일 4종(에디션 2 × Rhino 2)을
   하나의 GitHub 릴리스로 올린다. 언어는 설치할 때 고르므로 파일이 갈리지 않는다.
-  올린 뒤 고객 페이지의 링크까지 이 스크립트가 고쳐 커밋·푸시하므로,
-  사이트를 따로 손댈 일은 없다.
+  파일 이름이 버전과 무관하게 고정이라 사이트는 손댈 일이 없다.
 
   ★ 평가판(publish-trial.ps1)과 저장소가 다르다.
       평가판  cosscad-prog/rcw-releases           (홈페이지에서 공개 안내)
       유료판  cosscad-prog/rcw-customer-releases  (어디에도 링크하지 않음)
 
-  ★ 업로드 이름에도 버전이 들어간다.
-    받는 사람의 다운로드 폴더에서 어느 빌드인지 보이지 않으면 지원할 때 파일을
-    특정할 수 없다. 파일명이 릴리스마다 바뀌므로 고객 페이지가 만드는 링크도 같이
-    바뀌어야 하는데, 그 일은 이 스크립트가 api/customer-login.js 의
-    RELEASE_VERSION 을 고쳐 커밋·푸시하는 것으로 처리한다.
+  ★ 로컬 빌드 파일에는 버전이 붙지만(빌드끼리 덮어쓰지 않게), 업로드할 때는
+    **버전을 뗀 이름**으로 올린다(2026-07-30 결정). 그래서
+    releases/latest/download/<파일명> 링크가 고정되고 사이트를 고칠 일이 없다.
+    고객 페이지는 버전을 GitHub 릴리스 태그에서 직접 읽어 표시한다(latestRelease()).
 
   ★ 저장소는 공개다.
     비공개 저장소의 릴리스 파일은 토큰 없이 내려받을 수 없어 링크가 동작하지 않는다.
@@ -75,7 +73,7 @@ $plan = foreach ($e in $editions) {
         $item = Get-Item $localPath
         [pscustomobject]@{
             Edition    = $e.Label
-            UploadName = $localName
+            UploadName = "{0}_{1}.exe" -f $e.Prefix, $t   # 올릴 때는 버전을 뗀다
             Path       = $item.FullName
             SizeMB     = [math]::Round($item.Length / 1MB, 1)
             Built      = $item.LastWriteTime
@@ -176,12 +174,8 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
         Remove-Item -LiteralPath $uploadDir -Recurse -Force -ErrorAction SilentlyContinue
     }
 
-    Write-Host "`n고객 페이지 링크 갱신" -ForegroundColor Cyan
-    . (Join-Path $PSScriptRoot '_site-links.ps1')
-    Update-SiteDownloadLinks -Version $Version `
-        -RelativePath 'api/customer-login.js' `
-        -ConstantPrefix "const RELEASE_VERSION = '" `
-        -CommitMessage "Point the customer downloads at $Version"
+    # 파일 이름이 고정이라 고객 페이지는 손댈 것이 없다. 표시되는 버전은
+    # 페이지가 GitHub 릴리스 태그를 직접 읽어 온다.
 
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"

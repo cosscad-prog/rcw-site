@@ -5,9 +5,12 @@
   (에디션 2 × Rhino 2)을 하나의 GitHub 릴리스로 올린다. 언어는 설치할 때
   고르므로 파일이 갈리지 않는다(2026-07-30).
 
-  ★ 업로드 이름에도 버전이 남는다(RCW_V5_Core_Trial_Rhino8_5.0.7.exe). 그래서
-    releases/latest/download/<파일명> 링크가 릴리스마다 바뀌는데, 그 링크를
-    고치는 일은 이 스크립트가 아래에서 직접 한다(Update-SiteDownloadLinks).
+  ★ 로컬 빌드 파일에는 버전이 붙지만(RCW_V5_Core_Trial_Rhino8_5.0.7.exe — 빌드끼리
+    덮어쓰지 않게), 업로드할 때는 **버전을 뗀 이름**으로 올린다(2026-07-30 결정).
+    고객 화면에 버전 문자열이 파일명으로 보이는 것을 사용자가 원치 않았고,
+    그러면 releases/latest/download/<파일명> 링크가 고정되어 사이트를 고칠 일도 없다.
+    어느 빌드인지는 ①페이지의 버전 안내 ②릴리스 태그·노트의 SHA-256
+    ③파일 속성의 "파일 버전"(5.0.7.0) 으로 확인한다.
 
   사전 준비 (최초 1회):
     winget install GitHub.cli
@@ -60,7 +63,7 @@ $plan = foreach ($e in $editions) {
         [pscustomobject]@{
             Edition    = $e.Label
             Days       = $e.Days
-            UploadName = $localName
+            UploadName = "{0}_{1}.exe" -f $e.Prefix, $t   # 올릴 때는 버전을 뗀다
             Path       = $item.FullName
             SizeMB     = [math]::Round($item.Length / 1MB, 1)
             Built      = $item.LastWriteTime
@@ -143,12 +146,14 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
         Remove-Item -LiteralPath $uploadDir -Recurse -Force -ErrorAction SilentlyContinue
     }
 
-    Write-Host "`n사이트 링크 갱신" -ForegroundColor Cyan
+    # 다운로드 링크는 이름이 고정이라 고칠 게 없다. 대신 페이지가 안내하는
+    # 버전 문구를 맞춘다 — 받는 사람이 어느 빌드인지 알 길이 여기뿐이다.
+    Write-Host "`n사이트 버전 안내 갱신" -ForegroundColor Cyan
     . (Join-Path $PSScriptRoot '_site-links.ps1')
     Update-SiteDownloadLinks -Version $Version `
         -RelativePath 'trial.html' `
-        -NamePattern 'RCW_V5_(?:Core|Standard)_Trial_Rhino[78]' `
-        -CommitMessage "Point the trial downloads at $Version"
+        -ConstantPrefix "var TRIAL_VERSION = '" `
+        -CommitMessage "Say the trial downloads are $Version"
 
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"

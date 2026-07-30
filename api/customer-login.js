@@ -100,21 +100,20 @@ async function latestRelease() {
   }
 }
 
-// 설치 파일 이름에 들어가는 패치 버전. publish-customer.ps1 이 발행할 때마다
-// 이 줄을 고쳐 커밋한다 — 손으로 바꾸지 말 것.
-const RELEASE_VERSION = '5.0.7';
-
 /**
  * 고객 에디션에 맞는 설치 파일 목록.
- * 파일명에 버전이 들어가므로 받는 사람이 어느 빌드인지 알 수 있다. 대신 링크가
- * 릴리스마다 바뀌어 위 RELEASE_VERSION 을 함께 올려야 한다.
- * 언어는 파일을 가르지 않는다 — 설치 파일 하나가 한국어·영어를 모두 담고
- * 설치할 때 고른다(2026-07-30).
+ *
+ * 이름에 버전도 언어도 없다. 버전을 넣으면 릴리스마다 링크가 바뀌어 사이트를
+ * 함께 고쳐야 하고, 무엇보다 고객 화면에 버전 문자열이 파일명으로 드러난다
+ * (2026-07-30 결정). 어느 빌드인지는 화면 위쪽의 릴리스 태그로 알린다 —
+ * 그 값은 latestRelease() 가 GitHub 에서 직접 읽어 오므로 손볼 곳이 없다.
+ * 언어도 파일을 가르지 않는다: 설치 파일 하나가 한국어·영어를 모두 담고
+ * 설치할 때 고른다.
  */
 function fileList(edition) {
   const out = [];
   for (const rhino of ['8', '7']) {
-    const name = `RCW_V5_${edition}_Rhino${rhino}_${RELEASE_VERSION}.exe`;
+    const name = `RCW_V5_${edition}_Rhino${rhino}.exe`;
     out.push({
       rhino,
       file_name: name,
