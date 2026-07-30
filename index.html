@@ -47,7 +47,10 @@
     .hero h1 em { color:var(--blue); font-style:normal; }
     .hero-copy { max-width:580px; margin-bottom:27px; color:#475467; font-size:18px; word-break:keep-all; }
     .button-row { display:flex; flex-wrap:wrap; gap:11px; }
-    .micro { margin:14px 0 0; color:#667085; font-size:12px; }
+    /* 여기 담기는 것은 "Rhino 가 있어야 한다"는 전제 조건이다. 12px 회색으로 두면
+       사는 쪽이 못 보고 지나쳐 설치 단계에서야 알게 된다. */
+    .micro { margin:14px 0 0; max-width:560px; color:#475467; font-size:13px; line-height:1.6; word-break:keep-all; }
+    .micro b { color:var(--ink); font-weight:750; }
     .hero-art { position:relative; min-height:470px; }
     .hero-image { position:absolute; inset:0 0 16px 0; width:100%; height:100%; object-fit:cover; object-position:center 32%; border:1px solid #d8e1f0; border-radius:var(--radius); box-shadow:0 22px 50px rgba(16,31,61,.17); }
     .hero-card { position:absolute; right:-14px; bottom:-4px; width:min(285px,66%); padding:16px; border:1px solid #dbe3f0; border-radius:14px; background:rgba(255,255,255,.94); box-shadow:0 16px 32px rgba(16,31,61,.14); backdrop-filter:blur(8px); }
@@ -191,14 +194,16 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <span class="pill">Windows · Rhino 7 &amp; Rhino 8</span>
+          <!-- RCW 는 단독 프로그램이 아니라 Rhino 안에서 도는 플러그인이다. 사는 쪽이
+               Rhino 를 이미 갖고 있어야 한다는 사실을 가장 먼저 보이는 자리에서 말한다. -->
+          <span class="pill" data-en="Plug-in for Rhino 7 &amp; Rhino 8 · Windows">Rhino 7 · Rhino 8 플러그인 · Windows</span>
           <h1 data-en="Make the 3D model <em>easy enough to use</em>.">3D 모델을,<br><em>실제로 쓸 만큼 쉽게.</em></h1>
           <p class="hero-copy" data-en="RCW V5 turns curtain-wall sections and wireframes into a practical production model—then uses that model to create the fabrication drawings and parts lists the factory needs.">RCW V5는 커튼월 단면과 와이어프레임을 실제 제작용 모델로 바꾸고, 그 모델로 공장이 필요로 하는 가공도와 부품 리스트를 만듭니다.</p>
           <div class="button-row">
             <a class="button" href="#checkout" data-en="Get RCW V5 →">RCW V5 구매 →</a>
             <a class="button secondary" href="#features" data-en="See how it works">작동 방식 보기</a>
           </div>
-          <p class="micro" data-en="A Rhino workflow for the work between design intent and fabrication.">설계 의도와 제작 사이의 작업을 위한 Rhino 워크플로우.</p>
+          <p class="micro" data-en="RCW V5 is a plug-in for the work between design intent and fabrication. It runs inside <b>Rhino 7 or Rhino 8 for Windows</b>, which you need already installed — Rhino is not included.">RCW V5는 설계 의도와 제작 사이를 잇는 <b>Rhino 플러그인</b>입니다. <b>Windows용 Rhino 7 또는 Rhino 8</b> 안에서 동작하므로 Rhino 가 설치되어 있어야 하며, Rhino 는 포함되어 있지 않습니다.</p>
         </div>
         <div class="hero-art">
           <img class="hero-image" src="img/case_hero.jpg" alt="곡면 유리 커튼월 고층 건물">
@@ -277,8 +282,8 @@
           <article class="proof-card"><img src="img/FabBomTable.gif" alt="RCW가 생성한 부속 자재 BOM"><div class="caption"><b data-en="Accessory parts list">부속 부품 리스트</b><p data-en="Use the collected accessory data in a fabrication drawing to show the parts and quantities that complete the assembly.">가공도에 수집된 부속 데이터로 조립을 완성하는 부품과 수량을 보여줍니다.</p></div></article>
         </div>
         <div class="specs" id="requirements">
-          <div class="spec"><b data-en="Host application">호스트 프로그램</b><span data-en="Rhino 7 or Rhino 8 for Windows.">Windows용 Rhino 7 또는 Rhino 8.</span></div>
-          <div class="spec"><b data-en="Language">언어</b><span data-en="Separate Korean and English installers and help.">한국어·영어 설치본과 도움말 분리 제공.</span></div>
+          <div class="spec"><b data-en="Host application">호스트 프로그램</b><span data-en="Rhino 7 or Rhino 8 for Windows. RCW V5 is a plug-in that runs inside Rhino; Rhino itself is licensed separately by McNeel and is not included.">Windows용 Rhino 7 또는 Rhino 8. RCW V5는 그 안에서 동작하는 플러그인이며, Rhino 는 McNeel 이 별도로 판매하는 제품으로 포함되어 있지 않습니다.</span></div>
+          <div class="spec"><b data-en="Language">언어</b><span data-en="One installer carries both Korean and English; Setup asks which to use, and the help follows that choice.">설치 파일 하나에 한국어·영어가 함께 들어 있으며 설치할 때 고릅니다. 도움말도 그 선택을 따릅니다.</span></div>
           <div class="spec"><b data-en="License">라이선스</b><span data-en="Machine-bound license issued for one workstation.">워크스테이션 1대에 발급되는 기기 고정 라이선스.</span></div>
           <div class="spec"><b data-en="Support material">지원 자료</b><span data-en="Built-in HTML help and workflow-focused panels.">내장 HTML 도움말과 작업 흐름 중심 패널.</span></div>
         </div>
@@ -360,7 +365,9 @@
         <div class="buy-actions">
           <a class="button" href="trial.html" data-en="Register for the trial →">Trial 신청하기 →</a>
           <a class="button secondary" href="contact.html" data-en="Ask a product question">제품 문의하기</a>
-          <span class="checkout-note" data-en="Register now and we will notify you first when the trial opens.">지금 신청하시면 트라이얼이 열릴 때 가장 먼저 안내드립니다.</span>
+          <!-- 트라이얼은 이미 열려 있다. 예전의 "열리면 안내드립니다" 문구는 사실이
+               아니게 됐으므로, 그 자리에 정작 필요한 전제 조건을 적는다. -->
+          <span class="checkout-note" data-en="You will need Rhino 7 or Rhino 8 for Windows installed — RCW V5 is a plug-in that runs inside it.">설치하시려면 Windows용 Rhino 7 또는 Rhino 8 이 필요합니다 — RCW V5 는 그 안에서 동작하는 플러그인입니다.</span>
         </div>
       </div></div>
     </section>
