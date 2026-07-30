@@ -297,7 +297,7 @@
       <div class="wrap">
         <p class="eyebrow" data-en="Editions">버전 비교</p>
         <h2 data-en="Which edition fits your work?">어떤 버전이 필요하신가요?</h2>
-        <p class="lead" data-en="Core covers the full frame-and-glass workflow — modeling, numbering, lists, fabrication drawings, 2D and NC. Standard adds vents, grills, back panels, BIM data and the AutoCAD-side utilities. Professional adds curved transom geometry for non-orthogonal and free-form facades.">Core는 프레임과 유리의 전체 흐름 — 모델링·번호·리스트·가공도·2D·NC — 을 모두 담습니다. Standard는 여기에 창호·그릴·백패널·BIM 데이터와 AutoCAD 유틸리티를 더합니다. Professional은 비직교·자유곡면 파사드를 위한 트랜섬 곡선 모델링을 더합니다.</p>
+        <p class="lead" data-en="Core covers the full frame-and-glass workflow — modeling, numbering, lists, fabrication drawings, 2D and NC. Standard adds vents, grills, back panels and BIM data. Professional adds curved transom geometry for non-orthogonal and free-form facades.">Core는 프레임과 유리의 전체 흐름 — 모델링·번호·리스트·가공도·2D·NC — 을 모두 담습니다. Standard는 여기에 창호·그릴·백패널·BIM 데이터를 더합니다. Professional은 비직교·자유곡면 파사드를 위한 트랜섬 곡선 모델링을 더합니다.</p>
 
         <div class="table-wrap">
           <table>
@@ -333,10 +333,14 @@
               <tr><th data-en="Layer, block, text, dimension utilities">레이어·블록·텍스트·치수 유틸리티</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
               <tr><th data-en="Web viewer — WebV, ToWebFile">웹뷰어 — WebV · ToWebFile</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
               <tr><th data-en="Surface / DotText / angle / cylinder tools">서피스·DotText·각도·실린더 도구</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
-              <tr><th data-en="AutoCAD utilities &amp; tools">AutoCAD 유틸리티·도구</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+<!-- AutoCAD·BricsCAD 유틸리티 행은 뺐다(2026-07-30). 설치기가 Autocad_Utils*/
+                   Bricscad_Utils* DLL 을 모든 페이로드에서 금지 파일로 막으므로 어떤 에디션에도
+                   들어가지 않는다. 국내 기존 사용자에게만 따로 전달하는 레거시 부가물이다. -->
               <tr><th data-en="Rhino 7 &amp; Rhino 8">Rhino 7 · Rhino 8</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
               <tr><th data-en="License">라이선스</th><td data-en="Perpetual">영구</td><td class="hi" data-en="Perpetual">영구</td><td data-en="Perpetual">영구</td></tr>
-              <tr><th data-en="90-day trial">90일 트라이얼</th><td class="yes">✓</td><td class="hi" data-en="Core scope">Core 범위</td><td class="no">—</td></tr>
+<!-- 기간이 에디션마다 다르다: Core 90일 / Standard 30일. 두 평가 기록은 서로
+                   독립이라 Core 를 다 써도 Standard 30일이 온전히 남는다. -->
+              <tr><th data-en="Trial">트라이얼</th><td data-en="90 days">90일</td><td class="hi" data-en="30 days, full Standard scope">30일 · Standard 전체 범위</td><td class="no">—</td></tr>
             </tbody>
           </table>
         </div>
@@ -349,7 +353,7 @@
           </div>
           <div class="plan-card hi">
             <div class="ptop"><b>Standard</b><span class="badge" data-en="Most complete">가장 완전</span></div>
-            <p data-en="Choose this if you also handle vents, grills, back panels, BIM data or AutoCAD deliverables.">창호·그릴·백패널·BIM 데이터나 AutoCAD 산출물까지 다룬다면 Standard를 권합니다.</p>
+            <p data-en="Choose this if you also handle vents, grills, back panels or BIM data.">창호·그릴·백패널·BIM 데이터까지 다룬다면 Standard를 권합니다.</p>
             <a class="button" href="#checkout" data-en="Ask about Standard">Standard 문의</a>
           </div>
           <div class="plan-card">
