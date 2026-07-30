@@ -406,14 +406,19 @@
     text('v-edition', session.edition);
     text('v-license', session.license_id);
 
+    // 배지 문구는 JS 가 만들므로 data-ko/data-en 을 직접 달아야 언어 전환이 닿는다.
+    // 그냥 textContent 로 넣으면 영문 화면에 이 배지만 한국어로 남는다.
     var st = document.getElementById('v-status');
     var active = session.status === 'active';
     st.innerHTML = '';
     var badge = document.createElement('span');
     badge.className = 'badge' + (active ? '' : ' warn');
-    badge.textContent = active
-      ? (session.expires_on ? session.expires_on + ' 까지' : '사용 중')
-      : '중지';
+    var label = !active ? { ko: '중지', en: 'On hold' }
+              : session.expires_on ? { ko: session.expires_on + ' 까지', en: 'Until ' + session.expires_on }
+              : { ko: '사용 중', en: 'Active' };
+    badge.setAttribute('data-ko', label.ko);
+    badge.setAttribute('data-en', label.en);
+    badge.textContent = label.ko;
     st.appendChild(badge);
 
     document.getElementById('suspended-note').style.display = active ? 'none' : 'flex';
