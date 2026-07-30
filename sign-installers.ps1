@@ -87,17 +87,16 @@ $editions = @(
     @{ Folder = 'Core';     Prefix = 'RCW_V5_Core' },
     @{ Folder = 'Standard'; Prefix = 'RCW_V5_Standard' }
 )
+# 언어는 파일을 가르지 않는다 — 설치 파일 하나가 두 언어를 담는다(2026-07-30).
 $plan = foreach ($e in $editions) {
     foreach ($t in @('Rhino7', 'Rhino8')) {
-        foreach ($l in @('ko-KR', 'en-US')) {
-            $name = "{0}_{1}_{2}_{3}.exe" -f $e.Prefix, $t, $l, $Version
-            $path = Join-Path (Join-Path $SourceDir $e.Folder) $name
-            if (-not (Test-Path $path)) { throw "설치 파일이 없습니다: $path" }
-            [pscustomobject]@{
-                Name   = $name
-                Path   = (Get-Item $path).FullName
-                Status = (Get-AuthenticodeSignature $path).Status
-            }
+        $name = "{0}_{1}_{2}.exe" -f $e.Prefix, $t, $Version
+        $path = Join-Path (Join-Path $SourceDir $e.Folder) $name
+        if (-not (Test-Path $path)) { throw "설치 파일이 없습니다: $path" }
+        [pscustomobject]@{
+            Name   = $name
+            Path   = (Get-Item $path).FullName
+            Status = (Get-AuthenticodeSignature $path).Status
         }
     }
 }

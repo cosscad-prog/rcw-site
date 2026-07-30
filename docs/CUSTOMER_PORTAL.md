@@ -150,14 +150,17 @@ Vercel → 프로젝트 → Settings → Environment Variables. 세 개를 Produ
 
 평가판(`rcw-releases`)과 **별도 저장소**를 만들고, 어디에도 링크하지 않는다.
 
-파일명은 트라이얼과 같은 규칙으로 **버전을 뗀 이름**으로 올린다. 그래야
-`releases/latest/download/<파일명>` 링크가 버전이 올라가도 그대로 동작한다.
+파일명은 트라이얼과 같은 규칙으로 **버전을 붙인 이름**으로 올린다(2026-07-29). 받는
+사람이 어느 빌드인지 알 수 있어야 하기 때문이고, 그래서 릴리스마다 바뀌는
+`releases/latest/download/<파일명>` 링크는 `publish-customer.ps1` 이 발행 직후
+`api/customer-login.js` 의 `RELEASE_VERSION` 을 고쳐 커밋·푸시한다.
+
+언어는 파일을 가르지 않는다(2026-07-30). 설치 파일 하나가 한국어·영어를 모두 담고
+설치할 때 고르므로, 에디션 2 × Rhino 2 = **4개**다.
 
 ```
-RCW_V5_Core_Rhino7_ko-KR.exe        RCW_V5_Standard_Rhino7_ko-KR.exe
-RCW_V5_Core_Rhino7_en-US.exe        RCW_V5_Standard_Rhino7_en-US.exe
-RCW_V5_Core_Rhino8_ko-KR.exe        RCW_V5_Standard_Rhino8_ko-KR.exe
-RCW_V5_Core_Rhino8_en-US.exe        RCW_V5_Standard_Rhino8_en-US.exe
+RCW_V5_Core_Rhino7_<버전>.exe        RCW_V5_Standard_Rhino7_<버전>.exe
+RCW_V5_Core_Rhino8_<버전>.exe        RCW_V5_Standard_Rhino8_<버전>.exe
 ```
 
 이 저장소의 릴리스는 공개 상태여야 링크가 열린다. 즉 **주소를 아는 사람은 받을 수

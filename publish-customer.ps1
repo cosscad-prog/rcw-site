@@ -1,7 +1,8 @@
 <#
   RCW V5 유료판 릴리스 발행 스크립트
 
-  artifacts\RCW_V5 의 Core · Standard 설치 파일 8종을 하나의 GitHub 릴리스로 올린다.
+  artifacts\RCW_V5 의 Core · Standard 설치 파일 4종(에디션 2 × Rhino 2)을
+  하나의 GitHub 릴리스로 올린다. 언어는 설치할 때 고르므로 파일이 갈리지 않는다.
   올린 뒤 고객 페이지의 링크까지 이 스크립트가 고쳐 커밋·푸시하므로,
   사이트를 따로 손댈 일은 없다.
 
@@ -42,13 +43,13 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# 에디션별 폴더와 파일 접두사. 업로드 이름 = 접두사 + _Rhino<n>_<lang>.exe (버전 없음)
+# 에디션별 폴더와 파일 접두사. 파일 이름 = 접두사 + _Rhino<n>_<버전>.exe
+# 언어는 이름에 없다 — 한 파일이 두 언어를 담고 설치할 때 고른다(2026-07-30).
 $editions = @(
     @{ Folder = 'Core';     Prefix = 'RCW_V5_Core';     Label = 'Core' },
     @{ Folder = 'Standard'; Prefix = 'RCW_V5_Standard'; Label = 'Standard' }
 )
 $targets = @('Rhino7', 'Rhino8')
-$langs   = @('ko-KR', 'en-US')
 
 # --- 사전 점검 ---------------------------------------------------------
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
@@ -68,20 +69,18 @@ if ($LASTEXITCODE -ne 0) {
 
 $plan = foreach ($e in $editions) {
     foreach ($t in $targets) {
-        foreach ($l in $langs) {
-            $localName = "{0}_{1}_{2}_{3}.exe" -f $e.Prefix, $t, $l, $Version
-            $localPath = Join-Path (Join-Path $SourceDir $e.Folder) $localName
-            if (-not (Test-Path $localPath)) { throw "설치 파일이 없습니다: $localPath" }
-            $item = Get-Item $localPath
-            [pscustomobject]@{
-                Edition    = $e.Label
-                UploadName = $localName
-                Path       = $item.FullName
-                SizeMB     = [math]::Round($item.Length / 1MB, 1)
-                Built      = $item.LastWriteTime
-                Sha256     = (Get-FileHash -Path $item.FullName -Algorithm SHA256).Hash
-                Signature  = (Get-AuthenticodeSignature -FilePath $item.FullName).Status
-            }
+        $localName = "{0}_{1}_{2}.exe" -f $e.Prefix, $t, $Version
+        $localPath = Join-Path (Join-Path $SourceDir $e.Folder) $localName
+        if (-not (Test-Path $localPath)) { throw "설치 파일이 없습니다: $localPath" }
+        $item = Get-Item $localPath
+        [pscustomobject]@{
+            Edition    = $e.Label
+            UploadName = $localName
+            Path       = $item.FullName
+            SizeMB     = [math]::Round($item.Length / 1MB, 1)
+            Built      = $item.LastWriteTime
+            Sha256     = (Get-FileHash -Path $item.FullName -Algorithm SHA256).Hash
+            Signature  = (Get-AuthenticodeSignature -FilePath $item.FullName).Status
         }
     }
 }
@@ -133,7 +132,7 @@ https://rcw-site.vercel.app/customer
 | Standard | 전체 기능(Vent · Grill · BackPanel 포함) |
 
 - Windows 전용 / Rhino 7 · Rhino 8
-- 한국어 · 영어 설치 파일 별도 제공
+- 한국어 · 영어를 설치할 때 고릅니다(설치 파일 하나에 두 언어가 들어 있습니다)
 - 업데이트 후에도 기존 라이선스가 그대로 동작합니다
 
 ## 파일 검증 (SHA-256)

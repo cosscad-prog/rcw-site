@@ -1,7 +1,7 @@
 <#
   발행 스크립트가 사이트의 다운로드 링크를 새 버전으로 고쳐 커밋·푸시한다.
 
-  설치 파일 이름에 패치 버전이 들어가므로(예: RCW_V5_Core_Trial_Rhino8_ko-KR_5.0.6.exe)
+  설치 파일 이름에 패치 버전이 들어가므로(예: RCW_V5_Core_Trial_Rhino8_5.0.7.exe)
   릴리스마다 사이트의 링크도 같이 바뀌어야 한다. 손으로 고치면 빠뜨린 링크가
   404 가 되므로, 파일을 올린 스크립트가 이어서 직접 고친다.
 
@@ -17,7 +17,7 @@ function Update-SiteDownloadLinks {
         [Parameter(Mandatory = $true)][string[]] $RelativePath,
 
         # 파일 이름에서 버전 앞까지의 고정 부분.
-        # 예: 'RCW_V5_(?:Core|Standard)_Trial_Rhino[78]_(?:ko-KR|en-US)'
+        # 예: 'RCW_V5_(?:Core|Standard)_Trial_Rhino[78]'
         [Parameter(Mandatory = $true, ParameterSetName = 'FileName')]
         [string] $NamePattern,
 

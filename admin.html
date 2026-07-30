@@ -390,10 +390,17 @@
     return withTime ? day + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) : day;
   }
 
+  // 설치 파일이 두 언어를 함께 담게 된 뒤로는(2026-07-30) 내려받은 파일만 봐서는
+  // 어느 언어로 설치했는지 알 수 없다. 옛 기록에만 언어가 남아 있다.
+  function langLabel(lang) {
+    if (!lang) return '';
+    return ' · ' + (lang === 'ko-KR' ? '한국어' : 'English');
+  }
+
   function verLabel(r) {
     var cls = r.edition === 'Standard' ? 'std' : 'core';
     return '<span class="tag ' + cls + '">' + r.edition + '</span> Rhino ' + r.rhino +
-           ' · ' + (r.lang === 'ko-KR' ? '한국어' : 'English');
+           langLabel(r.lang);
   }
 
   function esc(s) {
@@ -427,7 +434,7 @@
         prevHtml = '<div class="prev">이전 ' + prev.length + '건' +
           prev.map(function (p) {
             return '<div>' + fmt(p.created_at, true) + ' · ' + p.edition +
-                   ' Rhino ' + p.rhino + ' · ' + (p.lang === 'ko-KR' ? '한국어' : 'English') + '</div>';
+                   ' Rhino ' + p.rhino + langLabel(p.lang) + '</div>';
           }).join('') + '</div>';
       }
 

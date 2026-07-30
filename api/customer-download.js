@@ -37,7 +37,10 @@ module.exports = async function handler(req, res) {
     const fileName = String((body && body.file_name) || '').slice(0, 200);
 
     // 파일명은 정해진 형태만 받는다. 아무 문자열이나 기록에 남지 않게 한다.
-    const ok = /^RCW_V5_(Core|Standard)_Rhino[78]_(ko-KR|en-US)\.exe$/.test(fileName);
+    // 버전은 2026-07-29 에 들어왔고 언어는 2026-07-30 에 빠졌다. 둘 다 선택으로 두어
+    // 캐시된 옛 페이지에서 눌러도 기록이 남게 한다(예전 형태만 받다가 그 사이 기록이
+    // 통째로 빠졌었다).
+    const ok = /^RCW_V5_(Core|Standard)_Rhino[78](?:_(?:ko-KR|en-US))?(?:_\d+\.\d+\.\d+)?\.exe$/.test(fileName);
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(customerId || ''));
 
     if (ok && isUuid) {

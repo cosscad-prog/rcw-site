@@ -1,16 +1,13 @@
 <#
   RCW V5 Trial 릴리스 발행 스크립트
 
-  artifacts\RCW_V5 의 Core Trial(90일) · Standard Trial(30일) 설치 파일 8종을
-  하나의 GitHub 릴리스로 올린다.
+  artifacts\RCW_V5 의 Core Trial(90일) · Standard Trial(30일) 설치 파일 4종
+  (에디션 2 × Rhino 2)을 하나의 GitHub 릴리스로 올린다. 언어는 설치할 때
+  고르므로 파일이 갈리지 않는다(2026-07-30).
 
-  사이트(trial.html)는 항상 "최신 릴리스"의 고정 파일명을 가리키므로,
-  이 스크립트를 실행하고 나면 웹사이트는 손대지 않아도 된다.
-
-  ★ 로컬 빌드 파일에는 버전이 붙어 있지만(RCW_V5_Core_Trial_Rhino8_ko-KR_5.0.4.exe),
-    업로드할 때는 버전을 뗀 이름으로 올린다. releases/latest/download/<파일명> 링크가
-    동작하려면 파일명이 버전마다 바뀌면 안 되기 때문이다. 어느 빌드인지는 태그와
-    릴리스 노트의 SHA-256 으로 확인한다.
+  ★ 업로드 이름에도 버전이 남는다(RCW_V5_Core_Trial_Rhino8_5.0.7.exe). 그래서
+    releases/latest/download/<파일명> 링크가 릴리스마다 바뀌는데, 그 링크를
+    고치는 일은 이 스크립트가 아래에서 직접 한다(Update-SiteDownloadLinks).
 
   사전 준비 (최초 1회):
     winget install GitHub.cli
@@ -40,7 +37,6 @@ $editions = @(
     @{ Folder = 'Standard_Trial'; Prefix = 'RCW_V5_Standard_Trial'; Label = 'Standard'; Days = 30 }
 )
 $targets = @('Rhino7', 'Rhino8')
-$langs   = @('ko-KR', 'en-US')
 
 # --- 사전 점검 ---------------------------------------------------------
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
@@ -57,20 +53,18 @@ if (-not (Test-Path $SourceDir)) {
 # 직접 한다(Update-SiteLinks).
 $plan = foreach ($e in $editions) {
     foreach ($t in $targets) {
-        foreach ($l in $langs) {
-            $localName = "{0}_{1}_{2}_{3}.exe" -f $e.Prefix, $t, $l, $Version
-            $localPath = Join-Path (Join-Path $SourceDir $e.Folder) $localName
-            if (-not (Test-Path $localPath)) { throw "설치 파일이 없습니다: $localPath" }
-            $item = Get-Item $localPath
-            [pscustomobject]@{
-                Edition    = $e.Label
-                Days       = $e.Days
-                UploadName = $localName
-                Path       = $item.FullName
-                SizeMB     = [math]::Round($item.Length / 1MB, 1)
-                Built      = $item.LastWriteTime
-                Sha256     = (Get-FileHash -Path $item.FullName -Algorithm SHA256).Hash
-            }
+        $localName = "{0}_{1}_{2}.exe" -f $e.Prefix, $t, $Version
+        $localPath = Join-Path (Join-Path $SourceDir $e.Folder) $localName
+        if (-not (Test-Path $localPath)) { throw "설치 파일이 없습니다: $localPath" }
+        $item = Get-Item $localPath
+        [pscustomobject]@{
+            Edition    = $e.Label
+            Days       = $e.Days
+            UploadName = $localName
+            Path       = $item.FullName
+            SizeMB     = [math]::Round($item.Length / 1MB, 1)
+            Built      = $item.LastWriteTime
+            Sha256     = (Get-FileHash -Path $item.FullName -Algorithm SHA256).Hash
         }
     }
 }
@@ -103,7 +97,7 @@ RCW V5 $Version 트라이얼
 한 번에 하나만 설치되며, 다른 쪽을 설치하면 교체됩니다(먼저 제거하지 않아도 됩니다).
 
 - Windows 전용 / Rhino 7 · Rhino 8
-- 한국어 · 영어 설치 파일 별도 제공
+- 한국어 · 영어를 설치할 때 고릅니다(설치 파일 하나에 두 언어가 들어 있습니다)
 - 트라이얼은 인증 코드가 필요 없습니다
 
 설치 안내: https://rcw-site.vercel.app/guide-ko.html
@@ -153,7 +147,7 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
     . (Join-Path $PSScriptRoot '_site-links.ps1')
     Update-SiteDownloadLinks -Version $Version `
         -RelativePath 'trial.html' `
-        -NamePattern 'RCW_V5_(?:Core|Standard)_Trial_Rhino[78]_(?:ko-KR|en-US)' `
+        -NamePattern 'RCW_V5_(?:Core|Standard)_Trial_Rhino[78]' `
         -CommitMessage "Point the trial downloads at $Version"
 
     Write-Host "`n완료" -ForegroundColor Green

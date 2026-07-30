@@ -220,13 +220,13 @@
 
       <div class="dl-group" id="dl-rhino8">
         <h3>Rhino 8</h3>
-        <p id="rel-note" data-en="Latest installer">최신 설치 파일</p>
+        <p id="rel-note" data-en="Latest installer — Korean and English are both included; Setup asks which one to use.">최신 설치 파일 — 한국어·영어가 함께 들어 있으며 설치할 때 고릅니다</p>
         <div class="dl-row" id="row-rhino8"></div>
       </div>
 
       <div class="dl-group" id="dl-rhino7">
         <h3>Rhino 7</h3>
-        <p data-en="For Rhino 7 users">Rhino 7 사용자용</p>
+        <p data-en="For customers still on Rhino 7. New work is being moved to Rhino 8 — please contact us before upgrading if you need Rhino 7 to keep working.">아직 Rhino 7 을 쓰시는 분들을 위한 설치 파일입니다. 신규 작업은 Rhino 8 을 기준으로 옮겨가고 있으니, Rhino 7 을 계속 쓰셔야 하면 미리 알려주세요.</p>
         <div class="dl-row" id="row-rhino7"></div>
       </div>
 
@@ -419,9 +419,11 @@
     document.getElementById('suspended-note').style.display = active ? 'none' : 'flex';
 
     if (data.release && data.release.tag) {
+      // 언어 안내는 남긴다 — 예전처럼 파일이 언어별로 갈리지 않는다는 것을 여기서만 알린다.
       var note = document.getElementById('rel-note');
-      note.textContent = '최신 설치 파일 — ' + data.release.tag;
-      note.setAttribute('data-en', 'Latest installer — ' + data.release.tag);
+      note.setAttribute('data-ko', '최신 설치 파일 ' + data.release.tag + ' — 한국어·영어가 함께 들어 있으며 설치할 때 고릅니다');
+      note.setAttribute('data-en', 'Latest installer ' + data.release.tag + ' — Korean and English are both included; Setup asks which one to use.');
+      if (window.rcwLang) window.rcwLang.refresh();
     }
 
     fill('row-rhino8', data.files, '8');
@@ -689,6 +691,7 @@
     return false;
   }
 
+  /* 설치 파일은 Rhino 버전당 하나다. 한국어·영어는 설치할 때 고른다(2026-07-30). */
   function fill(rowId, files, rhino){
     var row = document.getElementById(rowId);
     row.innerHTML = '';
@@ -698,10 +701,11 @@
       var a = document.createElement('a');
       a.className = 'dl-btn';
       a.href = f.url;
-      a.innerHTML = '<span>' + (f.lang === 'ko-KR' ? '한국어' : 'English') + '</span><em>' + f.file_name.replace(/\.exe$/, '') + '</em>';
+      a.innerHTML = '<span data-en="Download">내려받기</span><em>' + f.file_name.replace(/\.exe$/, '') + '</em>';
       a.addEventListener('click', recordClick(f.file_name));
       row.appendChild(a);
     }
+    if (window.rcwLang) window.rcwLang.refresh();
   }
 
   /* 기록 실패가 다운로드를 막지 않도록 오류는 삼킨다.

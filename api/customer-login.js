@@ -108,19 +108,18 @@ const RELEASE_VERSION = '5.0.6';
  * 고객 에디션에 맞는 설치 파일 목록.
  * 파일명에 버전이 들어가므로 받는 사람이 어느 빌드인지 알 수 있다. 대신 링크가
  * 릴리스마다 바뀌어 위 RELEASE_VERSION 을 함께 올려야 한다.
+ * 언어는 파일을 가르지 않는다 — 설치 파일 하나가 한국어·영어를 모두 담고
+ * 설치할 때 고른다(2026-07-30).
  */
 function fileList(edition) {
   const out = [];
   for (const rhino of ['8', '7']) {
-    for (const lang of ['ko-KR', 'en-US']) {
-      const name = `RCW_V5_${edition}_Rhino${rhino}_${lang}_${RELEASE_VERSION}.exe`;
-      out.push({
-        rhino,
-        lang,
-        file_name: name,
-        url: `https://github.com/${RELEASE_REPO}/releases/latest/download/${name}`
-      });
-    }
+    const name = `RCW_V5_${edition}_Rhino${rhino}_${RELEASE_VERSION}.exe`;
+    out.push({
+      rhino,
+      file_name: name,
+      url: `https://github.com/${RELEASE_REPO}/releases/latest/download/${name}`
+    });
   }
   return out;
 }
