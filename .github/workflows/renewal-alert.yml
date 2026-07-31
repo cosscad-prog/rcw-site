@@ -1,0 +1,47 @@
+# 구독 갱신 — 오늘 챙길 고객 알림
+#
+# 매일 아침 9시(KST)에 갱신이 다가오거나 지난 고객을 우선순위대로 관리자에게 보낸다.
+# 챙길 고객이 없는 날은 보내지 않는다 — 매일 오는 빈 메일은 곧 안 보게 되기 때문이다.
+# 매일 받고 싶으면 아래 SEND_WHEN_EMPTY 를 'true' 로 바꾼다.
+#
+# ★ 이 워크플로는 고객에게 메일을 보내지 않는다. 관리자 한 사람에게만 간다.
+#   고객 안내 자동 발송은 다음 단계다.
+#
+# ★ 아침에 보내는 이유: 다운로드 요약(daily-report)은 하루를 정리하는 밤 9시가 맞지만,
+#   갱신은 "오늘 전화할 곳" 목록이라 업무 시작 전에 와야 쓸모가 있다.
+#
+# 준비: 저장소 Settings → Secrets and variables → Actions
+#   SUPABASE_URL · SUPABASE_SERVICE_KEY · MAIL_USERNAME · MAIL_APP_PASSWORD · MAIL_TO
+#   — 전부 daily-report 워크플로가 이미 쓰는 값이라 새로 등록할 것이 없다.
+#
+# 선행 조건: docs/supabase-renewals.sql 을 Supabase SQL Editor 에서 한 번 실행해
+#   renewal_watch 뷰가 있어야 한다. 없으면 첫 실행이 404 로 실패한다.
+
+name: 구독 갱신 알림
+
+on:
+  schedule:
+    - cron: '0 0 * * *'      # 매일 09:00 KST (UTC 00:00)
+  workflow_dispatch:          # Actions 탭에서 수동 실행
+    inputs:
+      send_when_empty:
+        description: '챙길 고객이 없어도 메일 보내기'
+        type: boolean
+        default: true
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 갱신 대상 알림 보내기
+        env:
+          SUPABASE_URL:         ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          MAIL_USERNAME:        ${{ secrets.MAIL_USERNAME }}
+          MAIL_APP_PASSWORD:    ${{ secrets.MAIL_APP_PASSWORD }}
+          MAIL_TO:              ${{ secrets.MAIL_TO }}
+          # 수동 실행이면 입력값을, 예약 실행이면 false(챙길 고객이 있는 날만 발송)
+          SEND_WHEN_EMPTY:      ${{ github.event_name == 'workflow_dispatch' && inputs.send_when_empty || 'false' }}
+        run: python .github/scripts/renewal_alert.py

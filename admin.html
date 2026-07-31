@@ -86,6 +86,19 @@
   .st.stop { background:#fdf3f3; color:#a33; }                /* 중지 */
   tr.attn td { background:#fffdf7; }
   td.mono { font-family:ui-monospace,Consolas,monospace; font-size:12px; white-space:nowrap; }
+
+  /* 갱신 단계 — 숫자는 renewal_watch 뷰의 priority 와 같다(클수록 급함) */
+  .st.rw5 { background:#fdecec; color:#b32020; }              /* 잠김 — 작업 중단 */
+  .st.rw4 { background:#fdf0e6; color:#b4560f; }              /* 유예 후반 */
+  .st.rw3 { background:#fff3e0; color:var(--amber); }          /* 청구일 지남 */
+  .st.rw2 { background:#fdf7e3; color:#8a6d15; }              /* D-7 */
+  .st.rw1 { background:#eef2f5; color:var(--muted); }          /* D-30 */
+  tr.urgent td { background:#fffafa; }
+  td.left { white-space:nowrap; font-weight:800; font-variant-numeric:tabular-nums; }
+  td.left.over { color:#b32020; }
+  .btn.mini { padding:3px 9px; font-size:11.5px; }
+  .memo { display:block; margin-top:3px; color:var(--muted); font-size:11.5px;
+          max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -117,12 +130,43 @@
   </header>
 
   <div class="tabs">
-    <button id="tab-cust" class="on">고객<span class="count" id="tab-cust-n"></span></button>
+    <button id="tab-renew" class="on">갱신<span class="count" id="tab-renew-n"></span></button>
+    <button id="tab-cust">고객<span class="count" id="tab-cust-n"></span></button>
     <button id="tab-trial">트라이얼 다운로드<span class="count" id="tab-trial-n"></span></button>
   </div>
 
+<!-- ── 갱신 ───────────────────────────────────────────────── -->
+<div id="view-renew">
+  <div class="cards">
+    <div class="card"><b id="r-urgent">0</b><span>급함(청구일 지남)</span></div>
+    <div class="card"><b id="r-soon">0</b><span>D-30 이내</span></div>
+    <div class="card"><b id="r-locked">0</b><span>잠김 — 작업 중단</span></div>
+    <div class="card"><b id="r-total">0</b><span>구독 고객 전체</span></div>
+  </div>
+
+  <div class="tools">
+    <input id="rq" type="search" placeholder="회사 · 담당자 · 전화 · 이메일로 검색">
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>단계</th><th>회사</th><th>담당자</th><th>연락처</th>
+        <th>남은 기간</th><th>청구 만료</th><th>안내</th><th>마지막 연락</th><th></th>
+      </tr>
+    </thead>
+    <tbody id="rrows"><tr><td colspan="9" class="empty">불러오는 중…</td></tr></tbody>
+  </table>
+
+  <p class="note">
+    급한 순서대로 정렬됩니다 — <span class="st rw5">잠김</span> 은 이미 명령이 막혀 <b>작업이 멈춘</b> 고객이라 가장 먼저 챙기셔야 합니다.
+    <b>연락함</b> 을 누르면 통화 기록이 남고, 그 고객은 7일 동안 아침 알림에서 뒤로 밀립니다.
+    <b>영구 고객은 이 목록에 나오지 않습니다</b> — <code>paid_through</code> 가 있는 구독 고객만 대상입니다.
+  </p>
+</div>
+
 <!-- ── 고객 ───────────────────────────────────────────────── -->
-<div id="view-cust">
+<div id="view-cust" style="display:none">
   <div class="cards">
     <div class="card"><b id="k-total">0</b><span>전체 고객</span></div>
     <div class="card"><b id="k-wait">0</b><span>머신코드 회신 대기</span></div>
@@ -243,28 +287,32 @@
   document.getElementById('reload-btn').addEventListener('click', function () {
     load();
     loadCustomers();
+    loadRenewals();
   });
 
   // ── 탭 ────────────────────────────────────────────────────
-  var view = 'cust';
+  var TITLES = { renew: '갱신 — 오늘 챙길 고객', cust: '고객', trial: '트라이얼 다운로드 기록' };
+  var view = 'renew';
   function switchView(next) {
     view = next;
-    document.getElementById('view-cust').style.display  = next === 'cust'  ? 'block' : 'none';
-    document.getElementById('view-trial').style.display = next === 'trial' ? 'block' : 'none';
-    document.getElementById('tab-cust').classList.toggle('on', next === 'cust');
-    document.getElementById('tab-trial').classList.toggle('on', next === 'trial');
-    document.getElementById('view-title').textContent = next === 'cust' ? '고객' : '트라이얼 다운로드 기록';
+    ['renew', 'cust', 'trial'].forEach(function (name) {
+      document.getElementById('view-' + name).style.display = next === name ? 'block' : 'none';
+      document.getElementById('tab-' + name).classList.toggle('on', next === name);
+    });
+    document.getElementById('view-title').textContent = TITLES[next];
   }
-  document.getElementById('tab-cust').addEventListener('click', function () { switchView('cust'); });
-  document.getElementById('tab-trial').addEventListener('click', function () { switchView('trial'); });
+  ['renew', 'cust', 'trial'].forEach(function (name) {
+    document.getElementById('tab-' + name).addEventListener('click', function () { switchView(name); });
+  });
 
   // ── 데이터 ────────────────────────────────────────────────
   function start() {
     loginBox.style.display = 'none';
     app.style.display = 'block';
-    switchView('cust');
+    switchView('renew');   // 아침에 열면 오늘 챙길 고객이 먼저 보여야 한다
     load();
     loadCustomers();
+    loadRenewals();
   }
 
   function load() {
@@ -362,6 +410,124 @@
   }
 
   kqEl.addEventListener('input', renderCustomers);
+
+  // ── 갱신 ──────────────────────────────────────────────────
+  /* 우선순위·단계는 renewal_watch 뷰가 계산한다. 여기서 다시 계산하지 않는다 —
+     아침 알림 메일(renewal_alert.py)과 이 화면이 어긋나면 안 되기 때문이다. */
+  var renewals = [];
+  var rRowsEl = document.getElementById('rrows');
+  var rqEl    = document.getElementById('rq');
+
+  var STAGE_LABEL = {
+    locked: '잠김', grace: '유예 후반', due: '청구일 지남', d7: 'D-7', d30: 'D-30', ok: '여유'
+  };
+
+  function loadRenewals() {
+    rRowsEl.innerHTML = '<tr><td colspan="9" class="empty">불러오는 중…</td></tr>';
+    api('/rest/v1/renewal_watch?select=*&order=priority.desc,paid_through.asc&limit=2000')
+      .then(function (data) {
+        renewals = data || [];
+        summarizeRenewals();
+        renderRenewals();
+      })
+      .catch(function (err) {
+        console.error(err);
+        // 뷰를 아직 만들지 않았으면 404 가 난다. 그냥 "실패"라고만 하면 원인을 못 찾는다.
+        var missing = /404|does not exist|PGRST205/i.test(String(err && err.message));
+        rRowsEl.innerHTML = '<tr><td colspan="9" class="empty">' + (missing
+          ? 'renewal_watch 뷰가 없습니다. Supabase SQL Editor 에서 <code>docs/supabase-renewals.sql</code> 을 한 번 실행하세요.'
+          : '불러오지 못했습니다. 다시 로그인해 주세요.') + '</td></tr>';
+      });
+  }
+
+  function summarizeRenewals() {
+    var n = { urgent: 0, soon: 0, locked: 0, total: renewals.length };
+    renewals.forEach(function (r) {
+      if (r.cancelled_at) return;              // 해지 통보받은 고객은 세지 않는다
+      if (r.stage_now === 'locked') n.locked++;
+      if (r.priority >= 3) n.urgent++;
+      else if (r.priority >= 1) n.soon++;
+    });
+    document.getElementById('r-urgent').textContent = n.urgent;
+    document.getElementById('r-soon').textContent   = n.soon;
+    document.getElementById('r-locked').textContent = n.locked;
+    document.getElementById('r-total').textContent  = n.total;
+    // 탭 숫자는 "지금 손이 필요한 사람" 수다. 전체 구독자 수가 아니다.
+    var need = n.urgent + n.soon;
+    document.getElementById('tab-renew-n').textContent = need ? '(' + need + ')' : '';
+  }
+
+  function renderRenewals() {
+    var q = rqEl.value.trim().toLowerCase();
+    var html = '';
+
+    renewals.forEach(function (r) {
+      var hay = [r.company, r.name, r.email, r.phone, r.license_id].join(' ').toLowerCase();
+      if (q && hay.indexOf(q) === -1) return;
+
+      var left = r.days_left;
+      var leftText = left == null ? '—'
+        : left > 0 ? left + '일 남음'
+        : left === 0 ? '오늘 만료'
+        : Math.abs(left) + '일 지남';
+
+      var label = STAGE_LABEL[r.stage_now] || r.stage_now || '—';
+      var cls   = 'rw' + (r.priority || 0);
+      if (r.cancelled_at) { label = '해지 통보'; cls = 'stop'; }
+
+      var note = (r.contact_note || '').split('\n')[0];
+      var contactCell = r.last_contact_at
+        ? fmt(r.last_contact_at, true) + (note ? '<span class="memo" title="' + esc(r.contact_note) + '">' + esc(note) + '</span>' : '')
+        : '—';
+
+      html += '<tr' + (r.priority >= 3 && !r.cancelled_at ? ' class="urgent"' : '') + '>' +
+        '<td><span class="st ' + cls + '">' + esc(label) + '</span></td>' +
+        '<td>' + esc(r.company) + '</td>' +
+        '<td>' + esc(r.name) + '</td>' +
+        '<td>' + esc(r.phone) + '</td>' +
+        '<td class="left' + (left != null && left < 0 ? ' over' : '') + '">' + leftText + '</td>' +
+        '<td class="when">' + esc(r.paid_through) + '</td>' +
+        '<td>' + (r.renewal_stage ? esc(STAGE_LABEL[r.renewal_stage] || r.renewal_stage) + ' 발송' : '—') + '</td>' +
+        '<td class="when">' + contactCell + '</td>' +
+        '<td><button class="btn mini" data-contact="' + esc(r.id) + '">연락함</button></td>' +
+        '</tr>';
+    });
+
+    rRowsEl.innerHTML = html || '<tr><td colspan="9" class="empty">' +
+      (renewals.length ? '검색 결과가 없습니다.'
+                       : '구독 고객이 없습니다. 고객의 paid_through 에 청구 만료일을 넣으면 여기에 나타납니다.') +
+      '</td></tr>';
+  }
+
+  /* 통화·문자 기록. 남길 수 있는 칸은 last_contact_at·contact_note·cancelled_at 뿐이다
+     (supabase-renewals.sql 의 컬럼 단위 grant). 장부는 이 화면에서 고칠 수 없다. */
+  rRowsEl.addEventListener('click', function (e) {
+    var id = e.target && e.target.getAttribute && e.target.getAttribute('data-contact');
+    if (!id) return;
+
+    var row = renewals.filter(function (r) { return r.id === id; })[0];
+    var memo = prompt('통화 내용을 남기시겠습니까? (비워 두면 시각만 기록됩니다)',
+                      (row && row.contact_note) || '');
+    if (memo === null) return;                    // 취소
+
+    e.target.disabled = true;
+    api('/rest/v1/customers?id=eq.' + encodeURIComponent(id), {
+      method: 'PATCH',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        last_contact_at: new Date().toISOString(),
+        contact_note: memo.trim() || null
+      })
+    }).then(function () {
+      loadRenewals();
+    }).catch(function (err) {
+      console.error(err);
+      alert('기록하지 못했습니다. supabase-renewals.sql 의 update 권한이 적용되었는지 확인하세요.');
+      e.target.disabled = false;
+    });
+  });
+
+  rqEl.addEventListener('input', renderRenewals);
 
   function keyOf(r) { return (r.email || '').trim().toLowerCase(); }
 
@@ -474,6 +640,23 @@
 
   // 보고 있는 탭의 내용을 내려받는다
   document.getElementById('csv-btn').addEventListener('click', function () {
+    if (view === 'renew') {
+      // 전화 돌릴 때 옆에 두고 보는 용도라 화면과 같은 순서(급한 순)로 낸다
+      var rHead = ['단계', '남은일수', '청구만료', '회사', '담당자', '전화번호', '이메일',
+                   '에디션', '안내단계', '마지막연락', '메모', '해지통보', '코드'];
+      var rLines = [rHead.join(',')];
+      renewals.forEach(function (r) {
+        rLines.push([
+          STAGE_LABEL[r.stage_now] || r.stage_now, r.days_left, r.paid_through,
+          r.company, r.name, r.phone, r.email, r.edition,
+          r.renewal_stage || '', r.last_contact_at ? fmt(r.last_contact_at, true) : '',
+          r.contact_note || '', r.cancelled_at ? fmt(r.cancelled_at, true) : '', r.license_id
+        ].map(csvCell).join(','));
+      });
+      download('rcw-renewals-' + fmt(Date.now()) + '.csv', rLines);
+      return;
+    }
+
     if (view === 'cust') {
       var kHead = ['상태', '회사', '담당자', '에디션', '전화번호', '이메일', '정보확인', '코드', '기기코드'];
       var kLines = [kHead.join(',')];
