@@ -39,3 +39,7 @@ backup/
 # 고객 목록 백업 — *.csv 만으로는 .bak 이 걸러지지 않는다
 *.bak
 customers.csv*
+
+# 파이썬이 스크립트를 실행하면 생긴다. 저장소에 들어갈 것이 아니다.
+__pycache__/
+*.pyc
