@@ -126,8 +126,8 @@ https://rcw-site.vercel.app/customer
 
 | 에디션 | 명령 범위 |
 |---|---|
-| Core | Core 기능 범위 |
-| Standard | 전체 기능(Vent · Grill · BackPanel 포함) |
+| Core | 프레임 · 유리 · 백패널 전 과정 |
+| Standard | 전체 기능(Vent · Grill · BIM 데이터 추가) |
 
 - Windows 전용 / Rhino 7 · Rhino 8
 - 한국어 · 영어를 설치할 때 고릅니다(설치 파일 하나에 두 언어가 들어 있습니다)

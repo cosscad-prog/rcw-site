@@ -297,14 +297,14 @@
       <div class="wrap">
         <p class="eyebrow" data-en="Editions">버전 비교</p>
         <h2 data-en="Which edition fits your work?">어떤 버전이 필요하신가요?</h2>
-        <p class="lead" data-en="Core covers the full frame-and-glass workflow — modeling, numbering, lists, fabrication drawings, 2D and NC. Standard adds vents, grills, back panels and BIM data. Professional adds curved transom geometry for non-orthogonal and free-form facades.">Core는 프레임과 유리의 전체 흐름 — 모델링·번호·리스트·가공도·2D·NC — 을 모두 담습니다. Standard는 여기에 창호·그릴·백패널·BIM 데이터를 더합니다. Professional은 비직교·자유곡면 파사드를 위한 트랜섬 곡선 모델링을 더합니다.</p>
+        <p class="lead" data-en="Core covers the full frame, glass and back-panel workflow — modeling, numbering, lists, fabrication drawings, 2D and NC. Standard adds vents, grills and BIM data. Professional adds curved transom geometry for non-orthogonal and free-form facades.">Core는 프레임·유리·백패널의 전체 흐름 — 모델링·번호·리스트·가공도·2D·NC — 을 모두 담습니다. Standard는 여기에 창호·그릴·BIM 데이터를 더합니다. Professional은 비직교·자유곡면 파사드를 위한 트랜섬 곡선 모델링을 더합니다.</p>
 
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th><span class="plan" data-en="Feature">기능</span></th>
-                <th><span class="plan">Core</span><span class="plan-sub" data-en="Frame &amp; glass workflow">프레임·유리 전 과정</span></th>
+                <th><span class="plan">Core</span><span class="plan-sub" data-en="Frame, glass &amp; back panel">프레임·유리·백패널</span></th>
                 <th class="hi"><span class="plan">Standard</span><span class="plan-sub" data-en="Full command set">전체 명령 세트</span></th>
                 <th><span class="plan">Professional</span><span class="plan-sub" data-en="Curved geometry">곡면 형상</span></th>
               </tr>
@@ -314,9 +314,11 @@
               <tr><th data-en="Wireframe &amp; section definition">와이어프레임·단면 정의</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
               <tr><th data-en="Frame (mullion / transom) modeling — UMD">프레임(멀리언·트랜섬) 유닛 모델링 — UMD</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
               <tr><th data-en="Glass modeling, numbering, lists">유리 모델링·번호·리스트</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
+<!-- 백패널은 2026-07-31(5.0.8)부터 Core 에도 들어간다. 명령 13개 = BP1~BP5 ·
+                   BpOpt · BpNo · BpList · BpFd · BpTable + 레이어 BpC1 · BpC2 · BpCL. -->
+              <tr><th data-en="Back panel modeling">백패널(BackPanel) 모델링</th><td class="yes">✓</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
               <tr><th data-en="Vent (operable window) modeling">창호(Vent) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
               <tr><th data-en="Grill modeling">그릴(Grill) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
-              <tr><th data-en="Back panel modeling">백패널(BackPanel) 모델링</th><td class="no">—</td><td class="hi yes">✓</td><td class="yes">✓</td></tr>
               <tr><th data-en="Curved transom geometry">트랜섬 곡선(커브드) 모델링</th><td class="no">—</td><td class="hi no">—</td><td class="yes">✓</td></tr>
 
               <tr class="group"><th colspan="4" data-en="Documents &amp; quantities">도면 · 물량</th></tr>
@@ -348,12 +350,12 @@
         <div class="plan-cta">
           <div class="plan-card">
             <div class="ptop"><b>Core</b></div>
-            <p data-en="Choose this if your work is stick / unitized frame and glass: model, number, list, draw and cut.">프레임과 유리 중심의 작업이라면 Core로 충분합니다. 모델링·번호·리스트·가공도·컷팅까지 포함됩니다.</p>
+            <p data-en="Choose this if your work is stick / unitized frame, glass and back panel: model, number, list, draw and cut.">프레임·유리·백패널 중심의 작업이라면 Core로 충분합니다. 모델링·번호·리스트·가공도·컷팅까지 포함됩니다.</p>
             <a class="button secondary" href="#checkout" data-en="Ask about Core">Core 문의</a>
           </div>
           <div class="plan-card hi">
             <div class="ptop"><b>Standard</b><span class="badge" data-en="Most complete">가장 완전</span></div>
-            <p data-en="Choose this if you also handle vents, grills, back panels or BIM data.">창호·그릴·백패널·BIM 데이터까지 다룬다면 Standard를 권합니다.</p>
+            <p data-en="Choose this if you also handle vents, grills or BIM data.">창호·그릴·BIM 데이터까지 다룬다면 Standard를 권합니다.</p>
             <a class="button" href="#checkout" data-en="Ask about Standard">Standard 문의</a>
           </div>
           <div class="plan-card">

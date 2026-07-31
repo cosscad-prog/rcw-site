@@ -93,8 +93,8 @@ RCW V5 $Version 트라이얼
 
 | 에디션 | 명령 범위 | 사용 기간 |
 |---|---|---|
-| Core Trial | Core 기능 범위 | 90일 |
-| Standard Trial | 전체 기능(Vent · Grill · BackPanel 포함) | 30일 |
+| Core Trial | 프레임 · 유리 · 백패널 전 과정 | 90일 |
+| Standard Trial | 전체 기능(Vent · Grill · BIM 데이터 추가) | 30일 |
 
 두 트라이얼은 시작일을 따로 기록하므로, Core 를 끝까지 써 본 뒤에도 Standard 30일을 온전히 사용하실 수 있습니다.
 한 번에 하나만 설치되며, 다른 쪽을 설치하면 교체됩니다(먼저 제거하지 않아도 됩니다).
