@@ -97,8 +97,9 @@
   td.left { white-space:nowrap; font-weight:800; font-variant-numeric:tabular-nums; }
   td.left.over { color:#b32020; }
   .btn.mini { padding:3px 9px; font-size:11.5px; }
-  .memo { display:block; margin-top:3px; color:var(--muted); font-size:11.5px;
-          max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  /* 셀 아래에 덧붙는 보조 한 줄 — 이메일, 통화 메모에 함께 쓴다 */
+  .sub { display:block; margin-top:3px; color:var(--muted); font-size:11.5px;
+         max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -477,14 +478,19 @@
 
       var note = (r.contact_note || '').split('\n')[0];
       var contactCell = r.last_contact_at
-        ? fmt(r.last_contact_at, true) + (note ? '<span class="memo" title="' + esc(r.contact_note) + '">' + esc(note) + '</span>' : '')
+        ? fmt(r.last_contact_at, true) + (note ? '<span class="sub" title="' + esc(r.contact_note) + '">' + esc(note) + '</span>' : '')
         : '—';
+
+      // 전화가 주된 수단이라 위에 두고, 이메일은 아래 보조 줄로 붙인다.
+      // 열을 늘리지 않으면서 두 연락 수단이 한눈에 들어오게 하려는 것.
+      var reach = (r.phone ? esc(r.phone) : '—') +
+        (r.email ? '<span class="sub" title="' + esc(r.email) + '">' + esc(r.email) + '</span>' : '');
 
       html += '<tr' + (r.priority >= 3 && !r.cancelled_at ? ' class="urgent"' : '') + '>' +
         '<td><span class="st ' + cls + '">' + esc(label) + '</span></td>' +
         '<td>' + esc(r.company) + '</td>' +
         '<td>' + esc(r.name) + '</td>' +
-        '<td>' + esc(r.phone) + '</td>' +
+        '<td>' + reach + '</td>' +
         '<td class="left' + (left != null && left < 0 ? ' over' : '') + '">' + leftText + '</td>' +
         '<td class="when">' + esc(r.paid_through) + '</td>' +
         '<td>' + (r.renewal_stage ? esc(STAGE_LABEL[r.renewal_stage] || r.renewal_stage) + ' 발송' : '—') + '</td>' +
