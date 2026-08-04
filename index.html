@@ -85,9 +85,11 @@
     .feature li::before { position:absolute; top:5px; left:0; width:14px; height:14px; border-radius:50%; background:var(--mint); color:#07844b; content:"✓"; font-size:10px; font-weight:900; line-height:14px; text-align:center; }
     /* 세 장이 차례로 바뀌는 그림. 모델 → 번호 부여 → 리스트 라는 순서 자체가 설명이다.
        세 장의 비율이 제각각(1.08 / 1.98 / 2.56)이라 cover 로 채우면 도면이 잘린다 — contain 으로 두고
-       흰 여백을 준다. 다른 figure 는 그대로 cover 를 쓰므로 .shuffle 안에서만 덮어쓴다. */
-    .feature figure .shuffle { position:relative; aspect-ratio:16/10; background:#fff; }
-    .feature figure .shuffle img { position:absolute; inset:0; width:100%; height:100%; padding:16px; aspect-ratio:auto; object-fit:contain; opacity:0; animation:shuffle 13.5s infinite; }
+       흰 여백을 준다. 다른 figure 는 그대로 cover 를 쓰므로 .shuffle 안에서만 덮어쓴다.
+       첫 장은 거의 정사각(1.08)이라 16/10 상자에서는 높이에 막혀 작게 보인다. 상자를 3/2 로 조금
+       낮추고 여백도 줄여 그만큼 키웠다 — 가로로 긴 나머지 두 장은 폭에 맞으므로 영향이 없다. */
+    .feature figure .shuffle { position:relative; aspect-ratio:3/2; background:#fff; }
+    .feature figure .shuffle img { position:absolute; inset:0; width:100%; height:100%; padding:10px; aspect-ratio:auto; object-fit:contain; opacity:0; animation:shuffle 13.5s infinite; }
     .feature figure .shuffle img:nth-child(2) { animation-delay:4.5s; }
     .feature figure .shuffle img:nth-child(3) { animation-delay:9s; }
     @keyframes shuffle { 0%,36%,100% { opacity:0; } 3%,33% { opacity:1; } }
