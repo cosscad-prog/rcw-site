@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="RCW V5 Trial 다운로드 — Rhino 7·8용 90일 트라이얼. 이름, 회사, 이메일을 남기시면 바로 내려받으실 수 있습니다.">
+  <meta name="description" content="RCW V5 Trial 다운로드 — Rhino 8·7용 트라이얼. Core 90일, Standard 30일. 이름, 회사, 이메일을 남기시면 바로 내려받으실 수 있습니다.">
   <meta name="theme-color" content="#ffffff">
   <title>Trial 다운로드 — RCW V5</title>
   <style>
@@ -226,7 +226,9 @@
 
           <p class="dl-ver">
             <span data-en="Current version">현재 버전</span>
-            <b id="rel-version">5.0.7</b>
+            <!-- 값은 아래 TRIAL_VERSION 이 채운다(발행 스크립트가 갱신하는 곳은 거기 한 줄뿐).
+                 여기에 숫자를 적어 두면 발행 때 갱신되지 않아 옛 버전이 남는다 — 비워 둔다. -->
+            <b id="rel-version"></b>
             <a id="rel-notes" href="https://github.com/cosscad-prog/rcw-releases/releases/latest" target="_blank" rel="noopener" data-en="what changed">변경 내용</a>
           </p>
 
@@ -270,9 +272,11 @@
       </form>
 
       <div class="spec-grid">
-        <div class="spec-item"><b data-en="Host application">호스트 프로그램</b><span data-en="Rhino 7 or Rhino 8 for Windows.">Windows용 Rhino 7 또는 Rhino 8.</span></div>
-        <div class="spec-item"><b data-en="Trial period">트라이얼 기간</b><span data-en="90 days, covering the Core feature scope.">90일, Core 기능 범위로 제공됩니다.</span></div>
-        <div class="spec-item"><b data-en="Language">언어</b><span data-en="Separate Korean and English builds and help.">한국어·영어 설치본과 도움말 분리 제공.</span></div>
+        <div class="spec-item"><b data-en="Host application">호스트 프로그램</b><span data-en="Rhino 8 for Windows. Rhino 7 builds are still provided.">Windows용 Rhino 8. Rhino 7 용도 계속 제공합니다.</span></div>
+        <!-- 기간이 에디션마다 다르다: Core 90일 / Standard 30일. 두 평가 기록은 서로
+             독립이라 Core 를 다 써도 Standard 30일이 온전히 남는다. -->
+        <div class="spec-item"><b data-en="Trial period">트라이얼 기간</b><span data-en="Core 90 days · Standard 30 days, counted separately.">Core 90일 · Standard 30일. 두 기간은 서로 독립입니다.</span></div>
+        <div class="spec-item"><b data-en="Language">언어</b><span data-en="One installer holds Korean and English; Setup asks which to use, and the help follows that choice.">설치 파일 하나에 한국어·영어. 설치할 때 고르고 도움말도 그 선택을 따릅니다.</span></div>
       </div>
     </div>
   </main>
