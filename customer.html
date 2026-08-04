@@ -67,6 +67,9 @@
     .dl-group { margin-top:26px; }
     .dl-group h3 { margin:0 0 4px; font-size:16px; }
     .dl-group p { margin:0 0 12px; color:var(--muted); font-size:13.5px; }
+    /* 지금 받는 것이 몇 버전인지 한눈에 보여야 한다 — 안내 문구(13.5px)보다 크게 쓴다.
+       줄바꿈으로 버전만 떨어지면 오히려 눈에 안 띄므로 통째로 nowrap. */
+    .dl-group p .rel-ver { display:inline-block; margin-left:5px; color:var(--ink); font-size:18px; font-weight:850; letter-spacing:-.02em; white-space:nowrap; vertical-align:-1px; }
     .dl-row { display:flex; gap:12px; flex-wrap:wrap; }
     .dl-btn { display:flex; flex:1 1 200px; min-height:56px; align-items:center; justify-content:space-between; gap:10px; padding:0 18px; border:1px solid #c9d5ed; border-radius:12px; background:#fff; color:var(--blue-dark); font-weight:750; font-size:15px; transition:.18s; }
     .dl-btn:hover { border-color:var(--blue); background:var(--sky); transform:translateY(-2px); }
@@ -220,7 +223,10 @@
 
       <div class="dl-group" id="dl-rhino8">
         <h3>Rhino 8</h3>
-        <p id="rel-note" data-en="Latest installer — Korean and English are both included; Setup asks which one to use.">최신 설치 파일 — 한국어·영어가 함께 들어 있으며 설치할 때 고릅니다</p>
+        <!-- 버전은 로그인 응답의 릴리스 태그로 채운다(아래 rel-note 코드). 태그를 못
+             읽었을 때를 대비해 정적 문구에는 버전을 넣지 않는다 — 틀린 버전을 보이느니
+             안 보이는 편이 낫다. -->
+        <p id="rel-note" data-en="Korean and English are both included; Setup asks which one to use. <b class=&quot;rel-ver&quot;>- Latest installer -</b>">한국어·영어가 함께 들어 있으며 설치할 때 고릅니다 <b class="rel-ver">- 최신 설치 파일 -</b></p>
         <div class="dl-row" id="row-rhino8"></div>
       </div>
 
@@ -425,9 +431,12 @@
 
     if (data.release && data.release.tag) {
       // 언어 안내는 남긴다 — 예전처럼 파일이 언어별로 갈리지 않는다는 것을 여기서만 알린다.
+      // 버전은 문구 뒤에 크게 붙인다(.rel-ver). 태그는 'v5.0.10' 으로 오므로 앞의 v 를
+      // 떼고 대문자 V 로 다시 붙여 화면에는 'V5.0.10' 으로 보이게 한다.
+      var ver = 'V' + String(data.release.tag).replace(/^[vV]/, '');
       var note = document.getElementById('rel-note');
-      note.setAttribute('data-ko', '최신 설치 파일 ' + data.release.tag + ' — 한국어·영어가 함께 들어 있으며 설치할 때 고릅니다');
-      note.setAttribute('data-en', 'Latest installer ' + data.release.tag + ' — Korean and English are both included; Setup asks which one to use.');
+      note.setAttribute('data-ko', '한국어·영어가 함께 들어 있으며 설치할 때 고릅니다 <b class="rel-ver">- 최신 설치 파일 ' + ver + ' -</b>');
+      note.setAttribute('data-en', 'Korean and English are both included; Setup asks which one to use. <b class="rel-ver">- Latest installer ' + ver + ' -</b>');
       if (window.rcwLang) window.rcwLang.refresh();
     }
 
