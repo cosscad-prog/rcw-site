@@ -83,6 +83,19 @@
     .feature ul { margin:17px 0 0; padding:0; list-style:none; }
     .feature li { position:relative; margin:10px 0; padding-left:25px; color:#475467; word-break:keep-all; }
     .feature li::before { position:absolute; top:5px; left:0; width:14px; height:14px; border-radius:50%; background:var(--mint); color:#07844b; content:"✓"; font-size:10px; font-weight:900; line-height:14px; text-align:center; }
+    /* 세 장이 차례로 바뀌는 그림. 모델 → 번호 부여 → 리스트 라는 순서 자체가 설명이다.
+       세 장의 비율이 제각각(1.08 / 1.98 / 2.56)이라 cover 로 채우면 도면이 잘린다 — contain 으로 두고
+       흰 여백을 준다. 다른 figure 는 그대로 cover 를 쓰므로 .shuffle 안에서만 덮어쓴다. */
+    .feature figure .shuffle { position:relative; aspect-ratio:16/10; background:#fff; }
+    .feature figure .shuffle img { position:absolute; inset:0; width:100%; height:100%; padding:16px; aspect-ratio:auto; object-fit:contain; opacity:0; animation:shuffle 13.5s infinite; }
+    .feature figure .shuffle img:nth-child(2) { animation-delay:4.5s; }
+    .feature figure .shuffle img:nth-child(3) { animation-delay:9s; }
+    @keyframes shuffle { 0%,36%,100% { opacity:0; } 3%,33% { opacity:1; } }
+    /* 움직임을 줄여 달라고 한 사용자에게는 첫 장만 보인다 — 셋을 겹쳐 두면 읽을 수 없다 */
+    @media (prefers-reduced-motion:reduce) {
+      .feature figure .shuffle img { animation:none; }
+      .feature figure .shuffle img:first-child { opacity:1; }
+    }
     .tag { display:inline-block; margin-bottom:11px; padding:4px 9px; border-radius:6px; background:var(--sky); color:#315b9d; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
 
     .workflow { background:var(--navy); color:#fff; }
@@ -238,9 +251,9 @@
 
     <section id="features">
       <div class="wrap">
-        <p class="eyebrow" data-en="Two reasons to adopt RCW">RCW를 선택하는 두 가지 이유</p>
-        <h2 data-en="First, make the model quickly. Then, make the drawing work dependable.">먼저 모델을 빠르게 만들고, 그다음 도면 작업을 믿을 수 있게 만듭니다.</h2>
-        <p class="lead" data-en="RCW is not a general-purpose visualization tool. Its value is measured by two outcomes: a model that is quick enough for day-to-day curtain-wall design, and fabrication output reliable enough to issue.">RCW는 범용 시각화 도구가 아닙니다. 그 가치는 두 가지 결과로 측정됩니다. 매일의 커튼월 설계에 충분히 빠른 모델, 그리고 그대로 발행할 만큼 믿을 수 있는 제작 산출물입니다.</p>
+        <p class="eyebrow" data-en="Three reasons to adopt RCW">RCW를 선택하는 세 가지 이유</p>
+        <h2 data-en="First, make the model quickly. Let the computer read it. Then, make the drawing work dependable.">먼저 모델을 빠르게 만들고, 그 모델을 컴퓨터가 읽게 하고, 그다음 도면 작업을 믿을 수 있게 만듭니다.</h2>
+        <p class="lead" data-en="RCW is not a general-purpose visualization tool. Its value is measured by three outcomes: a model that is quick enough for day-to-day curtain-wall design, parts information no one has to count by hand, and fabrication output reliable enough to issue.">RCW는 범용 시각화 도구가 아닙니다. 그 가치는 세 가지 결과로 측정됩니다. 매일의 커튼월 설계에 충분히 빠른 모델, 사람이 직접 세지 않아도 되는 부재 정보, 그리고 그대로 발행할 만큼 믿을 수 있는 제작 산출물입니다.</p>
 
         <article class="feature">
           <div class="feature-copy"><span class="tag" data-en="01 / Easy modeling">01 / 쉬운 모델링</span><h3 data-en="Model as a curtain-wall designer—not as a 3D specialist.">3D 전문가가 아니라, 커튼월 설계자의 방식으로 모델링합니다.</h3><p data-en="RCW begins with the information a curtain-wall designer already has: sections, profiles, and wireframes. It guides that information into organized units and components, so the model becomes a working tool rather than an additional project to manage.">RCW는 커튼월 설계자가 이미 가진 정보 — 단면, 프로파일, 와이어프레임 — 에서 시작합니다. 그 정보를 정돈된 Unit과 구성요소로 이끌어, 모델이 또 하나의 관리 대상이 아니라 실제 작업 도구가 되게 합니다.</p><ul><li data-en="Build from sections, profiles, and wireframe information">단면·프로파일·와이어프레임 정보로 구성</li><li data-en="Create units, mullions, transoms, glass, vents, grilles, and back panels in a dedicated workflow">Unit·멀리언·트랜섬·유리·창호·그릴·백패널을 전용 흐름으로 생성</li><li data-en="Keep typical, curved, and irregular layouts in one practical modeling approach">정형·곡면·비정형 배치를 하나의 실용적 방식으로 처리</li></ul></div>
@@ -248,11 +261,16 @@
         </article>
 
         <article class="feature reverse">
-          <div class="feature-copy"><span class="tag" data-en="02 / Dependable fabrication drawings">02 / 믿을 수 있는 가공도</span><h3 data-en="Turn one verified model into a production drawing standard.">검증된 모델 하나를 제작 도면 표준으로 만듭니다.</h3><p data-en="Fabrication drawings are not a simple output. On large projects they require experienced people, careful review, and a great deal of time. RCW uses the model for the geometry, then FDStyle records the proven drawing setup for each profile so repeat work follows the same standard.">가공도는 단순한 출력물이 아닙니다. 대형 프로젝트에서는 숙련된 인력과 신중한 검토, 그리고 많은 시간이 필요합니다. RCW는 형상을 모델에서 가져오고, FDStyle이 프로파일별로 검증된 도면 구성을 기록해 반복 작업이 같은 표준을 따르게 합니다.</p><ul><li data-en="Review geometry, relationships, holes, and accessories in the model before issuing output">발행 전에 형상·관계·홀·부속을 모델에서 검토</li><li data-en="Record and replay fabrication-drawing options by profile">가공도 옵션을 프로파일별로 기록하고 재생</li><li data-en="Preserve annotations, leaders, accessory tables, detail views, and form settings">주석·지시선·부속표·상세 뷰·양식 설정을 보존</li></ul></div>
-          <figure><img src="img/FDstyle.gif" alt="FDStyle 기록·재생 워크플로우"><figcaption data-en="FDStyle records a reviewed fabrication-drawing setup and replays it for matching profiles.">FDStyle은 검토한 가공도 구성을 기록해 동일 프로파일에 재생합니다.</figcaption></figure>
+          <div class="feature-copy"><span class="tag" data-en="02 / Automatic analysis">02 / 자동 분석</span><h3 data-en="The computer analyzes the model, so no one has to count it.">모델은 컴퓨터가 분석합니다. 사람이 세지 않습니다.</h3><p data-en="Parts get missed while they are checked and transcribed one at a time. RCW reads the geometry across the whole model, separates the parts, and gives each one a fabrication number. Anchor blocks are picked up by the same rule, and the result carries straight through to the lists used for ordering and on the factory floor.">부재를 하나씩 확인하고 옮겨 적는 과정에서 누락이 생깁니다. RCW는 모델 전체의 형상을 읽어 부재를 구분하고 제작 번호를 부여합니다. 눈에 잘 띄지 않는 Anchor block까지 같은 기준으로 잡히고, 그 결과가 그대로 발주와 공장 작업에 쓰이는 리스트로 이어집니다.</p><ul><li data-en="Analyze the geometry to separate parts and assign fabrication numbers">형상을 분석해 부재를 구분하고 제작 번호를 부여</li><li data-en="Count glass, back panels, vents, and anchor blocks in a single pass">유리·백패널·Vent·Anchor block 까지 한 번에 집계</li><li data-en="Produce the material list, cutting list, and bar list the factory works from">공장에서 바로 쓰는 자재 리스트·절단 리스트·장바 리스트로 정리</li></ul></div>
+          <figure><div class="shuffle"><img src="img/analyze_01_model.png" alt="커튼월 모델"><img src="img/analyze_02_fabno.jpg" alt="부재를 구분하고 제작 번호를 부여한 모델"><img src="img/analyze_03_list.jpg" alt="부재별 자재 정보가 표기된 입면"></div><figcaption data-en="One model, in order: the parts are separated, numbered, and carried through to the lists for ordering and the factory.">같은 모델에서 차례로: 부재를 구분하고 번호를 부여해, 발주와 공장 작업에 쓰는 리스트까지 이어집니다.</figcaption></figure>
         </article>
 
         <article class="feature">
+          <div class="feature-copy"><span class="tag" data-en="03 / Dependable fabrication drawings">03 / 믿을 수 있는 가공도</span><h3 data-en="Turn one verified model into a production drawing standard.">검증된 모델 하나를 제작 도면 표준으로 만듭니다.</h3><p data-en="Fabrication drawings are not a simple output. On large projects they require experienced people, careful review, and a great deal of time. RCW uses the model for the geometry, then FDStyle records the proven drawing setup for each profile so repeat work follows the same standard.">가공도는 단순한 출력물이 아닙니다. 대형 프로젝트에서는 숙련된 인력과 신중한 검토, 그리고 많은 시간이 필요합니다. RCW는 형상을 모델에서 가져오고, FDStyle이 프로파일별로 검증된 도면 구성을 기록해 반복 작업이 같은 표준을 따르게 합니다.</p><ul><li data-en="Review geometry, relationships, holes, and accessories in the model before issuing output">발행 전에 형상·관계·홀·부속을 모델에서 검토</li><li data-en="Record and replay fabrication-drawing options by profile">가공도 옵션을 프로파일별로 기록하고 재생</li><li data-en="Preserve annotations, leaders, accessory tables, detail views, and form settings">주석·지시선·부속표·상세 뷰·양식 설정을 보존</li></ul></div>
+          <figure><img src="img/FDstyle.gif" alt="FDStyle 기록·재생 워크플로우"><figcaption data-en="FDStyle records a reviewed fabrication-drawing setup and replays it for matching profiles.">FDStyle은 검토한 가공도 구성을 기록해 동일 프로파일에 재생합니다.</figcaption></figure>
+        </article>
+
+        <article class="feature reverse">
           <div class="feature-copy"><span class="tag" data-en="Production package">제작 패키지</span><h3 data-en="Move from a good drawing to a clear manufacturing package.">좋은 도면에서, 명확한 제작 패키지로.</h3><p data-en="After the fabrication drawing is generated, the same model supports unit 2D, elevation information, and parts lists. The result gives the factory a clearer definition of what to make and gives the project team a traceable basis for review.">가공도가 생성된 뒤에도 같은 모델이 Unit 2D, 입면 정보, 부품 리스트를 뒷받침합니다. 그 결과 공장은 무엇을 만들지 더 명확히 알고, 프로젝트 팀은 추적 가능한 검토 기준을 갖게 됩니다.</p><ul><li data-en="FDwg and FDDS fabrication-drawing workflows">FDwg·FDDS 가공도 작업 흐름</li><li data-en="2D views, dimensions, hole data, NC tables, and drawing forms">2D 뷰·치수·홀 데이터·NC 표·도면 양식</li><li data-en="Unit section and front-elevation output with Fablist and accessory-list information">Fablist·부속 리스트와 함께 Unit 단면·정면 입면 산출</li></ul></div>
           <figure><img src="img/FDwg.gif?v=20260724" alt="RCW의 가공도 작업 흐름"><figcaption data-en="Fabrication drawings turn the reviewed model into production information for the factory.">가공도는 검토된 모델을 공장을 위한 제작 정보로 바꿉니다.</figcaption></figure>
         </article>
