@@ -96,10 +96,36 @@
   tr.urgent td { background:#fffafa; }
   td.left { white-space:nowrap; font-weight:800; font-variant-numeric:tabular-nums; }
   td.left.over { color:#b32020; }
-  .btn.mini { padding:3px 9px; font-size:11.5px; }
+  .btn.mini { padding:3px 9px; font-size:11.5px; white-space:nowrap; }
+  /* 열이 늘어나면 좁은 칸부터 접힌다. 전화번호가 세 줄로 쪼개지면 읽을 수 없다 */
+  td.nw { white-space:nowrap; }
   /* 셀 아래에 덧붙는 보조 한 줄 — 이메일, 통화 메모에 함께 쓴다 */
   .sub { display:block; margin-top:3px; color:var(--muted); font-size:11.5px;
          max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  /* 내려받은 Rhino 버전. 태그가 셀 맨 앞에 오므로 여백을 오른쪽으로 돌린다 */
+  td.inst { white-space:nowrap; }
+  td.inst .tag { margin:0 5px 0 0; }
+  .tag.r8 { background:var(--sky);   color:var(--blue-dark); }
+  .tag.r7 { background:#eef2f5;      color:var(--muted); }
+  td.inst .none { color:var(--muted); }
+
+  /* 고객 정보 수정 창 */
+  .modal { position:fixed; inset:0; z-index:20; display:flex; align-items:center;
+           justify-content:center; padding:20px; background:rgba(18,33,44,.45); }
+  .sheet { width:100%; max-width:420px; max-height:90vh; overflow:auto; padding:22px 24px;
+           background:#fff; border-radius:14px; box-shadow:0 18px 50px rgba(18,33,44,.28); }
+  .sheet h2 { margin:0 0 3px; font-size:16px; }
+  .sheet .whom { margin:0 0 16px; color:var(--muted); font-size:12.5px; }
+  .sheet label { display:block; margin:0 0 5px; font-size:12.5px; font-weight:700; }
+  .sheet input, .sheet textarea {
+           width:100%; margin:0 0 12px; padding:9px 11px; border:1px solid var(--line);
+           border-radius:8px; font:inherit; font-size:13.5px; }
+  .sheet textarea { min-height:58px; resize:vertical; }
+  .sheet .keep { margin:2px 0 16px; padding:9px 11px; border-radius:8px; background:var(--mist);
+                 color:var(--muted); font-size:11.5px; }
+  .sheet .keep b { color:var(--ink); font-weight:700; word-break:break-all; }
+  .sheet .foot { display:flex; justify-content:flex-end; gap:8px; }
 </style>
 </head>
 <body>
@@ -176,17 +202,17 @@
   </div>
 
   <div class="tools">
-    <input id="kq" type="search" placeholder="회사 · 담당자 · 이메일 · 코드로 검색">
+    <input id="kq" type="search" placeholder="회사 · 담당자 · 이메일 · 코드 · 메모로 검색">
   </div>
 
   <table>
     <thead>
       <tr>
-        <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th>
-        <th>연락처</th><th>이메일</th><th>정보확인</th><th>코드</th>
+        <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th><th>내려받음</th>
+        <th>연락처</th><th>이메일</th><th>정보확인</th><th>코드</th><th></th>
       </tr>
     </thead>
-    <tbody id="krows"><tr><td colspan="8" class="empty">불러오는 중…</td></tr></tbody>
+    <tbody id="krows"><tr><td colspan="10" class="empty">불러오는 중…</td></tr></tbody>
   </table>
 
   <p class="note">
@@ -195,6 +221,45 @@
     <span class="st none">미접속</span> 은 안내 메일을 받고도 아직 들어오지 않은 고객입니다.
     라이선스를 발급하면 발급기가 새 행을 하나 더 만들고, 그 행이 <span class="st done">발급됨</span> 이 됩니다.
   </p>
+  <p class="note">
+    <b>내려받음</b> 은 고객 페이지에서 <b>어느 Rhino 용 설치 파일을 받아 갔는지</b>입니다
+    (파일 이름의 <code>Rhino7</code>/<code>Rhino8</code>). 두 개를 다 받았으면 둘 다 표시되고,
+    최근에 받은 쪽이 앞에 옵니다. <b>받은 기록이지 설치 결과는 아닙니다</b> — 카톡·메일로 직접
+    보내드린 분은 <span class="none">—</span> 로 남습니다.
+    <b>[고치기]</b> 로는 회사·담당자·연락처·이메일·메모만 바꿉니다. 코드·에디션·기기코드는
+    라이선스 장부 값이라 이 화면에서 열리지 않습니다.
+  </p>
+</div>
+
+<!-- ── 고객 정보 수정 ─────────────────────────────────────── -->
+<div class="modal" id="edit-modal" style="display:none">
+  <form class="sheet" id="edit-form">
+    <h2>고객 정보 수정</h2>
+    <p class="whom" id="e-whom"></p>
+
+    <label for="e-company">회사</label>
+    <input id="e-company" maxlength="200" autocomplete="off">
+
+    <label for="e-name">담당자</label>
+    <input id="e-name" maxlength="100" autocomplete="off">
+
+    <label for="e-phone">연락처</label>
+    <input id="e-phone" maxlength="50" autocomplete="off">
+
+    <label for="e-email">이메일</label>
+    <input id="e-email" type="text" maxlength="200" autocomplete="off">
+
+    <label for="e-note">메모</label>
+    <textarea id="e-note" maxlength="500"></textarea>
+
+    <div class="keep" id="e-keep"></div>
+    <div class="err" id="e-err" style="display:none;margin:0 0 14px"></div>
+
+    <div class="foot">
+      <button class="btn" type="button" id="e-cancel">취소</button>
+      <button class="btn primary" type="submit" id="e-save">저장</button>
+    </div>
+  </form>
 </div>
 
 <!-- ── 트라이얼 다운로드(기존) ─────────────────────────────── -->
@@ -335,18 +400,75 @@
   var kRowsEl = document.getElementById('krows');
   var kqEl    = document.getElementById('kq');
 
-  function loadCustomers() {
-    kRowsEl.innerHTML = '<tr><td colspan="8" class="empty">불러오는 중…</td></tr>';
-    api('/rest/v1/customers?select=*&order=company.asc&limit=2000')
+  /* 고객이 어느 Rhino 용 설치 파일을 받아 갔는지.
+     따로 저장하는 값이 아니라 customer_access 의 다운로드 기록에서 읽는다 —
+     파일 이름이 RCW_V5_<에디션>_Rhino<7|8>.exe 로 고정돼 있어서(api/customer-login.js)
+     이름만 보면 알 수 있다. 플러그인은 서버로 아무것도 보내지 않으므로
+     "정말 설치했는지"는 어차피 알 수 없고, 받아 간 기록이 우리가 가진 전부다. */
+  var installs = {};                       // customer_id → { r7: 시각, r8: 시각 }
+
+  function loadInstalls() {
+    return api('/rest/v1/customer_access' +
+               '?select=customer_id,file_name,created_at&action=eq.download' +
+               '&order=created_at.desc&limit=5000')
       .then(function (data) {
-        customers = data || [];
+        var map = {};
+        (data || []).forEach(function (a) {
+          var m = /_Rhino([78])/.exec(a.file_name || '');
+          if (!m || !a.customer_id) return;
+          var rec = map[a.customer_id] || (map[a.customer_id] = {});
+          // 최신순으로 받아 왔으니 먼저 만난 것이 마지막으로 받아 간 시각이다
+          if (!rec['r' + m[1]]) rec['r' + m[1]] = a.created_at;
+        });
+        installs = map;
+      })
+      .catch(function (err) {
+        // 기록을 못 읽어도 고객 목록은 나와야 한다. 그 칸만 비운다.
+        console.error(err);
+        installs = {};
+      });
+  }
+
+  function loadCustomers() {
+    kRowsEl.innerHTML = '<tr><td colspan="10" class="empty">불러오는 중…</td></tr>';
+    Promise.all([
+      api('/rest/v1/customers?select=*&order=company.asc&limit=2000'),
+      loadInstalls()
+    ])
+      .then(function (r) {
+        customers = r[0] || [];
         summarizeCustomers();
         renderCustomers();
       })
       .catch(function (err) {
         console.error(err);
-        kRowsEl.innerHTML = '<tr><td colspan="8" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
+        kRowsEl.innerHTML = '<tr><td colspan="10" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
       });
+  }
+
+  /** 최근에 받은 Rhino 를 앞에 둔다. [{ rhino:'8', at:'...' }, …] */
+  function installsOf(c) {
+    var rec = installs[c.id];
+    if (!rec) return [];
+    var out = [];
+    if (rec.r7) out.push({ rhino: '7', at: rec.r7 });
+    if (rec.r8) out.push({ rhino: '8', at: rec.r8 });
+    return out.sort(function (a, b) { return new Date(b.at) - new Date(a.at); });
+  }
+
+  function installCell(c) {
+    var got = installsOf(c);
+    if (!got.length) return '<span class="none">—</span>';
+    return got.map(function (g) {
+      return '<span class="tag r' + g.rhino + '" title="마지막 내려받음 ' +
+             esc(fmt(g.at, true)) + '">Rhino ' + g.rhino + '</span>';
+    }).join('');
+  }
+
+  /** CSV·검색에 쓰는 글자 표현. 'Rhino 8' / 'Rhino 8·7' / '' */
+  function installText(c) {
+    var got = installsOf(c);
+    return got.length ? 'Rhino ' + got.map(function (g) { return g.rhino; }).join('·') : '';
   }
 
   /* 상태는 이 순서로 정한다.
@@ -389,28 +511,120 @@
 
     var html = '';
     list.forEach(function (c) {
-      var hay = [c.company, c.name, c.email, c.phone, c.license_id].join(' ').toLowerCase();
+      var hay = [c.company, c.name, c.email, c.phone, c.license_id, c.note, installText(c)]
+                  .join(' ').toLowerCase();
       if (q && hay.indexOf(q) === -1) return;
 
       var s = statusOf(c);
       var ed = '<span class="tag ' + (c.edition === 'Standard' ? 'std' : 'core') + '">' + esc(c.edition) + '</span>';
+      var note = (c.note || '').split('\n')[0];
       html += '<tr' + (s.cls === 'wait' ? ' class="attn"' : '') + '>' +
         '<td><span class="st ' + s.cls + '">' + s.label + '</span></td>' +
-        '<td>' + esc(c.company) + '</td>' +
-        '<td>' + esc(c.name) + '</td>' +
+        '<td class="nw">' + esc(c.company) + '</td>' +
+        '<td class="nw">' + esc(c.name) +
+          (note ? '<span class="sub" title="' + esc(c.note) + '">' + esc(note) + '</span>' : '') + '</td>' +
         '<td>' + ed + '</td>' +
-        '<td>' + esc(c.phone) + '</td>' +
+        '<td class="inst">' + installCell(c) + '</td>' +
+        '<td class="nw">' + esc(c.phone) + '</td>' +
         '<td>' + esc(c.email) + '</td>' +
         '<td class="when">' + (c.info_confirmed_at ? fmt(c.info_confirmed_at, true) : '—') + '</td>' +
         '<td class="mono">' + esc(c.license_id) + '</td>' +
+        '<td><button class="btn mini" type="button" data-edit="' + esc(c.id) + '">고치기</button></td>' +
         '</tr>';
     });
 
-    kRowsEl.innerHTML = html || '<tr><td colspan="8" class="empty">' +
+    kRowsEl.innerHTML = html || '<tr><td colspan="10" class="empty">' +
       (customers.length ? '검색 결과가 없습니다.' : '아직 등록된 고객이 없습니다.') + '</td></tr>';
   }
 
   kqEl.addEventListener('input', renderCustomers);
+
+  // ── 고객 정보 수정 ────────────────────────────────────────
+  /* 고칠 수 있는 칸은 company·name·phone·email·note 뿐이다
+     (docs/supabase-customer-edit.sql 의 컬럼 단위 grant). 코드·에디션·기기코드 같은
+     라이선스 장부 값은 정책이 아니라 grant 에서 막히므로, 화면 실수로는 못 건드린다.
+
+     표 안에서 바로 고치지 않고 창을 따로 띄우는 이유: 검색창에 글자를 넣으면
+     renderCustomers() 가 표를 통째로 다시 그려서, 표 안에 만든 입력칸은 그때 사라진다. */
+  var editing = null;                                     // 지금 고치는 고객 행
+  var modalEl = document.getElementById('edit-modal');
+  var errEditEl = document.getElementById('e-err');
+  var F = { company: 'e-company', name: 'e-name', phone: 'e-phone', email: 'e-email', note: 'e-note' };
+
+  function fld(key) { return document.getElementById(F[key]); }
+
+  function openEdit(c) {
+    editing = c;
+    errEditEl.style.display = 'none';
+    Object.keys(F).forEach(function (k) { fld(k).value = c[k] || ''; });
+
+    document.getElementById('e-whom').textContent =
+      (c.company || c.name || '(이름 없음)') + ' · ' + c.license_id;
+    // 못 고치는 값도 보여 준다. 지원 문의 때 대조하려고 여는 경우가 많아서다.
+    document.getElementById('e-keep').innerHTML =
+      '에디션 <b>' + esc(c.edition) + '</b> · 기기코드 <b>' +
+      esc(c.machine_code || '아직 없음') + '</b><br>이 값들은 라이선스 장부에서 오므로 여기서 바뀌지 않습니다.';
+
+    modalEl.style.display = 'flex';
+    fld('company').focus();
+  }
+
+  function closeEdit() { modalEl.style.display = 'none'; editing = null; }
+
+  kRowsEl.addEventListener('click', function (e) {
+    var id = e.target && e.target.getAttribute && e.target.getAttribute('data-edit');
+    if (!id) return;
+    var c = customers.filter(function (x) { return x.id === id; })[0];
+    if (c) openEdit(c);
+  });
+
+  document.getElementById('e-cancel').addEventListener('click', closeEdit);
+  modalEl.addEventListener('mousedown', function (e) { if (e.target === modalEl) closeEdit(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modalEl.style.display !== 'none') closeEdit();
+  });
+
+  document.getElementById('edit-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!editing) return;
+
+    // 지운 칸은 빈 문자열이 아니라 null 로 저장한다. 고객 화면·CSV 가 둘을 다르게 다룬다.
+    var patch = {};
+    Object.keys(F).forEach(function (k) {
+      var v = fld(k).value.trim();
+      patch[k] = v || null;
+    });
+
+    // 형식만 본다(필수는 아니다). 라이선스를 보낼 곳이라 오타가 그대로 남으면 곤란하다.
+    if (patch.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(patch.email)) {
+      errEditEl.textContent = '이메일 형식이 아닙니다. 비워 두거나 올바른 주소를 넣어 주세요.';
+      errEditEl.style.display = 'block';
+      return;
+    }
+
+    var saveBtn = document.getElementById('e-save');
+    var target = editing;
+    saveBtn.disabled = true;
+    errEditEl.style.display = 'none';
+
+    api('/rest/v1/customers?id=eq.' + encodeURIComponent(target.id), {
+      method: 'PATCH',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify(patch)
+    }).then(function () {
+      Object.keys(F).forEach(function (k) { target[k] = patch[k]; });
+      closeEdit();
+      renderCustomers();
+      loadRenewals();        // 갱신 탭도 같은 회사·연락처를 보여 준다
+    }).catch(function (err) {
+      console.error(err);
+      // 권한이 안 열렸을 때가 압도적으로 흔하다. 어디를 봐야 하는지 바로 알려 준다.
+      errEditEl.textContent = /42501|permission denied/i.test(String(err && err.message))
+        ? '권한이 없습니다. Supabase SQL Editor 에서 docs/supabase-customer-edit.sql 을 한 번 실행하세요.'
+        : '저장하지 못했습니다. 잠시 후 다시 시도해 주세요.';
+      errEditEl.style.display = 'block';
+    }).finally(function () { saveBtn.disabled = false; });
+  });
 
   // ── 갱신 ──────────────────────────────────────────────────
   /* 우선순위·단계는 renewal_watch 뷰가 계산한다. 여기서 다시 계산하지 않는다 —
@@ -664,12 +878,14 @@
     }
 
     if (view === 'cust') {
-      var kHead = ['상태', '회사', '담당자', '에디션', '전화번호', '이메일', '정보확인', '코드', '기기코드'];
+      var kHead = ['상태', '회사', '담당자', '에디션', '내려받음', '전화번호', '이메일',
+                   '정보확인', '코드', '기기코드', '메모'];
       var kLines = [kHead.join(',')];
       customers.forEach(function (c) {
         kLines.push([
-          statusOf(c).label, c.company, c.name, c.edition, c.phone, c.email,
-          c.info_confirmed_at ? fmt(c.info_confirmed_at, true) : '', c.license_id, c.machine_code
+          statusOf(c).label, c.company, c.name, c.edition, installText(c), c.phone, c.email,
+          c.info_confirmed_at ? fmt(c.info_confirmed_at, true) : '', c.license_id, c.machine_code,
+          c.note || ''
         ].map(csvCell).join(','));
       });
       download('rcw-customers-' + fmt(Date.now()) + '.csv', kLines);

@@ -151,8 +151,13 @@ create policy "admin can update contact fields"
   with check (true);
 
 -- 정책은 행을 고르고, 아래 grant 가 고칠 수 있는 칸을 정한다.
+--
+-- ★ 목록이 supabase-customer-edit.sql 과 똑같아야 한다. revoke 가 먼저 나오므로
+--   한쪽만 고쳐 두면, 다른 쪽을 다시 실행하는 순간 권한이 조용히 사라진다.
+--   뒤의 다섯 칸은 고객 탭 [고치기] 버튼이 쓴다(2026-08-05 추가).
 revoke update on public.customers from authenticated;
-grant  update (last_contact_at, contact_note, cancelled_at)
+grant  update (last_contact_at, contact_note, cancelled_at,
+               company, name, phone, email, note)
   on public.customers to authenticated;
 
 grant select on public.renewal_watch to authenticated;
