@@ -99,9 +99,13 @@
   .btn.mini { padding:3px 9px; font-size:11.5px; white-space:nowrap; }
   /* 열이 늘어나면 좁은 칸부터 접힌다. 전화번호가 세 줄로 쪼개지면 읽을 수 없다 */
   td.nw { white-space:nowrap; }
-  /* 셀 아래에 덧붙는 보조 한 줄 — 이메일, 통화 메모에 함께 쓴다 */
+  /* 셀 아래에 덧붙는 보조 한 줄 — 이메일, 통화 메모, 영구/구독에 함께 쓴다 */
   .sub { display:block; margin-top:3px; color:var(--muted); font-size:11.5px;
          max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  /* 구독은 챙길 날짜가 있는 고객이라 영구보다 눈에 들어와야 한다 */
+  .sub.plan { color:var(--ink); font-weight:700; }
+  /* 기한은 걸렸는데 청구일이 없다 = 갱신 안내가 조용히 안 나가는 상태 */
+  .sub.warn { color:#b4560f; font-weight:700; }
 
   /* 내려받은 Rhino 버전. 태그가 셀 맨 앞에 오므로 여백을 오른쪽으로 돌린다 */
   td.inst { white-space:nowrap; }
@@ -222,12 +226,20 @@
     라이선스를 발급하면 발급기가 새 행을 하나 더 만들고, 그 행이 <span class="st done">발급됨</span> 이 됩니다.
   </p>
   <p class="note">
+    에디션 아래 줄이 <b>영구</b>인지 <b>구독</b>인지입니다. 기준은 <code>paid_through</code>(청구 만료일)
+    하나뿐이라, 비어 있으면 영구 고객으로 보고 갱신 안내에서 완전히 뺍니다.
+    <b class="sub warn" style="display:inline">기한 있음 · 청구일 미기재</b> 는
+    <code>expires_on</code> 은 걸렸는데 청구일을 안 적어 둔 줄입니다 — 그대로 두면
+    <b>갱신 안내가 나가지 않은 채 고객이 어느 날 잠깁니다.</b> 청구일을 채워 넣으세요.
+  </p>
+  <p class="note">
     <b>내려받음</b> 은 고객 페이지에서 <b>어느 Rhino 용 설치 파일을 받아 갔는지</b>입니다
     (파일 이름의 <code>Rhino7</code>/<code>Rhino8</code>). 두 개를 다 받았으면 둘 다 표시되고,
     최근에 받은 쪽이 앞에 옵니다. <b>받은 기록이지 설치 결과는 아닙니다</b> — 카톡·메일로 직접
     보내드린 분은 <span class="none">—</span> 로 남습니다.
-    <b>[고치기]</b> 로는 회사·담당자·연락처·이메일·메모만 바꿉니다. 코드·에디션·기기코드는
+    <b>[고치기]</b> 로는 회사·담당자·연락처·이메일·메모만 바꿉니다. 코드·에디션·기기코드·청구일은
     라이선스 장부 값이라 이 화면에서 열리지 않습니다.
+    메모는 표에 나오지 않고 <b>담당자 칸에 마우스를 올리면</b> 뜹니다.
   </p>
 </div>
 
@@ -471,6 +483,25 @@
     return got.length ? 'Rhino ' + got.map(function (g) { return g.rhino; }).join('·') : '';
   }
 
+  /* 영구인지 구독인지.
+     기준은 paid_through 하나다(supabase-renewals.sql). null = 돈 낼 날짜가 없는
+     영구 고객이고, 갱신 감시 뷰에서 통째로 빠진다.
+
+     ★ expires_on 과 헷갈리지 말 것. 그건 .lic 파일의 만료일이라 구독이면
+       paid_through + 유예 30일로 따라온다. 그래서 expires_on 만 있고
+       paid_through 가 비어 있으면 "기한은 걸려 있는데 청구일을 안 적어 둔" 상태다 —
+       갱신 안내가 조용히 안 나가고 고객은 어느 날 잠긴다. 눈에 띄게 표시한다. */
+  function planOf(c) {
+    if (c.paid_through) return { label: '구독', when: '~' + c.paid_through, cls: 'plan' };
+    if (c.expires_on)   return { label: '기한 있음', when: '· 청구일 미기재', cls: 'warn' };
+    return { label: '영구', when: '', cls: '' };
+  }
+
+  function planText(c) {
+    var p = planOf(c);
+    return p.when ? p.label + ' ' + p.when : p.label;
+  }
+
   /* 상태는 이 순서로 정한다.
        machine_code 있음      → 라이선스까지 끝난 행(발급기가 만든 행)
        info_confirmed_at 있음 → 받아갔고 지금 머신코드 회신을 기다리는 중
@@ -511,19 +542,23 @@
 
     var html = '';
     list.forEach(function (c) {
-      var hay = [c.company, c.name, c.email, c.phone, c.license_id, c.note, installText(c)]
-                  .join(' ').toLowerCase();
+      var hay = [c.company, c.name, c.email, c.phone, c.license_id, c.note,
+                 installText(c), planText(c)].join(' ').toLowerCase();
       if (q && hay.indexOf(q) === -1) return;
 
       var s = statusOf(c);
       var ed = '<span class="tag ' + (c.edition === 'Standard' ? 'std' : 'core') + '">' + esc(c.edition) + '</span>';
-      var note = (c.note || '').split('\n')[0];
+      var p  = planOf(c);
       html += '<tr' + (s.cls === 'wait' ? ' class="attn"' : '') + '>' +
         '<td><span class="st ' + s.cls + '">' + s.label + '</span></td>' +
         '<td class="nw">' + esc(c.company) + '</td>' +
-        '<td class="nw">' + esc(c.name) +
-          (note ? '<span class="sub" title="' + esc(c.note) + '">' + esc(note) + '</span>' : '') + '</td>' +
-        '<td>' + ed + '</td>' +
+        // 메모는 표에 보이지 않는다(마이그레이션 임시코드처럼 알맹이 없는 문구가
+        // 줄마다 깔려 화면만 복잡해졌다). 값은 [고치기] 창·CSV·검색에 그대로 있고,
+        // 여기서는 셀에 마우스를 올렸을 때만 뜬다.
+        '<td class="nw"' + (c.note ? ' title="' + esc(c.note) + '"' : '') + '>' + esc(c.name) + '</td>' +
+        '<td class="nw">' + ed +
+          '<span class="sub ' + p.cls + '">' + esc(p.label) +
+          (p.when ? ' ' + esc(p.when) : '') + '</span></td>' +
         '<td class="inst">' + installCell(c) + '</td>' +
         '<td class="nw">' + esc(c.phone) + '</td>' +
         '<td>' + esc(c.email) + '</td>' +
@@ -878,12 +913,13 @@
     }
 
     if (view === 'cust') {
-      var kHead = ['상태', '회사', '담당자', '에디션', '내려받음', '전화번호', '이메일',
-                   '정보확인', '코드', '기기코드', '메모'];
+      var kHead = ['상태', '회사', '담당자', '에디션', '구분', '청구만료', '내려받음',
+                   '전화번호', '이메일', '정보확인', '코드', '기기코드', '메모'];
       var kLines = [kHead.join(',')];
       customers.forEach(function (c) {
         kLines.push([
-          statusOf(c).label, c.company, c.name, c.edition, installText(c), c.phone, c.email,
+          statusOf(c).label, c.company, c.name, c.edition,
+          planOf(c).label, c.paid_through || '', installText(c), c.phone, c.email,
           c.info_confirmed_at ? fmt(c.info_confirmed_at, true) : '', c.license_id, c.machine_code,
           c.note || ''
         ].map(csvCell).join(','));
