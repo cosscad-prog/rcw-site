@@ -99,13 +99,23 @@
   .btn.mini { padding:3px 9px; font-size:11.5px; white-space:nowrap; }
   /* 열이 늘어나면 좁은 칸부터 접힌다. 전화번호가 세 줄로 쪼개지면 읽을 수 없다 */
   td.nw { white-space:nowrap; }
-  /* 셀 아래에 덧붙는 보조 한 줄 — 이메일, 통화 메모, 영구/구독에 함께 쓴다 */
+  /* 표가 넘치면 페이지 전체가 아니라 표 안에서만 가로로 밀린다 */
+  .tscroll { overflow-x:auto; border-radius:12px; }
+  .tscroll table { min-width:1080px; }
+  /* 고객 표는 열이 11개다. 기본 여백 그대로면 [고치기] 가 화면 밖으로 밀린다 */
+  #view-cust th, #view-cust td { padding:10px 8px; }
+  #view-cust th:first-child, #view-cust td:first-child { padding-left:12px; }
+  #view-cust th:last-child,  #view-cust td:last-child  { padding-right:12px; }
+  /* 셀 아래에 덧붙는 보조 한 줄 — 이메일, 통화 메모에 함께 쓴다 */
   .sub { display:block; margin-top:3px; color:var(--muted); font-size:11.5px;
          max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  /* 구독은 챙길 날짜가 있는 고객이라 영구보다 눈에 들어와야 한다 */
-  .sub.plan { color:var(--ink); font-weight:700; }
-  /* 기한은 걸렸는데 청구일이 없다 = 갱신 안내가 조용히 안 나가는 상태 */
-  .sub.warn { color:#b4560f; font-weight:700; }
+
+  /* 영구/구독 — 한 줄에 들어가도록 전부 inline 이다 */
+  .plan { font-weight:700; }
+  .plan.perp { color:var(--muted); font-weight:600; }   /* 영구는 챙길 일이 없다 */
+  .plan.subs { color:var(--ink); }                      /* 구독은 청구일이 있다 */
+  .plan.warn { color:#b4560f; }                         /* 청구일을 안 적어 둔 줄 */
+  .dim { color:var(--muted); font-size:12px; }
 
   /* 내려받은 Rhino 버전. 태그가 셀 맨 앞에 오므로 여백을 오른쪽으로 돌린다 */
   td.inst { white-space:nowrap; }
@@ -209,15 +219,18 @@
     <input id="kq" type="search" placeholder="회사 · 담당자 · 이메일 · 코드 · 메모로 검색">
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th><th>내려받음</th>
-        <th>연락처</th><th>이메일</th><th>정보확인</th><th>코드</th><th></th>
-      </tr>
-    </thead>
-    <tbody id="krows"><tr><td colspan="10" class="empty">불러오는 중…</td></tr></tbody>
-  </table>
+  <!-- 열이 11개라 좁은 화면에서는 표가 넘친다. 페이지를 흔들지 말고 표 안에서 밀리게 한다 -->
+  <div class="tscroll">
+    <table>
+      <thead>
+        <tr>
+          <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th><th>영구/구독</th><th>내려받음</th>
+          <th>연락처</th><th>이메일</th><th>정보확인</th><th>코드</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="krows"><tr><td colspan="11" class="empty">불러오는 중…</td></tr></tbody>
+    </table>
+  </div>
 
   <p class="note">
     <span class="st wait">회신 대기</span> 는 정보를 확인하고 내려받았지만 아직 라이선스를 발급하지 않은 고객입니다.
@@ -226,9 +239,9 @@
     라이선스를 발급하면 발급기가 새 행을 하나 더 만들고, 그 행이 <span class="st done">발급됨</span> 이 됩니다.
   </p>
   <p class="note">
-    에디션 아래 줄이 <b>영구</b>인지 <b>구독</b>인지입니다. 기준은 <code>paid_through</code>(청구 만료일)
-    하나뿐이라, 비어 있으면 영구 고객으로 보고 갱신 안내에서 완전히 뺍니다.
-    <b class="sub warn" style="display:inline">기한 있음 · 청구일 미기재</b> 는
+    <b>영구/구독</b> 열의 기준은 <code>paid_through</code>(청구 만료일) 하나뿐이라,
+    비어 있으면 영구 고객으로 보고 갱신 안내에서 완전히 뺍니다.
+    <span class="plan warn">기한 있음</span> <span class="dim">청구일 미기재</span> 는
     <code>expires_on</code> 은 걸렸는데 청구일을 안 적어 둔 줄입니다 — 그대로 두면
     <b>갱신 안내가 나가지 않은 채 고객이 어느 날 잠깁니다.</b> 청구일을 채워 넣으세요.
   </p>
@@ -442,7 +455,7 @@
   }
 
   function loadCustomers() {
-    kRowsEl.innerHTML = '<tr><td colspan="10" class="empty">불러오는 중…</td></tr>';
+    kRowsEl.innerHTML = '<tr><td colspan="11" class="empty">불러오는 중…</td></tr>';
     Promise.all([
       api('/rest/v1/customers?select=*&order=company.asc&limit=2000'),
       loadInstalls()
@@ -454,7 +467,7 @@
       })
       .catch(function (err) {
         console.error(err);
-        kRowsEl.innerHTML = '<tr><td colspan="10" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
+        kRowsEl.innerHTML = '<tr><td colspan="11" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
       });
   }
 
@@ -492,14 +505,20 @@
        paid_through 가 비어 있으면 "기한은 걸려 있는데 청구일을 안 적어 둔" 상태다 —
        갱신 안내가 조용히 안 나가고 고객은 어느 날 잠긴다. 눈에 띄게 표시한다. */
   function planOf(c) {
-    if (c.paid_through) return { label: '구독', when: '~' + c.paid_through, cls: 'plan' };
-    if (c.expires_on)   return { label: '기한 있음', when: '· 청구일 미기재', cls: 'warn' };
-    return { label: '영구', when: '', cls: '' };
+    if (c.paid_through) return { label: '구독', when: '~' + c.paid_through, cls: 'subs' };
+    if (c.expires_on)   return { label: '기한 있음', when: '청구일 미기재', cls: 'warn' };
+    return { label: '영구', when: '', cls: 'perp' };
   }
 
   function planText(c) {
     var p = planOf(c);
     return p.when ? p.label + ' ' + p.when : p.label;
+  }
+
+  function planCell(c) {
+    var p = planOf(c);
+    return '<span class="plan ' + p.cls + '">' + esc(p.label) + '</span>' +
+           (p.when ? ' <span class="dim">' + esc(p.when) + '</span>' : '');
   }
 
   /* 상태는 이 순서로 정한다.
@@ -548,7 +567,6 @@
 
       var s = statusOf(c);
       var ed = '<span class="tag ' + (c.edition === 'Standard' ? 'std' : 'core') + '">' + esc(c.edition) + '</span>';
-      var p  = planOf(c);
       html += '<tr' + (s.cls === 'wait' ? ' class="attn"' : '') + '>' +
         '<td><span class="st ' + s.cls + '">' + s.label + '</span></td>' +
         '<td class="nw">' + esc(c.company) + '</td>' +
@@ -556,19 +574,20 @@
         // 줄마다 깔려 화면만 복잡해졌다). 값은 [고치기] 창·CSV·검색에 그대로 있고,
         // 여기서는 셀에 마우스를 올렸을 때만 뜬다.
         '<td class="nw"' + (c.note ? ' title="' + esc(c.note) + '"' : '') + '>' + esc(c.name) + '</td>' +
-        '<td class="nw">' + ed +
-          '<span class="sub ' + p.cls + '">' + esc(p.label) +
-          (p.when ? ' ' + esc(p.when) : '') + '</span></td>' +
+        '<td>' + ed + '</td>' +
+        '<td class="nw">' + planCell(c) + '</td>' +
         '<td class="inst">' + installCell(c) + '</td>' +
         '<td class="nw">' + esc(c.phone) + '</td>' +
         '<td>' + esc(c.email) + '</td>' +
-        '<td class="when">' + (c.info_confirmed_at ? fmt(c.info_confirmed_at, true) : '—') + '</td>' +
+        // 시각까지 넣으면 열이 넓어져 오른쪽 끝이 밀린다. 날짜만 보이고 시각은 hover 로.
+        '<td class="when"' + (c.info_confirmed_at ? ' title="' + esc(fmt(c.info_confirmed_at, true)) + '"' : '') +
+          '>' + (c.info_confirmed_at ? fmt(c.info_confirmed_at) : '—') + '</td>' +
         '<td class="mono">' + esc(c.license_id) + '</td>' +
         '<td><button class="btn mini" type="button" data-edit="' + esc(c.id) + '">고치기</button></td>' +
         '</tr>';
     });
 
-    kRowsEl.innerHTML = html || '<tr><td colspan="10" class="empty">' +
+    kRowsEl.innerHTML = html || '<tr><td colspan="11" class="empty">' +
       (customers.length ? '검색 결과가 없습니다.' : '아직 등록된 고객이 없습니다.') + '</td></tr>';
   }
 
