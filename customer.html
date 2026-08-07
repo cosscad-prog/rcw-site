@@ -77,6 +77,20 @@
     .dl-btn:hover { border-color:var(--blue); background:var(--sky); transform:translateY(-2px); }
     .dl-btn em { color:var(--muted); font-style:normal; font-size:12.5px; font-weight:600; }
 
+    /* 변경 안내(changes.js 가 그린다). 받을지 말지 판단하는 자리이므로 Rhino 8 /
+       Rhino 7 두 다운로드 묶음 바로 아래에 둔다. */
+    .rcw-chg { margin:22px 0 0; padding:16px 18px; border:1px solid var(--line); border-radius:14px; background:var(--mist); }
+    .rcw-chg-title { margin:0 0 9px; font-size:14px; font-weight:800; }
+    .rcw-chg-head { margin:0 0 7px; color:var(--muted); font-size:12.5px; }
+    .rcw-chg-ver { color:var(--ink); font-size:14px; font-weight:800; }
+    .rcw-chg-list { margin:0; padding-left:19px; color:var(--muted); font-size:13.5px; line-height:1.7; word-break:keep-all; }
+    .rcw-chg-list li { margin:0 0 6px; }
+    .rcw-chg-list b { color:var(--ink); }
+    .rcw-chg-prev { margin-top:13px; padding-top:12px; border-top:1px solid var(--line); }
+    .rcw-chg-prev summary { cursor:pointer; color:var(--muted); font-size:13px; font-weight:700; }
+    .rcw-chg-prev summary:hover { color:var(--blue-dark); }
+    .rcw-chg-prev .rcw-chg-head { margin-top:10px; }
+
     /* 라이선스 발급 결과 카드.
        예전엔 여기서도 .dl-row/.dl-btn 을 썼는데, 세로 배치(flex-direction:column)에서는
        .dl-btn 의 flex-basis 200px 가 '높이'로 걸려 200px 짜리 빈 상자가 됐다.
@@ -237,6 +251,10 @@
         <p data-en="For customers still on Rhino 7. New work is being moved to Rhino 8 — please contact us before upgrading if you need Rhino 7 to keep working.">아직 Rhino 7 을 쓰시는 분들을 위한 설치 파일입니다. 신규 작업은 Rhino 8 을 기준으로 옮겨가고 있으니, Rhino 7 을 계속 쓰셔야 하면 미리 알려주세요.</p>
         <div class="dl-row" id="row-rhino7"></div>
       </div>
+
+      <!-- 변경 안내는 releases.json 에서 온다(changes.js). 여기에 직접 적지 말 것 —
+           평가판 페이지와 같은 내용을 두 곳에 적으면 반드시 어긋난다. -->
+      <div id="rcw-changes"></div>
 
       <!-- 설치 파일에 코드 서명이 아직 없다. 미리 알려주지 않으면 고객이 여기서 멈춘다.
            서명 인증서를 적용하면 이 안내는 지운다. -->
@@ -749,5 +767,8 @@
   });
 })();
 </script>
+
+<!-- 변경 안내 — 내용은 releases.json, 그리는 것은 changes.js (평가판 페이지와 공용) -->
+<script src="changes.js" defer></script>
 </body>
 </html>

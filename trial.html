@@ -87,6 +87,20 @@
     .dl-note { margin:13px 0 0; color:#3f7359; font-size:12.5px; word-break:keep-all; }
     .dl-note a { color:var(--blue-dark); font-weight:700; text-decoration:underline; }
     /* Rhino 7 은 접어 둔다. 필요한 사람은 찾을 수 있고, 주력 다운로드는 흐려지지 않는다. */
+    /* 변경 안내(changes.js 가 그린다). 다운로드 버튼 바로 아래라, 눈에는 들어오되
+       버튼보다 앞서지 않도록 초록 계열 안내 색을 그대로 쓴다. */
+    .rcw-chg { margin:14px 0 0; padding:13px 15px; border:1px solid #cfe6d8; border-radius:10px; background:#f6fbf8; }
+    .rcw-chg-title { margin:0 0 8px; color:#0a6b3f; font-size:13px; font-weight:800; }
+    .rcw-chg-head { margin:0 0 6px; color:#3f7359; font-size:12px; }
+    .rcw-chg-ver { color:#0a6b3f; font-size:13px; font-weight:800; }
+    .rcw-chg-list { margin:0; padding-left:18px; color:#3f7359; font-size:12.5px; line-height:1.65; word-break:keep-all; }
+    .rcw-chg-list li { margin:0 0 5px; }
+    .rcw-chg-list b { color:#0a6b3f; }
+    .rcw-chg-prev { margin-top:11px; padding-top:10px; border-top:1px solid #dcebe2; }
+    .rcw-chg-prev summary { cursor:pointer; color:#3f7359; font-size:12.5px; font-weight:700; }
+    .rcw-chg-prev summary:hover { color:var(--blue-dark); }
+    .rcw-chg-prev .rcw-chg-head { margin-top:9px; }
+
     .dl-legacy { margin-top:14px; }
     .dl-legacy summary { cursor:pointer; color:#3f7359; font-size:12.5px; font-weight:700; }
     .dl-legacy summary:hover { color:var(--blue-dark); }
@@ -229,8 +243,12 @@
             <!-- 값은 아래 TRIAL_VERSION 이 채운다(발행 스크립트가 갱신하는 곳은 거기 한 줄뿐).
                  여기에 숫자를 적어 두면 발행 때 갱신되지 않아 옛 버전이 남는다 — 비워 둔다. -->
             <b id="rel-version"></b>
-            <a id="rel-notes" href="https://github.com/cosscad-prog/rcw-releases/releases/latest" target="_blank" rel="noopener" data-en="what changed">변경 내용</a>
+            <a id="rel-notes" href="https://github.com/cosscad-prog/rcw-releases/releases/latest" target="_blank" rel="noopener" data-en="release page">릴리스 페이지</a>
           </p>
+
+          <!-- 변경 안내는 releases.json 에서 온다(changes.js). 여기에 직접 적지 말 것 —
+               고객 페이지와 같은 내용을 두 곳에 적으면 반드시 어긋난다. -->
+          <div id="rcw-changes"></div>
 
           <!-- Rhino 7 은 정리 대상이다(2026-07-30 결정). 아직 쓰는 분이 있어 파일은
                계속 만들지만, 앞세우지 않고 접어 둔다. 주력 다운로드가 한곳에 모여야
@@ -301,6 +319,8 @@
       try{localStorage.setItem(KEY,l);}catch(e){}
     }
     function cur(){try{return localStorage.getItem(KEY)||'ko';}catch(e){return 'ko';}}
+    /* 화면을 만든 뒤에 끼워 넣는 것(변경 안내)에도 언어를 입혀야 한다. */
+    window.rcwLang={refresh:function(){apply(cur());}};
     function initLang(){apply(cur());
       document.addEventListener('click',function(e){
         var t=e.target.closest?e.target.closest('[data-lang-toggle]'):null;
@@ -452,5 +472,8 @@
     }
   })();
   </script>
+
+  <!-- 변경 안내 — 내용은 releases.json, 그리는 것은 changes.js (고객 페이지와 공용) -->
+  <script src="changes.js" defer></script>
 </body>
 </html>

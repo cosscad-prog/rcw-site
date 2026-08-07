@@ -50,6 +50,17 @@ if (-not (Test-Path $SourceDir)) {
     throw "릴리스 폴더를 찾을 수 없습니다: $SourceDir"
 }
 
+# 두 다운로드 페이지가 releases.json 의 맨 앞 항목을 "이번 버전에서 바뀐 것" 으로 보여준다.
+# 새 항목을 안 넣고 발행하면 새 파일에 옛 변경 안내가 붙는다 — 안내가 없는 것보다 나쁘다.
+$notesFile = Join-Path $PSScriptRoot 'releases.json'
+if (-not (Test-Path $notesFile)) {
+    throw "releases.json 을 찾을 수 없습니다: $notesFile"
+}
+$latestNote = (Get-Content -LiteralPath $notesFile -Raw | ConvertFrom-Json).releases[0]
+if ($latestNote.version -ne $Version) {
+    throw "releases.json 의 맨 앞이 $($latestNote.version) 입니다. $Version 항목을 먼저 넣으세요 — 두 다운로드 페이지가 이 파일을 그대로 보여줍니다."
+}
+
 # 업로드 이름에도 버전을 남긴다. 받는 사람의 다운로드 폴더에서 어느 빌드인지
 # 보이지 않으면 지원할 때 파일을 특정할 수 없기 때문이다. 파일명이 릴리스마다
 # 바뀌므로 사이트의 링크도 같이 고쳐야 하는데, 그 일은 이 스크립트가 아래에서

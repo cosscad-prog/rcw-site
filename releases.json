@@ -1,0 +1,37 @@
+{
+  "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 최신 하나만 펼쳐 보이고 나머지는 접힌다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다.",
+  "releases": [
+    {
+      "version": "5.0.14",
+      "date": "2026-08-07",
+      "items": [
+        {
+          "ko": "목록 명령의 엑셀 파일이 항상 만들어집니다. Cuttinglist · Molist · PMolist 등에서 엑셀이 생기지 않던 문제를 해결했습니다. <b>Excel 이나 Python 이 설치돼 있지 않아도 됩니다.</b>",
+          "en": "The list commands now always produce their Excel file. Cuttinglist, Molist, PMolist and the others could silently fail to create one. <b>Neither Excel nor Python needs to be installed.</b>"
+        },
+        {
+          "ko": "NBlock 을 선택하면 PMolist 표가 비어 있던 문제를 고쳤습니다.",
+          "en": "Fixed PMolist producing an empty table when an NBlock was selected."
+        },
+        {
+          "ko": "대화상자 글자가 겹치거나 잘려 보이던 문제를 고쳤습니다. 패널과 같은 글꼴로 맞췄습니다.",
+          "en": "Fixed overlapping and clipped text in dialog windows. They now use the same font as the panels."
+        },
+        {
+          "ko": "저장하지 않은 문서에서 목록 명령을 실행하면 Rhino 가 멈추던 문제를 고쳤습니다. 이제 먼저 저장하시라고 안내합니다.",
+          "en": "Fixed Rhino stopping when a list command ran on a document that had never been saved. It now asks you to save first."
+        }
+      ]
+    },
+    {
+      "version": "5.0.13",
+      "date": "2026-08-05",
+      "items": [
+        {
+          "ko": "Rhino 8 에서 RCW 명령이 하나도 나타나지 않던 문제를 고쳤습니다. 플러그인 자체가 로드되지 않던 상태였습니다.",
+          "en": "Fixed RCW commands not appearing at all in Rhino 8 — the plug-in itself was failing to load."
+        }
+      ]
+    }
+  ]
+}

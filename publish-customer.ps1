@@ -58,6 +58,17 @@ if (-not (Test-Path $SourceDir)) {
     throw "릴리스 폴더를 찾을 수 없습니다: $SourceDir"
 }
 
+# 고객 페이지도 releases.json 의 맨 앞 항목을 "이번 버전에서 바뀐 것" 으로 보여준다.
+# 새 항목을 안 넣고 발행하면 새 파일에 옛 변경 안내가 붙는다.
+$notesFile = Join-Path $PSScriptRoot 'releases.json'
+if (-not (Test-Path $notesFile)) {
+    throw "releases.json 을 찾을 수 없습니다: $notesFile"
+}
+$latestNote = (Get-Content -LiteralPath $notesFile -Raw | ConvertFrom-Json).releases[0]
+if ($latestNote.version -ne $Version) {
+    throw "releases.json 의 맨 앞이 $($latestNote.version) 입니다. $Version 항목을 먼저 넣으세요 — 두 다운로드 페이지가 이 파일을 그대로 보여줍니다."
+}
+
 # 커밋이 하나도 없는 저장소에는 릴리스를 만들 수 없다(태그가 가리킬 대상이 없어서).
 # 800MB 를 올리고 나서 실패하지 않도록 먼저 본다.
 gh api "repos/$Repo/commits?per_page=1" 2>$null | Out-Null
