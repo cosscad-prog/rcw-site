@@ -246,9 +246,6 @@
             <a id="rel-notes" href="https://github.com/cosscad-prog/rcw-releases/releases/latest" target="_blank" rel="noopener" data-en="release page">릴리스 페이지</a>
           </p>
 
-          <!-- 변경 안내는 releases.json 에서 온다(changes.js). 여기에 직접 적지 말 것 —
-               고객 페이지와 같은 내용을 두 곳에 적으면 반드시 어긋난다. -->
-          <div id="rcw-changes"></div>
 
           <!-- Rhino 7 은 정리 대상이다(2026-07-30 결정). 아직 쓰는 분이 있어 파일은
                계속 만들지만, 앞세우지 않고 접어 둔다. 주력 다운로드가 한곳에 모여야
@@ -288,6 +285,11 @@
           <a href="mailto:beimptech@gmail.com">beimptech@gmail.com</a>
         </div>
       </form>
+
+      <!-- 변경 안내 — 내용은 releases.json 하나뿐이고 changes.js 가 그린다.
+           ★신청 양식(form-card) 바깥에 둔다. 이미 트라이얼을 받아 본 사람이
+           "다시 받아야 하나" 를 보러 왔을 때, 양식을 또 채우지 않고도 보여야 한다. -->
+      <div id="rcw-changes"></div>
 
       <div class="spec-grid">
         <div class="spec-item"><b data-en="Host application">호스트 프로그램</b><span data-en="Rhino 8 for Windows. Rhino 7 builds are still provided.">Windows용 Rhino 8. Rhino 7 용도 계속 제공합니다.</span></div>

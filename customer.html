@@ -252,10 +252,6 @@
         <div class="dl-row" id="row-rhino7"></div>
       </div>
 
-      <!-- 변경 안내는 releases.json 에서 온다(changes.js). 여기에 직접 적지 말 것 —
-           평가판 페이지와 같은 내용을 두 곳에 적으면 반드시 어긋난다. -->
-      <div id="rcw-changes"></div>
-
       <!-- 설치 파일에 코드 서명이 아직 없다. 미리 알려주지 않으면 고객이 여기서 멈춘다.
            서명 인증서를 적용하면 이 안내는 지운다. -->
       <div class="notice">
@@ -304,6 +300,11 @@
         <button class="button" type="button" id="logout-btn" style="background:#fff;border-color:#c9d5ed;color:var(--blue-dark)" data-en="Sign out">나가기</button>
       </div>
     </section>
+
+    <!-- 변경 안내 — 내용은 releases.json 하나뿐이고 changes.js 가 그린다.
+         ★세 화면(로그인·정보확인·다운로드) 바깥에 둔다. 이미 쓰고 있는 고객이
+         "다시 받아야 하나" 를 보러 왔을 때, 로그인하기 전에 보여야 한다. -->
+    <div id="rcw-changes"></div>
 
   </div>
 </main>
