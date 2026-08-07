@@ -2,6 +2,20 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 맨 앞 3개만 나온다(changes.js 의 MAX): 최신 하나는 펼쳐지고 나머지 둘은 접힌다. 여기에 더 쌓아 두어도 되며 기록으로 남는다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.0.15",
+      "date": "2026-08-08",
+      "items": [
+        {
+          "ko": "영문으로 쓰실 때 BIM 데이터 입력창의 글자가 잘리고 탭 일부가 가려지던 문제를 고쳤습니다.",
+          "en": "Fixed clipped labels and hidden tabs in the BIM data dialog when the interface is in English."
+        },
+        {
+          "ko": "대화상자에서 긴 라벨이 옆 입력칸 위로 겹쳐 그려질 수 있던 문제를 고쳤습니다.",
+          "en": "Fixed a long label that could be drawn on top of the input box beside it."
+        }
+      ]
+    },
+    {
       "version": "5.0.14",
       "date": "2026-08-07",
       "items": [
