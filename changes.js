@@ -9,6 +9,11 @@
   var host = document.getElementById('rcw-changes');
   if (!host || !window.fetch) return;
 
+  /* 화면에 내놓는 최대 개수 — 맨 위 1개는 펼치고 나머지는 접는다.
+     releases.json 에는 더 쌓여도 되고(기록으로 남는다) 여기서 잘라 보여준다.
+     지금 받을지 판단하는 데 필요한 건 최근 몇 개뿐이라 페이지를 길게 만들지 않는다. */
+  var MAX = 3;
+
   function el(tag, cls) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -57,6 +62,7 @@
   function render(data) {
     var releases = (data && data.releases) || [];
     if (!releases.length) return;
+    if (releases.length > MAX) releases = releases.slice(0, MAX);
 
     var box = el('section', 'rcw-chg');
 
