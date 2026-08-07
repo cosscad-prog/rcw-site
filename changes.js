@@ -30,15 +30,27 @@
     return ul;
   }
 
-  /* 5.0.14 · 2026-08-07 — 날짜는 언어와 무관하므로 data-en 을 달지 않는다. */
-  function headNode(release) {
-    var b = el('b', 'rcw-chg-ver');
-    b.textContent = release.version || '';
-    var span = el('span', 'rcw-chg-date');
-    span.textContent = release.date ? ' · ' + release.date : '';
+  /* 최신버전: V5.0.14   2026-08-07
+     "최신버전:" 은 맨 위 항목에만 붙인다 — 접혀 있는 이전 버전에까지 붙으면 거짓말이 된다.
+     날짜는 언어와 무관하므로 data-en 을 달지 않는다. */
+  function headNode(release, isLatest) {
     var p = el('p', 'rcw-chg-head');
+
+    if (isLatest) {
+      var label = el('span', 'rcw-chg-label');
+      label.innerHTML = '최신버전:';
+      label.setAttribute('data-en', 'Latest version:');
+      p.appendChild(label);
+    }
+
+    var b = el('b', 'rcw-chg-ver');
+    b.textContent = 'V' + (release.version || '');
     p.appendChild(b);
+
+    var span = el('span', 'rcw-chg-date');
+    span.textContent = release.date || '';
     p.appendChild(span);
+
     return p;
   }
 
@@ -53,7 +65,7 @@
     title.setAttribute('data-en', "What's new in this version");
     box.appendChild(title);
 
-    box.appendChild(headNode(releases[0]));
+    box.appendChild(headNode(releases[0], true));
     box.appendChild(listNode(releases[0]));
 
     /* 이전 버전은 접어 둔다 — 지금 받을지 판단하는 데 필요한 건 맨 위 하나다. */
@@ -64,7 +76,7 @@
       sum.setAttribute('data-en', 'Earlier versions');
       det.appendChild(sum);
       for (var i = 1; i < releases.length; i++) {
-        det.appendChild(headNode(releases[i]));
+        det.appendChild(headNode(releases[i], false));
         det.appendChild(listNode(releases[i]));
       }
       box.appendChild(det);
