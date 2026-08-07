@@ -10,7 +10,6 @@
       ]
     },
     {
-      "comment": "발행할 때마다 바뀐다. 오래 물고 있으면 새 버전을 받은 사람이 옛 변경 안내를 본다.",
       "source": "/releases.json",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=60, must-revalidate" }
