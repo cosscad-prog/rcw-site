@@ -2,6 +2,28 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 맨 앞 3개만 나온다(changes.js 의 MAX): 최신 하나는 펼쳐지고 나머지 둘은 접힌다. 여기에 더 쌓아 두어도 되며 기록으로 남는다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.1.0",
+      "date": "2026-08-09",
+      "items": [
+        {
+          "ko": "<b>Milling — 프로파일 바를 원하는 단면 모양으로 깎을 수 있습니다.</b> 단면 평면에 닫힌 폴리라인을 그려 두면 그 모양대로 바를 절삭합니다. Pname 창의 새 <b>Milling</b> 탭에서 한 프로파일에 네 곳까지 지정할 수 있고, 간격·수량은 블록 삽입과 같은 방식으로 넣습니다.",
+          "en": "<b>Milling — cut a profile bar to any section shape.</b> Draw a closed polyline on the section plane and the bar is cut to match. The new <b>Milling</b> tab in Pname holds up to four per profile, and spacing and quantity work the same way they do for block insertion."
+        },
+        {
+          "ko": "<b>Erase · Acad_Join 명령이 추가되었습니다.</b> Erase 는 AutoCAD 의 ERASE 처럼 선택을 먼저 하든 나중에 하든 지워지고, Acad_Join 은 선택한 것을 한 번에 결합합니다. 곡선뿐 아니라 서피스와 폴리서피스도 됩니다.",
+          "en": "<b>New Erase and Acad_Join commands.</b> Erase deletes the way AutoCAD's ERASE does, whether you select before or after the command. Acad_Join joins a whole selection in one pass, and takes surfaces and polysurfaces as well as curves."
+        },
+        {
+          "ko": "Pname 창의 <b>Block Insert 와 Milling 탭 배치를 같게</b> 맞췄습니다. 탭을 오갈 때 입력칸이 움직이지 않고, 이름칸을 누르면 해당 블록이나 폴리라인에 번호가 표시되어 어느 것인지 바로 알 수 있습니다.",
+          "en": "The <b>Block Insert and Milling tabs now share one layout</b> in the Pname panel, so nothing moves as you switch between them. Clicking a slot's name marks the matching block or polyline with its number in the model."
+        },
+        {
+          "ko": "<b>블록 배열이 잘못 놓이던 세 가지를 고쳤습니다.</b> 수량을 1 로 두고 끝단 그룹을 함께 쓰면 블록 하나가 엉뚱한 곳에 생기던 것, 기준을 <b>By Line</b> 으로 두면 끝에서 블록 두 개가 겹치던 것, By Line 에서 등간격을 1/4·1/6·1/8 로 두면 좌우 대칭 두 개가 아니라 하나만 생기던 것입니다. <b>By Line 을 쓰신 기존 도면은 블록 개수가 달라질 수 있습니다</b> — 겹쳐 있던 것이 사라지거나, 빠져 있던 대칭 짝이 생깁니다.",
+          "en": "<b>Fixed three ways block arrays were placed wrongly.</b> A quantity of 1 combined with an end group put one block at an unusable position; with <b>By Line</b> selected two blocks landed on the same spot at the end; and By Line with 1/4, 1/6 or 1/8 spacing produced one block instead of the symmetric pair. <b>Existing drawings that use By Line may report a different block count</b> — an overlapping duplicate disappears, or a missing symmetric block appears."
+        }
+      ]
+    },
+    {
       "version": "5.0.15",
       "date": "2026-08-08",
       "items": [
