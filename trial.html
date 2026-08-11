@@ -336,14 +336,12 @@
 
   <script>
   /* ------------------------------------------------------------------
-     Trial 신청 → Supabase (trial_requests 테이블)
+     Trial 신청 → /api/trial → trial_requests 저장 + 텔레그램 알림
 
-     아래 키는 공개용(publishable)이다. RLS 정책상 INSERT 만 가능하며
-     저장된 신청 내역을 읽거나 지울 수는 없다.
-
-     TODO: 설치 파일이 준비되면 성공 문구를 다운로드 링크로 교체한다.
-           GitHub Releases 에 올린 뒤, alert-success 영역에
-           릴리스 URL 을 가리키는 다운로드 버튼을 추가하면 된다.
+     신청 저장만 서버 함수를 거친다(제품 문의와 같은 이유 — 접수를 바로 알아야
+     후속 연락이 된다). 아래 공개키는 **다운로드 클릭 기록에만** 남아 있다.
+     공개키로 할 수 있는 일은 RLS 가 허용한 INSERT 뿐이고, 저장된 내역을
+     읽거나 지울 수는 없다.
   ------------------------------------------------------------------ */
   (function(){
     var SUPABASE_URL = 'https://hzqbhxewftjkolwebkgy.supabase.co';
@@ -381,14 +379,9 @@
       btn.disabled = true;
       var requestId = newUuid();
 
-      fetch(SUPABASE_URL + '/rest/v1/trial_requests', {
+      fetch('/api/trial', {
         method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id:            requestId,
           name:          val('name'),
@@ -400,10 +393,13 @@
         })
       }).then(function (res) {
         if (!res.ok) return res.text().then(function (t) { throw new Error(res.status + ' ' + t); });
+        return res.json();
+      }).then(function (data) {
         // 다운로드 클릭을 이 신청과 연결하기 위해 방금 저장한 내용을 기억해 둔다.
-        // id 는 저장 전에 만들어 보냈으므로 되읽기가 필요 없다.
+        // ★ id 는 서버가 확인해 되돌려준 값을 쓴다. 보낸 값이 형식에 맞지 않으면
+        //   서버가 새로 만들어 저장하므로, 여기서 원래 값을 쓰면 연결이 끊긴다.
         submitted = {
-          request_id: requestId,
+          request_id: (data && data.request_id) || requestId,
           name:       val('name'),
           company:    val('company'),
           phone:      val('phone'),

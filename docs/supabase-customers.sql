@@ -9,7 +9,8 @@
 --   3. 익명(anon)에게는 아무 권한도 주지 않는다 ★
 --
 -- ★ 다른 테이블과 다른 점
---   contacts / trial_requests / downloads 는 브라우저가 공개키로 직접 INSERT 한다.
+--   downloads 는 브라우저가 공개키로 직접 INSERT 한다(contacts / trial_requests 는
+--   2026-08-11부터 api/contact.js · api/trial.js 를 거친다 — 텔레그램 알림 때문).
 --   고객 명부는 그러면 안 된다. 브라우저에 들어가는 공개키로 조회가 열리면
 --   고객 전체 명단이 유출된다. 그래서 이 두 테이블에는 anon 정책을 하나도 만들지
 --   않고, 서버리스 함수(api/customer-login.js)가 service key 로만 접근한다.

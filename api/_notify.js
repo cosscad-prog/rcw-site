@@ -161,4 +161,42 @@ async function notifyContact(info) {
   }
 }
 
-module.exports = { notifyLicenseRequest, notifyContact, maskCode, maskMachine, kstStamp };
+/**
+ * Trial 신청이 들어왔다고 알린다 (api/trial.js).
+ *
+ * 문의 알림과 같은 형식이다. 다른 점은 신청서 항목(규모·목적)이 함께 온다는 것뿐이다.
+ *
+ * @param {object} info  name, company, email, phone, project_scale, purpose
+ */
+async function notifyTrialRequest(info) {
+  try {
+    const who = [info.company, info.name].filter(Boolean).join('  ') || '(이름 미기재)';
+
+    const lines = [
+      '🧪 <b>RCW Trial 신청</b>',
+      '',
+      `신청자 ${esc(who)}`,
+      `메일   ${esc(info.email || '-')}`,
+      `연락처 ${esc(info.phone || '-')}`
+    ];
+    if (info.project_scale) lines.push(`규모   ${esc(info.project_scale)}`);
+    lines.push(`접수   ${kstStamp(new Date())} KST`);
+
+    if (info.purpose) {
+      const raw = String(info.purpose).trim();
+      const purpose = raw.length > 1000 ? raw.slice(0, 1000) + ' …(생략)' : raw;
+      // 태그로 감싸지 않는다 — 파스모드가 처리 못 하는 태그가 하나만 있어도
+      // 텔레그램이 400 을 돌려주고 알림이 통째로 사라진다.
+      lines.push('', '─────────────', esc(purpose));
+    }
+
+    await sendTelegram(lines.join('\n'));
+  } catch (err) {
+    console.error('[notify] Trial 알림 생성 실패:', err.message);
+  }
+}
+
+module.exports = {
+  notifyLicenseRequest, notifyContact, notifyTrialRequest,
+  maskCode, maskMachine, kstStamp
+};

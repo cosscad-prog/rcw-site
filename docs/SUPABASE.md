@@ -71,21 +71,22 @@ anon 키는 **공개를 전제로 만들어진 키**다. 이 키로 할 수 있�
 
 3단계의 두 값을 알려주면 `contact.html` 과 `trial.html` 에 반영한다.
 
-⚠️ **제품 문의(`contact.html`)는 2026-08-11부터 공개키를 쓰지 않는다.**
-브라우저 → `/api/contact`(Vercel 함수, service key) → `contacts` 저장 → **텔레그램 알림** 순서다.
-`trial.html` 만 아직 공개키로 직접 넣는다. `contacts` 의 anon INSERT 정책은 남겨 두었지만
-이제 아무도 쓰지 않는다(되돌릴 때를 위한 것).
+⚠️ **제품 문의와 Trial 신청은 2026-08-11부터 공개키로 넣지 않는다.**
+브라우저 → `/api/contact` · `/api/trial`(Vercel 함수, service key) → 저장 → **텔레그램 알림** 순서다.
+공개키가 아직 쓰이는 곳은 **`trial.html` 의 다운로드 클릭 기록(`downloads`)** 하나뿐이다.
+`contacts` / `trial_requests` 의 anon INSERT 정책은 남겨 두었지만 이제 아무도 쓰지 않는다
+(되돌릴 때를 위한 것).
 
 ---
 
 ## 5단계 — 알림
 
-**제품 문의는 텔레그램으로 온다** (2026-08-11 적용). 설정은 라이선스 요청 알림과 같은 것을
-그대로 쓴다 — Vercel 환경변수 `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` 하나뿐이고,
-보내는 코드는 `api/_notify.js` 의 `notifyContact()` 다. 자세한 것은 `docs/CUSTOMER_PORTAL.md`.
+**제품 문의와 Trial 신청은 텔레그램으로 온다** (2026-08-11 적용). 설정은 라이선스 요청 알림과
+같은 것을 그대로 쓴다 — Vercel 환경변수 `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` 둘뿐이고,
+보내는 코드는 `api/_notify.js` 의 `notifyContact()` / `notifyTrialRequest()` 다.
+자세한 것은 `docs/CUSTOMER_PORTAL.md`.
 
-아래 Resend + Edge Function 방식은 **대안**이다(메일로 받고 싶을 때, 또는 `trial_requests`
-접수까지 알림을 붙이고 싶을 때). 지금 제품 문의만 놓고 보면 할 필요가 없다.
+아래 Resend + Edge Function 방식은 **대안**이다(메일로 받고 싶을 때). 지금은 할 필요가 없다.
 
 이 설정을 하지 않으면 Supabase 대시보드에 직접 들어가야 접수를 확인할 수 있다.
 
