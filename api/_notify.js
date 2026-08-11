@@ -124,4 +124,41 @@ async function notifyLicenseRequest(info) {
   }
 }
 
-module.exports = { notifyLicenseRequest, maskCode, maskMachine, kstStamp };
+/**
+ * 홈페이지 제품 문의가 들어왔다고 알린다 (api/contact.js).
+ *
+ * 라이선스 알림과 달리 연락처를 가리지 않는다. 이 알림을 보고 바로 답장·전화를
+ * 해야 하는데 가려 놓으면 결국 대시보드를 열어야 하기 때문이다.
+ *
+ * @param {object} info  name, company, phone, email, message, source_page
+ */
+async function notifyContact(info) {
+  try {
+    const who = [info.company, info.name].filter(Boolean).join('  ') || '(이름 미기재)';
+
+    // 텔레그램 메시지 상한은 4096자다. 본문은 5000자까지 받으므로 여기서 줄인다.
+    const raw = String(info.message || '').trim();
+    const message = raw.length > 1200 ? raw.slice(0, 1200) + ' …(생략)' : raw;
+
+    const lines = [
+      '✉️ <b>RCW 제품 문의</b>',
+      '',
+      `보낸이 ${esc(who)}`,
+      `메일   ${esc(info.email || '-')}`
+    ];
+    if (info.phone) lines.push(`연락처 ${esc(info.phone)}`);
+    lines.push(`접수   ${kstStamp(new Date())} KST`);
+    if (info.source_page && info.source_page !== '/contact') {
+      lines.push(`경로   ${esc(info.source_page)}`);
+    }
+    // 본문은 태그로 감싸지 않는다. 파스모드에서 처리 못 하는 태그가 하나라도 있으면
+    // 텔레그램이 400 을 돌려주고 알림이 통째로 사라진다(로그에만 남는다).
+    lines.push('', '─────────────', esc(message));
+
+    await sendTelegram(lines.join('\n'));
+  } catch (err) {
+    console.error('[notify] 문의 알림 생성 실패:', err.message);
+  }
+}
+
+module.exports = { notifyLicenseRequest, notifyContact, maskCode, maskMachine, kstStamp };

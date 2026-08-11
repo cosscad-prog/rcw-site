@@ -71,9 +71,21 @@ anon 키는 **공개를 전제로 만들어진 키**다. 이 키로 할 수 있�
 
 3단계의 두 값을 알려주면 `contact.html` 과 `trial.html` 에 반영한다.
 
+⚠️ **제품 문의(`contact.html`)는 2026-08-11부터 공개키를 쓰지 않는다.**
+브라우저 → `/api/contact`(Vercel 함수, service key) → `contacts` 저장 → **텔레그램 알림** 순서다.
+`trial.html` 만 아직 공개키로 직접 넣는다. `contacts` 의 anon INSERT 정책은 남겨 두었지만
+이제 아무도 쓰지 않는다(되돌릴 때를 위한 것).
+
 ---
 
-## 5단계 — 메일 알림
+## 5단계 — 알림
+
+**제품 문의는 텔레그램으로 온다** (2026-08-11 적용). 설정은 라이선스 요청 알림과 같은 것을
+그대로 쓴다 — Vercel 환경변수 `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` 하나뿐이고,
+보내는 코드는 `api/_notify.js` 의 `notifyContact()` 다. 자세한 것은 `docs/CUSTOMER_PORTAL.md`.
+
+아래 Resend + Edge Function 방식은 **대안**이다(메일로 받고 싶을 때, 또는 `trial_requests`
+접수까지 알림을 붙이고 싶을 때). 지금 제품 문의만 놓고 보면 할 필요가 없다.
 
 이 설정을 하지 않으면 Supabase 대시보드에 직접 들어가야 접수를 확인할 수 있다.
 
@@ -157,7 +169,15 @@ Deno.serve(async (req) => {
 **폼 제출 시 401 / 403 오류**
 → anon 키가 잘못됐거나 RLS 정책이 없다. 2단계 확인 쿼리를 다시 실행해 볼 것
 
-**메일이 안 옴**
+**문의 텔레그램이 안 옴** (문의는 저장돼 있는 경우)
+→ Vercel → 프로젝트 → **Logs** 에서 `/api/contact` 실행 기록을 본다. `[notify]` 줄에 이유가 남는다.
+   ★환경변수를 **등록만 하고 Redeploy 를 안 하면** 함수가 값을 못 본다 — 라이선스 알림 때 실제로 걸렸다
+
+**문의 자체가 안 들어옴**
+→ `/api/contact` 가 500 이면 `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` 환경변수를 먼저 본다.
+   화면에는 "전송 중 문제가 발생했습니다 + 메일 주소" 가 뜨므로 고객은 메일로 우회할 수 있다
+
+**메일이 안 옴** (5단계 Resend 방식을 쓰는 경우)
 → Edge Functions → notify → **Logs** 에서 실행 기록과 오류를 확인.
    `RESEND_API_KEY` 가 등록되어 있는지 먼저 볼 것
 

@@ -199,17 +199,14 @@
 
   <script>
   /* ------------------------------------------------------------------
-     문의 폼 → Supabase
+     문의 폼 → /api/contact → Supabase + 텔레그램 알림
 
-     아래 키는 공개용(publishable)이다. 이 키로 할 수 있는 일은
-     DB 의 RLS 정책이 허용한 범위 — contacts 테이블에 INSERT 하는 것뿐이며,
-     저장된 문의를 읽거나 지울 수는 없다.
+     예전에는 여기서 공개키로 Supabase 에 직접 넣었다. 저장은 됐지만
+     대시보드를 열기 전에는 문의가 온 줄을 몰라, 서버 함수를 한 단계 거치게
+     바꿨다(api/contact.js). 접수 직후 운영자 휴대폰으로 알림이 간다.
      설정 내용은 docs/SUPABASE.md 와 docs/supabase-setup.sql 참조.
   ------------------------------------------------------------------ */
   (function(){
-    var SUPABASE_URL = 'https://hzqbhxewftjkolwebkgy.supabase.co';
-    var SUPABASE_KEY = 'sb_publishable_QQ0M4AO9cIqf6pvBHCXuVA_AVehhSwC';
-
     var form   = document.getElementById('contact-form');
     var btn    = document.getElementById('submit-btn');
     var okBox  = document.getElementById('alert-success');
@@ -230,14 +227,9 @@
 
       btn.disabled = true;
 
-      fetch(SUPABASE_URL + '/rest/v1/contacts', {
+      fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name:        val('name'),
           company:     val('company'),
