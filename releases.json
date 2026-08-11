@@ -2,6 +2,24 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 맨 앞 3개만 나온다(changes.js 의 MAX): 최신 하나는 펼쳐지고 나머지 둘은 접힌다. 여기에 더 쌓아 두어도 되며 기록으로 남는다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.1.1",
+      "date": "2026-08-11",
+      "items": [
+        {
+          "ko": "<b>모양이 같은 부재에 서로 다른 가공번호가 매겨지던 것을 고쳤습니다.</b> 특히 브라켓처럼 같은 것이 여러 개 붙는 부재에서, 하나로 묶여야 할 32개가 28개의 번호로 흩어지는 일이 있었습니다. 부재 길이에 따라 나타나기도 하고 안 나타나기도 해서 눈에 잘 띄지 않았습니다. <b>5.1.0 이하로 뽑으신 가공번호는 다시 확인하십시오</b> — FabNo 를 다시 실행하면 같은 것끼리 하나의 번호로 모입니다. 번호가 바뀌면 가공도와 목록도 다시 뽑아야 합니다.",
+          "en": "<b>Fixed identical parts being given different fabrication numbers.</b> It showed up most on parts that repeat, such as brackets: 32 that should have shared one number came out as 28. Whether it appeared depended on the part's length, so it was easy to miss. <b>Check any fabrication numbers produced with 5.1.0 or earlier</b> — running FabNo again groups identical parts under one number. If numbers change, the drawings and lists need to be produced again."
+        },
+        {
+          "ko": "<b>가공도에 연결 부재의 단면이 엉뚱하게 그려지던 것을 고쳤습니다.</b> 멀리언 가공도에 트랜섬 단면이 나와야 할 자리에, 단면 대신 부재를 길이 방향으로 자른 긴 선들이 그려졌습니다. 이제 연결 부재의 단면 모양이 제대로 나옵니다.",
+          "en": "<b>Fixed the connecting member's section being drawn the wrong way in fabrication drawings.</b> Where a transom's section belonged on a mullion drawing, long lines cut along the member's length appeared instead. The section now comes out with the member's true profile shape."
+        },
+        {
+          "ko": "FabNo 를 실행할 때마다 가공번호 글자가 <b>실행 회차별 레이어</b>(Run_1, Run_2 …)에 회차마다 다른 색으로 들어갑니다. 이전에는 같은 레이어에 겹쳐 쌓여 어느 실행의 번호인지 구분할 수 없었습니다.",
+          "en": "Each FabNo run now writes its number text to <b>its own layer</b> (Run_1, Run_2 …) in a colour of its own. Previously every run piled onto the same layer, so there was no telling which run a number came from."
+        }
+      ]
+    },
+    {
       "version": "5.1.0",
       "date": "2026-08-09",
       "items": [
