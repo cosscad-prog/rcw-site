@@ -15,6 +15,7 @@ const {
   db, normalizeMachineCode, MACHINE_CODE_RE, editionOfMachineCode,
   clientIp, userAgent, readBody, findCustomerByCode
 } = require('./_rcw');
+const { notifyLicenseRequest } = require('./_notify');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -30,7 +31,8 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const customer = await findCustomerByCode(body.code, 'id,edition,status');
+    // name/company/machine_code 는 알림 문구에만 쓴다(누가 요청했는지, 보류될 건인지).
+    const customer = await findCustomerByCode(body.code, 'id,edition,status,name,company,machine_code');
     if (!customer) return res.status(401).json({ error: 'invalid_code' });
     if (customer.status !== 'active') return res.status(403).json({ error: 'suspended' });
 
@@ -65,6 +67,26 @@ module.exports = async function handler(req, res) {
         ip: clientIp(req),
         user_agent: userAgent(req)
       })
+    });
+
+    // 발급기는 스스로 켜지지 않는다. 요청이 들어온 것을 사람이 알아야 켤 수 있으므로
+    // 여기서 알린다. notifyLicenseRequest 는 안에서 모든 예외를 삼키므로
+    // 알림이 실패해도 이 요청은 정상 접수로 끝난다.
+    let pendingCount;
+    try {
+      const pending = await db('license_requests?select=id&status=eq.pending');
+      if (Array.isArray(pending)) pendingCount = pending.length;
+    } catch { /* 건수는 있으면 좋은 정보일 뿐이다 */ }
+
+    await notifyLicenseRequest({
+      company: customer.company,
+      name: customer.name,
+      licenseCode: body.code,
+      edition: customer.edition,
+      machineCode,
+      // 이미 다른 기기가 등록돼 있으면 1고객 1대 원칙에 걸려 발급기가 보류한다.
+      heldLikely: Boolean(customer.machine_code) && customer.machine_code !== machineCode,
+      pendingCount
     });
 
     return res.status(200).json({ status: 'pending' });
