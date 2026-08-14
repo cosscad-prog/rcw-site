@@ -2,6 +2,36 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 맨 앞 3개만 나온다(changes.js 의 MAX): 최신 하나는 펼쳐지고 나머지 둘은 접힌다. 여기에 더 쌓아 두어도 되며 기록으로 남는다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.1.2",
+      "date": "2026-08-14",
+      "items": [
+        {
+          "ko": "<b>Rhino 를 켰을 때 패널이 빈 채로 열리던 것을 고쳤습니다.</b> 패널을 열어 둔 상태로 Rhino 를 끄면 다음에 켤 때 그 패널이 \"Container is empty\" 라는 문구만 있는 빈 창으로 나왔고, 닫았다 다시 열어도 채워지지 않아 Rhino 를 다시 시작해야 했습니다.",
+          "en": "<b>Fixed panels opening empty when Rhino starts.</b> A panel left open when Rhino closed came back as an empty window reading \"Container is empty\", and closing and reopening it did not help - only restarting Rhino did."
+        },
+        {
+          "ko": "<b>가공도에서 얇은 노칭이 빠지던 것을 고쳤습니다.</b> 넓게 파였어도 깊이가 얕으면(예: 20×6 인데 깊이 1.2mm) 가공 흔적으로 잘못 판단해 도면에 표시하지 않았습니다. 이제 깊이가 얕아도 파인 면적이 충분하면 노칭으로 표시합니다. <b>얕은 노칭이 있는 부재의 가공도는 다시 뽑아 확인하십시오.</b>",
+          "en": "<b>Fixed shallow notches missing from fabrication drawings.</b> A notch cut broad but shallow - 20 by 6 at a depth of 1.2mm, for instance - was taken for a tool mark and left off the drawing. Depth alone no longer decides: a shallow cut is kept when the area it covers is large enough. <b>Re-issue the drawings for any part with shallow notches.</b>"
+        },
+        {
+          "ko": "<b>단면 그룹을 복사해 쓸 때 블록이 엉뚱한 자리에 생기던 것을 고쳤습니다.</b> 그룹을 복사하면 블록 등록만 원본 그룹의 블록을 계속 가리켜, 모델링하면 블록이 원본 자리로 갔습니다. 이제 SSP 로 그룹을 고를 때 그 그룹 안의 같은 블록으로 바로잡고, 바로잡을 수 없으면 어느 프로파일의 어느 블록이 문제인지 알려 줍니다.",
+          "en": "<b>Fixed blocks appearing at the wrong place when a section group is copied.</b> Copying a group left its block registrations pointing at the original group's blocks, so modelling put the blocks back where the original stands. Selecting the group with SSP now repoints them to that group's own blocks, and where it cannot, it reports which block on which profile is at fault."
+        },
+        {
+          "ko": "<b>Standard 에 Bmt · Udt 두 명령이 들어갔습니다.</b> 와이어프레임 라인마다 쓸 단면을 직접 지정해 부재를 세우고(Bmt), 그렇게 지정한 유닛을 모델링합니다(Udt). 한 레이어에 서로 다른 단면을 섞어 쓸 수 있어, 레이어로 단면을 가르는 방식으로는 만들 수 없던 유닛을 다룰 수 있습니다.",
+          "en": "<b>Bmt and Udt are now part of Standard.</b> Bmt raises a member from a wireframe line with the section you pick for that line, and Udt models the unit built that way. One layer can carry several different sections, which lets you model units that the layer-per-section approach cannot express."
+        },
+        {
+          "ko": "<b>쓰고 계신 버전을 확인하는 RCWVersion 명령이 추가되었습니다.</b> Rhino 를 켜면 명령창 첫 줄에도 같은 내용이 나옵니다 — 지원 문의 때 이 줄을 알려 주시면 됩니다.",
+          "en": "<b>New RCWVersion command tells you which build you are running.</b> The same line appears in the command line when Rhino starts; quote it when you contact support."
+        },
+        {
+          "ko": "블록 패널이 <b>블록을 어느 폴더에서 읽는지 표시</b>하고, 그 폴더를 바로 열 수 있습니다. 목록에 나오지 않는 파일은 이유(블록 정의가 없음, 이름이 겹침 등)를 함께 보여 줍니다.",
+          "en": "The block panel now <b>shows the folder it reads blocks from</b> and opens it for you. Files that do not appear in the list are listed with the reason, such as holding no block definition or repeating a name already shown."
+        }
+      ]
+    },
+    {
       "version": "5.1.1",
       "date": "2026-08-11",
       "items": [
