@@ -9,10 +9,10 @@
   var host = document.getElementById('rcw-changes');
   if (!host || !window.fetch) return;
 
-  /* 화면에 내놓는 최대 개수 — 맨 위 1개는 펼치고 나머지는 접는다.
-     releases.json 에는 더 쌓여도 되고(기록으로 남는다) 여기서 잘라 보여준다.
-     지금 받을지 판단하는 데 필요한 건 최근 몇 개뿐이라 페이지를 길게 만들지 않는다. */
-  var MAX = 3;
+  /* releases.json 에 있는 것을 <b>전부</b> 내놓는다(2026-08-14).
+     맨 위 하나만 펼치고, 이전 버전은 <b>한 줄에 하나씩</b> 접어 둔다 — 눌러야 내용이 보인다.
+     전에는 3개까지만 그렸는데, 그러면 "그때 무엇을 고쳤는지" 를 되짚을 수가 없었다.
+     사용자는 어차피 다 읽지 않는다. 접혀 있으면 페이지는 짧고, 필요한 사람만 펼쳐 본다. */
 
   function el(tag, cls) {
     var n = document.createElement(tag);
@@ -59,10 +59,27 @@
     return p;
   }
 
+  /* 접힌 이전 버전 한 줄: ▸ V5.1.1   2026-08-11 — 누르면 그 버전의 항목이 펼쳐진다. */
+  function collapsedNode(release) {
+    var det = el('details', 'rcw-chg-item');
+    var sum = el('summary');
+
+    var b = el('b', 'rcw-chg-ver');
+    b.textContent = 'V' + (release.version || '');
+    sum.appendChild(b);
+
+    var span = el('span', 'rcw-chg-date');
+    span.textContent = release.date || '';
+    sum.appendChild(span);
+
+    det.appendChild(sum);
+    det.appendChild(listNode(release));
+    return det;
+  }
+
   function render(data) {
     var releases = (data && data.releases) || [];
     if (!releases.length) return;
-    if (releases.length > MAX) releases = releases.slice(0, MAX);
 
     var box = el('section', 'rcw-chg');
 
@@ -74,18 +91,20 @@
     box.appendChild(headNode(releases[0], true));
     box.appendChild(listNode(releases[0]));
 
-    /* 이전 버전은 접어 둔다 — 지금 받을지 판단하는 데 필요한 건 맨 위 하나다. */
+    /* 이전 버전은 버전마다 한 줄로 접어 둔다. 지금 받을지 판단하는 데 필요한 건 맨 위 하나이고,
+       나머지는 "언제 무엇이 바뀌었나" 를 되짚을 때만 펼치면 된다. */
     if (releases.length > 1) {
-      var det = el('details', 'rcw-chg-prev');
-      var sum = el('summary');
-      sum.innerHTML = '이전 버전';
-      sum.setAttribute('data-en', 'Earlier versions');
-      det.appendChild(sum);
-      for (var i = 1; i < releases.length; i++) {
-        det.appendChild(headNode(releases[i], false));
-        det.appendChild(listNode(releases[i]));
-      }
-      box.appendChild(det);
+      var prev = el('div', 'rcw-chg-prev');
+
+      var head = el('p', 'rcw-chg-head');
+      var label = el('span', 'rcw-chg-label');
+      label.innerHTML = '이전 버전';
+      label.setAttribute('data-en', 'Earlier versions');
+      head.appendChild(label);
+      prev.appendChild(head);
+
+      for (var i = 1; i < releases.length; i++) prev.appendChild(collapsedNode(releases[i]));
+      box.appendChild(prev);
     }
 
     host.appendChild(box);

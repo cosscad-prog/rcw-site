@@ -93,6 +93,11 @@
     .rcw-chg-prev summary { cursor:pointer; color:var(--muted); font-size:13px; font-weight:700; }
     .rcw-chg-prev summary:hover { color:var(--blue-dark); }
     .rcw-chg-prev .rcw-chg-head { margin-top:10px; }
+    /* 이전 버전 한 줄(접힘). 눌러야 그 버전의 항목이 보인다. */
+    .rcw-chg-item { margin:2px 0; }
+    .rcw-chg-item > summary { padding:4px 0; }
+    .rcw-chg-item[open] { margin-bottom:12px; }
+    .rcw-chg-item[open] > summary { margin-bottom:6px; }
 
     /* 라이선스 발급 결과 카드.
        예전엔 여기서도 .dl-row/.dl-btn 을 썼는데, 세로 배치(flex-direction:column)에서는

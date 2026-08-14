@@ -103,6 +103,11 @@
     .rcw-chg-prev summary { cursor:pointer; color:#3f7359; font-size:12.5px; font-weight:700; }
     .rcw-chg-prev summary:hover { color:var(--blue-dark); }
     .rcw-chg-prev .rcw-chg-head { margin-top:9px; }
+    /* 이전 버전 한 줄(접힘). 눌러야 그 버전의 항목이 보인다. */
+    .rcw-chg-item { margin:2px 0; }
+    .rcw-chg-item > summary { padding:3px 0; }
+    .rcw-chg-item[open] { margin-bottom:11px; }
+    .rcw-chg-item[open] > summary { margin-bottom:5px; }
 
     .dl-legacy { margin-top:14px; }
     .dl-legacy summary { cursor:pointer; color:#3f7359; font-size:12.5px; font-weight:700; }
