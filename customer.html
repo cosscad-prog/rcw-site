@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="RCW V5 고객 전용 다운로드 — 구매하실 때 받으신 고객 코드로 로그인하시면 최신 버전을 받으실 수 있습니다.">
+  <meta name="description" content="RCW V5 고객 전용 다운로드 — 메일로 받으신 고객 코드(RCW-)로 로그인하시면 최신 버전을 받으실 수 있습니다.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#ffffff">
   <title>고객 다운로드 — RCW V5</title>
@@ -141,7 +141,7 @@
   <div class="wrap">
     <p class="eyebrow" data-en="Customers">고객 전용</p>
     <h1 data-en="Download the latest version">최신 버전 다운로드</h1>
-    <p class="lead" data-en="Enter the customer code we emailed you when you purchased. It starts with V5KO- and stays the same for good - the same code every time, on any PC.">구매하실 때 메일로 보내 드린 <b>고객 코드</b>를 입력해 주세요. <b>V5KO-</b> 로 시작하며, <b>바뀌지 않습니다</b> — PC 를 바꾸셔도 늘 같은 코드입니다.</p>
+    <p class="lead" data-en="Enter the customer code we emailed you. It starts with RCW- and stays the same for good - the same code every time, on any PC. Codes issued before August 2026 start with V5KO- and still work.">메일로 보내 드린 <b>고객 코드</b>를 입력해 주세요. <b>RCW-</b> 로 시작하며, <b>바뀌지 않습니다</b> — PC 를 바꾸셔도 늘 같은 코드입니다. 2026년 8월 이전에 받으신 <b>V5KO-</b> 코드도 그대로 쓰실 수 있습니다.</p>
   </div>
 </section>
 
@@ -154,7 +154,7 @@
         <div class="field">
           <label for="f-code" data-en="Customer code">고객 코드</label>
           <input id="f-code" name="code" type="text" required autocomplete="off" spellcheck="false"
-                 placeholder="V5KO-XXXXXXXXXXXX" aria-describedby="code-help">
+                 placeholder="RCW-XXXX-XXXX-XXXX" aria-describedby="code-help">
         </div>
         <div class="form-actions">
           <button class="button" type="submit" id="login-btn" data-en="Continue">확인</button>
@@ -170,7 +170,7 @@
              서버에 물어보기 전에 여기서 알려 준다. -->
         <div class="alert error" id="alert-machine" role="alert">
           <b data-en="That is the machine code.">그건 머신코드입니다.</b>
-          <span data-en="RCW5- is what your PC shows when you request a license. Here you need the customer code we emailed you when you purchased - it starts with V5KO-.">RCW5- 로 시작하는 값은 라이선스를 <b>신청할 때</b> PC 가 알려주는 코드입니다. 여기에는 구매하실 때 메일로 받으신 <b>고객 코드</b>가 필요합니다 — <b>V5KO-</b> 로 시작합니다.</span>
+          <span data-en="RCW5- is what your PC shows when you request a license. Here you need the customer code we emailed you - it starts with RCW- (or V5KO- if you received it before August 2026).">RCW5- 로 시작하는 값은 라이선스를 <b>신청할 때</b> PC 가 알려주는 코드입니다. 여기에는 메일로 받으신 <b>고객 코드</b>가 필요합니다 — <b>RCW-</b> 로 시작합니다(2026년 8월 이전에 받으신 <b>V5KO-</b> 코드도 됩니다).</span>
         </div>
         <div class="alert error" id="alert-limit" role="alert">
           <b data-en="Too many attempts.">시도가 너무 많습니다.</b>

@@ -1,4 +1,4 @@
-<#
+﻿<#
   고객 코드 만들기 (한 명)
 
   신규 고객이 생겼을 때 쓴다. 코드 하나를 만들고, 명부에 넣을 INSERT 문과
@@ -47,8 +47,17 @@ if ([string]::IsNullOrWhiteSpace($Company) -and [string]::IsNullOrWhiteSpace($Na
     throw "회사명이나 담당자 이름 중 최소 하나는 주셔야 합니다. -Company 또는 -Name"
 }
 
-# 발급기가 만드는 것과 같은 형식이라 고객이 헷갈리지 않는다. 48비트 무작위.
-$code = 'V5KO-' + ([Guid]::NewGuid().ToString('N').Substring(0, 12).ToUpperInvariant())
+# 고객 코드 형식: RCW-XXXX-XXXX-XXXX (2026-08-24 부터)
+#   ★ 전에는 V5KO- 였는데 **라이선스 파일(.lic) 번호와 모양이 같아** 고객이
+#     무엇으로 로그인하는지 구분하지 못했다. 실제로 .lic 이름으로 들어오는 고객이 생겼다.
+#     이제 고객 코드는 RCW-, 라이선스 번호는 V5KO- 로 갈린다.
+#   ★ 글자에서 0 O 1 I L 을 뺐다 — 전화로 불러 주거나 손으로 옮겨 적을 때 사고를 낸다.
+$alphabet = '23456789ABCDEFGHJKMNPQRSTVWXYZ'.ToCharArray()
+$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+$bytes = New-Object byte[] 12
+$rng.GetBytes($bytes); $rng.Dispose()
+$picked = -join ($bytes | ForEach-Object { $alphabet[$_ % $alphabet.Length] })
+$code = 'RCW-' + $picked.Substring(0, 4) + '-' + $picked.Substring(4, 4) + '-' + $picked.Substring(8, 4)
 $today = (Get-Date).ToString('yyyy-MM-dd')
 if ([string]::IsNullOrWhiteSpace($Note)) { $Note = "신규 $today" }
 
