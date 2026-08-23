@@ -18,6 +18,21 @@ TimeSpan sinceRelease = DateTime.Now - BuildInfo.BuildDate;   // BuildDate.cs
 if (sinceRelease.TotalDays > 30 || sinceRelease.TotalDays < 0) { ShowExpiredMessage(); return false; }
 ```
 
+### ★ 이 30 은 체험 기간(`TRIAL_DAYS`)과 **다른 숫자**다
+
+| | 값 | 에디션별인가 |
+|---|---|---|
+| 체험 기간 `TRIAL_DAYS` | Core **90일** / Standard **30일** | ✅ `#if RCW_STANDARD` 로 갈린다 |
+| 설치본 유통기한 | **30일** — `:241` 에 리터럴로 박혀 있고 `#if` 블록 **바깥** | ❌ Core 도 30일 |
+
+**Standard 만 두 값이 우연히 같아서 헷갈리기 딱 좋다.** Core 는 "빌드 후 30일 안에 설치를
+시작하면, 거기서부터 90일" 이다. 기한 하루 전에 설치한 Core 사용자도 90일을 온전히 쓴다.
+
+```
+빌드 ──── 설치를 시작할 수 있는 창 30일 ────▶ 기한
+             설치 ──── Core 90일 / Standard 30일 ────▶ 체험 종료
+```
+
 - **이미 쓰고 있는 사람은 영향 없다.** 시작일이 레지스트리 3곳 + 숨김파일 2곳에 박혀 있다
 - **새로 받는 사람만** 막힌다. 화면에는 "평가판이 너무 오래되었다" 만 나온다
 - 즉 **트라이얼은 최소 한 달에 한 번 새로 빌드해 발행해야** 신규 유입이 끊기지 않는다
