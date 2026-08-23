@@ -464,6 +464,15 @@
           lang:       m[3] || null,   // 설치할 때 고르므로 파일명으로는 알 수 없다
           file_name:  fileName
         })
+      }).then(function (res) {
+        // ★ fetch 는 401/400 을 예외로 보지 않는다 — 여기서 직접 보지 않으면
+        //   거부당한 것을 아무도 모른다. 실제로 그래서 2026-07-26 ~ 08-24 의
+        //   다운로드 기록이 한 줄도 남지 않았다(RLS 정책 누락 + lang NOT NULL).
+        if (!res.ok) {
+          res.text().then(function (t) {
+            console.error('[trial] 다운로드 기록 거부됨:', res.status, t);
+          });
+        }
       }).catch(function (err) {
         // 기록 실패가 다운로드를 막아서는 안 된다
         console.error('[trial] 다운로드 기록 실패:', err);
