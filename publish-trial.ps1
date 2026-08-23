@@ -148,6 +148,11 @@ function Show-TrialShelfLife {
 $tag = "v$Version-trial"
 
 # 릴리스 노트 — 사이트가 "릴리스 페이지의 SHA-256 과 대조하라"고 안내하므로 반드시 싣는다
+#
+# ⚠️ "Core 를 끝까지 쓴 뒤에도 Standard 30일을 온전히 쓸 수 있다" 는 문장은 뺐다
+#    (2026-08-24 사용자 결정). 사실이기는 하지만 **체험을 이어 붙이는 방법을 우리가
+#    먼저 알려 주는 꼴**이다. 스스로 찾아서 하면 막지 않되 권하지는 않는다.
+#    다시 넣지 말 것.
 $hashRows = ($plan | ForEach-Object { '| `{0}` | {1:N1} MB | `{2}` |' -f $_.UploadName, $_.SizeMB, $_.Sha256 }) -join "`n"
 $notes = @"
 RCW V5 $Version 트라이얼
@@ -157,7 +162,6 @@ RCW V5 $Version 트라이얼
 | Core Trial | 프레임 · 유리 · 백패널 전 과정 | 90일 |
 | Standard Trial | 전체 기능(Vent · Grill · BIM 데이터 추가) | 30일 |
 
-두 트라이얼은 시작일을 따로 기록하므로, Core 를 끝까지 써 본 뒤에도 Standard 30일을 온전히 사용하실 수 있습니다.
 한 번에 하나만 설치되며, 다른 쪽을 설치하면 교체됩니다(먼저 제거하지 않아도 됩니다).
 
 - Windows 전용 / Rhino 7 · Rhino 8
