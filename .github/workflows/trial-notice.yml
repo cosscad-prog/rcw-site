@@ -1,0 +1,55 @@
+# 트라이얼 새 버전 안내 — 손으로 실행한다
+#
+# 버전이 나올 때마다 트라이얼 사용자에게 "새 버전이 나왔다" 를 알린다.
+# 개인 링크(/trial?r=<신청번호>)로 보내므로 받는 분은 신청서를 다시 채우지
+# 않는다 — 그것이 곧 안 받는 이유가 되기 때문이다.
+#
+# ★ 예약(cron)이 아니라 수동이다.
+#   발행은 사람이 하는 일이고, 발행 직후에 나가야 의미가 있다. 매일 도는
+#   cron 으로 두면 "아직 안 올린 버전" 을 안내하는 사고가 난다.
+#
+# ★★ 기본으로 나가지 않는다.
+#   저장소 Variables 에 SEND_TRIAL_MAIL=true 를 넣어야 실제로 발송한다.
+#   그전까지는 "이런 메일이 나갈 예정" 미리보기만 관리자에게 온다.
+#   잘못 나간 메일은 되돌릴 수 없으므로 확인 단계를 일부러 둔다.
+#   ⚠️ Variables 는 한 번 켜면 계속 켜져 있다. 켠 뒤에는 실행 자체가 곧 발송이다.
+#
+# 같은 버전을 두 번 실행해도 두 번 가지 않는다 — notified_version 으로 거른다.
+#
+# 준비: 저장소 Settings → Secrets and variables → Actions
+#   SUPABASE_URL · SUPABASE_SERVICE_KEY · MAIL_USERNAME · MAIL_APP_PASSWORD · MAIL_TO
+#   — 전부 다른 워크플로가 이미 쓰는 값이라 새로 등록할 것이 없다.
+#
+# 선행 조건: docs/supabase-trial-notice.sql 을 SQL Editor 에서 한 번 실행해
+#   notified_version 칸이 있어야 한다. 없으면 첫 실행이 400 으로 실패한다.
+
+name: 트라이얼 새 버전 안내
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '안내할 버전 (비우면 releases.json 의 맨 앞)'
+        type: string
+        default: ''
+
+jobs:
+  notice:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 상한(MAX_SEND)을 넘으면 아무것도 보내지 않고 실패한다.
+      - name: 트라이얼 사용자에게 새 버전 안내
+        env:
+          SUPABASE_URL:         ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          MAIL_USERNAME:        ${{ secrets.MAIL_USERNAME }}
+          MAIL_APP_PASSWORD:    ${{ secrets.MAIL_APP_PASSWORD }}
+          MAIL_TO:              ${{ secrets.MAIL_TO }}
+          REPLY_TO:             ${{ secrets.REPLY_TO }}
+          VERSION:              ${{ inputs.version }}
+          # ★ Variables 에 SEND_TRIAL_MAIL=true 를 넣기 전에는 미리보기만 한다
+          SEND_TRIAL_MAIL:      ${{ vars.SEND_TRIAL_MAIL }}
+          MAX_SEND:             ${{ vars.MAX_SEND }}
+        run: python .github/scripts/trial_notice.py

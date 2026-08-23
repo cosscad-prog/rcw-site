@@ -252,6 +252,11 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
 
     Show-TrialShelfLife
 
+    Write-Host "`n다음 할 일 — 트라이얼 사용자에게 안내" -ForegroundColor Yellow
+    Write-Host "  GitHub → Actions → '트라이얼 새 버전 안내' → Run workflow"
+    Write-Host "  https://github.com/cosscad-prog/rcw-site/actions/workflows/trial-notice.yml"
+    Write-Host "  버전 칸은 비워 두면 releases.json 맨 앞($Version)을 쓴다. 같은 버전은 두 번 안 간다." -ForegroundColor DarkGray
+
     Write-Host "`n첨부 파일 SHA-256" -ForegroundColor Cyan
     Write-Host "  릴리스 노트에는 싣지 않는다(GitHub 이 자체 제공). 발행 기록 문서에 옮겨 적을 것." -ForegroundColor DarkGray
     foreach ($f in $plan) { Write-Host ("  {0,-34} {1,6:N1} MB  {2}" -f $f.UploadName, $f.SizeMB, $f.Sha256) }
