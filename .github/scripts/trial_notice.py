@@ -135,15 +135,36 @@ def to_text(markup):
     return text.strip()
 
 
+def summary_of(item):
+    """항목의 한 줄 요약.
+
+    releases.json 의 각 항목은 **첫 문장을 <b> 로 감싸 요약**하고 그 뒤에 자세한
+    설명을 붙이는 형식이다(사이트 화면이 그렇게 읽히도록 쓴 글). 메일에는 그
+    요약만 싣는다 — 받는 분이 알고 싶은 것은 "받아야 할 이유" 한 줄이고,
+    자세한 내용은 링크를 눌러 다운로드 페이지에서 보시면 된다.
+
+    <b> 로 시작하지 않는 옛 항목이 있을 수 있으므로 첫 문장으로 물러선다.
+    """
+    markup = item.get("ko") or ""
+    match = re.search(r"<b>(.*?)</b>", markup, re.S)
+    text = to_text(match.group(1)) if match else to_text(markup).split("\n")[0]
+    text = " ".join(text.split())
+    if not match:
+        # 첫 문장까지만. 자르는 자리를 못 찾으면 길이로 자른다.
+        cut = text.find("다. ")
+        text = text[:cut + 2] if cut > 0 else text[:120].rstrip() + ("…" if len(text) > 120 else "")
+    return text
+
+
 def format_changes(note):
-    blocks = []
+    lines = []
     for item in note.get("items", []):
-        text = to_text(item.get("ko"))
-        if not text:
-            continue
-        # 들여쓰기해 두면 링크·제목과 눈으로 구분된다
-        blocks.append("\n".join("  " + line if line else "" for line in text.split("\n")))
-    return "\n\n".join(blocks) + "\n" if blocks else "  (변경 내용이 기록되어 있지 않습니다)\n"
+        text = summary_of(item)
+        if text:
+            lines.append("  · " + text)
+    if not lines:
+        return "  (변경 내용이 기록되어 있지 않습니다)\n"
+    return "\n".join(lines) + "\n\n  자세한 내용은 아래 페이지에서 보실 수 있습니다.\n"
 
 
 def fetch_people(base_url, key):
