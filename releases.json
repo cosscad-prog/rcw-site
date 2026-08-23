@@ -2,6 +2,24 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 여기 있는 것이 전부 나온다(2026-08-14): 맨 앞 하나는 펼쳐지고, 이전 버전은 버전마다 한 줄로 접혀 눌러야 내용이 보인다. 그래서 계속 쌓아 둘 것 — 언제 무엇을 고쳤는지 되짚는 기록이다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.1.3",
+      "date": "2026-08-23",
+      "items": [
+        {
+          "ko": "<b>단면을 등록할 때(SSP) 모델링을 망칠 단면을 미리 잡아 줍니다.</b> 전에는 등록이 그냥 되고, 문제는 한참 뒤 UMD 에서 터졌습니다 — 유닛이 통째로 거부되거나, 더 나쁘게는 <b>구멍이 조용히 빠진 채</b> 가공도까지 나갔습니다. 이제 등록 단계에서 멈추고 무엇이 잘못됐는지 말합니다.<br><br>세 가지를 봅니다. <b>①이름(Pname)이 없는 단면</b> — UMD 가 \"선택된 Section이 없습니다\" 로 거부하던 것입니다. <b>②형상이 깨진 단면</b> — 내부 선이 닫히지 않은 것처럼 눈으로는 멀쩡해 보여도 부재로 세울 수 없는 단면입니다. 실제로 100mm 를 뽑아 보고 판단하므로 \"뽑히는가\"를 미리 확인해 줍니다. <b>③같은 자리에 겹쳐 그린 선</b> — 이것이 가장 찾기 어려웠습니다. 화면에서는 한 줄로 보이고 단면 검사도 통과하지만, 부재를 세우면 두께 0 인 면이 생겨 <b>그 부재의 구멍 가공이 전부 실패</b>합니다.<br><br>문제가 있는 단면은 그 자리에 <b>빨간 표시</b>를 세워 넓은 모델에서도 바로 찾을 수 있게 하고, SSP 를 다시 돌리면 지난 표시는 먼저 지웁니다. 한 유닛에 여러 문제가 있으면 <b>한 창에 모아</b> 보여 주므로, 하나 고치고 다시 돌리기를 반복하지 않아도 됩니다.",
+          "en": "<b>Sections that would spoil the modelling are now caught as you register them (SSP).</b> Registration used to go through quietly and the trouble surfaced much later in UMD - the unit refused outright, or worse, <b>holes silently missing</b> on drawings that had already gone out. It now stops at registration and says what is wrong.<br><br>Three things are checked. <b>1. A section with no profile name (Pname)</b> - the one UMD refused with \"no section selected\". <b>2. A section whose shape cannot be built</b> - an inner loop left open, say: it looks fine on screen but no member can be extruded from it. The check actually extrudes 100mm and reports what the document says. <b>3. Lines drawn on top of each other</b> - the hardest of the three to find. They read as one line on screen and pass every shape check, yet they produce a zero-thickness face that makes <b>every hole on that member fail to cut</b>.<br><br>A faulty section is marked <b>in red at its own location</b>, so it can be found in a large model, and running SSP again clears the previous marks first. Several faults in one unit are listed <b>in a single window</b>, so there is no fix-one-and-run-again cycle."
+        },
+        {
+          "ko": "<b>Rhino 의 Properties 패널에서 단면 정보를 바로 볼 수 있습니다.</b> 객체를 고르면 Properties 창에 RCW 탭이 나오고, 그 부재의 이름·Material·Profile·Fab·Group·Alloy 와 추가 길이가 보입니다. <b>단면 그룹 안의 폴리라인을 골라도</b> 그 그룹의 단면 값이 나오므로, 선 하나를 짚어 \"이건 어느 프로파일인가\"를 확인할 수 있습니다. 값은 그 자리에서 고칠 수 있고, 더 자세한 내용은 More details 로 Pname 창을 엽니다.",
+          "en": "<b>Section data now shows in Rhino's Properties panel.</b> Select an object and an RCW tab appears with its name, Material, Profile, Fab, Group and Alloy IDs, and the additional lengths. <b>Selecting a polyline inside a section group</b> shows that group's section, so you can point at a single line and see which profile it is. Values can be edited there, and More details opens the full Pname panel."
+        },
+        {
+          "ko": "<b>Pname 의 Additional Length 에서 Mullion·Transom 두 칸이 Start 한 칸이 되었습니다.</b> 한 단면은 멀리언이거나 트랜섬이지 둘 다일 수 없어 늘 한쪽만 쓰였습니다. 이제 한 칸에 적으면 그 단면이 어느 쪽으로 쓰이든 같은 값이 적용됩니다. <b>기존 도면은 그대로 열리고</b>, 그 단면을 한 번 저장하면 옛 두 값이 하나로 정리됩니다. 단면 표(Dtable)와 목록(PDlist·PPlist)도 같은 모양으로 바뀌었습니다.",
+          "en": "<b>The Mullion and Transom fields in Pname's Additional Length became one Start field.</b> A section is either a mullion or a transom, never both, so only one of them was ever in use. One value now applies whichever way the section is used. <b>Existing drawings open unchanged</b>, and saving such a section merges its two old values into one. The section table and the PDlist/PPlist listings follow the same shape."
+        }
+      ]
+    },
+    {
       "version": "5.1.2",
       "date": "2026-08-14",
       "items": [
