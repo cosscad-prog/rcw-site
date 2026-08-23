@@ -72,6 +72,7 @@
   .tag.nodl { background:#fef3c7; color:#92400e; }
   .tag.gotdl { background:#dcfce7; color:#166534; }
   .manual { color:var(--muted); font-size:11px; }
+  td.kind .tag { margin:0 5px 0 0; }
 
   /* 탭 */
   .tabs { display:flex; gap:6px; margin:16px 0 0; }
@@ -332,7 +333,9 @@
 
   <p class="note">
     신청서를 낸 사람 전부입니다. 위의 다운로드 기록과 <b>같은 신청인지</b>는 신청 번호로 잇고,
-    없으면 이메일로 맞춰 봅니다. <b>안 받아 감</b> 은 연락해 볼 대상입니다.
+    없으면 이메일로 맞춰 봅니다. 받아 간 것은 <span class="tag core">Core 8</span>
+    처럼 <b>에디션과 Rhino 버전</b>으로 적고, 둘 이상 받았으면 모두 적습니다.
+    <b>안 받아 감</b> 은 연락해 볼 대상입니다.
     <b>기록 없음 · 확인함</b> 은 클릭 기록이 남지 않던 기간(2026-07-26~08-24)에 신청해서
     사람이 따로 확인한 것이며, 위의 다운로드 집계에는 넣지 않습니다.
   </p>
@@ -868,14 +871,19 @@
   /* 이 신청이 다운로드까지 갔는가.
      신청 번호(request_id)로 잇는 것이 정확하지만, 페이지를 새로 열고 받으면
      번호가 끊기므로 이메일로도 맞춰 본다. */
-  function gotDownload(q) {
+  /* 이 신청으로 받아 간 기록 전부. 신청 번호로 잇는 것이 정확하지만 페이지를
+     새로 열고 받으면 번호가 끊기므로 이메일로도 맞춰 본다.
+     한 사람이 Core 와 Standard 를, 또는 Rhino 7 과 8 을 함께 받는 일이 있어
+     하나만 보여주면 무엇을 쓰는지 잘못 짚게 된다 — 받은 것을 다 보여준다. */
+  function downloadsFor(q) {
     var email = (q.email || '').trim().toLowerCase();
-    for (var i = 0; i < all.length; i++) {
-      if (all[i].request_id && all[i].request_id === q.id) return all[i];
-      if (email && keyOf(all[i]) === email) return all[i];
-    }
-    return null;
+    return all.filter(function (d) {
+      if (d.request_id && d.request_id === q.id) return true;
+      return email && keyOf(d) === email;
+    });
   }
+
+  function gotDownload(q) { return downloadsFor(q)[0] || null; }   // 최신 1건 (all 이 최신순)
 
   /* 클릭 기록이 없던 기간(2026-07-26~08-24)의 신청은 사람이 확인해 표시한다.
      ★ downloads 에 줄을 지어 넣지 않는 이유 — 그 표는 edition·rhino 가 필수인데
@@ -890,13 +898,26 @@
       var hay = [r.name, r.company, r.phone, r.email].join(' ').toLowerCase();
       if (q && hay.indexOf(q) === -1) return;
 
-      var dl = gotDownload(r);
+      var dls = downloadsFor(r);
       var man = manualMark(r);
-      var mark = dl
-        ? '<span class="tag gotdl">받아 감</span> ' + fmt(dl.created_at)
-        : man
-          ? '<span class="tag gotdl">받아 감</span> <span class="manual">기록 없음 · 확인함</span>'
-          : '<span class="tag nodl">안 받아 감</span>';
+      var mark;
+      if (dls.length) {
+        // 같은 것을 여러 번 받은 것은 한 번만 적는다. 무엇을 받았는지가 핵심이지
+        // 몇 번 눌렀는지가 아니다(횟수는 위의 다운로드 표에 회차로 나온다).
+        var seenKind = {}, kinds = [];
+        dls.forEach(function (d) {
+          var k = d.edition + d.rhino;
+          if (seenKind[k]) return;
+          seenKind[k] = 1;
+          kinds.push('<span class="tag ' + (d.edition === 'Standard' ? 'std' : 'core') + '">' +
+                     d.edition + ' ' + d.rhino + '</span>');
+        });
+        mark = kinds.join('') + ' <span class="manual">' + fmt(dls[0].created_at) + '</span>';
+      } else if (man) {
+        mark = '<span class="tag gotdl">받아 감</span> <span class="manual">기록 없음 · 확인함</span>';
+      } else {
+        mark = '<span class="tag nodl">안 받아 감</span>';
+      }
 
       html += '<tr>' +
         '<td class="when"><b>' + fmt(r.created_at) + '</b>' + fmt(r.created_at, true).slice(11) + '</td>' +
@@ -904,7 +925,7 @@
         '<td>' + esc(r.company) + '</td>' +
         '<td>' + esc(r.phone) + '</td>' +
         '<td>' + esc(r.email) + '</td>' +
-        '<td>' + mark + '</td>' +
+        '<td class="kind">' + mark + '</td>' +
         '</tr>';
     });
     qRowsEl.innerHTML = html || '<tr><td colspan="6" class="empty">' +
