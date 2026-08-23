@@ -38,7 +38,7 @@ jobs:
   alert:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # 상한(MAX_SEND)을 넘으면 아무것도 보내지 않고 실패한다.
       # 날짜를 잘못 넣어 전원이 만료 대상이 되는 사고를 막는 장치다.

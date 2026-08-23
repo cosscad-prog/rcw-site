@@ -37,7 +37,7 @@ jobs:
   notice:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # 상한(MAX_SEND)을 넘으면 아무것도 보내지 않고 실패한다.
       - name: 트라이얼 사용자에게 새 버전 안내
