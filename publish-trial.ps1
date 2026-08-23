@@ -147,13 +147,45 @@ function Show-TrialShelfLife {
 
 $tag = "v$Version-trial"
 
-# 릴리스 노트 — 사이트가 "릴리스 페이지의 SHA-256 과 대조하라"고 안내하므로 반드시 싣는다
+<#
+  릴리스 노트에 **이번 버전에서 바뀐 것**을 싣는다 (2026-08-24).
+
+  전에는 여기에 SHA-256 표가 있었다. 뺀 이유 셋 —
+    · GitHub 이 첨부 파일마다 다이제스트를 **자체 제공**한다(우리 표는 같은 값의 사본)
+    · 사이트의 "SHA-256 과 대조하라" 안내는 **2026-07-26 에 이미 감췄다**
+      ("국내 사용자에게 혼란만 주어"). 가리키는 곳이 없어진 표만 남아 있었다
+    · 이 페이지에 오는 사람은 설치 파일을 받으러 온 실무자다. 표 넉 줄이 화면을
+      차지하면서 아무 일도 하지 않았다
+  해시 값 자체는 계속 만든다(docs\RCW_V5_INSTALLER_HASHES_*.md, GitHub API).
+  기업 IT 가 서명 없는 exe 승인 전에 요구하면 그것을 드리면 된다.
+
+  내용은 releases.json 에서 가져온다 — 사이트가 그리는 것과 **같은 글**이어야
+  두 곳이 어긋나지 않는다. <br> 만 줄바꿈으로 바꾼다(<b> 는 GitHub 이 그린다).
+#>
+function Get-ChangeSection {
+    param([Parameter(Mandatory)] $Note)
+
+    if (-not $Note.items -or $Note.items.Count -eq 0) { return '' }
+
+    $lines = foreach ($item in $Note.items) {
+        $text = [string] $item.ko
+        if (-not $text) { continue }
+        $text = $text -replace '<br\s*/?>', "`n"
+        $text = $text -replace "`n{3,}", "`n`n"
+        $text.Trim()
+    }
+
+    return "## 이번 버전에서 바뀐 것`n`n" + (($lines | Where-Object { $_ }) -join "`n`n") + "`n"
+}
+
+$changeSection = Get-ChangeSection -Note $latestNote
+
+# 해시는 노트에 싣지 않고 발행이 끝나면 화면에 찍는다(아래 Write-Host).
 #
 # ⚠️ "Core 를 끝까지 쓴 뒤에도 Standard 30일을 온전히 쓸 수 있다" 는 문장은 뺐다
 #    (2026-08-24 사용자 결정). 사실이기는 하지만 **체험을 이어 붙이는 방법을 우리가
 #    먼저 알려 주는 꼴**이다. 스스로 찾아서 하면 막지 않되 권하지는 않는다.
 #    다시 넣지 말 것.
-$hashRows = ($plan | ForEach-Object { '| `{0}` | {1:N1} MB | `{2}` |' -f $_.UploadName, $_.SizeMB, $_.Sha256 }) -join "`n"
 $notes = @"
 RCW V5 $Version 트라이얼
 
@@ -170,13 +202,7 @@ RCW V5 $Version 트라이얼
 
 설치 안내: https://rcw-site.vercel.app/guide-ko.html
 
-## 파일 검증 (SHA-256)
-
-PowerShell 에서 ``Get-FileHash 파일이름.exe`` 로 확인하실 수 있습니다.
-
-| 파일 | 크기 | SHA-256 |
-|---|---:|---|
-$hashRows
+$changeSection
 "@
 
 if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
@@ -225,4 +251,8 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
     Write-Host "  사이트   https://rcw-site.vercel.app/trial"
 
     Show-TrialShelfLife
+
+    Write-Host "`n첨부 파일 SHA-256" -ForegroundColor Cyan
+    Write-Host "  릴리스 노트에는 싣지 않는다(GitHub 이 자체 제공). 발행 기록 문서에 옮겨 적을 것." -ForegroundColor DarkGray
+    foreach ($f in $plan) { Write-Host ("  {0,-34} {1,6:N1} MB  {2}" -f $f.UploadName, $f.SizeMB, $f.Sha256) }
 }
