@@ -153,10 +153,21 @@ module.exports = async function handler(req, res) {
       return res.status(429).json({ error: 'too_many_attempts', retry_after_min: FAIL_WINDOW_MIN });
     }
 
-    const rows = await db(
-      'customers?select=id,license_id,name,company,phone,email,edition,issued_on,expires_on,status,info_confirmed_at' +
-      `&code_key=eq.${encodeURIComponent(codeKey)}&limit=1`
-    );
+    // 코드는 새 것(code_key)과 옛 것(legacy_code_key) 둘 다 받는다.
+    // 2026-08-24 에 고객 코드 형식을 RCW-XXXX-XXXX-XXXX 로 바꾸면서, 옛 V5KO- 코드를
+    // legacy_code_key 로 옮겼다. 고객 메일함에는 옛 코드가 영원히 남아 있으므로
+    // ★옛 코드는 계속 받는다(사용자 결정). 지우면 그 메일을 보고 온 고객이 잠긴다.
+    const select =
+      'customers?select=id,license_id,name,company,phone,email,edition,issued_on,expires_on,status,info_confirmed_at';
+    let rows = await db(`${select}&code_key=eq.${encodeURIComponent(codeKey)}&limit=1`);
+    if (!(Array.isArray(rows) && rows.length)) {
+      // ★ 칸이 아직 없을 수도 있다(SQL 을 돌리기 전에 이 파일이 먼저 배포되는 경우).
+      //   그때 PostgREST 는 400 을 준다 — 그것 때문에 "코드가 틀렸다" 가 "서버 오류" 로
+      //   바뀌면 안 되므로 삼키고 넘어간다. 칸이 생기면 그때부터 저절로 동작한다.
+      try {
+        rows = await db(`${select}&legacy_code_key=eq.${encodeURIComponent(codeKey)}&limit=1`);
+      } catch { rows = null; }
+    }
     const customer = Array.isArray(rows) && rows.length ? rows[0] : null;
 
     if (!customer) {
