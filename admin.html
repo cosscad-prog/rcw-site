@@ -1439,6 +1439,23 @@
     }).join('');
   };
 
+  /* 새 탭으로 연다.
+     ⚠️ `window.open(url, '_blank', 'noopener')` 를 쓰지 말 것 — 세 번째 인자(창 옵션)가 있으면
+        브라우저가 탭이 아니라 **팝업 창**으로 열려 하고, 팝업 차단에 **조용히** 막힌다.
+        버튼을 눌러도 아무 일도 안 일어난다(2026-08-27 실제로 이렇게 막혔다).
+     그래서 진짜 링크를 만들어 누른다 — 사용자의 클릭으로 취급되어 차단되지 않고,
+     noopener 는 rel 로 붙인다. */
+  function openTab(url) {
+    var a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
   var openCust = $('rel-open-cust');
   if (openCust) {
     openCust.addEventListener('click', function () {
@@ -1446,15 +1463,13 @@
       var code = sel && sel.value;
       if (!code) { alert('고객을 먼저 고르십시오.'); return; }
       // 코드는 # 뒤에 둔다 — 서버 접속 기록에 남지 않는다.
-      window.open('customer.html#preview=' + encodeURIComponent(code), '_blank', 'noopener');
+      openTab('customer.html#preview=' + encodeURIComponent(code));
     });
   }
 
   var openTrial = $('rel-open-trial');
   if (openTrial) {
-    openTrial.addEventListener('click', function () {
-      window.open('trial.html?preview=1', '_blank', 'noopener');
-    });
+    openTrial.addEventListener('click', function () { openTab('trial.html?preview=1'); });
   }
 
   var tab = $('tab-rel');
