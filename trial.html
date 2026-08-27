@@ -514,6 +514,33 @@
       okBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    /* ── 관리자 미리보기 ────────────────────────────────────────────
+       /trial?preview=1 (또는 #preview) 로 열면 신청서를 쓰지 않고 **고객이 보는 그대로**
+       다운로드 화면을 편다. 관리자 페이지의 [평가판 화면] 버튼이 이 주소로 연다.
+
+       ★ submitted 를 채우지 않는다 — recordDownload 가 그 값으로 막아 주므로
+         미리보기에서 누른 것은 **다운로드 기록에 남지 않는다**(통계가 더러워지지 않는다).
+       ★ 신청서를 내지 않으므로 신청 표에도 줄이 생기지 않는다. 읽기만 하는 화면이다. */
+    function previewRequested() {
+      try {
+        var q = new URLSearchParams(location.search);
+        if (q.get('preview') !== null) return true;
+      } catch (e) { /* 아주 옛 브라우저 */ }
+      return /(^|[#&])preview/.test(location.hash);
+    }
+
+    if (previewRequested()) {
+      form.classList.add('done');
+      okBox.classList.add('show');
+      var ab = document.getElementById('again-box');
+      if (ab) ab.classList.add('done');
+      var flag = document.createElement('p');
+      flag.style.cssText = 'margin:0 0 14px;padding:9px 13px;border-radius:8px;background:#fff3e0;' +
+                           'border:1px solid #f0d3a5;color:#92400e;font-size:13px;font-weight:700;';
+      flag.textContent = '관리자 미리보기 — 고객이 보는 그대로입니다. 여기서 누른 것은 다운로드 기록에 남지 않습니다.';
+      okBox.insertBefore(flag, okBox.firstChild);
+    }
+
     function lookUp(payload) {
       // ★ 창구는 /api/trial 하나다. Vercel Hobby 는 배포당 함수 12개까지라
       //   따로 만들었더니 13개가 되어 배포가 통째로 실패했다(2026-08-24).

@@ -370,6 +370,14 @@
    토큰이나 쿠키를 두지 않는다.
 ------------------------------------------------------------------ */
 (function(){
+  /* 관리자 미리보기 — /customer#preview=<고객코드> 로 열면 코드를 넣지 않고 바로
+     그 고객이 보는 화면을 편다. 관리자 페이지의 [고객 화면] 버튼이 이 주소로 연다.
+     ★ 로그인 자체는 평소와 똑같이 /api/customer-login 을 거친다. 화면을 흉내 내지 않고
+       실제로 그 고객으로 들어가야 "무엇이 잘못됐는지" 가 보이기 때문이다.
+     ★ 다만 다운로드 클릭은 기록하지 않는다(recordClick 참조).
+     ★ 코드는 주소창에 남으므로 **# 뒤**에 둔다 — 서버 접속 기록에 남지 않는다. */
+  var preview = false;
+
   var form   = document.getElementById('login-form');
   var btn    = document.getElementById('login-btn');
   var input  = document.getElementById('f-code');
@@ -760,6 +768,7 @@
   function recordClick(fileName){
     return function(){
       if (!session) return;
+      if (preview) return;          // 관리자 미리보기 — 남의 다운로드 통계를 더럽히지 않는다
       fetch('/api/customer-download', {
         method: 'POST',
         keepalive: true,
@@ -768,6 +777,21 @@
       }).catch(function(err){ console.error('[customer] 기록 실패:', err); });
     };
   }
+
+  /* 미리보기 진입: 해시에서 코드를 꺼내 평소의 로그인 흐름을 그대로 태운다. */
+  (function(){
+    var m = /(^|[#&])preview=([^&]+)/.exec(location.hash || '');
+    if (!m) return;
+    preview = true;
+    input.value = decodeURIComponent(m[2]).trim();
+    var flag = document.createElement('p');
+    flag.style.cssText = 'margin:0 0 14px;padding:9px 13px;border-radius:8px;background:#fff3e0;' +
+                         'border:1px solid #f0d3a5;color:#92400e;font-size:13px;font-weight:700;';
+    flag.textContent = '관리자 미리보기 — 이 고객이 보는 그대로입니다. 여기서 누른 것은 다운로드 기록에 남지 않습니다.';
+    var host = document.getElementById('download-view');
+    if (host) host.insertBefore(flag, host.firstChild);
+    if (form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit', { cancelable: true }));
+  })();
 
   document.getElementById('logout-btn').addEventListener('click', function(){
     session = null;

@@ -70,6 +70,12 @@
   .note { margin:14px 0 0; color:var(--muted); font-size:12px; }
   .sec { margin:26px 0 10px; font-size:14px; font-weight:800; }
   .sec .mini { margin-left:6px; font-size:12px; font-weight:500; color:var(--muted); }
+  .peek { display:flex; flex-wrap:wrap; align-items:center; gap:9px; margin:0 0 12px; padding:12px 14px;
+          border:1px solid var(--line); border-radius:10px; background:var(--mist); }
+  .peek b { margin-right:6px; font-size:13px; }
+  .peek span { color:var(--muted); font-size:12px; }
+  .peek select { padding:7px 9px; border:1px solid var(--line); border-radius:8px; background:#fff;
+                 font:inherit; font-size:13px; max-width:340px; }
   .tag.nodl { background:#fef3c7; color:#92400e; }
   .tag.gotdl { background:#dcfce7; color:#166534; }
   .manual { color:var(--muted); font-size:11px; }
@@ -356,6 +362,20 @@
 </div>
 
 <div id="view-rel" style="display:none">
+  <div class="peek">
+    <b>고객이 보는 화면 그대로 열기</b>
+    <span>고객</span>
+    <select id="rel-pick"><option value="">고객을 불러오는 중…</option></select>
+    <button class="btn primary" id="rel-open-cust">고객 화면</button>
+    <button class="btn" id="rel-open-trial">평가판 화면</button>
+  </div>
+  <p class="note" id="rel-peek-note">
+    코드를 넣거나 신청서를 쓰지 않고 <b>그 고객이 보는 화면</b>을 그대로 엽니다. 새 탭으로 열립니다.
+    <br>
+    로그인은 평소와 <b>똑같이</b> 거칩니다 — 화면을 흉내 내는 것이 아니라 실제로 그 고객으로 들어갑니다.
+    다만 거기서 누른 다운로드는 <b>기록에 남지 않습니다.</b>
+  </p>
+
   <div class="cards">
     <div class="card"><b id="rel-site">…</b><span>사이트가 안내하는 버전</span></div>
     <div class="card"><b id="rel-cust-tag">…</b><span>고객 릴리스</span></div>
@@ -554,6 +574,7 @@
         customers = r[0] || [];
         summarizeCustomers();
         renderCustomers();
+        if (window.rcwFillPreview) window.rcwFillPreview(customers);   // 배포 현황 탭의 [고객 화면] 선택칸
       })
       .catch(function (err) {
         console.error(err);
@@ -1400,6 +1421,39 @@
       } else {
         $('rel-trial-life').textContent = '';
       }
+    });
+  }
+
+  // ── 고객이 보는 화면 그대로 열기 ─────────────────────────
+  //   코드를 손으로 넣지 않게 고객 목록에서 고른다. 실제 로그인 흐름을 그대로 태우므로
+  //   "무엇이 잘못됐는지" 가 고객과 똑같이 보인다. 다운로드 기록은 남지 않는다.
+  window.rcwFillPreview = function (list) {
+    var sel = $('rel-pick');
+    if (!sel) return;
+    var rows = (list || []).filter(function (c) { return c && c.license_id; });
+    if (!rows.length) { sel.innerHTML = '<option value="">고객이 없습니다</option>'; return; }
+    rows.sort(function (a, b) { return String(a.company || '').localeCompare(String(b.company || '')); });
+    sel.innerHTML = rows.map(function (c) {
+      var who = (c.company || c.name || '이름 없음') + ' · ' + (c.edition || '') + ' · ' + c.license_id;
+      return '<option value="' + c.license_id + '">' + who.replace(/[<>&]/g, '') + '</option>';
+    }).join('');
+  };
+
+  var openCust = $('rel-open-cust');
+  if (openCust) {
+    openCust.addEventListener('click', function () {
+      var sel = $('rel-pick');
+      var code = sel && sel.value;
+      if (!code) { alert('고객을 먼저 고르십시오.'); return; }
+      // 코드는 # 뒤에 둔다 — 서버 접속 기록에 남지 않는다.
+      window.open('customer.html#preview=' + encodeURIComponent(code), '_blank', 'noopener');
+    });
+  }
+
+  var openTrial = $('rel-open-trial');
+  if (openTrial) {
+    openTrial.addEventListener('click', function () {
+      window.open('trial.html?preview=1', '_blank', 'noopener');
     });
   }
 
