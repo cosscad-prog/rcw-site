@@ -281,9 +281,11 @@
   /* 그림이 칸을 억지로 채우지 않게 한다.
      width:100% + object-fit:contain 이면 비율이 안 맞는 그림은 좌우에 흰 띠가 생긴다
      (그 띠는 img 자신의 배경색이다). 자기 비율대로 놓고 칸을 넘지 않게만 막는다.
-     작은 그림을 늘려 흐려지게 하지도 않는다. */
+     작은 그림을 늘려 흐려지게 하지도 않는다.
+     ⚠️ 선택자를 위 규칙과 <b>같은 명시도</b>로 쓸 것 — 전에 video 만 `.shot video` (0,1,1) 로
+     적어 두었더니, 위 `figure.shot video` (0,1,2) 가 이겨 흰 띠가 되살아났다(2026-08-28). */
   figure.shot img,
-    .shot video { width: auto; max-width: 100%; margin-inline: auto; display: block; }
+  figure.shot video { width: auto; max-width: 100%; margin-inline: auto; display: block; }
 </style>
 
 <div class="bar">
