@@ -171,7 +171,8 @@
   @media (max-width: 1080px) { .stage, .stage.wide-img, .stage.even { grid-template-columns: 1fr; } }
 
   figure.shot { margin: 0; }
-  figure.shot img {
+  figure.shot img,
+  figure.shot video {
     display: block; width: 100%; height: auto;
     max-height: calc(100dvh - 330px);
     object-fit: contain; object-position: center top;
@@ -185,11 +186,14 @@
   }
   .shots { display: grid; gap: 14px; }
   .shots.two { grid-template-columns: 1fr 1fr; }
-  .shots.two figure.shot img { max-height: calc(100dvh - 360px); }
+  .shots.two figure.shot img,
+  .shots.two figure.shot video { max-height: calc(100dvh - 360px); }
   .shots.grid4 { grid-template-columns: 1fr 1fr; }
-  .shots.grid4 figure.shot img { max-height: calc(50dvh - 190px); }
+  .shots.grid4 figure.shot img,
+  .shots.grid4 figure.shot video { max-height: calc(50dvh - 190px); }
   .shots.grid5 { grid-template-columns: repeat(3, 1fr); }
-  .shots.grid5 figure.shot img { max-height: calc(50dvh - 190px); }
+  .shots.grid5 figure.shot img,
+  .shots.grid5 figure.shot video { max-height: calc(50dvh - 190px); }
   @media (max-width: 700px) { .shots.two, .shots.grid4, .shots.grid5 { grid-template-columns: 1fr; } }
 
   .col { display: flex; flex-direction: column; gap: 12px; }
@@ -262,13 +266,16 @@
     align-items: center; justify-content: center; padding: 2vh 2vw; cursor: zoom-out;
   }
   #zoom.open { display: flex; }
-  #zoom img { max-width: 100%; max-height: 96vh; object-fit: contain; background: #fff; border: 1px solid rgba(255,255,255,.3); }
+  #zoom img,
+  #zoom video { max-width: 100%; max-height: 96vh; object-fit: contain; background: #fff; border: 1px solid rgba(255,255,255,.3); }
+  #zoom img[hidden], #zoom video[hidden] { display: none; }
 
   @media print {
     .bar, .progress, .overlay, #zoom { display: none !important; }
     .deck { height: auto; overflow: visible; }
     .slide { min-height: 0; page-break-after: always; padding: 20px 0; border: none; }
-    figure.shot img { max-height: 420px; }
+    figure.shot img,
+    figure.shot video { max-height: 420px; }
   }
 
   /* 그림이 칸을 억지로 채우지 않게 한다.
@@ -300,7 +307,7 @@
   </div>
 </div>
 
-<div id="zoom"><img alt=""></div>
+<div id="zoom"><img alt="" hidden><video muted loop playsinline hidden></video></div>
 
 <div class="deck" id="deck">
 
@@ -1517,6 +1524,7 @@
   var btn = document.getElementById('btn-index');
   var zoom = document.getElementById('zoom');
   var zoomImg = zoom.querySelector('img');
+  var zoomVideo = zoom.querySelector('video');
   var current = 0;
 
   idx.innerHTML = '';
@@ -1558,23 +1566,38 @@
   function toggleOverlay() { overlay.classList.toggle('open'); }
   btn.addEventListener('click', toggleOverlay);
 
+  /* 그림이든 영상이든 눌러 크게 본다. GIF 를 영상으로 옮기면서(2026-08-28) 영상도 받게 했다 —
+     전에는 img 만 봐서 영상 슬라이드는 눌러도 아무 일도 일어나지 않았다. */
+  function closeZoom() {
+    zoom.classList.remove('open');
+    zoomImg.src = ''; zoomImg.hidden = true;
+    zoomVideo.pause(); zoomVideo.removeAttribute('src'); zoomVideo.load(); zoomVideo.hidden = true;
+  }
+
   deck.addEventListener('click', function (e) {
-    var img = e.target.closest ? e.target.closest('figure.shot img') : null;
-    if (!img) return;
-    zoomImg.src = img.src;
-    zoomImg.alt = img.alt;
+    var el = e.target.closest ? e.target.closest('figure.shot img, figure.shot video') : null;
+    if (!el) return;
+    if (el.tagName === 'VIDEO') {
+      zoomImg.hidden = true;
+      zoomVideo.src = el.getAttribute('src');
+      zoomVideo.setAttribute('aria-label', el.getAttribute('aria-label') || '');
+      zoomVideo.hidden = false;
+      zoomVideo.play();
+    } else {
+      zoomVideo.hidden = true;
+      zoomImg.src = el.src;
+      zoomImg.alt = el.alt;
+      zoomImg.hidden = false;
+    }
     zoom.classList.add('open');
   });
-  zoom.addEventListener('click', function () {
-    zoom.classList.remove('open');
-    zoomImg.src = '';
-  });
+  zoom.addEventListener('click', closeZoom);
 
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     var k = e.key;
     if (k === 'Escape') {
-      if (zoom.classList.contains('open')) { zoom.classList.remove('open'); zoomImg.src = ''; }
+      if (zoom.classList.contains('open')) { closeZoom(); }
       else closeOverlay();
       return;
     }
