@@ -2,6 +2,44 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 여기 있는 것이 전부 나온다(2026-08-14): 맨 앞 하나는 펼쳐지고, 이전 버전은 버전마다 한 줄로 접혀 눌러야 내용이 보인다. 그래서 계속 쌓아 둘 것 — 언제 무엇을 고쳤는지 되짚는 기록이다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.2.0",
+      "date": "2026-08-28",
+      "items": [
+        {
+          "ko": "<b>가공도는 이제 FDwg 하나입니다. FDDS 는 폐기했습니다.</b> FDDS 를 실행하시면 도면을 그리지 않고 \"더이상 사용하지 않는 명령어 입니다. FDwg 사용하십시요\" 한 줄만 나옵니다. <b>고장이 아닙니다.</b><br><br>두 명령이 같은 도면을 조금씩 다르게 그려 온 것이 오래된 혼란거리였습니다. 하나로 합치는 편이 낫다고 판단했습니다. FDDS 로 하시던 작업은 <b>FDwg 으로 그대로</b> 하시면 되고, 전에 FDDS 로 뽑아 두신 도면은 <b>그대로 열리고 그대로 쓰실 수 있습니다.</b>",
+          "en": "<b>Fabrication drawings now come from FDwg alone. FDDS has been retired.</b> Running FDDS no longer draws anything - it answers with one line: use FDwg instead. <b>That is not a fault.</b><br><br>Having two commands draw slightly different versions of the same drawing had been a long-standing source of confusion, and folding them into one was the better answer. Anything you did with FDDS you now do with FDwg, and <b>drawings already produced by FDDS still open and still work</b>."
+        },
+        {
+          "ko": "<b>FDwg 이 옵션 창을 열고 물어봅니다.</b> 전에는 DDOpt·DsOpt 창이 닫혀 있으면 <b>객체를 다 고른 뒤에</b> 창만 열고 조용히 끝났습니다. 화면에는 아무 도면도 나오지 않고 이유도 눈에 띄지 않아, 왜 안 되는지 알 수 없었습니다.<br><br>이제 <b>객체를 고르기 전에</b> 확인합니다. 닫혀 있던 창을 열어 드린 다음 \"지금 그 창에 보이는 값 그대로 계속할까요?\" 라고 묻습니다. <b>예</b> 는 그 값으로 그리고, <b>아니오</b> 는 거기서 멈춥니다 — 값을 확인하신 뒤 다시 실행하시면 됩니다. 두 창이 이미 열려 있으면 <b>묻지 않고</b> 하던 대로 진행합니다.",
+          "en": "<b>FDwg now opens the option panels and asks.</b> With DDOpt or DsOpt closed, it used to open them and stop <b>after you had already selected every group</b> - no drawing appeared, and the one line explaining why was buried in the log.<br><br>The check now happens <b>before</b> the selection prompt. Whatever was closed is opened, and you are asked whether to draw with the values now on screen. <b>Yes</b> draws with them; <b>No</b> stops so you can check them and run again. With both panels already open, nothing is asked and nothing changes."
+        },
+        {
+          "ko": "<b>가공도의 각도 치수에서 직각을 뺄 수 있습니다.</b> 사선으로 잘린 끝은 각도를 알아야 하지만 90도로 잘린 끝은 적어 봐야 도면만 복잡해집니다. 그런데 <b>Angle Dim</b> 옵션은 각도 전체를 켜고 끌 뿐이라, 끄면 필요한 사선 각도까지 사라졌습니다.<br><br>이제 이 옵션은 <b>직각만</b> 가릅니다. 꺼 두시면 사선 각도는 그대로 나오고 <b>90도만 빠집니다.</b> 뷰마다 따로 끄고 켜던 방식도 없앴습니다 — 어느 뷰든 <b>변마다 저절로</b> 판단하므로, 같은 부재가 뷰에 따라 다르게 나오지 않습니다.",
+          "en": "<b>Right angles can now be left out of the angle dimensions on a fabrication drawing.</b> An end cut on a slant needs its angle written; an end cut square does not, and writing it only clutters the drawing. The <b>Angle Dim</b> option, however, governed every angle at once, so switching it off also removed the slant angles that were wanted.<br><br>The option now governs <b>right angles only</b>. Switched off, slant angles still appear and <b>only the 90-degree ones are dropped</b>. The per-view switches are gone as well: every view now decides <b>edge by edge</b>, so the same member no longer reads differently from one view to the next."
+        },
+        {
+          "ko": "<b>DdOpt 창의 글자가 잘리던 것과, 쓰이지 않는 옵션을 정리했습니다.</b> \"Bottom\" 이 \"Botto\" 로 잘려 보이던 것을 고쳤고, 실제 동작과 이름이 어긋나 있던 항목의 이름을 바로잡았습니다.<br><br>뷰마다 있던 <b>[F]Angle 체크박스는 없앴습니다</b> — 위 세 번째 항목대로 각도를 저절로 판단하게 되면서 <b>읽는 곳이 하나도 남지 않은</b> 항목이었습니다. 화면에만 남아 있으면 \"이걸 켜야 하나\" 를 고민하게 됩니다. 남은 칸들은 창 폭에 맞춰 고르게 폈습니다. <b>저장해 두신 설정은 그대로 열립니다.</b>",
+          "en": "<b>Clipped labels in the DdOpt panel are fixed, and options that no longer did anything are gone.</b> \"Bottom\" that appeared as \"Botto\" now fits, and an option whose name no longer matched what it did has been renamed.<br><br>The per-view <b>[F]Angle checkboxes have been removed</b>: with angles decided automatically (see above), <b>nothing read them any more</b>. Left on screen they only invite the question of whether they should be ticked. The remaining columns are spread evenly across the panel. <b>Settings you had saved still load unchanged.</b>"
+        },
+        {
+          "ko": "<b>단면을 고르면 Properties 의 RCW 탭이 저절로 열립니다.</b> 지난 판에서 생긴 이 탭이 실제로 쓰이려면 매번 손으로 탭을 바꿔야 했고, 단면이 아닌 객체를 골라도 빈 탭이 나와 거슬렸습니다. 이제 <b>단면일 때만</b> 나오고, 고르는 즉시 그 탭으로 넘어갑니다.<br><br><b>group 으로 묶인 단면</b>도 다룰 수 있습니다. group 안의 선 하나를 <b>Alt 를 누른 채 클릭</b>하시면 그 단면의 값이 나오고 그 자리에서 고치실 수 있습니다. 전에는 group 을 풀어야만 했습니다. 글자 모양도 Rhino 기본 페이지와 같게 맞췄습니다.",
+          "en": "<b>Selecting a section now brings up the RCW tab in Properties by itself.</b> The tab added in the last release still had to be switched to by hand every time, and it appeared - empty - for objects that were not sections. It now shows <b>only for sections</b>, and the moment you select one it comes to the front.<br><br><b>Sections inside a group</b> can be worked on too: <b>Alt+click</b> a line within the group and that section's values appear, editable in place. Previously the group had to be exploded first. The text is also drawn the way Rhino draws its own Properties pages."
+        },
+        {
+          "ko": "<b>추가 길이만 옮기는 명령 CDPlg 가 생겼습니다.</b> 단면 하나의 Additional Length 만 다른 단면과 맞추고 싶을 때, 전에는 단면 정보를 통째로 덮어써야 했습니다. 이름·Material·Block 까지 함께 넘어가 원하지 않던 값까지 바뀌었습니다.<br><br>CDPlg 는 <b>추가 길이 상자만</b> 그대로 옮깁니다. 상자 안의 다섯 칸을 모두 옮기므로 한쪽만 반영되는 일이 없고, 받는 쪽에 아직 단면 기록이 없으면 나머지 값은 기본값으로 채워 <b>빈칸으로 남지 않습니다.</b>",
+          "en": "<b>CDPlg copies the additional length and nothing else.</b> To match one section's Additional Length to another, the whole section record had to be overwritten - name, material, block and all - changing values you had not meant to touch.<br><br>CDPlg moves <b>the additional-length box alone</b>, all five of its fields together so none is left behind. If the receiving section has no record yet, the remaining values are filled with their defaults rather than <b>left blank</b>."
+        },
+        {
+          "ko": "<b>Pname 이 커브에는 쓸모없는 값을 받지 않습니다.</b> 폴리라인을 고른 채로 Block Insert 나 Milling 값을 넣을 수 있었는데, 그 값은 커브에 아무 의미가 없으면서 기록에는 남았습니다. 그러고는 한참 뒤 단면을 등록(SSP)할 때 <b>이유를 알 수 없는 거부</b>로 돌아왔습니다. 이제 커브를 고르시면 해당 칸이 잠깁니다.<br><br>같은 맥락으로, Rhino 를 켤 때 <b>빈 상자로 복원된 패널</b>에서 Pname 이 아무 말 없이 죽던 것도 고쳤습니다. 이제 무엇이 잘못됐는지 알려 드립니다. Rhino 를 끄시기 전에 패널을 닫아 두시면 이 상태 자체를 피할 수 있습니다.",
+          "en": "<b>Pname no longer accepts values that mean nothing on a curve.</b> Block Insert and Milling values could be entered with a polyline selected; they did nothing there but were still recorded, and came back much later as an <b>unexplained refusal</b> when the section was registered (SSP). Those fields are now locked while a curve is selected.<br><br>In the same area, Pname used to die silently in a panel that Rhino had restored as an empty container on start-up. It now says what is wrong. Closing the panel before quitting Rhino avoids the state altogether."
+        },
+        {
+          "ko": "<b>도움말에서 검색할 수 있습니다.</b> 목차를 눈으로 훑는 대신 명령 이름이나 단어를 넣으면 해당 문서로 바로 갑니다.<br><br>문서도 크게 손봤습니다. 그동안 문서가 없던 <b>Bmt·Udt·Erase·Acad_Join</b> 을 새로 썼고, 화면과 어긋나 있던 그림들을 다시 찍었습니다. 라이선스·버전 관련 명령을 <b>한 문서로 모았고</b>, 여기에 <b>RCWCustomerCode</b> 를 더했습니다 — 고객 페이지 로그인에 쓰는 고객 코드를 이 컴퓨터에 한 번 적어 두면, 나중에 <b>RCWVersion</b> 으로 언제든 다시 보실 수 있습니다. 안내 메일을 못 찾으셔도 됩니다.",
+          "en": "<b>The help now has search.</b> Type a command name or a word instead of scanning the contents, and it takes you straight to the page.<br><br>The documentation itself has been overhauled. <b>Bmt, Udt, Erase and Acad_Join</b> - which had no pages at all - are now written up, and pictures that no longer matched the screen have been retaken. The licence and version commands are gathered into <b>one page</b>, which now also covers <b>RCWCustomerCode</b>: save the customer code you sign in with once, and <b>RCWVersion</b> shows it back to you whenever you need it, with no need to find the e-mail again."
+        }
+      ]
+    },
+    {
       "version": "5.1.3",
       "date": "2026-08-23",
       "items": [
