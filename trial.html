@@ -25,6 +25,14 @@
     .button { display:inline-flex; min-height:48px; align-items:center; justify-content:center; gap:8px; padding:0 20px; border:1px solid transparent; border-radius:10px; background:var(--blue); color:#fff; font-weight:750; font-size:15px; transition:.2s ease; cursor:pointer; }
     .button:hover { transform:translateY(-2px); background:var(--blue-dark); box-shadow:0 12px 28px rgba(38,103,217,.22); }
     .button:disabled { opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    .deck-link { display:flex; align-items:center; justify-content:space-between; gap:18px; margin:26px 0 0; padding:18px 22px; border:1px solid var(--line); border-left:4px solid var(--blue); border-radius:12px; background:var(--paper); color:inherit; text-decoration:none; transition:.2s ease; }
+    .deck-link:hover { border-color:var(--blue); box-shadow:0 12px 28px rgba(38,103,217,.14); transform:translateY(-2px); }
+    .deck-link-text { display:flex; flex-direction:column; gap:4px; }
+    .deck-link-text b { font-size:16px; font-weight:800; color:var(--blue-dark); }
+    .deck-link-text span { font-size:14px; color:var(--muted); }
+    .deck-link-go { flex:none; font-size:22px; color:var(--blue); }
+    @media (max-width:560px) { .deck-link { padding:16px 18px } .deck-link-go { display:none } }
     .button.secondary { border-color:#c9d5ed; background:#fff; color:var(--blue-dark); }
     .button.secondary:hover { background:var(--sky); box-shadow:none; }
 
@@ -331,6 +339,17 @@
       <!-- 변경 안내 — 내용은 releases.json 하나뿐이고 changes.js 가 그린다.
            ★신청 양식(form-card) 바깥에 둔다. 이미 트라이얼을 받아 본 사람이
            "다시 받아야 하나" 를 보러 왔을 때, 양식을 또 채우지 않고도 보여야 한다. -->
+  <!-- 새 기능 발표 덱 — 무엇이 달라졌는지 화면으로 보여 준다.
+       ★변경 안내(#rcw-changes) 바로 위에 둔다. 글로 읽는 목록보다 먼저 눈에 들어와야
+       "이번엔 받을 만하다" 가 전달된다. 페이지는 공개라 로그인 없이 열린다. -->
+  <a class="deck-link" href="/whatsnew">
+    <span class="deck-link-text">
+      <b data-en="See what changed">이번에 달라진 것 보기</b>
+      <span data-en="Twenty-one changes, shown on screen - new commands, redesigned panels, and what they replace.">스물한 가지 변경을 화면으로 봅니다 &mdash; 새 명령, 바뀐 패널, 그리고 무엇이 없어졌는지.</span>
+    </span>
+    <span class="deck-link-go" aria-hidden="true">&rarr;</span>
+  </a>
+
       <div id="rcw-changes"></div>
 
       <div class="spec-grid">

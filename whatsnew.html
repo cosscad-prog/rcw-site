@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RCW 새 기능 발표 덱</title>
+<meta name="description" content="RCW V5 에 새로 들어온 기능을 한 장씩 보여 주는 발표 자료입니다.">
+<meta property="og:title" content="RCW 새 기능 발표 덱">
+<meta property="og:description" content="RCW V5 에 새로 들어온 기능을 한 장씩 보여 주는 발표 자료입니다.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>:root{color-scheme:light}html,body{margin:0;padding:0}img,video{max-width:100%}</style>
+</head>
+<body>
+
+
+
+<style>
+  :root {
+    --ground: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E9EEF3;
+    --ink: #101820;
+    --ink-2: #3B4956;
+    --muted: #67757F;
+    --rule: #D6DEE6;
+    --rule-strong: #B2BFCB;
+    --accent: #0A6494;
+    --accent-soft: #E1EDF5;
+    --new: #0F6B4A;
+    --new-soft: #E0F0E8;
+    --warn: #8A6612;
+    --warn-soft: #F7EFDA;
+    --crit: #A82F1D;
+    --crit-soft: #F8E7E3;
+    --shot-bg: #FFFFFF;
+
+    --f-body: "IBM Plex Sans KR", "Malgun Gothic", system-ui, sans-serif;
+    --f-disp: "IBM Plex Sans Condensed", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
+    --f-mono: "IBM Plex Mono", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0C1116; --surface: #141C23; --surface-2: #1B252E;
+      --ink: #E6EDF3; --ink-2: #BDC9D4; --muted: #87949F;
+      --rule: #26313B; --rule-strong: #394753;
+      --accent: #5DB0E0; --accent-soft: #142E3D;
+      --new: #62C79A; --new-soft: #122E24;
+      --warn: #D9AE55; --warn-soft: #2C2616;
+      --crit: #EE8A76; --crit-soft: #33201C;
+      --shot-bg: #EDF1F4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0C1116; --surface: #141C23; --surface-2: #1B252E;
+    --ink: #E6EDF3; --ink-2: #BDC9D4; --muted: #87949F;
+    --rule: #26313B; --rule-strong: #394753;
+    --accent: #5DB0E0; --accent-soft: #142E3D;
+    --new: #62C79A; --new-soft: #122E24;
+    --warn: #D9AE55; --warn-soft: #2C2616;
+    --crit: #EE8A76; --crit-soft: #33201C;
+    --shot-bg: #EDF1F4;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .deck { height: 100dvh; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; }
+  .deck::-webkit-scrollbar { display: none; }
+
+  .slide {
+    min-height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    padding: 68px 3.4vw 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .slide-inner { width: 100%; max-width: 1520px; margin: 0 auto; }
+
+  /* ---- bar ---- */
+  .bar {
+    position: fixed; inset: 0 0 auto 0; height: 48px;
+    display: flex; align-items: center; gap: 14px; padding: 0 3.4vw;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    z-index: 40;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+  }
+  .bar .brand { font-weight: 600; color: var(--ink-2); letter-spacing: 0.12em; }
+  .bar .spacer { flex: 1; }
+  .bar button {
+    font: inherit; letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid var(--rule-strong); color: var(--ink-2);
+    padding: 4px 10px; border-radius: 3px; cursor: pointer;
+  }
+  .bar button:hover { background: var(--surface); }
+  .bar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #counter { font-variant-numeric: tabular-nums; color: var(--ink-2); font-weight: 600; }
+  .progress { position: fixed; inset: 47px 0 auto 0; height: 2px; z-index: 41; }
+  .progress span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .18s linear; }
+
+  /* ---- title ---- */
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 16px;
+  }
+  .title-slide h1 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(38px, 6.4vw, 76px); line-height: 1.02;
+    letter-spacing: -0.02em; margin: 0 0 20px; text-wrap: balance;
+  }
+  .title-slide .sub { font-size: clamp(16px, 1.8vw, 20px); color: var(--ink-2); max-width: 58ch; margin: 0 0 32px; }
+
+  .agenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .agenda div { background: var(--surface); padding: 15px 17px 17px; }
+  .agenda .n { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--accent); margin: 0 0 5px; }
+  .agenda .t { font-family: var(--f-disp); font-size: 19px; font-weight: 700; margin: 0 0 4px; }
+  .agenda p { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+
+  /* ---- head ---- */
+  .head {
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    padding-bottom: 11px; border-bottom: 2px solid var(--rule-strong); margin-bottom: 18px;
+  }
+  .head .no {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(26px, 2.6vw, 36px); line-height: 1; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .head h2 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(24px, 2.7vw, 38px); line-height: 1.06;
+    letter-spacing: -0.015em; margin: 0; text-wrap: balance;
+  }
+  .head .cmds { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+  .pill {
+    display: inline-block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px; vertical-align: 3px;
+  }
+  .p-new { background: var(--new-soft); color: var(--new); }
+  .p-chg { background: var(--accent-soft); color: var(--accent); }
+  .p-std { background: var(--warn-soft); color: var(--warn); }
+  .p-name { background: var(--crit-soft); color: var(--crit); }
+
+  .lede { font-size: clamp(15.5px, 1.45vw, 18px); color: var(--ink-2); max-width: 92ch; margin: 0 0 18px; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  /* ---- image + text layout ---- */
+  .stage { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+  .stage.wide-img { grid-template-columns: 1.55fr 1fr; }
+  .stage.even { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 1080px) { .stage, .stage.wide-img, .stage.even { grid-template-columns: 1fr; } }
+
+  figure.shot { margin: 0; }
+  figure.shot img {
+    display: block; width: 100%; height: auto;
+    max-height: calc(100dvh - 330px);
+    object-fit: contain; object-position: center top;
+    background: var(--shot-bg);
+    border: 1px solid var(--rule-strong);
+    cursor: zoom-in;
+  }
+  figure.shot figcaption {
+    font-family: var(--f-mono); font-size: 11px; color: var(--muted);
+    margin-top: 6px; letter-spacing: 0.02em;
+  }
+  .shots { display: grid; gap: 14px; }
+  .shots.two { grid-template-columns: 1fr 1fr; }
+  .shots.two figure.shot img { max-height: calc(100dvh - 360px); }
+  .shots.grid4 { grid-template-columns: 1fr 1fr; }
+  .shots.grid4 figure.shot img { max-height: calc(50dvh - 190px); }
+  .shots.grid5 { grid-template-columns: repeat(3, 1fr); }
+  .shots.grid5 figure.shot img { max-height: calc(50dvh - 190px); }
+  @media (max-width: 700px) { .shots.two, .shots.grid4, .shots.grid5 { grid-template-columns: 1fr; } }
+
+  .col { display: flex; flex-direction: column; gap: 12px; }
+
+  .card { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--accent); padding: 13px 16px 16px; }
+  .card.is-new { border-top-color: var(--new); }
+  .card.is-demo { border-top-color: var(--muted); }
+  .card.is-warn { border-top-color: var(--warn); }
+  .card > h3 {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-weight: 500;
+  }
+  .card.is-new > h3 { color: var(--new); }
+  .card.is-warn > h3 { color: var(--warn); }
+
+  .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .card ul li { padding-left: 14px; position: relative; font-size: 14.5px; line-height: 1.55; }
+  .card ul li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 6px; height: 2px; background: var(--rule-strong); }
+  .card ul li span.sub { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+
+  .card ol { margin: 0; padding-left: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 8px; }
+  .card ol li { counter-increment: s; padding-left: 24px; position: relative; font-size: 14.5px; line-height: 1.5; }
+  .card ol li::before {
+    content: counter(s); position: absolute; left: 0; top: 0;
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--accent); font-weight: 600;
+    width: 16px; text-align: right;
+  }
+
+  .say {
+    background: var(--accent-soft); border-left: 3px solid var(--accent);
+    padding: 11px 16px; margin-top: 16px;
+    font-size: clamp(14.5px, 1.3vw, 17px); line-height: 1.5; color: var(--ink);
+  }
+  .say .lbl {
+    display: block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px;
+  }
+
+  code { font-family: var(--f-mono); font-size: 0.87em; background: var(--surface-2); padding: 0.1em 0.36em; border-radius: 2px; color: var(--ink-2); }
+  .card ul li code, .say code, .card ol li code { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+
+  table.mini { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.mini th, table.mini td { text-align: left; padding: 5px 9px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  table.mini th { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  table.mini td:first-child { font-family: var(--f-mono); font-size: 12.5px; white-space: nowrap; color: var(--accent); }
+
+  /* ---- divider ---- */
+  .divider { background: var(--surface); }
+  .divider .kicker { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+  .divider h2 { font-family: var(--f-disp); font-weight: 700; font-size: clamp(32px, 4.8vw, 58px); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 16px; text-wrap: balance; }
+  .divider p { font-size: clamp(16px, 1.6vw, 19px); color: var(--ink-2); max-width: 62ch; margin: 0; }
+  .divider .items { margin-top: 26px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 7px 18px; }
+
+  /* ---- overlays ---- */
+  .overlay { position: fixed; inset: 0; background: color-mix(in srgb, var(--ground) 96%, transparent); z-index: 60; padding: 64px 3.4vw 36px; overflow-y: auto; display: none; }
+  .overlay.open { display: block; }
+  .overlay h2 { font-family: var(--f-disp); font-size: 24px; margin: 0 0 18px; font-weight: 700; }
+  .idx { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 9px; max-width: 1520px; margin: 0 auto; }
+  .idx a { display: block; background: var(--surface); border: 1px solid var(--rule); padding: 10px 13px; text-decoration: none; color: var(--ink); }
+  .idx a:hover, .idx a:focus-visible { border-color: var(--accent); outline: none; }
+  .idx a .n { font-family: var(--f-mono); font-size: 10.5px; color: var(--accent); letter-spacing: 0.08em; }
+  .idx a .t { font-weight: 600; font-size: 14.5px; display: block; margin-top: 2px; }
+  .idx a .d { font-size: 12.5px; color: var(--muted); display: block; }
+  .keys { max-width: 1520px; margin: 22px auto 0; font-family: var(--f-mono); font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 20px; }
+  .keys kbd { font-family: inherit; background: var(--surface-2); border: 1px solid var(--rule); border-radius: 3px; padding: 1px 6px; color: var(--ink-2); }
+
+  #zoom {
+    position: fixed; inset: 0; z-index: 80; display: none;
+    background: color-mix(in srgb, #000 82%, transparent);
+    align-items: center; justify-content: center; padding: 2vh 2vw; cursor: zoom-out;
+  }
+  #zoom.open { display: flex; }
+  #zoom img { max-width: 100%; max-height: 96vh; object-fit: contain; background: #fff; border: 1px solid rgba(255,255,255,.3); }
+
+  @media print {
+    .bar, .progress, .overlay, #zoom { display: none !important; }
+    .deck { height: auto; overflow: visible; }
+    .slide { min-height: 0; page-break-after: always; padding: 20px 0; border: none; }
+    figure.shot img { max-height: 420px; }
+  }
+
+  /* 그림이 칸을 억지로 채우지 않게 한다.
+     width:100% + object-fit:contain 이면 비율이 안 맞는 그림은 좌우에 흰 띠가 생긴다
+     (그 띠는 img 자신의 배경색이다). 자기 비율대로 놓고 칸을 넘지 않게만 막는다.
+     작은 그림을 늘려 흐려지게 하지도 않는다. */
+  figure.shot img,
+    .shot video { width: auto; max-width: 100%; margin-inline: auto; display: block; }
+</style>
+
+<div class="bar">
+  <span class="brand">RCW · 새 기능 발표</span>
+  <span id="counter">3 / 26</span>
+  <span class="spacer"></span>
+  <button id="btn-index" type="button">목차 · G</button>
+</div>
+<div class="progress"><span id="bar-fill" style="width: 11.5385%;"></span></div>
+
+<div class="overlay" id="overlay">
+  <h2>목차</h2>
+  <div class="idx" id="idx"><a href="#slide-0"><span class="n">01</span><span class="t">표지</span><span class="d">발표 개요</span></a><a href="#slide-1"><span class="n">02</span><span class="t">① 넣고, 만들고</span><span class="d">1 – 7</span></a><a href="#slide-2"><span class="n">03</span><span class="t">Pname</span><span class="d">Milling 탭 · Start 한 칸</span></a><a href="#slide-3"><span class="n">04</span><span class="t">Properties 단면 정보</span><span class="d">선 하나 짚으면 무슨 부재인지</span></a><a href="#slide-4"><span class="n">05</span><span class="t">FDwg</span><span class="d">입면에 홀 관통 깊이</span></a><a href="#slide-5"><span class="n">06</span><span class="t">FDstyle</span><span class="d">한 번 기록 → 다음부터 자동 재현</span></a><a href="#slide-6"><span class="n">07</span><span class="t">F3D</span><span class="d">3D 부분 확대 뷰</span></a><a href="#slide-7"><span class="n">08</span><span class="t">FabBomTable</span><span class="d">부속자재 표</span></a><a href="#slide-8"><span class="n">09</span><span class="t">LeaderTextMove</span><span class="d">화살표는 고정, 텍스트만</span></a><a href="#slide-9"><span class="n">10</span><span class="t">WebV · ToWebFile</span><span class="d">브라우저에서 3D · 파일 하나로 공유</span></a><a href="#slide-10"><span class="n">11</span><span class="t">Bmt · Udt</span><span class="d">부재를 하나씩 만든다</span></a><a href="#slide-11"><span class="n">12</span><span class="t">NBlock</span><span class="d">반복 유닛을 블록으로</span></a><a href="#slide-12"><span class="n">13</span><span class="t">② 뽑고, 집계하고</span><span class="d">8 – 13</span></a><a href="#slide-13"><span class="n">14</span><span class="t">Make2D — 입면도 산출</span><span class="d">UF2D · U2D · F2D · TextBoxLeaderMove</span></a><a href="#slide-14"><span class="n">15</span><span class="t">FabList TypeA / TypeB</span><span class="d">라벨 방식 두 가지 + FabTable 부자재 옵션</span></a><a href="#slide-15"><span class="n">16</span><span class="t">Cuttinglist</span><span class="d">최적 장바 5종 · Excel 없이</span></a><a href="#slide-16"><span class="n">17</span><span class="t">BlockOpt</span><span class="d">블록 삽입 패널</span></a><a href="#slide-17"><span class="n">18</span><span class="t">UnitList · UnitTable</span><span class="d">유닛 종류별 입면과 수량</span></a><a href="#slide-18"><span class="n">19</span><span class="t">System Default</span><span class="d">사람마다 다른 기본값</span></a><a href="#slide-19"><span class="n">20</span><span class="t">③ 보고, 편집하고</span><span class="d">14 – 21</span></a><a href="#slide-20"><span class="n">21</span><span class="t">Dtable</span><span class="d">여러 단면을 한 표에서</span></a><a href="#slide-21"><span class="n">22</span><span class="t">GRV · VB</span><span class="d">유리 반투명 · 사선 CPlane</span></a><a href="#slide-22"><span class="n">23</span><span class="t">NC3~NC6 · FSC · SFB · FFB</span><span class="d">AutoCAD 에서 하던 일을 Rhino 안에서</span></a><a href="#slide-23"><span class="n">24</span><span class="t">SST · Erase · Acad_Join</span><span class="d">AutoCAD 손버릇 그대로</span></a><a href="#slide-24"><span class="n">25</span><span class="t">명령 이름 변경</span><span class="d">Dlist → PDlist 외 2건</span></a><a href="#slide-25"><span class="n">26</span><span class="t">정리</span><span class="d">세 문장으로</span></a></div>
+  <div class="keys">
+    <span><kbd>→</kbd> <kbd>Space</kbd> 다음</span>
+    <span><kbd>←</kbd> 이전</span>
+    <span><kbd>G</kbd> 목차</span>
+    <span><kbd>Home</kbd> 처음</span>
+    <span>그림 클릭 = 크게 보기</span>
+    <span><kbd>Esc</kbd> 닫기</span>
+  </div>
+</div>
+
+<div id="zoom"><img alt=""></div>
+
+<div class="deck" id="deck">
+
+  <!-- 표지 -->
+  <section class="slide title-slide" data-title="표지" data-desc="발표 개요" id="slide-0">
+    <div class="slide-inner">
+      <p class="eyebrow">RCW for Rhino · 새로 만들어진 기능과 바뀐 것</p>
+      <h1>이번에 달라진 것<br>스물한 가지</h1>
+      <p class="sub">
+        단면 정보를 넣는 화면부터 가공도·리스트·2D 도면, 그리고 AutoCAD 에서 쓰던 명령까지.
+        <b>오류 수정은 빼고, 화면에서 달라진 것과 새로 생긴 것만</b> 봅니다.
+      </p>
+      <div class="agenda">
+        <div><p class="n">1 – 7</p><p class="t">넣고, 만들고</p><p>단면 정보 입력 · Properties 단면 페이지 · 단면 사전검사 · 가공도 다섯 명령 · 웹 뷰어 · Bmt/Udt · NBlock</p></div>
+        <div><p class="n">8 – 13</p><p class="t">뽑고, 집계하고</p><p>입면 2D · FabList 라벨 · 절단 최적화 · 블록 패널 · Unit 집계 · 기본값 저장</p></div>
+        <div><p class="n">14 – 21</p><p class="t">보고, 편집하고</p><p>단면 표 · 유리 반투명 · 사선 CPlane · AutoCAD 명령군 · 편집 명령 · 명령 이름 변경 · 추가 길이 복사 · 도움말 검색</p></div>
+      </div>
+      <div class="say">
+        <span class="lbl">여는 말</span>
+        이번 변경의 방향은 하나입니다 — <b>한 번 정해 둔 것을 두 번 다시 정하지 않게</b> 만들었습니다.
+        가공도 방식도, 라벨 방식도, 옵션 기본값도 저장해 두면 다음부터 그대로 나옵니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 구분 ① -->
+  <section class="slide divider" data-title="① 넣고, 만들고" data-desc="1 – 7" id="slide-1">
+    <div class="slide-inner">
+      <p class="kicker">Part 1</p>
+      <h2>넣고, 만들고</h2>
+      <p>단면에 정보를 넣는 화면이 둘로 늘었고, 가공도는 한 번 기록하면 다음부터 스스로 재현합니다.</p>
+      <div class="items">
+        <span>1 Pname</span><span>2 Properties 단면 정보</span><span>3 SSP</span>
+        <span>4 가공도 5</span><span>5 WebV · ToWebFile</span><span>6 Bmt · Udt</span><span>7 NBlock</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 Pname -->
+  <section class="slide" data-title="Pname" data-desc="Milling 탭 · Start 한 칸" id="slide-2">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">01</span>
+        <h2>Pname <span class="pill p-new">Milling 신규</span> <span class="pill p-chg">화면 변경</span></h2>
+        <span class="cmds">Pname · PPI</span>
+      </div>
+      <p class="lede">
+        단면에 이름·단중·추가 길이·Block 정보를 넣는 그 창입니다. 여기에 <b>Milling 탭</b>이 새로 생겼고,
+        <b>Additional Length 가 <code>Start</code> 한 칸으로</b> 줄었습니다.
+      </p>
+      <div class="stage wide-img">
+        <div class="shots two">
+          <figure class="shot">
+            <img src="/img/deck/Pname_milling.png" alt="Pname 창에서 단면 정보를 입력하는 화면">
+            <figcaption>Pname — 단면 정보 입력 창</figcaption>
+          </figure>
+          <figure class="shot">
+            <video src="/img/deck/PName_Milling.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Milling 탭에서 닫힌 폴리라인으로 프로파일을 깎는 과정"></video>
+            <figcaption>Milling — 폴리라인 하나로 깎기</figcaption>
+          </figure>
+        </div>
+        <div class="col">
+          <div class="card is-new">
+            <h3>새로 생긴 것 — Milling 탭</h3>
+            <ul>
+              <li><b>프로파일 바를 폴리라인 모양으로 깎습니다.</b><span class="sub">단면과 같은 평면에 <b>닫힌 폴리라인</b>을 그리고 Mill 1 버튼으로 고릅니다. 한 프로파일에 <code>Mill 1</code>~<code>Mill 4</code> 네 칸.</span></li>
+              <li><b>Cut Type</b> — 깎기만 / 깎고 절삭체 사본 남기기<span class="sub">사본은 <code>Subtract_Block</code> 레이어에 남아 위치를 눈으로 확인할 수 있습니다.</span></li>
+              <li><b>Location</b> — <code>By Brep</code>(바 실제 양 끝) / <code>By Line</code>(중심선 양 끝)</li>
+              <li><b>등간격은 Block Insert 와 같은 뜻</b>입니다 — 양 끝에 하나씩 놓고 사이를 <b>값을 넘지 않는 가장 적은 개수</b>로 나눕니다. 자투리가 없습니다.</li>
+            </ul>
+            <table class="mini" style="margin-top:10px">
+              <tbody><tr><th>구간</th><th>입력</th><th>결과</th></tr>
+              <tr><td>1250mm</td><td>등간격 100</td><td>간격 96.15mm · 14 개</td></tr>
+              <tr><td>1200mm</td><td>등간격 200</td><td>간격 200mm 그대로 · 7 개</td></tr>
+            </tbody></table>
+          </div>
+          <div class="card">
+            <h3>바뀐 것 — Additional Length</h3>
+            <ul>
+              <li><b>Mullion · Transom 두 칸이 <code>Start</code> 한 칸으로.</b><span class="sub">한 단면은 멀리언이거나 트랜섬이지 둘 다일 수 없어 늘 한쪽만 쓰였습니다.</span></li>
+              <li><b>기존 도면은 그대로 열립니다</b> — 한 번 저장하면 옛 두 값이 하나로 정리됩니다.</li>
+              <li>두 탭의 <b>배치를 맞춰</b> 탭을 바꿔도 항목이 움직이지 않습니다. 이름 칸을 누르면 모델에 <b>번호 점</b>이 찍힙니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        전에는 슬롯·홈을 넣으려면 형상을 따로 만들어 빼야 했습니다. 이제 <b>단면에 그린 폴리라인 하나</b>면
+        UMD 가 알아서 깎습니다. 간격 규칙도 블록과 같아 <b>새로 외울 것이 없습니다.</b>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 Properties -->
+  <section class="slide" data-title="Properties 단면 정보" data-desc="선 하나 짚으면 무슨 부재인지" id="slide-3">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">02</span>
+        <h2>Properties 패널의 단면 정보 <span class="pill p-new">신규</span></h2>
+        <span class="cmds">명령 아님 — Properties 패널 안의 탭</span>
+      </div>
+      <p class="lede">
+        Rhino <b>Properties</b> 패널 안에 <b>RCW 탭</b>이 생겼습니다. 객체를 고르고 <b>P 아이콘</b>을 누르면
+        그것이 어떤 부재인지 바로 나옵니다. <b>단면 group 안의 선 하나</b>를 골라도 됩니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/Properties_windows.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Properties 패널의 RCW 단면 탭에서 값을 확인하고 고치는 화면"></video>
+          <figcaption>Properties → P 탭 — 고르면 바로 보이고, 그 자리에서 고칠 수 있다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>화면 구성</h3>
+            <table class="mini">
+              <tbody><tr><td>Object</td><td>Rhino 기본 Object 페이지와 같은 줄 — <code>Type</code> · <code>Name</code> · <code>Description</code> · <code>Layer</code> · <code>Display Color</code></td></tr>
+              <tr><td>Section Data</td><td>Material · Profile · Fab · Group · Alloy — <b>번호가 아니라 뜻</b>으로(<code>1. Mullion</code>)</td></tr>
+              <tr><td>Add Length</td><td><code>Top/Left</code> · <code>Bot/Right</code> 두 줄</td></tr>
+              <tr><td>More details</td><td>그 객체로 <b>Pname 창</b>을 바로 엽니다</td></tr>
+            </tbody></table>
+          </div>
+          <div class="card is-warn">
+            <h3>알아 둘 것</h3>
+            <ul>
+              <li><b>Name 을 고치면 단면 이름(P_name)도 함께</b> 바뀝니다 — 확인창이 먼저 뜹니다.</li>
+              <li><b>여러 개를 고르면 편집이 꺼집니다.</b></li>
+              <li><b>ID 를 바꿔도 이미 만든 모델·도면은 그대로</b>입니다 — SSP 재등록 + UMD 재실행이 필요합니다.</li>
+              <li>단면 data 는 <b>Undo 로 되돌아가지 않습니다.</b> Rhino 7 에서도 나오고, <b>탭 아이콘만</b> Rhino 8 전용입니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        전에는 "이 선이 어느 프로파일인가"를 알려면 Pname 을 열어야 했습니다. 이제 <b>클릭 한 번</b>입니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 SSP -->
+  <section class="slide" data-title="SSP" data-desc="등록하기 전에 단면을 먼저 검사한다" id="slide-4">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">03</span>
+        <h2>SSP — 등록 전에 먼저 걸러 준다 <span class="pill p-new">사전검사 신규</span></h2>
+        <span class="cmds">SSP</span>
+      </div>
+      <p class="lede">
+        SSP 는 단면 group 을 골라 등록하는 명령입니다. 여기에 <b>등록 전 검사</b>가 들어갔습니다 —
+        그대로 등록하면 한참 뒤 <b>UMD 에서야</b> 터지던 것들을, 이제 <b>등록하는 그 자리에서</b> 알려줍니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <img src="/img/deck/SSP.png" alt="SSP 가 data 없는 단면에 No_Data 표시를 세우고 중단 경고창을 띄운 화면">
+          <figcaption>SSP — 문제가 있는 단면은 선택 + 표시 + 경고창, 셋으로 알린다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>새로 검사하는 것 — 셋</h3>
+            <ul>
+              <li><b>data 가 없는 단면 Surface</b><span class="sub">Pname 을 넣지 않은 단면입니다. <b>등록을 중단</b>하고, 그 단면 한가운데에 빨간 <code>No_Data</code> 표시를 세웁니다.</span></li>
+              <li><b>복사로 어긋난 Block ID — 다시 찾아 줍니다</b><span class="sub">단면 group 을 복사하면 등록된 블록 ID 가 <b>원본 group 의 블록</b>을 그대로 가리킵니다. group 안에서 <b>같은 이름 · 같은 거리</b>의 블록을 찾아 스스로 고쳐 씁니다. 하나로 좁혀지지 않으면 고치지 않고 알립니다.</span></li>
+              <li><b>형상이 깨진 단면 Surface</b><span class="sub">닫히지 않은 구멍 선, 겹쳐 그린 선 — <b>잘못된 Surface</b> 라고 알리고 <code>Bad_Shape</code> 표시를 세웁니다.</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>알아 둘 것</h3>
+            <ul>
+              <li><b>한 창에 모아서 보여줍니다.</b><span class="sub">단면 문제와 블록 문제가 섞여 있어도 나누지 않습니다 — 같은 유닛의 줄이 나란히 떠야 한 번에 고칩니다.</span></li>
+              <li><b>찾아가기 쉽게</b> — 문제 객체는 <b>선택된 채로</b> 남고, 표시는 <code>No_Data</code> Layer 에 모입니다.<span class="sub">SSP 를 다시 돌리면 지난 표시는 지웁니다. 자세한 이유는 명령창에 한 줄씩 남습니다.</span></li>
+              <li><b>중단이면 등록은 하지 않습니다.</b><span class="sub">반쪽짜리 단면이 Multi_set 에 들어가지 않게 합니다. 고친 뒤 SSP 를 다시 실행하면 됩니다.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        전에는 <b>UMD 가 죽고 나서야</b> 어느 단면이 문제인지 되짚어야 했습니다.
+        이제 SSP 가 <b>그 단면을 집어서</b> 보여줍니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-1 FDwg -->
+  <section class="slide" data-title="FDwg" data-desc="입면에 홀 관통 깊이" id="slide-5">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>FDwg — 입면에 홀 깊이가 보인다</h2>
+        <span class="cmds">FDwg · FDDS</span>
+      </div>
+      <p class="lede">
+        FDwg 는 FDDS 와 같은 가공도를 만들되, <b>입면도에도 홀 정보를 함께 표시</b>하고
+        홀이 자재를 <b>얼마나 관통하는지</b>를 점선으로 보여 줍니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/FDwg.mp4" autoplay muted loop playsinline preload="metadata" aria-label="FDwg 가 가공도와 입면 홀 깊이를 생성하는 화면"></video>
+          <figcaption>FDwg — 그룹을 고르면 View 별 가공도와 입면 홀 깊이가 함께 생성된다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>입면 홀 깊이 표현</h3>
+            <ul>
+              <li><b>홀이 자재를 통과하는 구간을 점선(Hidden Line)으로</b> 그립니다 — 위치와 관통 깊이를 동시에 봅니다.</li>
+              <li><b>홀과 같은 깊이의 선만 골라냅니다.</b><span class="sub">홀의 Bounding Box 깊이와 2D 투영이 계산한 가려진 선의 깊이가 맞는 것만 씁니다 — 반대편 벽 같은 무관한 선은 빠집니다.</span></li>
+              <li>선별된 선은 <code>Shape_Hidden</code> 레이어에 들어갑니다.</li>
+              <li><b>FR · TO · BO · TB · BB 모든 입면 View</b>에 적용되며, 프로파일 방향에 따라 알맞은 View 에 자동으로 나타납니다.</li>
+              <li>홀 중심선 · 단면 해치 · 홀 포인트 등 <b>기존 표기는 그대로</b> 두고 그 위에 더합니다.</li>
+            </ul>
+          </div>
+          <div class="card is-warn">
+            <h3>옵션 우선순위</h3>
+            <ul>
+              <li><code>DdOpt</code> 는 View 방향·거리·추가 치수·홀 인식 지름을, <code>DsOpt</code> 는 치수선 배치와 크기를 정합니다.</li>
+              <li><b>재생 모드에서 해당 금형 행이 파일에 있으면 파일 값이 패널 값보다 우선</b>합니다. 없으면 DdOpt 패널 값을 씁니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        입면만 보고도 <b>홀이 어디까지 뚫렸는지</b> 알 수 있습니다. 단면을 따로 찾아볼 일이 줄어듭니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-2 FDstyle -->
+  <section class="slide" data-title="FDstyle" data-desc="한 번 기록 → 다음부터 자동 재현" id="slide-6">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>FDstyle — 한 번 기록하면 다음부터 자동 <span class="pill p-chg">명령 통합</span></h2>
+        <span class="cmds">FDstyle (구 FDP · FDwgStyle)</span>
+      </div>
+      <p class="lede">
+        자주 쓰는 Profile 의 가공도 작업을 <b>한 번 기록</b>해 두면, 같은 Profile 의 가공도를 만들 때
+        <b>같은 결과가 자동으로 재현</b>됩니다.
+      </p>
+      <div class="stage">
+        <div class="shots two">
+          <figure class="shot">
+            <video src="/img/deck/FDstyle.mp4" autoplay muted loop playsinline preload="metadata" aria-label="FDstyle 패널에서 기록 모드로 가공도를 만드는 화면"></video>
+            <figcaption>기록(ON) → 작업 → 재생(OFF)에서 자동 재현</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="/img/deck/FDStyle_KR.png" alt="FDstyle 패널 구성 — 배너 토글, 도면양식, 양식삽입, 상태 표">
+            <figcaption>패널 — 배너 토글 · 도면양식 · 양식삽입 · Profile 별 상태 표</figcaption>
+          </figure>
+        </div>
+        <div class="col">
+          <div class="card is-new">
+            <h3>기록되고 재현되는 것</h3>
+            <ul>
+              <li><b>DdOpt 옵션</b> 전체</li>
+              <li><b>NC 데이터 테이블</b> (NC3~NC6)</li>
+              <li><b>FSC 도면 압축</b></li>
+              <li><b>주석 · 지시선 · 라벨 이동</b><span class="sub">직접 추가한 지시선·텍스트와 <code>LeaderTextMove</code> 로 옮긴 위치까지.</span></li>
+              <li><b>부속자재 표</b>(FabBomTable)의 위치</li>
+              <li><b>부분 확대 3D</b>(F3D)의 카메라 방향과 배율</li>
+              <li><b>도면 양식</b>(SFB/FFB)</li>
+            </ul>
+          </div>
+          <div class="card is-demo">
+            <h3>보여 줄 것</h3>
+            <ol>
+              <li>기록 ON → DdOpt 맞추고 FDwg 실행</li>
+              <li>F3D · 부속자재 표 · 지시선 추가</li>
+              <li>재생으로 되돌린 뒤 <b>같은 Profile 을 다시</b> FDwg</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        여기가 이번 변경의 <b>중심</b>입니다. 가공도를 "매번 다시 꾸미는 일"에서 <b>"한 번 정해 두는 일"</b>로 바꿉니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-3 F3D -->
+  <section class="slide" data-title="F3D" data-desc="3D 부분 확대 뷰" id="slide-7">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>F3D — 3D 부분 확대 뷰 <span class="pill p-new">신규</span></h2>
+        <span class="cmds">F3D</span>
+      </div>
+      <p class="lede">
+        복잡한 가공 부위나 브래킷 결합부를 <b>원하는 각도의 3D 모습 그대로</b> 도면에 넣습니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/F3d.mp4" autoplay muted loop playsinline preload="metadata" aria-label="F3D 로 3D 창에서 각도를 잡고 도면에 부분 확대 뷰를 삽입하는 화면"></video>
+          <figcaption>F3D — 3D 창에서 구도를 잡고, 확정하면 그대로 2D 로 삽입된다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>순서</h3>
+            <ol>
+              <li>부재를 고르면 <b>별도 3D 창</b>이 열립니다 — 그 부재만 격리되어 보입니다.</li>
+              <li>우버튼 드래그 <b>회전</b> · 휠 <b>확대</b> · 좌버튼 드래그 <b>이동</b></li>
+              <li><b>확정</b> — 화면에 보이는 그대로(원근)가 숨은선 제거 2D 로 바뀝니다.</li>
+              <li>위치를 클릭하고 <b>배율을 드래그</b>로 정합니다(0.3 배부터).</li>
+            </ol>
+          </div>
+          <div class="card is-warn">
+            <h3>알아 둘 것</h3>
+            <ul>
+              <li><b>카메라 방향과 배율이 저장됩니다</b> — 재생 시 <b>같은 방향·같은 배율</b>로 자동 재현.</li>
+              <li>부재(Brep)와 <code>ProfileName</code> 이 있어야 합니다 — 없으면 중단됩니다.</li>
+              <li>출력은 <b>항상 모델 실측 기준</b>. 3D 창의 확대는 <b>구도용</b>일 뿐입니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        "이 부위는 말로 설명하기 어렵다" 싶을 때 씁니다. 한 번 각도를 잡아 두면 <b>다음 도면에서도 같은 각도로</b> 나옵니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-4 FabBomTable -->
+  <section class="slide" data-title="FabBomTable" data-desc="부속자재 표" id="slide-8">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>FabBomTable — 부속자재 표 <span class="pill p-chg">구 FBL</span></h2>
+        <span class="cmds">FabBomTable</span>
+      </div>
+      <p class="lede">
+        가공도에 들어가는 <b>부속자재 목록(BOM)</b>을 마우스로 원하는 자리에 놓습니다.
+        내용은 이 명령이 만드는 것이 아니라 <b>가공도를 만들 때 이미 모인 것</b>입니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/FabBomTable.mp4" autoplay muted loop playsinline preload="metadata" aria-label="FabBomTable 로 부속자재 표를 도면에 배치하는 화면"></video>
+          <figcaption>주황색 미리보기로 좌상단을 클릭하면 그 자리에 표가 그려진다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>동작</h3>
+            <ul>
+              <li><b>내용</b> — FDwg/FDDS 가 그룹의 브래킷·슬리브·부착물에서 자동 수집</li>
+              <li><b>위치 지정</b> — 표 외곽과 행 구분선이 <b>주황색 미리보기</b>로 보입니다</li>
+              <li><b>크기</b>는 자재 종수와 글자 크기에 따라 자동 결정</li>
+              <li>같은 Profile 에 표가 있으면 <b>지우고 새로</b> 그립니다</li>
+              <li><b>위치는 도면 기준점 상대좌표로 저장</b> → 재생 시 같은 자리</li>
+            </ul>
+          </div>
+          <div class="card is-warn">
+            <h3>안 될 때</h3>
+            <ul>
+              <li>"수집된 부속자재가 없습니다" — <b>부속자재가 포함된 그룹으로 FDwg/FDDS 를 먼저</b> 실행해야 합니다.</li>
+              <li><code>ProfileName</code> 태그가 없는 객체는 대상이 아닙니다.</li>
+              <li><code>FabTable</code>(제작 번호 표)과는 <b>다른 표</b>입니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        표를 <b>어디에 둘지만</b> 정하면 됩니다. 그 자리를 기억했다가 다음 도면에서도 같은 자리에 놓습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-5 LeaderTextMove -->
+  <section class="slide" data-title="LeaderTextMove" data-desc="화살표는 고정, 텍스트만" id="slide-9">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>LeaderTextMove — 화살표는 두고 글자만 옮긴다 <span class="pill p-chg">구 LM</span></h2>
+        <span class="cmds">LeaderTextMove · LeaderMove</span>
+      </div>
+      <p class="lede">
+        지시선의 <b>화살표는 부속에 고정</b>한 채 <b>텍스트(꼬리)만</b> 옮깁니다.
+        일반 Move 는 화살표까지 움직여 지시 대상이 흔들립니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/LeadertextMove.mp4" autoplay muted loop playsinline preload="metadata" aria-label="LeaderTextMove 로 라벨 텍스트만 옮기는 화면"></video>
+          <figcaption>화살표는 그대로, 꼬리만 새 위치로 — 지시선이 따라 다시 그려진다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>동작</h3>
+            <ul>
+              <li><b>고정 / 이동</b> — 시작점(화살표)은 그대로, 마지막 점(꼬리)만 이동</li>
+              <li><b>미리보기가 실제 지시선과 같은 DimStyle</b> 로 그려져, 클릭 위치가 결과와 일치합니다</li>
+              <li>여러 라벨을 <b>이어서</b> 옮길 수 있습니다 — Enter 로 종료</li>
+              <li>Annotation(지시선)만 선택됩니다</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>쓰는 자리</h3>
+            <ul>
+              <li>단면 라벨이 <b>서로 겹치거나</b> 도면 밖으로 나갈 때</li>
+              <li><b>기록 모드에서 옮기면 그 위치가 저장</b>되어 재생 시 그대로 재현됩니다</li>
+              <li>라벨 전체를 옮기려면 <code>LeaderMove</code></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        도면 손질 중 가장 잦은 것이 <b>겹친 라벨 정리</b>입니다. 그 손질까지 기록되니 다시 뽑아도 정리된 상태로 나옵니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 WebV -->
+  <section class="slide" data-title="WebV · ToWebFile" data-desc="브라우저에서 3D · 파일 하나로 공유" id="slide-10">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">05</span>
+        <h2>WebV · ToWebFile — 브라우저에서 보고, 파일 하나로 보낸다 <span class="pill p-std">Standard</span></h2>
+        <span class="cmds">WebV · ToWebFile</span>
+      </div>
+      <p class="lede">
+        모델을 <b>Rhino 없이</b> 볼 수 있게 만듭니다. <code>WebV</code> 는 지금 바로 브라우저로 열고,
+        <code>ToWebFile</code> 은 <b>HTML 파일 하나</b>로 저장해 그대로 전달합니다.
+      </p>
+      <div class="stage">
+        <div class="shots two">
+          <figure class="shot">
+            <video src="/img/deck/WebV.mp4" autoplay muted loop playsinline preload="metadata" aria-label="WebV 로 모델을 브라우저 뷰어에서 확인하는 화면"></video>
+            <figcaption>WebV — 내 PC 의 <code>localhost:8765</code> 뷰어. 외부로 올리지 않는다</figcaption>
+          </figure>
+          <figure class="shot">
+            <video src="/img/deck/ToWebFile.mp4" autoplay muted loop playsinline preload="metadata" aria-label="ToWebFile 로 단일 HTML 파일을 저장해 여는 화면"></video>
+            <figcaption>ToWebFile — 모델이 안에 든 HTML 하나. 더블클릭이면 열린다</figcaption>
+          </figure>
+        </div>
+        <div class="col">
+          <div class="card is-new">
+            <h3>뷰어에서 할 수 있는 것</h3>
+            <ul>
+              <li><b>Orbit · Pan · Zoom · Reset · Fit</b> — 상단 툴바</li>
+              <li><b>Ghost</b> 반투명 · <b>Grid</b> · <b>Section</b> 절단(X/Y/Z 축과 위치)</li>
+              <li><b>Explode</b> — 슬라이더로 요소를 벌려 조립 관계 확인</li>
+              <li><b>Projection</b> — Persp / Ortho (기본 Ortho)</li>
+              <li><b>Zoom Window</b> — <code>W</code> → Space, 영역 드래그</li>
+              <li>뷰 단축키 — <code>TV</code> · <code>FV</code> · <code>RV</code> · <code>LV</code> · <code>SE</code>/<code>SW</code> · <code>ZX</code> 전체보기</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>공통</h3>
+            <ul>
+              <li><b>폴리곤 감소율</b>을 물어봅니다 — Enter 면 원본. 값이 작을수록 가볍습니다.</li>
+              <li>레이어·색상·블록 색상 상속과 텍스트까지 함께 넘어갑니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        현장이나 발주처에 <b>모델을 그대로 보여 주는 가장 빠른 길</b>입니다. 받는 사람은 프로그램을 깔 필요가 없습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 Bmt/Udt -->
+  <section class="slide" data-title="Bmt · Udt" data-desc="부재를 하나씩 만든다" id="slide-11">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">06</span>
+        <h2>Bmt · Udt — 부재를 하나씩 만든다 <span class="pill p-new">신규</span> <span class="pill p-std">Standard</span></h2>
+        <span class="cmds">Bmt · Udt</span>
+      </div>
+      <p class="lede">
+        <code>UMD</code> 는 와이어프레임 group 을 <b>완전하게 준비하고 골라야</b> 결과가 나옵니다.
+        <code>Bmt</code> 는 같은 규칙을 <b>부재 하나 단위</b>로 줍니다 — 선 하나를 짚으면 그 부재가 바로 생깁니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/Bmt_Udt.mp4" autoplay muted loop playsinline preload="metadata" aria-label="프로파일 group 을 고르고 선을 짚어 부재를 하나씩 만드는 과정"></video>
+          <figcaption>Bmt — 선 하나를 짚으면 그 부재가 생긴다</figcaption>
+        </figure>
+        <div style="display:grid; gap:14px; align-content:start">
+        <div class="card is-new">
+          <h3>작업 순서</h3>
+          <ol>
+            <li>Mullion 이나 Transom <b>프로파일 group 하나</b>를 고릅니다.</li>
+            <li><b>선 하나</b>를 짚습니다.</li>
+            <li>미리보고 <b>그 부재를 바로 만듭니다.</b></li>
+            <li>뒤 부재를 <b>같은 와이어프레임 셋</b>에 이어서 더합니다.</li>
+            <li>두 종류가 다 있으면 <code>Udt</code> 로 셋을 다시 지어 <b>부재 간 절단이 보이게</b> 합니다.</li>
+          </ol>
+        </div>
+        <div class="card is-warn">
+          <h3>알아 둘 것</h3>
+          <ul>
+            <li><b>생성물은 와이어프레임 셋 단위로 묶입니다.</b><span class="sub">선택이 단순해지고, 관계없는 유닛의 프로파일이 함께 갱신되지 않습니다.</span></li>
+            <li><b>프로파일 방향은 원본 group 에 저장</b>되어, 나중에 갱신해도 지금의 뷰나 선택 방향에 좌우되지 않습니다.</li>
+            <li><b>한 유닛은 한 방식만</b> 씁니다 — BMT/UDT 아니면 SSP/UMD.</li>
+            <li>단면 data 가 없는 프로파일은 옛 기본 연장값을 씁니다 — Brep·curve 50, 원본 Surface 0.</li>
+            <li>도움말에 <b>Bmt/Udt</b> 페이지가 있습니다 — <b>04 Frame Modeling</b> 의 <b>UMD</b> 다음.</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>처음 배우는 사람</b>과 <b>한두 부재만 고쳐야 하는 상황</b>을 위한 길입니다.
+        전체를 다시 돌리지 않고 필요한 것만 만들 수 있습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 NBlock -->
+  <section class="slide" data-title="NBlock" data-desc="반복 유닛을 블록으로" id="slide-12">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">07</span>
+        <h2>NBlock — 같은 유닛은 블록 하나로</h2>
+        <span class="cmds">NBlock → Molist · Cuttinglist · FabTable</span>
+      </div>
+      <p class="lede">
+        같은 형상·같은 규격의 유닛을 <b>Group 으로 계속 복사</b>하는 대신 <b>블록 하나</b>로 관리합니다.
+        작업 시간과 파일 용량이 줄고, 이후 리스트 명령이 그 블록을 그대로 읽습니다.
+      </p>
+      <div class="stage">
+        <div class="shots grid5" style="grid-template-columns:1fr 1fr 1fr">
+          <figure class="shot">
+            <video src="/img/deck/NBlock.mp4" autoplay muted loop playsinline preload="metadata" aria-label="NBlock 으로 객체 안의 Text 이름을 써서 블록을 만드는 화면"></video>
+            <figcaption>이름은 객체 안의 Text 에서</figcaption>
+          </figure>
+          <figure class="shot">
+            <video src="/img/deck/NBlock_02.mp4" autoplay muted loop playsinline preload="metadata" aria-label="같은 이름의 NBlock 을 다시 만들어 갱신하는 화면"></video>
+            <figcaption>같은 이름이면 정의 갱신 + 인스턴스 재배치</figcaption>
+          </figure>
+          <figure class="shot">
+            <video src="/img/deck/Molist_demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Molist 가 블록과 그룹을 함께 집계하는 화면"></video>
+            <figcaption>Molist — Group·Block·Mixed 자동 판별</figcaption>
+          </figure>
+        </div>
+        <div class="col">
+          <div class="card is-new">
+            <h3>블록 만들기</h3>
+            <ul>
+              <li><b>이름은 객체 안의 Text 에서</b> 가져옵니다.<span class="sub">GS·VT·BP·GR 로 시작하는 Text 는 제외. 쓸 Text 가 없으면 새 이름을 입력합니다.</span></li>
+              <li><b>기준점</b>은 <code>M_Center</code>·<code>T_Center</code> 시작점이 만나는 곳<span class="sub">중심선 레이어가 함께 선택되어야 정확합니다. <b>M_Center 선이 하나 포함</b>되어야 합니다.</span></li>
+              <li><b>같은 이름이면</b> 정의를 갱신하고 기존 인스턴스를 <b>원래 위치·회전 그대로</b> 재배치합니다.</li>
+              <li>이름이 애매하면 <b>어느 Text 를 쓸지 묻고</b>, 덮어쓰기 전에 <b>확인창</b>이 뜹니다.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>리스트가 블록을 읽는다</h3>
+            <table class="mini">
+              <tbody><tr><td>Molist</td><td>Group / Block / <b>Mixed</b> 자동 판별해 하나로 집계</td></tr>
+              <tr><td>Cuttinglist</td><td>Group · NBlock · 혼합 모두 지원</td></tr>
+              <tr><td>FabTable</td><td>블록 내부와 중첩 블록의 수량 반영</td></tr>
+              <tr><td>PMolist</td><td>블록 안의 프로파일까지 읽습니다</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>부분 선택하면 부분 리스트가 나옵니다.</b> 유닛을 블록으로 만들어 두면 <b>고른 만큼</b>만 집계됩니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 구분 ② -->
+  <section class="slide divider" data-title="② 뽑고, 집계하고" data-desc="8 – 13" id="slide-13">
+    <div class="slide-inner">
+      <p class="kicker">Part 2</p>
+      <h2>뽑고, 집계하고</h2>
+      <p>입면 도면과 리스트가 한 명령으로 이어지고, 결과 형식은 사람마다 다르게 저장해 둘 수 있습니다.</p>
+      <div class="items">
+        <span>8 UF2D · U2D · F2D</span><span>9 FabList TypeA/B</span><span>10 Cuttinglist</span>
+        <span>11 BlockOpt</span><span>12 UnitList · UnitTable</span><span>13 System Default</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 Make2D -->
+  <section class="slide" data-title="Make2D — 입면도 산출" data-desc="UF2D · U2D · F2D · TextBoxLeaderMove" id="slide-14">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">08</span>
+        <h2>입면도 산출 — 단면·입면·치수·리스트를 한 번에</h2>
+        <span class="cmds">UF2D · U2D · F2d · TextBoxLeaderMove</span>
+      </div>
+      <p class="lede">
+        유닛 하나를 골라 <b>단면 2D · 제작 리스트 · 입면 2D · 치수</b>를 한 번에 만듭니다.
+        단면을 낼 위치에 <b>점을 찍어</b> Cross Line 을 만듭니다(2 점까지).
+      </p>
+      <div class="stage">
+        <div class="shots grid4">
+          <figure class="shot"><video src="/img/deck/U2D_demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="U2D 로 단면 2D 와 Fablist 를 만드는 화면"></video><figcaption>U2D — 단면 2D + Fablist</figcaption></figure>
+          <figure class="shot"><video src="/img/deck/UF2D_demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="UF2D 로 단면과 입면을 함께 만드는 화면"></video><figcaption>UF2D — 여기에 Front 입면 + 치수까지</figcaption></figure>
+          <figure class="shot"><video src="/img/deck/F2d_demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="F2d 로 Front 입면 2D 를 만드는 화면"></video><figcaption>F2d — Front 입면 2D (Glass Line 생략)</figcaption></figure>
+          <figure class="shot"><video src="/img/deck/TextBoxleaderMove.mp4" autoplay muted loop playsinline preload="metadata" aria-label="TextBoxLeaderMove 로 TypeB 라벨 박스를 옮기는 화면"></video><figcaption>TextBoxLeaderMove — 박스만 옮기면 지시선이 따라온다</figcaption></figure>
+        </div>
+        <div class="col">
+          <div class="card is-new">
+            <h3>세 명령의 범위</h3>
+            <table class="mini">
+              <tbody><tr><td>U2D</td><td>Cross Line 기준 <b>Top/Right 단면 2D + 치수</b> + 그 유닛의 <b>Fablist</b></td></tr>
+              <tr><td>UF2D</td><td>U2D <b>+ Front 입면 2D + 치수</b> — 단면과 입면이 함께 필요할 때 이 하나로 끝냅니다</td></tr>
+              <tr><td>F2d</td><td>Front 기준 <b>입면 2D</b>. 프로파일이 잘 보이도록 <b>Glass Line 생략</b>, Center Line 따라 치수</td></tr>
+            </tbody></table>
+          </div>
+          <div class="card is-new">
+            <h3>TextBoxLeaderMove</h3>
+            <ul>
+              <li><b>Fablist TypeB 의 미니 테이블 라벨</b>을 옮길 때 씁니다.</li>
+              <li>박스가 이동하면 <b>지시선 끝점이 자동으로 다시 계산</b>되고, <b>시작점(멤버 중점)은 움직이지 않습니다.</b></li>
+              <li>박스 안 <b>어느 객체를 클릭해도</b> 동작합니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <code>UnitTable</code> 로 유닛 입면을 세워 두고 <code>UF2D</code> 를 돌리는 것이 <b>가장 짧은 입면 도면 작업</b>입니다 — 12 번에서 이어집니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 FabList -->
+  <section class="slide" data-title="FabList TypeA / TypeB" data-desc="라벨 방식 두 가지 + FabTable 부자재 옵션" id="slide-15">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">09</span>
+        <h2>입면 번호 라벨 — TypeA / TypeB <span class="pill p-new">신규</span></h2>
+        <span class="cmds">Fablist · Flist · FabTable</span>
+      </div>
+      <p class="lede">
+        입면에 붙는 <b>번호 라벨의 방식</b>을 고를 수 있게 됐습니다.
+        표 자체는 두 방식 모두 똑같이 나오고, <b>입면 라벨만</b> 달라집니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/fabList_demo2.mp4" autoplay muted loop playsinline preload="metadata" aria-label="FabList 로 제작 리스트와 입면 번호 라벨을 만드는 화면"></video>
+          <figcaption>FabList — TypeA(원+번호) / TypeB(라인별 미니 테이블)</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>두 방식</h3>
+            <table class="mini">
+              <tbody><tr><td>TypeA</td><td>솔리드마다 <b>원 + 번호</b>를 지시선으로. 표의 NO 와 1:1 (기존 방식)</td></tr>
+              <tr><td>TypeB</td><td>같은 센터라인의 솔리드를 묶어 <b>미니 테이블</b>을 만들고 멤버 중점에 연결. 행은 <code>ProfileName Fab번호 - 수량</code></td></tr>
+            </tbody></table>
+            <ul style="margin-top:10px">
+              <li><b>LabelFontScale</b> — 글자 배율(기본 2.5)</li>
+              <li><b><code>SaveAsDefault</code>=On</b> 으로 한 번 실행하면 그 방식·크기가 <b>기본값으로 저장</b>됩니다.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>FabTable 에 생긴 옵션</h3>
+            <ul>
+              <li><b>Accessory</b>(기본 On) — <b>Off 면 부자재 테이블이 통째로 생성되지 않습니다.</b><span class="sub">주부재에 브라켓으로 붙어 함께 복사되는 형상은 이 옵션과 무관합니다.</span></li>
+              <li><b>Unit_No_On</b> — 부재명에 Unit No 를 함께(<code>Profile-UnitNo F1</code>)</li>
+              <li class="sub">FabTable 은 <b>제작 번호 표</b>, TypeA/TypeB 는 <b>FabList 의 입면 라벨</b> — 서로 다른 것입니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>사람마다 선호하는 방식이 다릅니다.</b> 한 번 정해 두면 그 PC 에서는 늘 그 방식으로 나옵니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 Cuttinglist -->
+  <section class="slide" data-title="Cuttinglist" data-desc="최적 장바 5종 · Excel 없이" id="slide-16">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">10</span>
+        <h2>Cuttinglist — 최적 장바 5 종을 함께 낸다 <span class="pill p-new">신규</span></h2>
+        <span class="cmds">Cuttinglist</span>
+      </div>
+      <p class="lede">
+        절단 길이별로 집계하고 장바 길이와 Loss 를 계산해 <b>절단 계획표</b>를 만듭니다.
+        여기에 <b>최적의 장바 5 종에 대한 추가 리스트</b>가 함께 나옵니다.
+      </p>
+      <div class="stage">
+        <div class="shots two">
+          <figure class="shot"><video src="/img/deck/Cuttinglist_demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Cuttinglist 실행 화면"></video><figcaption>절단 계획표 생성</figcaption></figure>
+          <figure class="shot"><img src="/img/deck/Cuttinglist_BarList.png" alt="Cuttinglist 가 낸 장바 리스트"><figcaption>장바 List — Profile 별 사용 장바와 총 중량</figcaption></figure>
+        </div>
+        <div class="col">
+          <div class="card is-new">
+            <h3>산출 내용</h3>
+            <table class="mini">
+              <tbody><tr><td>절단 계획</td><td>Profile Name · 단중 · 절단길이 · 수량 · 사용 장바 · 생산 수량</td></tr>
+              <tr><td>Loss / 재고</td><td>Loss 의 길이·수량·중량과 <b>재사용 가능한 재고</b></td></tr>
+              <tr><td>장바 List</td><td>Profile 별 사용 장바 길이·수량과 총 중량을 <b>따로</b></td></tr>
+            </tbody></table>
+            <ul style="margin-top:10px">
+              <li><b>Auto_Barlist_On</b> — Min~Max 와 Interval 로 자동 생성(기본 3000~6500, 간격 100). Off 면 사용자 txt.</li>
+            </ul>
+          </div>
+          <div class="card is-new">
+            <h3>엑셀이 이제 정말 나옵니다</h3>
+            <ul>
+              <li><b>고객 PC 에 Excel 도 Python 도 필요 없습니다.</b><span class="sub">전에는 그것이 없는 PC 에서 워크북이 아예 나오지 않았습니다. 이제 프로그램이 <code>.xlsx</code> 를 직접 만듭니다.</span></li>
+              <li>목록 명령 <b>여덟 개 전부</b> — Cuttinglist · Molist · PMolist · UnitList · GsList · BpList · VtList · GrList</li>
+              <li><b>저장하지 않은 문서</b>에서는 "문서를 저장하라"고 말하고 멈춥니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        발주 전에 <b>장바를 어떤 길이로 사는 것이 가장 덜 버리는지</b>를 다섯 가지로 비교해 줍니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 BlockOpt -->
+  <section class="slide" data-title="BlockOpt" data-desc="블록 삽입 패널" id="slide-17">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">11</span>
+        <h2>BlockOpt — 자주 쓰는 블록을 패널에서</h2>
+        <span class="cmds">BlockOpt</span>
+      </div>
+      <p class="lede">
+        <code>RCWFolder</code> 로 열리는 폴더 안의 <code>Blocks</code> 에서 <code>.3dm</code> 파일을 읽어 <b>목록과 미리보기</b>를
+        패널에 띄우고, 고른 블록을 화면에 바로 삽입합니다.
+      </p>
+      <div class="stage">
+        <div class="shots two">
+          <figure class="shot"><video src="/img/deck/BlockOpt1.mp4" autoplay muted loop playsinline preload="metadata" aria-label="BlockOpt 패널에서 블록을 골라 삽입하는 화면"></video><figcaption>고르고 → 미리보고 → Insert</figcaption></figure>
+          <figure class="shot"><img src="/img/deck/BlockOpt.png" alt="BlockOpt 패널 구성"><figcaption>TreeView · Preview · Refresh · Insert</figcaption></figure>
+        </div>
+        <div class="col">
+          <div class="card is-new">
+            <h3>패널</h3>
+            <table class="mini">
+              <tbody><tr><td>TreeView</td><td>파일별 블록 이름. 같은 이름은 먼저 발견된 파일의 것만</td></tr>
+              <tr><td>Preview</td><td><b>우버튼 드래그로 Orbit</b>, <b>더블클릭으로 리셋</b></td></tr>
+              <tr><td>Refresh</td><td>폴더를 다시 읽어 목록 갱신</td></tr>
+              <tr><td>Insert</td><td>정의를 문서에 추가하고 지정 위치에 삽입</td></tr>
+            </tbody></table>
+            <ul style="margin-top:10px">
+              <li>기본 제공 — <code>Bolt.3dm</code> · <code>Screw_CS.3dm</code> · <code>Screw_Pan.3dm</code></li>
+              <li>명령을 다시 입력하면 패널이 닫힙니다(토글).</li>
+            </ul>
+          </div>
+          <div class="card is-warn">
+            <h3>목록이 비어 있으면</h3>
+            <ul>
+              <li>폴더가 없거나 <code>.3dm</code> 안에 블록 정의가 없는 경우입니다.</li>
+              <li><b>이제 어느 폴더를 읽었는지와 파일이 왜 없는지를 말해 줍니다.</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        볼트·나사처럼 <b>매번 쓰는 부속</b>을 회사 표준으로 한 폴더에 모아 두면 모두가 같은 블록을 씁니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 UnitTable -->
+  <section class="slide" data-title="UnitList · UnitTable" data-desc="유닛 종류별 입면과 수량" id="slide-18">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">12</span>
+        <h2>UnitList · UnitTable — 유닛 종류별로 세운다 <span class="pill p-new">신규</span> <span class="pill p-std">Standard</span></h2>
+        <span class="cmds">UnitTable · UnitList</span>
+      </div>
+      <p class="lede">
+        <code>NBlock</code> 으로 만든 유닛들을 <b>블록 이름별로 집계</b>해서, 각 유닛의 대표 입면을
+        <b>가로로 나란히</b> 세우고 그 아래에 이름과 수량을 적습니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/UnitTable.mp4" autoplay muted loop playsinline preload="metadata" aria-label="UnitTable 로 유닛 종류별 입면을 나란히 배치하는 화면"></video>
+          <figcaption>UnitTable — 유닛 사이를 그 폭의 4 배로 벌려 UF2D 가 들어갈 자리를 남긴다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>UnitTable</h3>
+            <ul>
+              <li><b>블록 이름별로 대표 유닛 하나</b>를 복제해 가로로 배치합니다.</li>
+              <li><b>간격은 그 유닛 폭의 4 배</b> — 이어서 <code>UF2D</code> 로 fablist 와 치수를 넣을 공간을 미리 확보합니다.</li>
+              <li>각 입면 아래에 <b>블록 이름과 <code>Qnt-수량</code></b>.</li>
+              <li>아래쪽 Profile 표는 만들지 않습니다.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>UnitList · 그리고 이어지는 흐름</h3>
+            <ul>
+              <li><b>UnitList</b> — 유닛 이름과 수량을 리스트 표로.</li>
+              <li>대상은 <code>Description</code> 이 <code>NBlock:</code> 으로 시작하는 것뿐 — <b>일반 블록은 아닙니다.</b></li>
+              <li class="sub">NBlock → UnitTable → UF2D 순서로 이어집니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>"이 현장에 유닛이 몇 종류, 각각 몇 개"</b> 를 한 장으로 만듭니다. 그리고 그 한 장이 입면 도면의 바탕이 됩니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 System Default -->
+  <section class="slide" data-title="System Default" data-desc="사람마다 다른 기본값" id="slide-19">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">13</span>
+        <h2>System Default — 내 기본값을 저장한다 <span class="pill p-new">신규</span></h2>
+        <span class="cmds">DdOpt · DsOpt 의 D 버튼 · Fablist SaveAsDefault</span>
+      </div>
+      <p class="lede">
+        자주 쓰는 설정을 <b>기본값으로 저장</b>해 두면 다음부터 그 값으로 시작합니다.
+        파일 하나에 모이고 <b>설치 PC 단위</b>라, 사람마다 다른 기본값을 가질 수 있습니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <img src="/img/deck/system_default.png" alt="DdOpt 와 DsOpt 두 패널의 D 버튼 위치" style="max-height:calc((100dvh - 330px) * 0.67)">
+          <figcaption>기본값을 저장하는 <b>D</b> 버튼 — <code>DdOpt</code> 는 위쪽, <code>DsOpt</code> 는 <code>Apply</code> 아래</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>어떻게 저장하나</h3>
+            <table class="mini">
+              <tbody><tr><td>DdOpt</td><td>패널 <b>위쪽</b>의 작은 <b>D</b> 버튼. 누르면 <b>파랗게</b> 바뀌고, 값을 하나라도 바꾸면 원래 색으로 돌아옵니다.</td></tr>
+              <tr><td>DsOpt</td><td><b>Apply</b> 버튼 <b>아래</b>의 <b>D</b> 버튼. DimStyle 이름과 배수값·Max 체크가 저장됩니다.</td></tr>
+              <tr><td>Fablist</td><td>옵션 <b><code>SaveAsDefault</code>=On</b> 으로 실행하면 LabelType·LabelFontScale 가 저장됩니다.</td></tr>
+            </tbody></table>
+          </div>
+          <div class="card">
+            <h3>알아 둘 것</h3>
+            <ul>
+              <li>저장 위치는 <code>System_Default.dat</code> <b>한 파일</b>입니다 — 전체 경로는 저장할 때 <b>명령창</b>에 찍힙니다.</li>
+              <li>여러 기능이 같은 파일을 공유하되 <b>자기 항목만 갱신</b>하고 다른 값은 그대로 둡니다.</li>
+              <li><b>메모장으로 직접 고칠 수 있습니다</b> — <code>key=value</code> 한 줄에 하나.</li>
+              <li><b>설치 PC 단위</b>입니다 — 다른 PC 로 옮기려면 이 파일을 복사하십시오.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>매번 같은 체크박스를 다시 맞추던 일</b>이 없어집니다. 회사 표준을 정했다면 그 파일 하나를 나눠 주면 됩니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 구분 ③ -->
+  <section class="slide divider" data-title="③ 보고, 편집하고" data-desc="14 – 21" id="slide-20">
+    <div class="slide-inner">
+      <p class="kicker">Part 3</p>
+      <h2>보고, 편집하고</h2>
+      <p>여러 단면을 한 표에서 고치고, AutoCAD 에서 쓰던 손버릇을 Rhino 안에서 그대로 씁니다.</p>
+      <div class="items">
+        <span>14 Dtable</span><span>15 GRV</span><span>16 VB</span>
+        <span>17 NC3~NC6 · FSC · SFB · FFB</span><span>18 SST · Erase · Acad_Join</span><span>19 명령 이름 변경</span>
+        <span>20 CDPlg</span><span>21 도움말 검색</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 Dtable -->
+  <section class="slide" data-title="Dtable" data-desc="여러 단면을 한 표에서" id="slide-21">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">14</span>
+        <h2>Dtable — 여러 단면을 한 표에서 고친다 <span class="pill p-chg">되살아난 명령</span></h2>
+        <span class="cmds">Dtable</span>
+      </div>
+      <p class="lede">
+        프로파일을 <b>하나씩 Pname 으로 열어 고치는 대신</b>, 선택한 단면들을 한 표에 모아 <b>비교하며</b> 편집합니다.
+        행을 클릭하면 왼쪽에 그 단면의 미리보기가 나옵니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/Dtable_demo_2.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Dtable 에서 여러 단면 값을 표로 비교하며 고치는 화면"></video>
+          <figcaption>Section_Information_Table — 단면마다 한 행, 왼쪽에 미리보기</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>표 구성</h3>
+            <ul>
+              <li><b>항상 보이는 컬럼</b> — Profile Name · Description · Unit Weight · Color Code</li>
+              <li><b>접이식 그룹 셋</b> — <b>Profile IDs</b>(기본 펼침) / <b>Additional Length</b> / <b>Extrusion</b></li>
+              <li><b>이름으로 정렬해도 저장이 엉키지 않습니다</b><span class="sub">화면 순서가 아니라 각 행의 숨은 식별자를 기준으로 저장하기 때문입니다.</span></li>
+              <li><b>Save All</b> 저장 후 닫기 / <b>Close</b> 저장 없이 닫기</li>
+              <li>끝나면 <b>원래 쓰던 치수 스타일로 되돌립니다.</b></li>
+            </ul>
+          </div>
+          <div class="card is-warn">
+            <h3>바뀐 것</h3>
+            <ul>
+              <li><b>Additional Length 컬럼이 넷에서 둘로</b> 줄었습니다 — <code>T/L</code> · <code>B/R</code>.<span class="sub">Pname 이 <code>Start</code> 한 칸이 된 것과 같은 변화입니다(1 번).</span></li>
+              <li>어떤 단면이 실제로 바뀌었는지 <b>명령창에 이름으로</b> 표시됩니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        단면이 스무 개, 서른 개가 되면 <b>하나씩 여는 것이 일</b>입니다. 표로 놓고 보면 <b>빠진 값이 눈에 보입니다.</b>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15/16 GRV VB -->
+  <section class="slide" data-title="GRV · VB" data-desc="유리 반투명 · 사선 CPlane" id="slide-22">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">15 · 16</span>
+        <h2>GRV · VB — 보는 방식을 바꾸는 두 명령</h2>
+        <span class="cmds">GRV · VB</span>
+      </div>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/GRV_demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="GRV 로 유리를 반투명으로 전환하는 화면"></video>
+          <figcaption>GRV — 다시 실행하면 원래대로. 켜고 끄는 토글</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>GRV — 유리 반투명 토글</h3>
+            <ul>
+              <li>이름이 <code>Glass</code> 로 시작하는 <b>모든 레이어</b>의 서피스를 <b>80% 투명</b>으로.</li>
+              <li>켜면 레이어 색을 밝게 보정하고 <b>Rendered 뷰</b>로 전환합니다.</li>
+              <li>끄면 재질·표시 모드·색상 소스를 <b>모두 원래대로</b> 복원합니다.</li>
+              <li class="sub">유리에 가리지 않고 <b>뒤쪽 부재와 구조를 함께</b> 확인할 때 씁니다.</li>
+            </ul>
+          </div>
+          <div class="card is-new">
+            <h3>VB — 사선을 기준으로 작업 평면</h3>
+            <ul>
+              <li>고른 커브의 <b>시작점이 CPlane 원점</b>, <b>시작→끝 방향이 X 축</b>이 됩니다.</li>
+              <li>선이 <b>World Z 와 평행</b>하면 Y 축을 World Y 로 대신합니다.</li>
+              <li><b>화면 View 는 바꾸지 않습니다</b> — 작업 평면만 바꿉니다.</li>
+              <li class="sub">사선 부재 위에서 <b>매번 CPlane 을 손으로 맞추던 일</b>을 없앱니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        둘 다 <b>모델을 건드리지 않고 보는 방식만</b> 바꿉니다. 언제든 되돌릴 수 있으니 부담 없이 쓰십시오.
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 AutoCAD -->
+  <section class="slide" data-title="NC3~NC6 · FSC · SFB · FFB" data-desc="AutoCAD 에서 하던 일을 Rhino 안에서" id="slide-23">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">17</span>
+        <h2>AutoCAD 에서 하던 일을 Rhino 안에서</h2>
+        <span class="cmds">NC3 · NC4 · NC5 · NC6 · FSC · SFB · FFB</span>
+      </div>
+      <p class="lede">
+        가공 데이터 · 도면 압축 · 도면 양식 — <b>도면을 마무리하는 세 작업</b>을 Rhino 안에서 끝냅니다.
+        그리고 셋 모두 <b>FDstyle 재생으로 자동 재현</b>됩니다.
+      </p>
+      <div class="stage">
+        <div class="shots grid5">
+          <figure class="shot"><img src="/img/deck/C2110_NC3_NC6.png" alt="NC3~NC6 이 만든 홀 좌표 테이블"><figcaption>NC3~NC6 — 홀 좌표 테이블</figcaption></figure>
+          <figure class="shot"><img src="/img/deck/C2210_FSC1.png" alt="FSC 압축 전후 비교"><figcaption>FSC — 긴 구간만 줄인다</figcaption></figure>
+          <figure class="shot"><video src="/img/deck/C2210_FSC3.mp4" autoplay muted loop playsinline preload="metadata" aria-label="FSC 로 도면을 X 방향으로 압축하는 화면"></video><figcaption>FSC 실행</figcaption></figure>
+          <figure class="shot"><img src="/img/deck/C2310_SFB_Form.png" alt="SFB 로 등록하는 프레임 양식 블록"><figcaption>SFB — 회사 양식 등록</figcaption></figure>
+          <figure class="shot"><video src="/img/deck/C2320_FFB.mp4" autoplay muted loop playsinline preload="metadata" aria-label="FFB 가 도면 크기에 맞춰 양식을 삽입하는 화면"></video><figcaption>FFB — 스케일·위치 자동 계산</figcaption></figure>
+        </div>
+        <div class="col">
+          <div class="card is-new">
+            <h3>NC3 ~ NC6 — 홀 좌표 테이블</h3>
+            <ul>
+              <li>홀의 <b>X/Y 좌표(원점 기준)와 지름</b>을 NC 가공용 테이블로.</li>
+              <li><b>네 명령의 차이는 원점 모서리 하나뿐</b> — NC3 좌상 · NC4 좌하 · NC5 우상 · NC6 우하.</li>
+              <li><code>Gap=Yes</code> 로 <b>X_Gap 컬럼</b>을 함께(기본 No).</li>
+            </ul>
+          </div>
+          <div class="card is-new">
+            <h3>FSC · SFB → FFB</h3>
+            <ul>
+              <li><b>FSC</b> — 형상이 양식보다 길 때 <b>X 방향으로만</b> 압축. <b>긴 구간만</b> 줄이고 <b>치수값은 원래 값 그대로</b> 표시합니다. 기준은 <code>AutoScale.dat</code> 의 프로파일별 값.</li>
+              <li><b>SFB</b> 로 회사 양식을 한 번 골라 두면, <b>FFB</b> 가 도면 크기를 재서 <b>스케일과 위치를 자동 계산</b>해 삽입합니다.</li>
+              <li>도면번호 · 수량 · 스케일 · 패널/패드 크기 · 길이를 <b>양식의 빈칸에 자동으로</b> 채웁니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>도면을 AutoCAD 로 넘겨서 마무리하던 단계가 없어집니다.</b>
+        한 번 기록해 두면(FDstyle) 다음 가공도부터는 <b>알아서 붙습니다.</b>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 편집 -->
+  <section class="slide" data-title="SST · Erase · Acad_Join" data-desc="AutoCAD 손버릇 그대로" id="slide-24">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">18</span>
+        <h2>SST · Erase · Acad_Join <span class="pill p-new">Erase · Acad_Join 신규</span></h2>
+        <span class="cmds">SST · Erase · Acad_Join</span>
+      </div>
+      <p class="lede">AutoCAD 에서 손에 익은 편집 방식을 Rhino 안에서 그대로 씁니다.</p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="/img/deck/SST.mp4" autoplay muted loop playsinline preload="metadata" aria-label="SST 로 Crossing Window 를 잡아 형상을 늘리는 화면"></video>
+          <figcaption>SST — 드래그 방향이 Window(파랑) / Crossing(초록)을 정한다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>SST — AutoCAD 식 STRETCH</h3>
+            <ul>
+              <li><b>오른쪽으로</b> 드래그 = Window(파란 창) — 완전히 들어온 것만.<br><b>왼쪽으로</b> 드래그 = Crossing(초록 창) — 걸친 것까지.</li>
+              <li>창 안의 <b>커브 제어점 · Brep 정점 · 포인트 · 블록 삽입점 · 치수 끝점</b>을 옮깁니다.</li>
+              <li>선택한 객체는 <b>노란색으로 미리 표시</b>되고 이동 중에도 미리보기가 따라옵니다.</li>
+              <li><b>선택되지 않은 부분은 그대로</b> 두고 곡선과 치수를 함께 변형합니다.</li>
+            </ul>
+          </div>
+          <div class="card is-new">
+            <h3>Erase · Acad_Join <span style="font-family:var(--f-mono);font-size:10px;color:var(--muted)">— 도움말 있음 · 13 Utils</span></h3>
+            <ul>
+              <li><b>Erase</b> — AutoCAD 의 ERASE 처럼 <b>명령 전에 고른 것도, 후에 고른 것도</b> 모두 받습니다.</li>
+              <li><b>Acad_Join</b> — 커브를 하나씩 묻지 않고 <b>선택 전체를 한 번에</b> 결합합니다. <b>Surface·Polysurface 도</b> 받습니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        작은 것들이지만 <b>하루에 수십 번</b> 쓰는 명령입니다. <b>손버릇을 바꾸지 않아도 되는 것</b>이 이 셋의 목적입니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 19 rename -->
+  <section class="slide" data-title="명령 이름 변경" data-desc="Dlist → PDlist 외 2건" id="slide-25">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">19</span>
+        <h2>명령 이름이 바뀌었습니다 <span class="pill p-name">조치 필요</span></h2>
+        <span class="cmds">PDlist · PPlist · PBlist</span>
+      </div>
+      <p class="lede">
+        단면(Profile) 계열 확인 명령을 <b><code>P</code> 접두어로 묶었습니다.</b>
+        <b>옛 이름은 더 이상 없습니다</b> — 별칭 · 툴바 버튼 · 스크립트를 쓰고 계셨다면 고쳐 주십시오.
+      </p>
+      <div class="stage">
+        <div class="shots grid5">
+          <figure class="shot"><img src="/img/deck/Dlist_demo_1.png" alt="PDlist 가 만든 단면 데이터 표"><figcaption>PDlist (구 Dlist)</figcaption></figure>
+          <figure class="shot"><img src="/img/deck/Plist_demo_1.png" alt="PPlist 가 만든 폴리라인 데이터 표"><figcaption>PPlist (구 Plist)</figcaption></figure>
+          <figure class="shot"><img src="/img/deck/Blist_demo.png" alt="PBlist 가 만든 블록 데이터 그래픽 표"><figcaption>PBlist (구 Blist)</figcaption></figure>
+        </div>
+        <div class="col">
+          <div class="card is-warn">
+            <h3>바뀐 이름</h3>
+            <table class="mini">
+              <tbody><tr><th>옛 이름</th><th>새 이름</th><th>하는 일</th></tr>
+              <tr><td>Dlist</td><td><b>PDlist</b></td><td>단면의 Section Data 를 표로 — ID · 단중 확인</td></tr>
+              <tr><td>Plist</td><td><b>PPlist</b></td><td>PolyLine 의 Subtracter 설정을 표로</td></tr>
+              <tr><td>Blist</td><td><b>PBlist</b></td><td>단면에 물린 Block Data 를 그래픽 표로</td></tr>
+            </tbody></table>
+            <p style="margin:10px 0 0; font-size:13.5px; color:var(--muted)">
+              같은 <code>P</code> 가족 — <code>PMolist</code> · <code>PFList</code>
+            </p>
+          </div>
+          <div class="card">
+            <h3>셋 다 확인 명령입니다</h3>
+            <ul>
+              <li>모두 <b>UMD 로 모델링하기 전에</b> 단면 데이터를 <b>눈으로 점검</b>하는 명령입니다.</li>
+              <li>누락 · 중복 · 오입력을 표로 비교해 잡습니다.</li>
+              <li class="sub">이 셋에서 Additional Length 는 이제 <code>T/L</code> · <code>B/R</code> <b>한 값씩</b> 나옵니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>이 슬라이드는 꼭 기억해 주십시오.</b> 옛 이름을 치면 <b>"명령을 찾을 수 없다"</b>가 나옵니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 마무리 -->
+    <section class="slide" data-title="CDPlg" data-desc="추가 길이만 옮긴다">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">20</span>
+        <h2>CDPlg — 추가 길이만 옮긴다 <span class="pill p-new">신규</span></h2>
+        <span class="cmds">CDPlg</span>
+      </div>
+      <p class="lede">
+        기준 단면의 <b>Additional Length 상자만</b> 다른 단면들에 복사합니다.
+        이름·단중·ID·Block 데이터는 <b>손대지 않습니다.</b>
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>작업 순서</h3>
+          <ol>
+            <li><b>기준이 될 단면</b> 하나를 고릅니다.</li>
+            <li>값을 받을 <b>단면들을 고릅니다</b> — 여러 개를 한꺼번에.</li>
+            <li>상자 안 다섯 칸이 그대로 넘어갑니다 —
+                <b>Start · Length · 간격 · 수량 · 대칭</b>, 위·아래 두 줄이니 <b>열두 칸</b>입니다.</li>
+          </ol>
+        </div>
+        <div class="card is-warn">
+          <h3>알아 둘 것</h3>
+          <ul>
+            <li><b>멀리언과 트랜섬 사이에도 값이 그대로 갑니다.</b><span class="sub">화면에 보이는 두 값(위/아래)으로 옮기므로 어느 쪽으로 쓰이든 뜻이 유지됩니다.</span></li>
+            <li><b>상자 밖은 건드리지 않습니다</b> — Material·Profile·Fab·Group·Alloy ID 는 대상 것 그대로.</li>
+            <li>단면 data 가 없던 대상에는 <b>새로 만들어 넣습니다</b> — 이름이 지워지지 않습니다.</li>
+            <li><code>CDP</code> 는 단면 data 를 <b>통째로</b> 덮습니다. 추가 길이만 맞추려면 <code>CDPlg</code> 입니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        추가 길이 하나 맞추자고 <b>단면 data 를 통째로 덮던 것</b>이 없어졌습니다.
+        바꾸고 싶은 것만 바꿉니다.
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="도움말 검색" data-desc="목차를 훑지 않는다">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">21</span>
+        <h2>도움말 검색 — 목차를 훑지 않는다 <span class="pill p-new">신규</span></h2>
+        <span class="cmds">RcwHelp</span>
+      </div>
+      <p class="lede">
+        도움말 왼쪽 위에 <b>검색창</b>이 생겼습니다. 명령 이름뿐 아니라 <b>본문까지</b> 찾습니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <img src="/img/deck/help_search.png" alt="도움말 검색창에 각도를 넣어 12개 결과가 나온 화면">
+          <figcaption>검색어가 본문에서 노랗게 표시된다</figcaption>
+        </figure>
+        <div style="display:grid; gap:14px; align-content:start">
+          <div class="card is-new">
+            <h3>찾아 주는 것</h3>
+            <ul>
+              <li><b>명령 이름</b> — <code>FDwg</code>, <code>SSAngle</code> 처럼.</li>
+              <li><b>본문 글자</b> — "각도", "허용오차" 처럼 <b>설명 안의 말</b>로도 찾습니다.</li>
+              <li>결과마다 <b>어느 폴더의 무슨 명령</b>인지 함께 보여 줍니다.</li>
+            </ul>
+          </div>
+          <div class="card is-warn">
+            <h3>알아 둘 것</h3>
+            <ul>
+              <li><b>한국어·영어 각각</b> 찾습니다 — 지금 보고 있는 언어의 문서에서.</li>
+              <li>도움말을 <b>새로 받으면</b> 검색 내용도 함께 갱신됩니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>"그 옵션 이름이 뭐였더라"</b> 를 목차에서 찾지 않아도 됩니다.
+        기억나는 낱말 하나면 그 페이지로 갑니다.
+      </div>
+    </div>
+  </section>
+
+<section class="slide" data-title="정리" data-desc="세 문장으로" id="slide-26">
+    <div class="slide-inner">
+      <p class="eyebrow">정리</p>
+      <h2 style="font-family:var(--f-disp); font-weight:700; font-size:clamp(30px,4.4vw,54px); line-height:1.08; margin:0 0 26px; letter-spacing:-0.02em;">세 문장으로</h2>
+      <div class="stage" style="grid-template-columns:1fr 1fr 1fr; gap:16px;">
+        <div class="card is-new">
+          <h3>하나</h3>
+          <p style="margin:0; font-size:16px; line-height:1.6;">
+            <b>한 번 정해 두면 다시 정하지 않습니다.</b><br>
+            가공도 방식(FDstyle) · 라벨 방식(FabList) · 옵션 기본값(System Default) 이 모두 저장되고
+            다음부터 자동으로 적용됩니다.
+          </p>
+        </div>
+        <div class="card is-new">
+          <h3>둘</h3>
+          <p style="margin:0; font-size:16px; line-height:1.6;">
+            <b>확인이 빨라집니다.</b><br>
+            선 하나를 클릭하면 무슨 부재인지 나오고(Properties), 여러 단면을 한 표에서 비교하고(Dtable),
+            입면에서 홀 깊이까지 보입니다(FDwg).
+          </p>
+        </div>
+        <div class="card is-new">
+          <h3>셋</h3>
+          <p style="margin:0; font-size:16px; line-height:1.6;">
+            <b>Rhino 밖으로 나갈 일이 줄었습니다.</b><br>
+            NC 데이터 · 도면 압축 · 도면 양식 · 엑셀 리스트 · 웹 공유까지 <b>다른 프로그램 없이</b> 끝납니다.
+          </p>
+        </div>
+      </div>
+      <div class="say" style="margin-top:22px">
+        <span class="lbl">맺음</span>
+        각 명령의 자세한 설명은 <code>RcwHelp</code> 로 도움말을 열면 모두 있습니다.
+        <b>꼭 기억할 하나는 19 번 — 명령 이름 변경</b>입니다.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var counter = document.getElementById('counter');
+  var fill = document.getElementById('bar-fill');
+  var overlay = document.getElementById('overlay');
+  var idx = document.getElementById('idx');
+  var btn = document.getElementById('btn-index');
+  var zoom = document.getElementById('zoom');
+  var zoomImg = zoom.querySelector('img');
+  var current = 0;
+
+  idx.innerHTML = '';
+  slides.forEach(function (s, i) {
+    s.id = 'slide-' + i;
+    var a = document.createElement('a');
+    a.href = '#slide-' + i;
+    a.innerHTML = '<span class="n">' + (i + 1).toString().padStart(2, '0') + '</span>' +
+      '<span class="t"></span><span class="d"></span>';
+    a.querySelector('.t').textContent = s.dataset.title || ('슬라이드 ' + (i + 1));
+    a.querySelector('.d').textContent = s.dataset.desc || '';
+    a.addEventListener('click', function () { closeOverlay(); });
+    idx.appendChild(a);
+  });
+
+  function render() {
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    fill.style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+  function go(n) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    current = n;
+    slides[n].scrollIntoView({ block: 'start' });
+    render();
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var i = slides.indexOf(e.target);
+        if (i >= 0) { current = i; render(); }
+      }
+    });
+  }, { root: deck, threshold: 0.5 });
+  slides.forEach(function (s) { io.observe(s); });
+
+  function openOverlay() { overlay.classList.add('open'); }
+  function closeOverlay() { overlay.classList.remove('open'); }
+  function toggleOverlay() { overlay.classList.toggle('open'); }
+  btn.addEventListener('click', toggleOverlay);
+
+  deck.addEventListener('click', function (e) {
+    var img = e.target.closest ? e.target.closest('figure.shot img') : null;
+    if (!img) return;
+    zoomImg.src = img.src;
+    zoomImg.alt = img.alt;
+    zoom.classList.add('open');
+  });
+  zoom.addEventListener('click', function () {
+    zoom.classList.remove('open');
+    zoomImg.src = '';
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') {
+      if (zoom.classList.contains('open')) { zoom.classList.remove('open'); zoomImg.src = ''; }
+      else closeOverlay();
+      return;
+    }
+    if (zoom.classList.contains('open')) return;
+    if (k === 'g' || k === 'G' || k === 'ㅎ') { e.preventDefault(); toggleOverlay(); return; }
+    if (overlay.classList.contains('open')) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ') { e.preventDefault(); go(current + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(current - 1); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
