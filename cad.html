@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RCW V5 Trial 다운로드 — Rhino 8·7용 트라이얼. Core 90일, Standard 30일. 이름, 회사, 이메일을 남기시면 바로 내려받으실 수 있습니다.">
+  <meta name="theme-color" content="#ffffff">
+  <title>AutoCAD · BricsCAD 용 RCW 유틸리티 — RCW V5</title>
+  <style>
+    :root {
+      --ink:#101828; --muted:#667085; --line:#e4e7ec; --paper:#fff;
+      --mist:#f7f9fc; --navy:#101f3d; --blue:#2667d9; --blue-dark:#17499e;
+      --sky:#eaf1ff; --mint:#d9fbe8; --danger:#b42318; --danger-bg:#fef3f2; --radius:18px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; overflow-x:hidden; color:var(--ink); background:var(--paper); font:16px/1.65 Inter,Pretendard,"Noto Sans KR","Malgun Gothic",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    img { display:block; max-width:100%; }
+    h1,h2,h3,p { margin-top:0; }
+    .wrap { width:min(760px,calc(100% - 40px)); margin:auto; }
+    .eyebrow { margin:0 0 10px; color:var(--blue); font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { margin-bottom:14px; font-size:clamp(29px,4vw,42px); line-height:1.15; letter-spacing:-.04em; word-break:keep-all; }
+    .lead { max-width:600px; color:var(--muted); font-size:17px; word-break:keep-all; }
+    .button { display:inline-flex; min-height:48px; align-items:center; justify-content:center; gap:8px; padding:0 20px; border:1px solid transparent; border-radius:10px; background:var(--blue); color:#fff; font-weight:750; font-size:15px; transition:.2s ease; cursor:pointer; }
+    .button:hover { transform:translateY(-2px); background:var(--blue-dark); box-shadow:0 12px 28px rgba(38,103,217,.22); }
+    .button:disabled { opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    .deck-link { display:flex; align-items:center; justify-content:space-between; gap:18px; margin:26px 0 0; padding:18px 22px; border:1px solid var(--line); border-left:4px solid var(--blue); border-radius:12px; background:var(--paper); color:inherit; text-decoration:none; transition:.2s ease; }
+    .deck-link:hover { border-color:var(--blue); box-shadow:0 12px 28px rgba(38,103,217,.14); transform:translateY(-2px); }
+    .deck-link-text { display:flex; flex-direction:column; gap:4px; }
+    .deck-link-text b { font-size:16px; font-weight:800; color:var(--blue-dark); }
+    .deck-link-text span { font-size:14px; color:var(--muted); }
+    .deck-link-go { flex:none; font-size:22px; color:var(--blue); }
+    @media (max-width:560px) { .deck-link { padding:16px 18px } .deck-link-go { display:none } }
+    .button.secondary { border-color:#c9d5ed; background:#fff; color:var(--blue-dark); }
+    .button.secondary:hover { background:var(--sky); box-shadow:none; }
+
+    .nav { position:sticky; top:0; z-index:20; border-bottom:1px solid rgba(228,231,236,.8); background:rgba(255,255,255,.9); backdrop-filter:blur(14px); }
+    .nav-inner { display:flex; height:66px; align-items:center; justify-content:space-between; gap:18px; width:min(1140px,calc(100% - 40px)); margin:auto; }
+    .wordmark { display:flex; align-items:center; gap:9px; font-size:18px; font-weight:850; letter-spacing:-.03em; }
+    .mark { display:grid; width:29px; height:29px; place-items:center; border-radius:8px; background:var(--blue); color:#fff; font-size:11px; letter-spacing:-.07em; }
+    .nav-links { display:flex; align-items:center; gap:22px; color:#475467; font-size:14px; font-weight:650; }
+    .nav-links a:hover { color:var(--blue); }
+    .nav-right { display:flex; align-items:center; gap:11px; }
+    .lang { min-width:54px; height:36px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:#344054; font:750 12px/1 inherit; cursor:pointer; transition:.15s; }
+    .lang:hover { border-color:#b9cbee; color:var(--blue); }
+
+    .intro { padding:60px 0 8px; background:radial-gradient(circle at 87% 0%,#dce9ff 0,transparent 32%),linear-gradient(180deg,#f9fbff 0%,#fff 90%); }
+    main { padding:40px 0 100px; }
+
+    .notice { display:flex; gap:12px; margin-top:22px; padding:15px 17px; border:1px solid #cfdcf4; border-radius:13px; background:var(--sky); }
+    .notice i { flex:none; display:grid; width:22px; height:22px; place-items:center; border-radius:50%; background:var(--blue); color:#fff; font-style:normal; font-size:12px; font-weight:900; }
+    .notice p { margin:0; color:#2c4470; font-size:13.5px; word-break:keep-all; }
+
+    .form-card { margin-top:20px; padding:34px; border:1px solid var(--line); border-radius:var(--radius); background:#fff; box-shadow:0 18px 42px rgba(16,31,61,.08); }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .field { margin-bottom:18px; }
+    .field label { display:block; margin-bottom:7px; font-size:13.5px; font-weight:700; color:#344054; }
+    .field label .req { margin-left:3px; color:var(--blue); }
+    .field label .opt { margin-left:6px; color:var(--muted); font-weight:500; font-size:12px; }
+    .field input, .field textarea, .field select {
+      width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:10px; background:#fbfcfe;
+      font:15px/1.5 inherit; color:var(--ink); transition:.15s;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus { outline:none; border-color:var(--blue); background:#fff; box-shadow:0 0 0 3px rgba(38,103,217,.12); }
+    .field textarea { resize:vertical; min-height:110px; }
+    .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+    .form-actions { display:flex; align-items:center; gap:14px; margin-top:6px; }
+    .form-note { color:var(--muted); font-size:12px; word-break:keep-all; }
+
+    /* 제출이 끝나면 입력 항목을 감춘다. 빈 칸을 남겨두면 입력이 사라진 것처럼 보인다 */
+    .form-card.done .field-row,
+    .form-card.done .field,
+    .form-card.done .form-actions { display:none; }
+    .form-card.done { padding:22px; }
+
+    .alert { display:none; margin-top:18px; padding:16px 18px; border-radius:12px; font-size:14px; word-break:keep-all; }
+    .alert.show { display:block; }
+    .alert.success { border:1px solid #b4e3c8; background:var(--mint); color:#0a6b3f; }
+    .alert.error { border:1px solid #f3c6c1; background:var(--danger-bg); color:var(--danger); }
+    .alert b { display:block; margin-bottom:4px; font-size:15px; }
+
+    /* 신청 성공 후 나타나는 다운로드 영역 */
+    .dl { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0 0; }
+    .dl-group { padding:14px 15px; border:1px solid #b4e3c8; border-radius:11px; background:#fff; }
+    .dl-group h4 { margin:0 0 9px; color:var(--ink); font-size:13px; font-weight:850; letter-spacing:-.02em; }
+    .again { margin:0 auto 18px; padding:14px 16px; border:1px solid var(--line); border-radius:11px; background:var(--mist); }
+    .again b { display:block; font-size:13.5px; }
+    .again > span { display:block; margin-top:3px; color:var(--muted); font-size:12.5px; }
+    .again-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+    .again-row input { flex:1 1 220px; min-width:0; padding:9px 11px; border:1px solid var(--line); border-radius:8px; font:inherit; font-size:13.5px; background:#fff; color:var(--ink); }
+    .again-row .again-go { min-height:0; padding:9px 16px; font-size:13.5px; }
+    .again-msg { display:none; margin:8px 0 0; color:#b45309; font-size:12.5px; }
+    .again-msg.show { display:block; }
+    .again.done { display:none; }
+    .welcome { display:none; margin:0 auto 18px; padding:14px 16px; border:1px solid var(--line); border-radius:11px; background:var(--sky); font-size:13.5px; }
+    .welcome.show { display:block; }
+    .dl-btn { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:7px; padding:10px 12px; border:1px solid var(--line); border-radius:9px; background:var(--mist); color:var(--ink); font-size:13.5px; font-weight:700; transition:.15s; }
+    .dl-btn:hover { border-color:var(--blue); background:var(--sky); color:var(--blue-dark); }
+    .dl-btn em { color:var(--muted); font-style:normal; font-size:11.5px; font-weight:600; }
+    /* 파일명에 버전이 없으니 어느 빌드인지는 이 줄이 알린다 */
+    .dl-ver { display:flex; align-items:center; gap:8px; margin:12px 0 0; color:#3f7359; font-size:12.5px; }
+    .dl-ver b { color:#0a6b3f; font-size:13px; }
+    .dl-ver a { color:var(--blue-dark); font-weight:700; text-decoration:underline; }
+    .dl-note { margin:13px 0 0; color:#3f7359; font-size:12.5px; word-break:keep-all; }
+    .dl-note a { color:var(--blue-dark); font-weight:700; text-decoration:underline; }
+    /* Rhino 7 은 접어 둔다. 필요한 사람은 찾을 수 있고, 주력 다운로드는 흐려지지 않는다. */
+    /* 변경 안내(changes.js 가 그린다). 다운로드 버튼 바로 아래라, 눈에는 들어오되
+       버튼보다 앞서지 않도록 초록 계열 안내 색을 그대로 쓴다. */
+    .rcw-chg { margin:14px 0 0; padding:13px 15px; border:1px solid #cfe6d8; border-radius:10px; background:#f6fbf8; }
+    .rcw-chg-title { margin:0 0 8px; color:#0a6b3f; font-size:13px; font-weight:800; }
+    .rcw-chg-head { margin:0 0 7px; color:#3f7359; font-size:12px; }
+    .rcw-chg-label { margin-right:6px; font-weight:700; }
+    .rcw-chg-ver { color:#0a6b3f; font-size:13px; font-weight:800; }
+    .rcw-chg-date { margin-left:12px; }
+    /* 제목·버전 줄보다 눈에 띄게 안쪽으로 들여쓴다(글자 네 칸쯤). */
+    .rcw-chg-list { margin:0; padding-left:44px; color:#3f7359; font-size:12.5px; line-height:1.65; word-break:keep-all; }
+    .rcw-chg-list li { margin:0 0 6px; }
+    .rcw-chg-list b { color:#0a6b3f; }
+    .rcw-chg-prev { margin-top:11px; padding-top:10px; border-top:1px solid #dcebe2; }
+    .rcw-chg-prev summary { cursor:pointer; color:#3f7359; font-size:12.5px; font-weight:700; }
+    .rcw-chg-prev summary:hover { color:var(--blue-dark); }
+    .rcw-chg-prev .rcw-chg-head { margin-top:9px; }
+    /* 이전 버전 한 줄(접힘). 눌러야 그 버전의 항목이 보인다. */
+    .rcw-chg-item { margin:2px 0; }
+    .rcw-chg-item > summary { padding:3px 0; }
+    .rcw-chg-item[open] { margin-bottom:11px; }
+    .rcw-chg-item[open] > summary { margin-bottom:5px; }
+
+    .dl-legacy { margin-top:14px; }
+    .dl-legacy summary { cursor:pointer; color:#3f7359; font-size:12.5px; font-weight:700; }
+    .dl-legacy summary:hover { color:var(--blue-dark); }
+    .dl-legacy .dl { margin-top:10px; }
+
+    /* 코드 서명 미적용 안내 — 눈에 띄어야 하므로 별도 색을 쓴다 */
+    .warn { margin:16px 0 0; padding:15px 17px; border:1px solid #f0cf95; border-radius:12px; background:#fffaf0; color:#7a4c10; }
+    .warn b { display:block; margin-bottom:6px; color:#8a4b08; font-size:13.5px; }
+    .warn p { margin:0 0 8px; font-size:12.8px; line-height:1.6; word-break:keep-all; }
+    .warn p:last-child { margin-bottom:0; }
+    .warn kbd { display:inline-block; padding:1px 6px; border:1px solid #e3c48d; border-radius:5px; background:#fff; font:700 11.5px/1.5 inherit; color:#7a4c10; }
+    .warn code { padding:1px 5px; border-radius:4px; background:#f4ece0; font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace; word-break:break-all; }
+    .warn a { color:#8a4b08; font-weight:700; text-decoration:underline; }
+
+    .spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:26px 0 0; }
+    .spec-item { padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--mist); }
+    .spec-item b { display:block; margin-bottom:3px; font-size:14px; }
+    .spec-item span { color:var(--muted); font-size:12.5px; word-break:keep-all; }
+
+    footer { padding:33px 0; border-top:1px solid var(--line); color:#667085; font-size:12px; }
+    .footer-row { display:flex; justify-content:space-between; gap:18px; width:min(1140px,calc(100% - 40px)); margin:auto; }
+
+    @media (max-width:720px) {
+      .nav-links { display:none; }
+      .field-row, .spec-grid { grid-template-columns:1fr; }
+      .form-card { padding:24px; }
+      .footer-row { flex-direction:column; }
+    }
+  </style>
+  <style>
+    /* CAD 다운로드 페이지 전용 — 내려받기 버튼 4개를 두 줄로 놓는다 */
+    .dl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0 6px}
+    .dl-grid .dl-group{margin:0}
+    .dl-grid .dl-group>b{display:block;margin-bottom:6px}
+    .dl-steps{margin:10px 0 6px;padding-left:22px;line-height:1.9}
+    .dl-steps li{margin-bottom:2px}
+    main h2{margin-top:34px}
+    @media (max-width:640px){.dl-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="wordmark" href="index.html"><span class="mark">RCW</span> RCW V5</a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="index.html" data-en="Overview">전체 소개</a>
+        <a href="modeling.html" data-en="Modeling">모델링</a>
+        <a href="output.html" data-en="Output">산출물</a>
+        <a href="contact.html" data-en="Contact">문의</a>
+        <a href="customer.html" data-en="Customers">고객 다운로드</a>
+      </nav>
+      <div class="nav-right">
+        <button class="lang" type="button" data-lang-toggle aria-label="언어 전환">ENGLISH</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="intro">
+    <div class="wrap">
+      <p class="eyebrow" data-en="AutoCAD &middot; BricsCAD">AutoCAD &middot; BricsCAD</p>
+      <h1 data-en="RCW utilities for AutoCAD and BricsCAD.">AutoCAD &middot; BricsCAD 용 RCW 유틸리티.</h1>
+      <p class="lead" data-en="The curtain-wall utilities that have long run inside AutoCAD and BricsCAD - dimensioning, NC data, cutting lists and the layer and block tools. Free for existing customers in Korea, with no activation code.">오랫동안 AutoCAD &middot; BricsCAD 안에서 쓰이던 커튼월 유틸리티입니다 &mdash; 치수, NC 데이터, 컷팅 리스트, 레이어 &middot; 블록 도구. <b>기존 국내 사용자에게 무상으로 제공</b>하며 인증 코드가 필요 없습니다.</p>
+
+      <div class="notice">
+        <i>i</i>
+        <p data-en="This is separate from RCW V5 for Rhino. It is a CAD plug-in loaded with NETLOAD, not an installer. If you use the Rhino product as well, both read and write the same settings folder.">이것은 <b>Rhino 용 RCW V5 와 별개</b>입니다. 설치 프로그램이 아니라 CAD 안에서 <b>NETLOAD</b> 로 불러 쓰는 플러그인입니다. Rhino 용 RCW 를 함께 쓰신다면 <b>같은 설정 폴더</b>를 씁니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="wrap">
+
+      <div class="notice">
+        <i>!</i>
+        <p data-en="Before anything else - unblock the file. Windows marks files that came from the internet, and with that mark left in place the plug-in will not load. Right-click the ZIP, choose Properties, tick Unblock at the bottom, click OK, and only then extract it. Most installation failures are this.">
+        <b>받으신 뒤 가장 먼저 &mdash; 차단 해제</b><br>
+        인터넷에서 받은 파일에는 Windows 가 &ldquo;다른 컴퓨터에서 온 파일&rdquo; 표시를 붙입니다.
+        이 표시가 남아 있으면 <b>플러그인을 불러오지 못합니다.</b><br>
+        <b>ZIP 우클릭 &rarr; 속성 &rarr; 아래쪽 [차단 해제] 체크 &rarr; 확인 &rarr; 그 다음에 압축 풀기.</b>
+        설치가 안 되는 경우 대부분이 이것입니다.</p>
+      </div>
+
+      <h2 data-en="Pick the one file that matches your CAD">쓰시는 CAD 에 맞는 파일 하나만 받으시면 됩니다</h2>
+
+      <div class="dl-grid">
+        <div class="dl-group">
+          <b>AutoCAD 2021</b>
+          <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-cad-releases/releases/latest/download/RCW_V5_AutoCAD_2021.zip"><span data-en="Download for AutoCAD 2021">AutoCAD 2021 용 내려받기</span><em>161 KB</em></a>
+        </div>
+        <div class="dl-group">
+          <b>AutoCAD 2025</b>
+          <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-cad-releases/releases/latest/download/RCW_V5_AutoCAD_2025.zip"><span data-en="Download for AutoCAD 2025">AutoCAD 2025 용 내려받기</span><em>162 KB</em></a>
+        </div>
+        <div class="dl-group">
+          <b>BricsCAD V22</b>
+          <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-cad-releases/releases/latest/download/RCW_V5_BricsCAD_V22.zip"><span data-en="Download for BricsCAD V22">BricsCAD V22 용 내려받기</span><em>162 KB</em></a>
+        </div>
+        <div class="dl-group">
+          <b>BricsCAD V23</b>
+          <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-cad-releases/releases/latest/download/RCW_V5_BricsCAD_V23.zip"><span data-en="Download for BricsCAD V23">BricsCAD V23 용 내려받기</span><em>162 KB</em></a>
+        </div>
+      </div>
+
+      <p class="dl-note" data-en="Each ZIP holds one DLL, a Data folder and 읽어보기.txt - the guide that covers unblocking, installation, where your editable files live (RCWFolder) and what to do when something does not work.">각 ZIP 에는 <b>DLL 하나</b>, <code>Data</code> 폴더, 그리고 <b>읽어보기.txt</b> 가 들어 있습니다 &mdash; 차단 해제, 설치, 고치는 파일이 어디 있는지(<code>RCWFolder</code>), 잘 안 될 때까지 적혀 있습니다.</p>
+
+      <h2 data-en="Installing">설치</h2>
+      <ol class="dl-steps">
+        <li data-en="Unblock the ZIP (see above), then extract it to a folder you will keep.">위 안내대로 <b>차단 해제</b>한 뒤, 계속 둘 폴더에 압축을 푸세요.</li>
+        <li data-en="Start your CAD, type NETLOAD, and choose the DLL from that folder.">CAD 를 실행하고 <code>NETLOAD</code> 를 친 뒤, 그 폴더의 DLL 을 고르세요.</li>
+        <li data-en="AutoCAD may show a security warning - choose Load. BricsCAD does not.">AutoCAD 는 보안 경고가 뜰 수 있습니다 &mdash; <b>[Load]</b> 를 누르세요.</li>
+        <li data-en="Type Acmd. The version appears if it loaded."><code>Acmd</code> 를 치면 버전이 나옵니다. 나오면 성공입니다.</li>
+      </ol>
+
+      <p class="dl-note" data-en="BricsCAD: run Areg once and it loads by itself from then on (Aunreg undoes it). On AutoCAD, NETLOAD is needed each time you start it for now."><b>BricsCAD</b> 는 <code>Areg</code> 를 한 번 실행해 두시면 다음부터 자동으로 불러옵니다(<code>Aunreg</code> 로 해제). <b>AutoCAD</b> 는 지금은 켤 때마다 <code>NETLOAD</code> 가 필요합니다.</p>
+
+      <h2 data-en="The files you edit">내가 고치는 파일</h2>
+      <p class="dl-note" data-en="Type RCWFolder in the command line and the folder holding the files you edit opens, with a note of where each one is being read from. Rhino's RCW has the same command and opens the same folder - edit once and both use it.">명령창에 <code>RCWFolder</code> 를 치면 고쳐서 쓰는 파일이 모여 있는 폴더가 열리고, 각 파일을 지금 어디서 읽고 있는지도 함께 나옵니다. <b>Rhino 용 RCW 에도 같은 이름의 명령이 있고 같은 폴더를 엽니다</b> &mdash; 한 번만 고치면 양쪽이 같은 값을 씁니다.</p>
+
+      <p class="dl-note" data-en="Questions: Beimptech@gmail.com">문의 &mdash; <a href="mailto:Beimptech@gmail.com">Beimptech@gmail.com</a></p>
+
+    </div>
+  </main>
+
+  <footer><div class="footer-row"><span>© 2026 Beimptech · RCW V5</span><span data-en="Rhino is a registered trademark of Robert McNeel &amp; Associates.">Rhino는 Robert McNeel &amp; Associates의 등록 상표입니다.</span></div></footer>
+
+  <script>
+  (function(){
+    var KEY='rcw-lang';
+    function apply(l){
+      var n=document.querySelectorAll('[data-en]');
+      for(var i=0;i<n.length;i++){var el=n[i];
+        if(el.dataset.ko===undefined)el.dataset.ko=el.innerHTML;
+        el.innerHTML=(l==='en')?el.dataset.en:el.dataset.ko;}
+      var ph=document.querySelectorAll('[data-en-placeholder]');
+      for(var k=0;k<ph.length;k++){var pe=ph[k];
+        if(pe.dataset.koPlaceholder===undefined)pe.dataset.koPlaceholder=pe.getAttribute('placeholder')||'';
+        pe.setAttribute('placeholder',(l==='en')?pe.dataset.enPlaceholder:pe.dataset.koPlaceholder);}
+      document.documentElement.lang=(l==='en')?'en':'ko';
+      var b=document.querySelectorAll('[data-lang-toggle]');
+      for(var j=0;j<b.length;j++){b[j].textContent=(l==='en')?'한국어':'ENGLISH';}
+      try{localStorage.setItem(KEY,l);}catch(e){}
+    }
+    function cur(){try{return localStorage.getItem(KEY)||'ko';}catch(e){return 'ko';}}
+    /* 화면을 만든 뒤에 끼워 넣는 것(변경 안내)에도 언어를 입혀야 한다. */
+    window.rcwLang={refresh:function(){apply(cur());}};
+    function initLang(){apply(cur());
+      document.addEventListener('click',function(e){
+        var t=e.target.closest?e.target.closest('[data-lang-toggle]'):null;
+        if(!t)return;e.preventDefault();apply(cur()==='ko'?'en':'ko');});}
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initLang);else initLang();
+  })();
+  </script>
+</body>
+</html>
