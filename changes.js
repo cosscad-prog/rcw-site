@@ -114,6 +114,15 @@
   /* 발행할 때마다 내용이 바뀌므로 오래된 사본을 쥐고 있으면 안 된다. */
   fetch('releases.json', { cache: 'no-cache' })
     .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (d) { if (d) render(d); })
+    .then(function (d) {
+      if (!d) return;
+      /* 다운로드 기록에 "무슨 판을 받았나" 를 남기려면 페이지가 그 값을 알아야 한다.
+         이 파일이 이미 releases.json 을 읽고 있으므로 여기서 한 번 내놓는다
+         (customer.html 의 다운로드 기록이 쓴다). 못 읽으면 그냥 없는 값이고,
+         서버가 비운 채 기록한다 — 안내를 못 그려도 다운로드는 되어야 하는 것과 같은 원칙. */
+      var top = d.releases && d.releases[0];
+      if (top && top.version) window.rcwLatestVersion = String(top.version);
+      render(d);
+    })
     .catch(function () { /* 안내를 못 그려도 다운로드는 되어야 한다 */ });
 })();

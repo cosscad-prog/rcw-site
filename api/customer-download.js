@@ -43,6 +43,11 @@ module.exports = async function handler(req, res) {
     const ok = /^RCW_V5_(Core|Standard)_Rhino[78](?:_(?:ko-KR|en-US))?(?:_\d+\.\d+\.\d+)?\.exe$/.test(fileName);
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(customerId || ''));
 
+    // 버전은 화면이 알려 준다. 있으면 좋은 값이지 필수가 아니다 — 형식이 어긋나거나
+    // 캐시된 옛 페이지가 안 보내면 비운 채 기록한다(기록이 통째로 빠지는 것보다 낫다).
+    const rawVer  = String((body && body.version) || '').trim();
+    const version = /^\d+\.\d+\.\d+$/.test(rawVer) ? rawVer : null;
+
     if (ok && isUuid) {
       const url = supabaseBase();
       const key = process.env.SUPABASE_SERVICE_KEY;
@@ -59,6 +64,7 @@ module.exports = async function handler(req, res) {
             action: 'download',
             customer_id: customerId,
             file_name: fileName,
+            version,
             ip: clientIp(req),
             user_agent: String(req.headers['user-agent'] || '').slice(0, 300)
           })
