@@ -175,7 +175,10 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: 'invalid_code' });
     }
 
-    await log({ action: 'login', customer_id: customer.id, ip, user_agent: userAgent });
+    // 회사·이름을 그때 베껴 둔다 — 명부가 나중에 바뀌어도 <b>그때 누가</b> 들어왔는지가 남아야 한다
+    // (트라이얼 downloads 표가 같은 이유로 그렇게 한다). 여기서는 customer 를 이미 쥐고 있어 조회가 늘지 않는다.
+    await log({ action: 'login', customer_id: customer.id, company: customer.company || null,
+                name: customer.name || null, ip, user_agent: userAgent });
 
     // 중지된 고객은 로그인은 되지만 파일을 주지 않는다. 화면에 문의 안내가 뜬다.
     const suspended = customer.status !== 'active';

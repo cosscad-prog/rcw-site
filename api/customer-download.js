@@ -52,6 +52,23 @@ module.exports = async function handler(req, res) {
       const url = supabaseBase();
       const key = process.env.SUPABASE_SERVICE_KEY;
       if (url && key) {
+        // 회사·이름을 명부에서 베껴 둔다. 표만 보고 누가 받아 갔는지 알 수 있어야 하고,
+        // 명부가 나중에 바뀌어도 그때 누구였는지가 남아야 한다(트라이얼 downloads 와 같은 원칙).
+        // 조회 실패는 무시한다 — 이름 두 칸 때문에 다운로드 기록 자체를 잃는 것이 더 나쁘다.
+        let company = null, name = null;
+        try {
+          const who = await fetch(url + '/rest/v1/customers?select=company,name&id=eq.' +
+                                  encodeURIComponent(customerId) + '&limit=1',
+                                  { headers: { apikey: key, Authorization: 'Bearer ' + key } });
+          if (who.ok) {
+            const rows = await who.json();
+            if (Array.isArray(rows) && rows.length) {
+              company = rows[0].company || null;
+              name    = rows[0].name    || null;
+            }
+          }
+        } catch { /* 이름 없이라도 기록은 남긴다 */ }
+
         await fetch(url + '/rest/v1/customer_access', {
           method: 'POST',
           headers: {
@@ -63,6 +80,8 @@ module.exports = async function handler(req, res) {
           body: JSON.stringify({
             action: 'download',
             customer_id: customerId,
+            company,
+            name,
             file_name: fileName,
             version,
             ip: clientIp(req),
