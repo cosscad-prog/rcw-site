@@ -7,6 +7,7 @@ Supabase 와 텔레그램에는 아무것도 나가지 않고, 설치할 것도 
 node docs/_tests/contact-api.test.js
 node docs/_tests/trial-api.test.js
 node docs/_tests/todo-sync.test.js
+node docs/_tests/todo-render.test.js
 ```
 
 각 줄의 `HTTP … supabase=n telegram=n` 과 `▶ … OK` 를 눈으로 확인한다.
@@ -57,3 +58,18 @@ INSERT 에 **201 + 빈 본문**(PATCH 는 204)을 준다. 전에 스텁이 INSER
 
 RLS 정책은 여기서 확인되지 않는다 — `docs/supabase-todo.sql` 을 실제로 돌렸는지,
 `with check` 가 들어갔는지는 로그인해서 한 번 써 보고 Supabase 표에 줄이 생기는지로만 안다.
+
+## 할 일 화면 (`todo-render.test.js`)
+
+`todo.html` 의 컬럼 빌더 두 개를 상태 10가지로 그려 본다. **보는 것은 하나 — 예외가 나나.**
+
+`render()` 는 맨 처음에 `list.innerHTML=""` 를 한다. 그 뒤에서 예외가 하나만 나도 화면이
+"일부만 이상"이 아니라 **통째로 빈다.** 2026-09-01 에 실제로 그랬다 —
+`buildImportantNormalColumn` 이 `buildColumn` 의 지역변수 `hidSub` 를 읽어서,
+**오른쪽 상단 패널이 빌 때마다** `ReferenceError`. 항목을 숨기니 그 순간 판이 사라졌다.
+
+## ⚠️ 못 잡는 것
+
+`row()` · `makeDropZone()` · `updateBoardHeight()` 는 스텁이라 안 지난다. 그쪽에서 나는
+예외는 이 검사로 안 잡힌다 — 브라우저에서 항목을 실제로 하나 끌어 보는 것으로만 안다.
+`정상` 상태만 돌려 보면 이 버그도 통과한다(그래서 상태를 10가지 둔다).

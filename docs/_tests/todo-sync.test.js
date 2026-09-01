@@ -48,6 +48,9 @@ const factory=new Function(...names,'state',src+'\n return {sbInit,sbPush,sbPull
 const api=factory(...names.map(n=>scope[n]),state);
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+/* 동기화는 전부 promise 안에서 돈다 — 거기서 난 예외는 조용히 사라지고
+   "배지가 초록이 아니다" 같은 애매한 실패로만 보인다. 원문을 찍게 한다. */
+process.on('unhandledRejection',e=>{ console.log('  ↑ 삼켜진 예외: '+(e&&e.stack||e)); });
 const out=[]; const P=s=>out.push(s);
 let fails=0;
 function chk(label,got,want){ const ok=String(got)===String(want); if(!ok) fails++; P((ok?'  PASS ':'  FAIL ')+label+' = '+got+(ok?'':'   (기대: '+want+')')); }

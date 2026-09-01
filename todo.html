@@ -556,7 +556,9 @@
         });
       }).then(function(){
         sbPending=false; sbRemoteStamp=stamp;
-        sbSetBadge("☁️ 동기화됨 "+stamp.substr(11,5),"ok");
+        /* 서버에는 ISO(UTC)로 보내고, 화면에는 내 시계로 보여준다.
+           stamp 를 그대로 잘라 쓰면 12:35 가 03:35 로 나온다. */
+        sbSetBadge("☁️ 동기화됨 "+new Date(stamp).toTimeString().slice(0,5),"ok");
       }).catch(function(e){
         /* 실패를 초록으로 덮지 않는다 — 저장 안 된 것을 저장됐다고 하면
            그대로 날린다. 배지를 누르거나 다음 변경 때 다시 민다. */
@@ -1195,7 +1197,12 @@
     // 숨김도 왼쪽 프로젝트 컬럼에 통합 표시 — 여기서는 렌더링 안 함
     if(shownCount===0){
       var e=document.createElement("div"); e.className="col-empty";
-      e.textContent=(tot===0&&hidSub&&hidSub.length===0)?"항목이 없어요.":"표시할 항목이 없어요.";
+      /* ★ 여기서 buildColumn 의 hidSub 를 읽어 화면이 통째로 비던 자리다(2026-09-01).
+         이 패널이 가진 것만으로 판단한다 — 중요·일반이 아예 없나, 있는데 안 보이나. */
+      var anyIN=state.items.filter(function(i){
+        return i.lane==="project" && (i.priority==="important"||i.priority==="normal");
+      }).length;
+      e.textContent=(anyIN===0)?"항목이 없어요.":"표시할 항목이 없어요.";
       col.appendChild(e);
     }
     return col;
