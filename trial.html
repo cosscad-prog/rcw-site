@@ -501,7 +501,10 @@
         method: 'POST',
         keepalive: true,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'download', request_id: submitted.request_id, file_name: fileName })
+        /* version 은 이 페이지가 안내한 버전이다(publish-trial.ps1 이 TRIAL_VERSION 을 갱신한다).
+           파일명에는 버전이 없으므로(2026-07-30 결정) 이 값이 없으면 "누가 어느 판을 받았나" 를
+           날짜로 미루어 짐작할 수밖에 없다. 서버가 형식을 검사하고, 이상하면 비운 채 기록한다. */
+        body: JSON.stringify({ action: 'download', request_id: submitted.request_id, file_name: fileName, version: TRIAL_VERSION })
       }).then(function (res) {
         if (!res.ok) {
           res.text().then(function (t) {

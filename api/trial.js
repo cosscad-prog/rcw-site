@@ -38,6 +38,9 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
    두어 캐시된 옛 페이지에서 눌러도 기록이 남게 한다 — 예전 이름만 받는 정규식이라
    그 사이 기록이 통째로 빠진 적이 있다. */
 const FILE_RE = /^RCW_V5_(Core|Standard)_Trial_Rhino([78])(?:_(ko-KR|en-US))?(?:_\d+\.\d+\.\d+)?\.exe$/;
+// 다운로드한 판. 화면이 보내지만 믿지 않고 여기서 형식을 본다 — 어긋나면 null 로 남긴다
+// (기록이 통째로 실패하는 것보다 한 칸이 비는 편이 낫다).
+const VERSION_RE = /^\d+\.\d+\.\d+$/;
 
 function field(raw, max) {
   const s = String(raw == null ? '' : raw).trim();
@@ -90,6 +93,9 @@ async function handleDownload(body, res) {
   const id = String(body.request_id || '').trim().toLowerCase();
   const m  = FILE_RE.exec(String(body.file_name || '').trim());
   if (!UUID_RE.test(id) || !m) return res.status(400).json({ error: 'bad_request' });
+  // 버전은 있으면 좋은 값이지 필수가 아니다 — 캐시된 옛 페이지는 안 보낸다.
+  const rawVer = String(body.version || '').trim();
+  const ver    = VERSION_RE.test(rawVer) ? rawVer : null;
 
   try {
     // 이름·회사·전화는 신청 행에서 그대로 베낀다. 신청 정보가 나중에 바뀌어도
@@ -111,6 +117,7 @@ async function handleDownload(body, res) {
         edition:    m[1],
         rhino:      m[2],
         lang:       m[3] || null,   // 설치할 때 고르므로 파일명으로는 알 수 없다
+        version:    ver,            // 파일명에 버전이 없으므로(2026-07-30) 화면이 알려 준 값을 남긴다
         file_name:  String(body.file_name).trim()
       })
     });
