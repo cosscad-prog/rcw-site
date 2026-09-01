@@ -2,6 +2,37 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 여기 있는 것이 전부 나온다(2026-08-14): 맨 앞 하나는 펼쳐지고, 이전 버전은 버전마다 한 줄로 접혀 눌러야 내용이 보인다. 그래서 계속 쌓아 둘 것 — 언제 무엇을 고쳤는지 되짚는 기록이다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.2.1",
+      "date": "2026-09-01",
+      "deck": null,
+      "items": [
+        {
+          "ko": "<b>단면이 맞지 않아 생긴 오류를 수정했습니다.</b>",
+          "en": "<b>Fixed the errors caused by a section that does not match the member.</b>"
+        },
+        {
+          "ko": "<b>노칭 최소 두께를 1.2mm 이상으로 수정했습니다.</b>",
+          "en": "<b>Notches are now recognised from 1.2mm thick.</b>"
+        },
+        {
+          "ko": "<b>홀을 찾았는데 지름 치수가 어느 장에도 안 나오던 것을 고쳤습니다.</b>",
+          "en": "<b>Fixed holes being found but never dimensioned on any sheet.</b>"
+        },
+        {
+          "ko": "<b>저장단면이 실제 부재와 다르면 알려 드립니다.</b>",
+          "en": "<b>You are now told when the saved section does not match the member.</b>"
+        },
+        {
+          "ko": "<b>단면을 저장하지 않은 프로파일을 그리기 전에 알려 드립니다.</b>",
+          "en": "<b>Profiles with no saved section are reported before anything is drawn.</b>"
+        },
+        {
+          "ko": "<b>영문 도움말을 한국어 도움말과 맞췄습니다.</b>",
+          "en": "<b>The English help has caught up with the Korean help.</b>"
+        }
+      ]
+    },
+    {
       "version": "5.2.0",
       "date": "2026-08-28",
       "deck": "https://rcw-site.vercel.app/whatsnew",
