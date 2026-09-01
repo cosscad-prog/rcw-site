@@ -486,10 +486,22 @@
     });
   }
 
-  function sbSetBadge(text,cls){
+  function sbSetBadge(text,cls,why){
     var b=document.getElementById("syncBadge"); if(!b) return;
     b.textContent=text; b.className="sync-badge"+(cls?" "+cls:"");
+    b.title=why||"";
     b.onclick=(cls==="err")?function(){ sbPush(true); }:null;
+  }
+
+  /* 실패를 "동기화 실패" 한 마디로 뭉개면 무엇을 고쳐야 하는지 알 수 없다.
+     제일 흔한 두 가지는 글자로 바로 말해 준다. */
+  function sbWhy(e){
+    var t=(e&&e.message)||String(e);
+    if(t.indexOf("PGRST205")>=0||t.indexOf("todo_state")>=0&&t.indexOf("Could not find")>=0)
+      return {msg:"⚠️ 표가 없습니다 — supabase-todo.sql 실행",why:t};
+    if(e&&(e.status===401||e.status===403)||t.indexOf("row-level security")>=0)
+      return {msg:"⚠️ 권한 없음 — RLS 정책 확인",why:t};
+    return {msg:"⚠️ 동기화 실패 (눌러 재시도)",why:t};
   }
 
   function sbSaveSession(d){
@@ -548,7 +560,8 @@
       }).catch(function(e){
         /* 실패를 초록으로 덮지 않는다 — 저장 안 된 것을 저장됐다고 하면
            그대로 날린다. 배지를 누르거나 다음 변경 때 다시 민다. */
-        sbSetBadge("⚠️ 동기화 실패 (눌러 재시도)","err");
+        var w=sbWhy(e);
+        sbSetBadge(w.msg,"err",w.why);
       });
     };
     if(immediate) doPush(); else sbPushTimer=setTimeout(doPush,800);
@@ -568,7 +581,7 @@
       sbRemoteStamp=row.updated_at;
       sbApplyRemote(row.data);
       sbSetBadge("☁️ 다른 기기 변경 반영","ok");
-    }).catch(function(){ sbSetBadge("⚠️ 불러오기 실패","err"); });
+    }).catch(function(e){ var w=sbWhy(e); sbSetBadge(w.msg,"err",w.why); });
   }
 
   function sbOnLogin(){
@@ -583,8 +596,13 @@
       if(row&&row.data){ sbRemoteStamp=row.updated_at; sbApplyRemote(row.data); sbSetBadge("☁️ 동기화됨","ok"); }
       else{ sbPush(true); }              // 서버에 아직 없으면 지금 로컬 것을 올린다
     }).catch(function(e){
-      if(e&&(e.status===401||e.status===400)){ sbOnLogout(); return; }
-      sbSetBadge("⚠️ 동기화 오류","err");
+      /* 로그인 자체가 만료된 것과, 로그인은 됐는데 표/정책이 없는 것을 가른다.
+         전자만 다시 로그인시킨다 — 후자에서 로그인 창을 띄우면 엉뚱한 데를 고치게 된다. */
+      var t=(e&&e.message)||"";
+      if(e&&e.status===400&&t.indexOf("refresh_token")>=0){ sbOnLogout(); return; }
+      if(!sbToken){ sbOnLogout(); return; }
+      var w=sbWhy(e);
+      sbSetBadge(w.msg,"err",w.why);
     });
   }
 

@@ -11,7 +11,7 @@ if(!src) { console.error('todo.html 에서 동기화 블록을 못 찾았다'); 
 // ---- 스텁 ----
 const store={};
 const localStorage={getItem:k=>k in store?store[k]:null,setItem:(k,v)=>{store[k]=String(v)},removeItem:k=>{delete store[k]}};
-function El(){ return {textContent:'',className:'',value:'',disabled:false,style:{},onclick:null,
+function El(){ return {textContent:'',className:'',title:'',value:'',disabled:false,style:{},onclick:null,
   classList:{s:new Set(),add(c){this.s.add(c)},remove(c){this.s.delete(c)},contains(c){return this.s.has(c)}},
   addEventListener(){},focus(){}}; }
 const els={}; ['syncBadge','loginOverlay','syncLogout','loginBtn','loginPw','loginEmail','loginErr'].forEach(i=>els[i]=El());
@@ -27,7 +27,7 @@ let renders=0; function render(){ renders++; }
 
 // ---- 가짜 Supabase ----
 const UID='11111111-1111-1111-1111-111111111111';
-let row=null, calls=[], failNext=false, tokenIssued=0;
+let row=null, calls=[], failNext=false, tokenIssued=0, noTable=false;
 function res(body,status){ return Promise.resolve({ok:status<400,status,text:()=>Promise.resolve(body===null?'':JSON.stringify(body))}); }
 function fetch(url,opts){
   opts=opts||{}; const path=String(url).split('.co')[1]; const m=(opts.method||'GET');
@@ -36,6 +36,7 @@ function fetch(url,opts){
   if(path.indexOf('grant_type=password')>=0) return res({access_token:'A1',refresh_token:'R1',expires_in:3600,user:{id:UID,email:'me@x.com'}},200);
   if(path.indexOf('grant_type=refresh_token')>=0){ tokenIssued++; return res({access_token:'A'+(tokenIssued+1),refresh_token:'R'+(tokenIssued+1),expires_in:3600,user:{id:UID,email:'me@x.com'}},200); }
   if(auth!=='Bearer A1'&&auth.indexOf('Bearer A')!==0) return res({message:'no auth'},401);
+  if(noTable) return res({code:'PGRST205',message:"Could not find the table 'public.todo_state' in the schema cache"},404);
   if(failNext){ failNext=false; return res({message:'boom'},500); }
   if(m==='GET') return res(row?[row]:[],200);
   const b=JSON.parse(opts.body); row={data:b.data,updated_at:b.updated_at}; return res(null,204);
@@ -142,6 +143,18 @@ function chk(label,got,want){ const ok=String(got)===String(want); if(!ok) fails
   els.syncLogout.onclick();
   chk('세션 지워짐', store.todo_sb_session===undefined, true);
   chk('오버레이 다시 보임', !els.loginOverlay.classList.contains('hide'), true);
+
+  // 10) 표가 없을 때 — "동기화 실패" 로 뭉개지 말고 무엇을 해야 하는지 말한다
+  P('10) todo_state 표가 아직 없을 때');
+  noTable=true;
+  store.todo_sb_session=JSON.stringify({refresh_token:'R1',user:{id:UID,email:'me@x.com'}});
+  const api3=factory(...names.map(n=>scope[n]),state);
+  api3.sbInit();
+  await sleep(80);
+  chk('배지', els.syncBadge.textContent, '⚠️ 표가 없습니다 — supabase-todo.sql 실행');
+  chk('원문을 title 에 남김', els.syncBadge.title.indexOf('PGRST205')>=0, true);
+  chk('로그인 창을 띄우지 않음', els.loginOverlay.classList.contains('hide'), true);
+  noTable=false;
 
   P('');
   P('호출한 끝점: '+[...new Set(calls)].join(' | '));
