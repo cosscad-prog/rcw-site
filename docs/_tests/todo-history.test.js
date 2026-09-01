@@ -53,6 +53,8 @@ function sbFetch(pathq, opts) {
   calls.push(method + ' ' + table);
   if (table === 'todo_day') {
     if (method === 'GET') {
+      const eq = (pathq.split('day=eq.')[1] || '').split('&')[0];
+      if (eq) return res(dayRows.filter(r => r.day === eq), 200);
       const lt = (pathq.split('day=lt.')[1] || '').split('&')[0];
       const rows = lt ? dayRows.filter(r => r.day < lt) : dayRows.slice();
       rows.sort((a, b) => (a.day < b.day ? -1 : 1));
@@ -64,7 +66,7 @@ function sbFetch(pathq, opts) {
       return res(null, 204);
     }
     const b = JSON.parse(opts.body);
-    dayRows = dayRows.filter(r => r.day !== b.day).concat([{ day: b.day, data: b.data }]);
+    dayRows = dayRows.filter(r => r.day !== b.day).concat([{ day: b.day, data: b.data, updated_at: b.updated_at }]);
     return res(null, 204);
   }
   if (table === 'todo_archive') {
@@ -92,7 +94,7 @@ const names = ['localStorage', 'document', 'window', 'alert', 'URL', 'Blob', 'es
 const vals = { localStorage, document, window, alert, URL, Blob, esc, KEY, sbFetch, sbRefresh, sbUser,
   sbAuthed, sbApplyRemote, sbPush, snapshot, setTimeout, clearTimeout, Date, JSON, Promise, encodeURIComponent, console };
 const factory = new Function(...names,
-  src + NL + 'return {hxTouchDay,hxFold,hxLoadDays,hxRestore,hxToday,hxDaysAgo,hxDayOf,hxInit,hxRenderStatus,hxExport,HX_KEEP};');
+  src + NL + 'return {hxWriteDay,hxBackfill,hxScheduleDaily,hxFold,hxLoadDays,hxRestore,hxToday,hxDaysAgo,hxDayOf,hxInit,hxRenderStatus,hxExport,HX_KEEP,HX_HOUR,HX_MIN};');
 const build = () => factory(...names.map(n => vals[n]));
 
 /* ── 검사 ───────────────────────────────────────────────── */
@@ -110,22 +112,52 @@ const item = (t, o) => Object.assign({ id: t, text: t, thtml: t, detail: '', dht
 (async () => {
   let hx = build();
 
-  // 1) 2단계 — 오늘 줄
-  P('1) 하루치 기록 (2단계)');
+  // 1) 2단계 — 23:50 에 한 번
+  P('1) 하루치는 23:50 에 한 번 쓴다 (2단계)');
+  chk('예약 시각', hx.HX_HOUR + ':' + hx.HX_MIN, '23:50');
   state.items = [item('a'), item('b')];
-  hx.hxTouchDay();
-  await sleep(30);
+  calls = [];
+  hx.hxScheduleDaily();
+  await sleep(20);
+  chk('예약만 하고 지금 쓰지는 않음', calls.filter(c => c === 'POST todo_day').length, 0);
+
+  P('   23:50 이 되면');
+  await hx.hxWriteDay(hx.hxToday(), snapshot());     // 타이머가 부르는 바로 그것
   chk('오늘 줄이 생김', dayRows.length, 1);
   chk('오늘 날짜', dayRows[0].day, hx.hxToday());
   chk('그 줄에 담긴 항목 수', dayRows[0].data.items.length, 2);
 
-  P('2) 연달아 고쳐도 서버를 계속 두드리지 않는다');
-  const before = calls.filter(c => c === 'POST todo_day').length;
+  P('   그 뒤 하루 종일 고쳐도 서버를 안 두드린다');
+  calls = [];
   state.items.push(item('c'));
-  hx.hxTouchDay(); hx.hxTouchDay(); hx.hxTouchDay();
-  await sleep(30);
-  chk('추가 쓰기 없음(1분 안)', calls.filter(c => c === 'POST todo_day').length - before, 0);
-  chk('그래도 잊지 않는다(예약됨)', dayRows[0].data.items.length, 2);   // 아직 옛 내용
+  await sleep(20);
+  chk('추가 쓰기 없음', calls.length, 0);
+
+  // 2) 23:50 을 놓친 날 되메우기
+  P('2) 23:50 에 꺼져 있었으면 — 다음에 열 때 되메운다');
+  hx = build();
+  dayRows = []; calls = [];
+  state.items = [item('어제 끝낸 것')];
+  const 어제 = hx.hxDaysAgo(1);
+  const 어제저녁 = new Date(); 어제저녁.setDate(어제저녁.getDate() - 1); 어제저녁.setHours(18, 0, 0, 0);
+  chk('되메웠나', await hx.hxBackfill(어제저녁.toISOString()), true);
+  chk('되메운 날짜 = 목록이 마지막으로 바뀐 날', dayRows[0].day, 어제);
+  chk('담긴 내용', dayRows[0].data.items[0].text, '어제 끝낸 것');
+
+  P('   이미 줄이 있으면 다시 안 쓴다');
+  calls = [];
+  chk('되메우기 안 함', await hx.hxBackfill(어제저녁.toISOString()), false);
+  chk('쓰기 호출 0', calls.filter(c => c === 'POST todo_day').length, 0);
+
+  P('   그 줄을 쓴 뒤에 또 고쳐진 채 끝났으면 다시 쓴다');
+  const 어제밤 = new Date(); 어제밤.setDate(어제밤.getDate() - 1); 어제밤.setHours(23, 58, 0, 0);
+  dayRows[0].updated_at = 어제저녁.toISOString();
+  state.items = [item('23:55 에 고친 것')];
+  chk('다시 씀', await hx.hxBackfill(어제밤.toISOString()), true);
+  chk('내용이 갱신됨', dayRows[0].data.items[0].text, '23:55 에 고친 것');
+
+  P('   오늘 것은 되메우지 않는다 (23:50 이 아직 안 왔다)');
+  chk('오늘은 건너뜀', await hx.hxBackfill(new Date().toISOString()), false);
 
   // 3) 3단계 — 30일 지난 것 몰기
   P('3) 30일 지난 하루치를 보관으로 (3단계)');
@@ -192,6 +224,52 @@ const item = (t, o) => Object.assign({ id: t, text: t, thtml: t, detail: '', dht
   const keep = archive.days[archive.days.length - 1];
   chk('그 이름표', keep.label, '되돌리기 직전');
   chk('거기 담긴 항목 수', keep.data.items.length, 3);
+
+  // 8) 예약 시각 계산 — 시계를 가짜로 두고 본다
+  P('8) 23:50 예약 — 시계를 돌려 본다');
+  {
+    /* 진짜 Date 를 감싸서 "지금"만 바꾼다. 타이머는 손으로 터뜨린다. */
+    let nowMs = 0;
+    const Real = Date;
+    function FakeDate(...a) { return a.length ? new Real(...a) : new Real(nowMs); }
+    FakeDate.prototype = Real.prototype;
+    FakeDate.now = () => nowMs;
+    let timer = null;
+    const fakeSetTimeout = (fn, ms) => { timer = { fn, ms }; return 1; };
+    const fakeClearTimeout = () => { timer = null; };
+
+    const v2 = Object.assign({}, vals, { Date: FakeDate, setTimeout: fakeSetTimeout, clearTimeout: fakeClearTimeout });
+    const hx8 = factory(...names.map(n => v2[n]));
+
+    // 2026-09-01 (화) 09:00 에 열었다면
+    nowMs = new Real(2026, 8, 1, 9, 0, 0).getTime();
+    dayRows = []; calls = [];
+    hx8.hxScheduleDaily();
+    chk('한 시간 뒤 다시 재라고 함(먼 시각이라)', timer.ms, 3600000);
+
+    // 23:00 이면 이제 진짜 예약이 잡힌다
+    nowMs = new Real(2026, 8, 1, 23, 0, 0).getTime();
+    hx8.hxScheduleDaily();
+    chk('23:00 → 50분 뒤로 예약', timer.ms, 50 * 60 * 1000);
+
+    // 23:50 을 지났으면 내일 것으로
+    nowMs = new Real(2026, 8, 1, 23, 55, 0).getTime();
+    hx8.hxScheduleDaily();
+    chk('23:55 → 하루 이상 남음(한 시간씩 끊어 잼)', timer.ms, 3600000);
+
+    // ★ 재웠다가 늦게 깨어나도 날짜가 밀리면 안 된다
+    P('   ★ 23:50 에 재워 두고 다음날 08:00 에 깨어나면');
+    nowMs = new Real(2026, 8, 1, 23, 0, 0).getTime();
+    state.items = [item('9월 1일에 하던 것')];
+    hx8.hxScheduleDaily();                       // 2026-09-01 23:50 을 겨냥해 예약
+    const fire = timer.fn;
+    nowMs = new Real(2026, 8, 2, 8, 0, 0).getTime();   // 깨어난 시각은 다음날 아침
+    fire();
+    await sleep(30);
+    chk('쓴 날짜 = 겨냥했던 9/1', dayRows.length ? dayRows[0].day : '(안 씀)', '2026-09-01');
+    chk('깨어난 날(9/2)로 안 밀림', dayRows.filter(r => r.day === '2026-09-02').length, 0);
+    chk('내용', dayRows[0].data.items[0].text, '9월 1일에 하던 것');
+  }
 
   P('');
   P(fails ? ('실패 ' + fails + '개') : ('전부 통과 — 검사 ' + out.filter(l => l.indexOf('  PASS') === 0).length + '개'));
