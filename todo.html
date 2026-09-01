@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<!-- saved from url=(0103)file:///C:/Users/inkoj/Desktop/%EC%83%88%20%ED%8F%B4%EB%8D%94/%EA%B3%84%EB%B0%9C%EA%B3%84%ED%9A%8D.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>할 일</title>
+<style>
+  :root{
+    --bg:#F3F4F6; --surface:#FFFFFF; --ink:#18181B; --muted:#6B7280;
+    --faint:#9CA3AF; --line:#E5E7EB; --done:#0E9F6E;
+    --urgent:#E5484D; --important:#E0890B; --normal:#9CA3AF;
+    --radius:12px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",
+      "Malgun Gothic","맑은 고딕",Roboto,sans-serif;
+    background:var(--bg); color:var(--ink);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    min-height:100vh; padding:24px 24px;
+  }
+  .app{max-width:100%; margin:0 auto;}
+
+  /* ── header ── */
+  .head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; padding:0 4px;}
+  .head-left{display:flex; align-items:baseline; gap:12px;}
+  .head h1{font-size:18px; font-weight:700; letter-spacing:-0.02em;}
+  .head .date{font-size:15px; color:var(--muted);}
+  .ring-wrap{display:flex; align-items:center; gap:8px;}
+  .ring-wrap .frac{font-size:13px; color:var(--muted); text-align:right; white-space:nowrap;}
+  .ring-wrap .frac b{display:block; font-size:14px; color:var(--ink); font-weight:600;}
+  .ring{position:relative; width:36px; height:36px;}
+  .ring svg{transform:rotate(-90deg);}
+  .ring .pct{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:600; color:var(--ink);}
+
+  /* ── add bar ── */
+  .add{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:10px; margin-bottom:0; display:flex; flex-direction:column; gap:10px;}
+  .add input{width:100%; border:none; outline:none; font-size:15px; padding:6px 8px;
+    background:transparent; color:var(--ink); font-family:inherit;}
+  .add input::placeholder{color:var(--faint);}
+  .add .row{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .seg{display:flex; gap:4px;}
+  .seg button{font-family:inherit; font-size:12.5px; padding:6px 11px; border-radius:8px;
+    border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer;
+    transition:all .12s; display:flex; align-items:center; gap:5px;}
+  .seg button .dot{width:7px; height:7px; border-radius:50%;}
+  .seg button[data-p="urgent"] .dot{background:var(--urgent);}
+  .seg button[data-p="important"] .dot{background:var(--important);}
+  .seg button[data-p="normal"] .dot{background:var(--normal);}
+  .seg button[data-p="meeting"] .dot{background:#185FA5;}
+  .seg button svg{width:14px; height:14px;}
+  .seg button.on{color:var(--ink); border-color:var(--ink); font-weight:600;}
+  .add .submit{margin-left:auto; font-family:inherit; font-size:13px; font-weight:600;
+    padding:7px 16px; border-radius:8px; border:none; background:var(--ink); color:#fff;
+    cursor:pointer; transition:opacity .12s;}
+  .add .submit:hover{opacity:.85;}
+  .seg-sep{width:1px; align-self:stretch; background:var(--line); margin:0 2px;}
+
+  /* ── global format bar ── */
+  .gfmt{background:var(--surface); border:1px solid var(--line); border-top:none;
+    border-radius:0 0 var(--radius) var(--radius);
+    padding:7px 10px; margin-bottom:18px;
+    display:flex; align-items:center; gap:4px; flex-wrap:wrap;}
+  .gfmt .fmt-label{font-size:12px; color:var(--faint); margin-right:4px; white-space:nowrap;}
+  .gfmt button{width:27px; height:27px; border:1px solid var(--line); background:var(--surface);
+    border-radius:7px; cursor:pointer; font-size:13px; color:var(--ink);
+    display:flex; align-items:center; justify-content:center; padding:0; font-family:inherit;}
+  .gfmt button:hover{background:#F1F3F5;}
+  .gfmt .fmt-sep{width:1px; height:18px; background:var(--line); margin:0 3px;}
+  .gfmt .swatch span{width:13px; height:13px; border-radius:50%; display:block; border:1px solid rgba(0,0,0,.15);}
+  .gfmt .hint{font-size:11.5px; color:var(--faint); margin-left:6px;}
+
+  /* ── board ── */
+  .board{display:flex; gap:0; height:var(--board-h, calc(100vh - 230px)); min-height:300px;}
+  .column{min-width:0;}
+  .col-project{flex:0 0 auto; overflow-y:auto;}
+  .col-right{
+    flex:1 1 0; min-width:0;
+    display:flex; flex-direction:column;
+    overflow:hidden;
+  }
+  .col-important{flex:0 0 auto; max-height:var(--imp-max, 60%); overflow-y:auto; padding-right:2px;}
+  .col-personal{flex:0 0 auto;}
+  .row-divider{height:1px; background:var(--line); margin:4px 2px 8px;}
+  .divider{flex:0 0 22px; align-self:stretch; position:relative; cursor:col-resize;
+    display:flex; align-items:center; justify-content:center; touch-action:none;}
+  .divider::before{content:""; position:absolute; top:0; bottom:0; left:50%; transform:translateX(-50%);
+    width:1px; background:var(--line); transition:background .12s, width .12s;}
+  .divider:hover::before,.divider.dragging::before{background:#AEB4BC; width:2px;}
+  .grip{width:4px; height:38px; border-radius:3px; background:#D5D8DC; position:relative; z-index:1; transition:background .12s;}
+  .divider:hover .grip,.divider.dragging .grip{background:#9CA3AF;}
+
+  .col-head{display:flex; align-items:center; gap:8px; margin:0 2px 6px;}
+  .col-head .ic{flex:none; color:var(--muted); display:flex;}
+  .col-head .ic svg{width:18px; height:18px;}
+  .col-head .ctitle{font-size:15px; font-weight:700; letter-spacing:-0.01em;}
+  .col-head .ccount{margin-left:auto; font-size:12px; color:var(--faint);}
+  .col-bar{height:4px; border-radius:4px; background:var(--line); margin:0 2px 16px; overflow:hidden;}
+  .col-bar > div{height:100%; background:var(--done); width:0; transition:width .3s ease;}
+  .col-empty{font-size:13px; color:var(--faint); padding:18px 6px; text-align:center;}
+
+  /* ── groups ── */
+  .group{margin-bottom:18px;}
+  .group-head{display:flex; align-items:center; gap:8px; margin:0 2px 9px;}
+  .group-head .gdot{width:9px; height:9px; border-radius:50%;}
+  .group-head .glabel{font-size:12.5px; font-weight:600; color:var(--muted);}
+  .group-head .gcount{font-size:11.5px; color:var(--faint);}
+  .g-urgent .gdot{background:var(--urgent);}
+  .g-important .gdot{background:var(--important);}
+  .g-normal .gdot{background:var(--normal);}
+  .g-hidden .gdot{background:var(--faint);}
+  .g-hidden .glabel{color:var(--faint);}
+  .g-done .gdot{background:var(--done);}
+  .g-done .glabel{color:var(--muted);}
+  .g-done .task{opacity:.55;}
+  .g-done .task .label{text-decoration:line-through; color:var(--faint);}
+  .g-done .check{background:var(--done); border-color:var(--done);}
+  .g-done .check svg{opacity:1; transform:scale(1);}
+  .g-meeting .gdot{background:#185FA5;}
+  .g-meeting .glabel{color:#185FA5;}
+  .drop-line{height:2px; background:var(--done); border-radius:2px; margin:0 2px 8px;}
+
+  /* ── task ── */
+  .task{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:10px 10px 10px 6px; margin-bottom:8px; transition:border-color .12s, opacity .15s;}
+  .task:hover{border-color:#D1D5DB;}
+  .task.dragging-src{opacity:.4;}
+  .task-main{display:flex; align-items:center; gap:9px;}
+  .handle{flex:none; width:18px; height:24px; display:flex; align-items:center; justify-content:center;
+    color:#C5CAD1; cursor:grab; opacity:0; transition:opacity .12s, color .12s;}
+  .task:hover .handle{opacity:1;}
+  .handle:hover{color:var(--muted);}
+  .handle:active{cursor:grabbing;}
+  .chev{flex:none; width:24px; height:24px; border-radius:7px; border:none; background:transparent;
+    color:var(--faint); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:transform .16s, color .12s;}
+  .chev:hover{color:var(--ink);}
+  .task.expanded .chev{transform:rotate(180deg);}
+  .task .label{flex:1; font-size:14.5px; color:var(--ink); cursor:text; word-break:break-word;
+    outline:none; border-radius:6px; padding:2px 4px; margin:-2px -4px; transition:background .12s;}
+  .task .label:focus{background:#F1F3F5;}
+  .task .label b,.task .label strong{font-weight:700;}
+  .task .label:empty:before{content:attr(data-placeholder); color:var(--faint); pointer-events:none;}
+  .note-ind{flex:none; color:var(--faint); display:flex; align-items:center;}
+  .task .cat{flex:none; font-size:11px; padding:3px 8px; border-radius:7px;
+    background:#F1F3F5; color:#566; font-weight:500;}
+  .check{flex:none; width:21px; height:21px; border-radius:7px; border:1.8px solid #CBD0D6;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .14s;}
+  .check svg{width:13px; height:13px; opacity:0; transform:scale(.6); transition:all .14s;}
+  .tuck{flex:none; width:24px; height:24px; border-radius:7px; border:none; background:transparent;
+    color:var(--faint); cursor:pointer; opacity:0; transition:opacity .12s, background .12s, color .12s;
+    display:flex; align-items:center; justify-content:center;}
+  .task:hover .tuck{opacity:1;}
+  .tuck:hover{background:#EEF0F2; color:var(--ink);}
+
+  .task.done .check{background:var(--done); border-color:var(--done);}
+  .task.done .check svg{opacity:1; transform:scale(1);}
+  .task.hidden{opacity:.6; border-style:dashed;}
+  .task.hidden .tuck{opacity:1;}
+
+  /* ── detail (always visible) ── */
+  .task-detail{margin:8px 4px 2px 72px; display:flex; flex-direction:column; gap:0;}
+
+  .detail-edit{border:1px solid var(--line); border-radius:9px; background:#FBFBFC; color:var(--ink);
+    font-family:inherit; font-size:13.5px; line-height:1.65; padding:8px 10px; min-height:38px;
+    outline:none; transition:border-color .12s; word-break:break-word;}
+  .detail-edit:focus{border-color:#C2C7CD; background:var(--surface);}
+  .detail-edit:empty:before{content:attr(data-placeholder); color:var(--faint); pointer-events:none;}
+  .detail-edit b,.detail-edit strong{font-weight:700;}
+
+  /* ── footer ── */
+  .foot{display:flex; align-items:center; gap:18px; margin:18px 4px 0;}
+  .foot button{font-family:inherit; font-size:12.5px; color:var(--muted); background:none;
+    border:none; cursor:pointer; padding:4px;}
+  .foot button:hover{color:var(--ink);}
+  .foot .spacer{flex:1 1 auto;}
+  .foot .bk{display:flex; align-items:center; gap:14px;}
+  .foot .bk .st{font-size:11.5px; color:var(--muted); white-space:nowrap;}
+  .foot button.warn{color:#B45309; font-weight:600;}
+
+  /* ── context menu ── */
+  .ctx{position:fixed; z-index:50; background:var(--surface); border:1px solid var(--line);
+    border-radius:10px; box-shadow:0 8px 26px rgba(0,0,0,.13); padding:5px; min-width:184px;}
+  .ctx[hidden]{display:none;}
+  .ctx-title{font-size:11.5px; color:var(--faint); padding:6px 9px 7px; border-bottom:1px solid var(--line);
+    margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px;}
+  .ctx-item{display:flex; align-items:center; gap:9px; width:100%; font-family:inherit; font-size:13.5px;
+    padding:8px 9px; border:none; background:none; border-radius:7px; cursor:pointer; color:var(--ink); text-align:left;}
+  .ctx-item:hover{background:#F1F3F5;}
+  .ctx-item svg{width:15px; height:15px; flex:none;}
+  .ctx-item.danger{color:var(--urgent);}
+  .ctx-item.danger:hover{background:#FCECEC;}
+  .ctx-sep{height:1px; background:var(--line); margin:4px 4px;}
+  .ctx-pri{display:flex; align-items:center; gap:8px; padding:5px 9px;}
+  .ctx-pri-label{font-size:12.5px; color:var(--muted);}
+  .ctx-pri-btns{display:flex; gap:5px; margin-left:auto;}
+  .pbtn{width:24px; height:24px; border-radius:7px; border:1px solid var(--line); background:none;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;}
+  .pbtn:hover{background:#F1F3F5;}
+  .pbtn.on{border-color:var(--ink);}
+  .pbtn .dot{width:9px; height:9px; border-radius:50%;}
+  .pbtn[data-p="urgent"] .dot{background:var(--urgent);}
+  .pbtn[data-p="important"] .dot{background:var(--important);}
+  .pbtn[data-p="normal"] .dot{background:var(--normal);}
+  .pbtn[data-p="meeting"] .dot{background:#185FA5;}
+
+  /* ── priority dot button on card ── */
+  .pri-dot{flex:none; width:22px; height:22px; border-radius:50%; border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; background:transparent; padding:0;
+    transition:transform .12s;}
+  .pri-dot:hover{transform:scale(1.25);}
+  .pri-dot .dot-inner{width:10px; height:10px; border-radius:50%; pointer-events:none;}
+  .pri-dot[data-p="urgent"]   .dot-inner{background:var(--urgent);}
+  .pri-dot[data-p="important"] .dot-inner{background:var(--important);}
+  .pri-dot[data-p="normal"]   .dot-inner{background:var(--normal);}
+  .pri-dot[data-p="meeting"]  .dot-inner{background:#185FA5;}
+
+  /* ── priority popup ── */
+  .pri-pop{position:fixed; z-index:60; background:var(--surface); border:1px solid var(--line);
+    border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,.13); padding:5px; display:flex; gap:4px;}
+  .pri-pop[hidden]{display:none;}
+  .pri-pop .pp-btn{width:28px; height:28px; border-radius:8px; border:1.5px solid var(--line);
+    background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; transition:border-color .1s, transform .1s;}
+  .pri-pop .pp-btn:hover{transform:scale(1.15);}
+  .pri-pop .pp-btn.on{border-color:var(--ink);}
+  .pri-pop .pp-btn .dot-inner{width:10px; height:10px; border-radius:50%; pointer-events:none;}
+  .pri-pop .pp-btn[data-p="urgent"]    .dot-inner{background:var(--urgent);}
+  .pri-pop .pp-btn[data-p="important"] .dot-inner{background:var(--important);}
+  .pri-pop .pp-btn[data-p="normal"]    .dot-inner{background:var(--normal);}
+  .pri-pop .pp-btn[data-p="meeting"]   .dot-inner{background:#185FA5;}
+
+  /* ── header backup status ── */
+  .head-bk{display:flex; align-items:center; gap:6px; margin-right:14px;}
+  .head-bk .hbk-status{
+    display:flex; flex-direction:column; align-items:flex-end; gap:1px;
+  }
+  .head-bk .hbk-label{
+    font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap;
+  }
+  .head-bk .hbk-label.ok{ color:#059669; }
+  .head-bk .hbk-label.warn{ color:#D97706; cursor:pointer; }
+  .head-bk .hbk-label.warn:hover{ color:#B45309; text-decoration:underline; }
+  .head-bk .hbk-time{font-size:11px; color:var(--faint); white-space:nowrap; text-align:right;}
+  .head-bk .hbk-icon{ font-size:18px; line-height:1; }
+  :focus-visible{outline:2px solid var(--ink); outline-offset:2px; border-radius:6px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+  @media (max-width:720px){
+    .board{flex-direction:column; height:auto; gap:0;}
+    .divider{display:none;}
+    .col-project{width:auto!important; flex:1 1 auto; overflow-y:visible;
+      border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:14px;}
+    .col-right{height:auto; overflow:visible;}
+    .col-important{overflow-y:visible; flex:1 1 auto;}
+  }
+
+  /* ── 클라우드 동기화 (Firebase) ── */
+  .sync-badge{font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; cursor:default;}
+  .sync-badge.ok{color:#059669;}
+  .sync-badge.err{color:#D93025; cursor:pointer;}
+  .sync-badge.busy{color:#D97706;}
+  #syncLogout{font-size:11px; color:var(--faint); background:none; border:none; cursor:pointer; margin-left:6px; text-decoration:underline; display:none;}
+  #loginOverlay{position:fixed; inset:0; background:rgba(24,24,27,.55); display:flex;
+    align-items:center; justify-content:center; z-index:999; padding:16px;}
+  #loginOverlay.hide{display:none;}
+  .login-box{background:#fff; border-radius:16px; padding:28px 26px; width:100%; max-width:340px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);}
+  .login-box h2{font-size:17px; margin-bottom:4px;}
+  .login-box p{font-size:12.5px; color:var(--muted); margin-bottom:16px;}
+  .login-box input{width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:9px;
+    font-size:14px; margin-bottom:8px; font-family:inherit;}
+  .login-box .lrow{display:flex; gap:8px; margin-top:6px;}
+  .login-box button{flex:1; padding:10px; border-radius:9px; border:1px solid var(--line);
+    font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; background:#fff;}
+  .login-box button.primary{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .login-box .lerr{color:#D93025; font-size:12px; min-height:16px; margin-top:8px;}
+</style>
+</head>
+<body>
+<div id="loginOverlay">
+  <div class="login-box">
+    <h2>할 일 — 로그인</h2>
+    <p>로그인하면 모든 기기에서 같은 목록이 동기화됩니다.</p>
+    <input id="loginEmail" type="email" placeholder="이메일" autocomplete="username">
+    <input id="loginPw" type="password" placeholder="비밀번호 (6자 이상)" autocomplete="current-password">
+    <div class="lrow">
+      <button id="loginBtn" class="primary">로그인</button>
+    </div>
+    <div class="lerr" id="loginErr"></div>
+  </div>
+</div>
+<div class="app">
+  <div class="head">
+    <div class="head-left"><h1>할 일</h1><div class="date" id="date">2026년 8월 25일 (화)</div></div>
+    <div class="head-bk">
+      <div class="hbk-status">
+        <span class="hbk-label" id="hbkBtn">💾 저장 중…</span>
+        <span class="hbk-time" id="hbkTime"></span>
+      </div>
+      <div class="hbk-status">
+        <span class="sync-badge" id="syncBadge">☁️ 연결 중…</span>
+        <button id="syncLogout" title="로그아웃">로그아웃</button>
+      </div>
+    </div>
+    <div class="ring-wrap">
+      <div class="frac"><b id="frac">0 / 11</b></div>
+      <div class="ring">
+        <svg width="36" height="36">
+          <circle cx="18" cy="18" r="15" fill="none" stroke="#E5E7EB" stroke-width="3.5"></circle>
+          <circle id="ringFill" cx="18" cy="18" r="15" fill="none" stroke="#0E9F6E" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="94.2" stroke-dashoffset="94.2" style="transition: stroke-dashoffset 0.3s; stroke-dashoffset: 94.2;"></circle>
+        </svg>
+        <div class="pct" id="pct">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="add">
+    <input id="inp" type="text" placeholder="새 할 일 (예: 프로파일 버그 수정 #개발)" autocomplete="off">
+    <div class="row">
+      <div class="seg" id="laneSeg">
+        <button data-l="project" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>프로젝트</button>
+        <button data-l="personal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>개인</button>
+      </div>
+      <div class="seg-sep"></div>
+      <div class="seg" id="seg">
+        <button data-p="urgent" class="on"><span class="dot"></span>긴급</button>
+        <button data-p="important"><span class="dot"></span>중요</button>
+        <button data-p="normal" class=""><span class="dot"></span>일반</button>
+        <button data-p="meeting"><span class="dot"></span>미팅</button>
+      </div>
+      <button class="submit" id="addBtn">추가</button>
+    </div>
+  </div>
+
+  <!-- global format bar -->
+  <div class="gfmt" id="gfmt">
+    <span class="fmt-label">서식</span>
+    <button data-cmd="bold" title="굵게 (Ctrl+B)" style="font-weight:700;">B</button>
+    <button data-cmd="strike" title="취소선" style="text-decoration:line-through; text-decoration-color:#18181B;">S</button>
+    <span class="fmt-sep"></span>
+    <button class="swatch" data-color="default" title="기본색"><span style="background:#18181B"></span></button>
+    <button class="swatch" data-color="#0E9F6E" title="완료(초록)"><span style="background:#0E9F6E"></span></button>
+    <button class="swatch" data-color="#E5484D" title="빨강"><span style="background:#E5484D"></span></button>
+    <button class="swatch" data-color="#185FA5" title="파랑"><span style="background:#185FA5"></span></button>
+    <button class="swatch" data-color="#B45309" title="주황"><span style="background:#B45309"></span></button>
+    <span class="hint">텍스트를 선택한 뒤 클릭 — 제목·소항목 모두 적용</span>
+  </div>
+
+  <div id="list"><div class="board" id="board"><div class="column col-project" style="width: 60%;"><div class="col-head"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span><span class="ctitle">프로젝트</span><span class="ccount">0 / 11</span></div><div class="col-bar"><div style="width:0%"></div></div><div class="group g-urgent"><div class="group-head"><span class="gdot"></span><span class="glabel">긴급</span><span class="gcount">0/9</span></div><div class="task" data-id="1787642164639yjq6"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev" style="transform: rotate(180deg);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="1787642164639yjq6" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">유리에 접합유리 두께 표현 기능 추가- data를 받는다.</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="유리에 접합유리 두께 표현 기능 추가- data를 받는다."><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div><div class="detail-edit" contenteditable="true" data-id="1787642164639yjq6" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능.">입면도에서 유리치수 표현 기능 추가<div>backpanel 치수 기능 추가</div></div></div></div></div><div class="task" data-id="1786684445129ejts"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="1786684445129ejts" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">fdwg 에서 방향을 찾지 못했다. 1번선과 2번선이 같은 길이이고 서로 다른 방향이 대칭인 모양인 경우 상하가 뒤집힌 결과가 나올수 있다. 3번선이 필요하다.</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="fdwg 에서 방향을 찾지 못했다. 1번선과 2번선이 같은 길이이고 서로 다른 방향이 대칭인 모양인 경우 상하가 뒤집힌 결과가 나올수 있다. 3번선이 필요하다."><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div style="display: none;"><div class="detail-edit" contenteditable="true" data-id="1786684445129ejts" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능."></div></div></div></div><div class="task" data-id="1787022307246fy0p"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="1787022307246fy0p" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">남은 할일</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="남은 할일"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div style="display: none;"><div class="detail-edit" contenteditable="true" data-id="1787022307246fy0p" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능.">1. 발행 대기<div><br></div><div>&nbsp; - SSP 사전검사 개선 (오늘 작업, Rhino 8·7 확인 완료) → 다음 수정과 함께 5.1.3</div><div><br></div><div>&nbsp; 2. Sheet(판재) — 가장 큰 덩어리</div><div><br></div><div>&nbsp; - Sheet 절곡 판재 실기 미확인 3가지: Dir 수정판 · Parallel(면이 늘어남) · Parallel 윙 앞/뒤</div><div>&nbsp; - 순수 패널 건축물(사용자가 밝힌 실제 목표) — 남은 것: ②접힘 끝선 노출 + 고정용 profile 부착 ③후속(번호·리스트·가공도)</div><div>&nbsp; ④곡면 조각 평면화. ①윙 screw hole 은 완료</div><div>&nbsp; - 🅿️ Sheet 2·3번 단순 attach — 구현했으나 "설계가 잘못됐다"로 보류. 다시 할 땐 설계 합의부터</div><div>&nbsp; - 🅿️ 개구부 판재(B형) — 조사만 해두고 보류(커튼월 개구부가 필요해지면 그 조사 그대로 유효)</div><div>&nbsp; - Sheet 는 아직 00_temp 의 Internal 전용 — 정식 편입 시 폴더 이동 + 명령 수 기대값 2곳 + 도움말</div><div><br></div><div>&nbsp; 3. 판매 구조</div><div><br></div><div>&nbsp; - 에디션 신설(Sheet / Core·Standard / Professional) — 라이선스는 상수 4곳 추가뿐. 미정 2개: Core+Sheet 조합을 팔</div><div>&nbsp; 것인가, Sheet 평가판을 낼 것인가. 착수는 Sheet 실기 뒤</div><div><br></div><div>&nbsp; 4. FDwg/가공도 계열</div><div><br></div><div>&nbsp; - Y7(stock−part) 피처검출 런타임 검증 대기</div><div>&nbsp; - 원본단면 스토어 — 사선 끝 trim·subtract 미완</div><div>&nbsp; - Fab_ID 3 = F90(멀리언 길게 90도) 보류 — WIP 자산 보존 중</div><div>&nbsp; - 기록모드 watcher 제네릭 object 캡처 — 설계 합의됐으나 필요성 보고 결정하기로 보류</div><div><br></div><div>&nbsp; 5. 밖으로 물려 있는 것</div><div><br></div><div>&nbsp; - Rhino 8 Boolean 결함 — McNeel 리포트 대기(실 도면은 Rhino 7 로)</div><div>&nbsp; - 라이선스 원장 옛 4줄에 CustomerCode 미기입 — 그대로 두면 같은 고객에게 두 번째 영구 발급이 나갈 수 있음</div><div>&nbsp; - 고객 포털 스팸 방어가 honeypot 뿐 / 영문 도움말 Purpose 정밀 정리 보류</div></div></div></div></div><div class="task" data-id="17874647705115nwa"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="17874647705115nwa" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">Xtract/Vent  mullion/transom 값을 합쳤다. 문제 없는지 확인해야 한다.</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Xtract/Vent  mullion/transom 값을 합쳤다. 문제 없는지 확인해야 한다."><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div style="display: none;"><div class="detail-edit" contenteditable="true" data-id="17874647705115nwa" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능."></div></div></div></div><div class="task" data-id="17874880647275kqo"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="17874880647275kqo" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">남은할일 8월23일</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="남은할일 8월23일"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div style="display: none;"><div class="detail-edit" contenteditable="true" data-id="17874880647275kqo" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능.">기록에 남은 미완료는 6건입니다. 급한 순서로 정리합니다.<div><br></div><div>&nbsp; 1. 지금 해야 할 것 — 발행 직후에만 가능</div><div><br></div><div>&nbsp; 새 버전 알림창 실물 확인 (마스터 TODO, 사용자 지시로 못 박아 둔 항목)</div><div><br></div><div>&nbsp; 알림창은 설치본보다 새 버전이 홈페이지에 있어야 뜹니다. 5.1.3 을 방금 올렸으니 지금이 그 기회입니다. 확인할 것 셋:</div><div><br></div><div>&nbsp; 1. RCWUpdate → 안내창이 뜨고 [예] 로 다운로드 페이지가 열리는가</div><div>&nbsp; 2. Rhino 시작 시 자동 알림이 뜨는가</div><div>&nbsp; 3. AutoCheck 를 끄고 재시작 → 아무 말도 안 하는가</div><div><br></div><div>&nbsp; ⚠️ 함정: 개발 PC 의 빌드도 5.1.3 이라 "최신"으로 판단해 안 뜹니다. 옛 버전이 깔린 PC 나 -p:VersionPrefix=5.1.2 로 낮춰</div><div>&nbsp; 빌드한 것으로 봐야 합니다. 또 시작 알림은 하루 1회·버전당 1회라 두 번째 시도가 조용한 것은 고장이 아닙니다(RCWUpdate</div><div>&nbsp; 는 늘 뜹니다).</div><div><br></div><div>&nbsp; 2. 실기 확인이 안 된 수정 3건 (이미 5.1.3 에 나감)</div><div><br></div><div>&nbsp; ┌─────────┬────────────────────────────────────┬──────────────────────────────────────────────────────────────────┐</div><div>&nbsp; │   ID    │                내용                │                            확인할 것                             │</div><div>&nbsp; ├─────────┼────────────────────────────────────┼──────────────────────────────────────────────────────────────────┤</div><div>&nbsp; │ SSP-004 │ 형상 깨진 단면 뽑아 보기 검사      │ 코드·실측만 했고 실물 확인 없음                                  │</div><div>&nbsp; ├─────────┼────────────────────────────────────┼──────────────────────────────────────────────────────────────────┤</div><div>&nbsp; │ CDP-001 │ 속성 복사가 조용히 끝나던 것       │ ① data 없는 원본 → 속성만 옮겨지는가 ② data 있는 원본 → 회귀     │</div><div>&nbsp; │         │                                    │ 없는가                                                           │</div><div>&nbsp; ├─────────┼────────────────────────────────────┼──────────────────────────────────────────────────────────────────┤</div><div>&nbsp; │ CDP-002 │ CDPnw 가 data 없는 대상에서 죽던   │ 〃                                                               │</div><div>&nbsp; │         │ 것                                 │                                                                  │</div><div>&nbsp; └─────────┴────────────────────────────────────┴──────────────────────────────────────────────────────────────────┘</div><div><br></div><div>&nbsp; 3. 다음 사고 때 확인할 것</div><div><br></div><div>&nbsp; Subtract 실패 시 프로파일 이름 표시(SUB-003) — 사용자가 폴리라인을 고쳐 재현이 안 되므로 다음 Subtract 실패 때 그</div><div>&nbsp; 자리에서 확인하기로 미뤄 둔 항목입니다.</div><div><br></div><div>&nbsp; 4. 진행 중인 기능</div><div><br></div><div>&nbsp; Xtract — 기능 자체가 미완성입니다. 마무리하실 때 FIX_LOG ADD-002 를 먼저 보십시오(Data_2/3 이 더 이상 트랜섬 전용이</div><div>&nbsp; 아님).</div><div><br></div><div>&nbsp; 5. 접어 둔 것</div><div><br></div><div>&nbsp; Rhino 7 패널 탭 아이콘 — 원인 미확정, 더 파지 않기로 결정(PNL-001).</div><div><br></div><div>&nbsp; 6. 도입 대기</div><div><br></div><div>&nbsp; 코드 서명 인증서 — OV/EV 인증서 + USB 토큰이 필요하고 발급 신청은 사장님 몫입니다. 미룰수록 릴리스마다 같은 손해가</div><div>&nbsp; 반복됩니다(평판이 누적되지 않음).</div></div></div></div></div><div class="task" data-id="1787491551264ztel"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="1787491551264ztel" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">help 문서에 pName 창이 변경되어야 한다.</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="help 문서에 pName 창이 변경되어야 한다."><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div style="display: none;"><div class="detail-edit" contenteditable="true" data-id="1787491551264ztel" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능."></div></div></div></div><div class="task" data-id="17875632431025erg"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="17875632431025erg" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">발표내용 정리</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="발표내용 정리"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div style="display: none;"><div class="detail-edit" contenteditable="true" data-id="17875632431025erg" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능."><div><span style="font-family: inherit;">1 Pname</span></div><div>2. Properties 패널의 단면 정보</div><div>3 FDwg, LeaderTextMove, FabBomTable, F3D, FDstyle</div><div>4 WebV,toWebFile</div><div>5 Bmt,Udt</div><div>6 NBlock (Molist,Cuttinglist)</div><div>7 Make2D - 입면도 산출 기능 - UF2D,U2D,F2D, TextBoxLeaderMove</div><div>8 Fabtable (typeA,typeB)</div><div>9. Cuttinglist - 최적 5종 산출 기능</div><div>10 blockopt</div><div>11 UnitList/UnitTable</div><div>12  System Default 버튼</div><div><br></div><div>13 DTable</div><div>14 GRV</div><div>15 VB</div><div>16 Autocad명령어- NC3~NC6 , FSC, SFB, FFB</div><div>17 SST-stretch , Erase , Acad_Join 기능추가</div><div>18 DList-&gt; PDList , PList -&gt; PPList , BList -&gt; PBList 이름 변경&nbsp;</div></div></div></div></div><div class="task" data-id="1787642347020exb7"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev" style="transform: rotate(180deg);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="1787642347020exb7" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">FDwg - 에서 90 도인 각도만 나오지 않게 한다 .-- 나머지 각도는 나와야 한다.</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="FDwg - 에서 90 도인 각도만 나오지 않게 한다 .-- 나머지 각도는 나와야 한다."><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div><div class="detail-edit" contenteditable="true" data-id="1787642347020exb7" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능."></div></div></div></div><div class="task" data-id="17876429993042u66"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev" style="transform: rotate(180deg);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="17876429993042u66" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">backpanel - 상하는 외부, 좌우는 내부기준으로 추가 기능</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="backpanel - 상하는 외부, 좌우는 내부기준으로 추가 기능"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div><div class="detail-edit" contenteditable="true" data-id="17876429993042u66" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능.">삼각형인 경우, 오각형인 경우까지 대비하여 sheet 방법으로 변경</div></div></div></div></div><div class="group g-normal"><div class="group-head"><span class="gdot"></span><span class="glabel">일반</span><span class="gcount">0/2</span></div><div class="task" data-id="17876406497702mln"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev" style="transform: rotate(180deg);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="17876406497702mln" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">폴리아미드연결 profile 을 하나로 인식하는 방법</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="폴리아미드연결 profile 을 하나로 인식하는 방법"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div><div class="detail-edit" contenteditable="true" data-id="17876406497702mln" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능."></div></div></div></div><div class="task" data-id="1787640678353zelh"><div class="task-main"><div class="handle" draggable="true" title="드래그해서 이동"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></div><button class="chev" style="transform: rotate(180deg);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="label" contenteditable="true" data-id="1787640678353zelh" data-title="1" data-placeholder="제목" title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용">help 문 검색기능 추가.</div><div class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="help 문 검색기능 추가."><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><button class="tuck" aria-label="숨기기" title="숨기기 (지우지 않음)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path><line x1="10" y1="12" x2="14" y2="12"></line></svg></button></div><div class="task-detail"><div><div class="detail-edit" contenteditable="true" data-id="1787640678353zelh" data-placeholder="소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능."></div></div></div></div></div></div><div class="divider" role="separator" tabindex="0" title="드래그해서 좌우 폭 조절"><div class="grip"></div></div><div class="column col-personal"><div class="col-head"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span><span class="ctitle">개인 · 일정</span><span class="ccount">0 / 0</span></div><div class="col-bar"><div style="width:0%"></div></div><div class="col-empty">표시할 항목이 없어요.</div></div></div></div>
+  <div class="foot">
+    <button id="toggleDone">완료 항목 숨기기</button>
+    <button id="toggleHidden">숨긴 항목 보기 (8)</button>
+    <span class="spacer"></span>
+    <span class="bk">
+      <span class="st" id="bkStatus">백업한 적 없음</span>
+      <button id="bkAuto" title="자동 백업 폴더 설정 (내 문서 › 할일 권장)" class="warn">자동 백업 설정 — 클릭</button>
+      <button id="bkExport" title="지금 HTML 파일로 저장 (다운로드 폴더)">💾 저장</button>
+      <button id="bkImport" title="백업 HTML 파일에서 복원">복원</button>
+    </span>
+    <input type="file" id="bkFile" accept="text/html,.html,application/json,.json" hidden="">
+  </div>
+</div>
+
+<div class="pri-pop" id="priPop" hidden="">
+  <button class="pp-btn" data-p="urgent"   title="긴급"><span class="dot-inner"></span></button>
+  <button class="pp-btn" data-p="important" title="중요"><span class="dot-inner"></span></button>
+  <button class="pp-btn" data-p="normal"   title="일반"><span class="dot-inner"></span></button>
+  <button class="pp-btn" data-p="meeting"  title="미팅"><span class="dot-inner"></span></button>
+</div>
+
+<div class="ctx" id="ctx" hidden="">
+  <div class="ctx-title" id="ctxTitle"></div>
+  <button class="ctx-item" id="ctxUp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg><span>위로</span></button>
+  <button class="ctx-item" id="ctxDown"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg><span>아래로</span></button>
+  <div class="ctx-sep"></div>
+  <div class="ctx-pri">
+    <span class="ctx-pri-label">우선순위</span>
+    <span class="ctx-pri-btns" id="ctxPri">
+      <button class="pbtn" data-p="urgent" title="긴급"><span class="dot"></span></button>
+      <button class="pbtn" data-p="important" title="중요"><span class="dot"></span></button>
+      <button class="pbtn" data-p="normal" title="일반"><span class="dot"></span></button>
+      <button class="pbtn" data-p="meeting" title="미팅"><span class="dot"></span></button>
+    </span>
+  </div>
+  <button class="ctx-item" id="ctxLane"></button>
+  <div class="ctx-sep"></div>
+  <button class="ctx-item" id="ctxHide"></button>
+  <button class="ctx-item danger" id="ctxDel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg><span>지우기</span></button>
+</div>
+
+<script>
+(function(){
+  var KEY="todo_app_v1";
+  var PR=[["urgent","긴급"],["important","중요"],["normal","일반"],["meeting","미팅"]];
+  var LANES=[
+    ["project","프로젝트",'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'],
+    ["personal","개인 · 일정",'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>']
+  ];
+  var IC={
+    grip:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
+    up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>',
+    down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+    swap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 21 7 17 3"/><line x1="21" y1="7" x2="9" y2="7"/><polyline points="7 21 3 17 7 13"/><line x1="3" y1="17" x2="15" y2="17"/></svg>',
+    archive:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>',
+    restore:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
+    trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
+  };
+  var CIRC=94.2;
+  var state={items:[],priority:"urgent",lane:"project",hideDone:false,showHidden:false,split:60,collapsed:{}};
+  var ctxId=null;
+  var dragId=null;
+  var editingId=null;   // id of item whose title is being edited in top input
+
+  /* ---- saved selection for toolbar ---- */
+  var savedRange=null;
+  function saveSelection(){
+    var s=window.getSelection();
+    if(s&&s.rangeCount>0) savedRange=s.getRangeAt(0).cloneRange();
+  }
+  function restoreSelection(){
+    if(!savedRange) return false;
+    var s=window.getSelection(); s.removeAllRanges(); s.addRange(savedRange);
+    return true;
+  }
+
+  /* ---- helpers ---- */
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function textToHtml(t){ return esc(t||"").replace(/\n/g,"<br>"); }
+  function htmlHasText(h){ if(!h) return false; var d=document.createElement("div"); d.innerHTML=h; return (d.textContent||"").trim().length>0; }
+
+  /* ---- persistence ---- */
+  function load(){
+    try{var s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.items){state.items=s.items; state.hideDone=!!s.hideDone; if(typeof s.split==="number") state.split=s.split; if(s.collapsed) state.collapsed=s.collapsed;}}
+    catch(e){}
+    if(!localStorage.getItem(KEY)){ seed(); }
+    state.items.forEach(normalizeItem);
+  }
+  function normalizeItem(i){
+    if(!i.lane) i.lane="project";
+    if(i.detail==null) i.detail="";
+    if(i.hidden==null) i.hidden=false;
+    if(!i.dhtml){ i.detail=textToHtml(i.detail); i.dhtml=true; }
+    if(i.thtml==null) i.thtml=esc(i.text||"");
+  }
+  function snapshot(){ return {items:state.items,hideDone:state.hideDone,split:state.split,collapsed:state.collapsed}; }
+  var saveFailed=false;
+  function save(){
+    try{
+      localStorage.setItem(KEY,JSON.stringify(snapshot()));
+    }catch(e){
+      if(!saveFailed){ saveFailed=true; alert("저장에 실패했습니다: "+(e&&e.message||e)+"\n\n지금 바로 [내보내기]로 파일 백업을 받아두세요."); }
+      return;
+    }
+    saveFailed=false;
+    bkSnapshot(false);
+    bkSchedule();
+    sbPush(false);
+  }
+  /* ---- Supabase 클라우드 동기화 ----
+     admin.html 과 같은 프로젝트·같은 계정을 쓴다. supabase-js CDN 없이
+     REST/auth 끝점을 직접 부른다(사이트의 다른 페이지와 같은 방식).
+     표 만들기: docs/supabase-todo.sql 을 SQL Editor 에서 한 번 실행.
+     ★ 브라우저에 두는 키는 공개 키다. 남의 줄을 못 읽는 것은 RLS 가 막는 것이지
+       키가 비밀이라서가 아니다. */
+  var SUPABASE_URL="https://hzqbhxewftjkolwebkgy.supabase.co";
+  var SUPABASE_ANON_KEY="sb_publishable_QQ0M4AO9cIqf6pvBHCXuVA_AVehhSwC";
+  var SESS_KEY="todo_sb_session";
+
+  var sbToken=null, sbRefresh=null, sbExpAt=0, sbUser=null;
+  var sbPushTimer=null, sbApplyingRemote=false, sbReady=false;
+  var sbPending=false;          // 저장할 것이 밀려 있나 (오프라인/실패 뒤 재시도용)
+  var sbRemoteStamp=null;       // 마지막으로 확인한 서버 updated_at
+
+  function sbFetch(path,opts){
+    opts=opts||{};
+    opts.headers=Object.assign({
+      "apikey":SUPABASE_ANON_KEY,
+      "Authorization":"Bearer "+(opts.useAnon?SUPABASE_ANON_KEY:sbToken),
+      "Content-Type":"application/json"
+    },opts.headers||{});
+    return fetch(SUPABASE_URL+path,opts).then(function(res){
+      if(!res.ok) return res.text().then(function(t){ var e=new Error(res.status+" "+t); e.status=res.status; throw e; });
+      return res.status===204?null:res.text().then(function(t){ return t?JSON.parse(t):null; });
+    });
+  }
+
+  function sbSetBadge(text,cls){
+    var b=document.getElementById("syncBadge"); if(!b) return;
+    b.textContent=text; b.className="sync-badge"+(cls?" "+cls:"");
+    b.onclick=(cls==="err")?function(){ sbPush(true); }:null;
+  }
+
+  function sbSaveSession(d){
+    sbToken=d.access_token; sbRefresh=d.refresh_token;
+    sbExpAt=Date.now()+((d.expires_in||3600)*1000);
+    if(d.user) sbUser=d.user;
+    /* localStorage 에 둔다 — 세션 저장소는 탭을 닫으면 날아가서
+       휴대폰에서 열 때마다 로그인해야 한다. */
+    try{ localStorage.setItem(SESS_KEY,JSON.stringify({refresh_token:sbRefresh,user:{id:sbUser.id,email:sbUser.email}})); }catch(e){}
+  }
+  function sbClearSession(){
+    sbToken=null; sbRefresh=null; sbExpAt=0; sbUser=null;
+    try{ localStorage.removeItem(SESS_KEY); }catch(e){}
+  }
+
+  /* 토큰이 곧 만료면 미리 갱신한다. 만료된 채로 저장을 쏘면
+     401 로 조용히 안 저장되는 사고가 난다. */
+  function sbAuthed(){
+    if(!sbRefresh) return Promise.reject(new Error("no session"));
+    if(sbToken && Date.now() < sbExpAt-60000) return Promise.resolve();
+    return sbFetch("/auth/v1/token?grant_type=refresh_token",{
+      method:"POST", useAnon:true, body:JSON.stringify({refresh_token:sbRefresh})
+    }).then(function(d){ sbSaveSession(d); });
+  }
+
+  function sbApplyRemote(d){
+    if(!d) return;
+    sbApplyingRemote=true;
+    try{
+      state.items=d.items||[]; state.hideDone=!!d.hideDone;
+      if(typeof d.split==="number") state.split=d.split;
+      if(d.collapsed) state.collapsed=d.collapsed;
+      state.items.forEach(normalizeItem);
+      try{ localStorage.setItem(KEY,JSON.stringify(snapshot())); }catch(e){}
+      render();
+    }finally{ sbApplyingRemote=false; }
+  }
+
+  function sbPush(immediate){
+    if(!sbRefresh||!sbUser||sbApplyingRemote) return;
+    sbPending=true;
+    if(sbPushTimer){ clearTimeout(sbPushTimer); sbPushTimer=null; }
+    var doPush=function(){
+      sbPushTimer=null;
+      sbSetBadge("☁️ 저장 중…","busy");
+      var stamp=new Date().toISOString();
+      sbAuthed().then(function(){
+        return sbFetch("/rest/v1/todo_state",{
+          method:"POST",
+          headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},
+          body:JSON.stringify({user_id:sbUser.id,data:snapshot(),updated_at:stamp})
+        });
+      }).then(function(){
+        sbPending=false; sbRemoteStamp=stamp;
+        sbSetBadge("☁️ 동기화됨 "+stamp.substr(11,5),"ok");
+      }).catch(function(e){
+        /* 실패를 초록으로 덮지 않는다 — 저장 안 된 것을 저장됐다고 하면
+           그대로 날린다. 배지를 누르거나 다음 변경 때 다시 민다. */
+        sbSetBadge("⚠️ 동기화 실패 (눌러 재시도)","err");
+      });
+    };
+    if(immediate) doPush(); else sbPushTimer=setTimeout(doPush,800);
+  }
+
+  /* 서버에서 다시 읽는다. 다른 기기에서 고친 것을 가져오는 통로 —
+     실시간 구독 대신 화면이 다시 보일 때마다 확인한다(휴대폰에서 더 잘 맞는다). */
+  function sbPull(){
+    if(!sbRefresh||!sbUser) return;
+    if(sbPending||sbPushTimer) return;   // 내 변경이 아직 안 올라갔으면 덮어쓰지 않는다
+    sbAuthed().then(function(){
+      return sbFetch("/rest/v1/todo_state?select=data,updated_at&user_id=eq."+encodeURIComponent(sbUser.id));
+    }).then(function(rows){
+      var row=rows&&rows[0];
+      if(!row) return;
+      if(sbRemoteStamp && row.updated_at===sbRemoteStamp) return;   // 바뀐 게 없다
+      sbRemoteStamp=row.updated_at;
+      sbApplyRemote(row.data);
+      sbSetBadge("☁️ 다른 기기 변경 반영","ok");
+    }).catch(function(){ sbSetBadge("⚠️ 불러오기 실패","err"); });
+  }
+
+  function sbOnLogin(){
+    document.getElementById("loginOverlay").classList.add("hide");
+    document.getElementById("syncLogout").style.display="";
+    sbSetBadge("☁️ 불러오는 중…","busy");
+    sbAuthed().then(function(){
+      return sbFetch("/rest/v1/todo_state?select=data,updated_at&user_id=eq."+encodeURIComponent(sbUser.id));
+    }).then(function(rows){
+      var row=rows&&rows[0];
+      sbReady=true;
+      if(row&&row.data){ sbRemoteStamp=row.updated_at; sbApplyRemote(row.data); sbSetBadge("☁️ 동기화됨","ok"); }
+      else{ sbPush(true); }              // 서버에 아직 없으면 지금 로컬 것을 올린다
+    }).catch(function(e){
+      if(e&&(e.status===401||e.status===400)){ sbOnLogout(); return; }
+      sbSetBadge("⚠️ 동기화 오류","err");
+    });
+  }
+
+  function sbOnLogout(){
+    sbClearSession(); sbReady=false; sbPending=false;
+    if(sbPushTimer){ clearTimeout(sbPushTimer); sbPushTimer=null; }
+    document.getElementById("loginOverlay").classList.remove("hide");
+    document.getElementById("syncLogout").style.display="none";
+    sbSetBadge("☁️ 로그인 필요","err");
+  }
+
+  function sbSignIn(){
+    var errEl=document.getElementById("loginErr"); errEl.textContent="";
+    var email=document.getElementById("loginEmail").value.trim();
+    var pw=document.getElementById("loginPw").value;
+    if(!email||!pw){ errEl.textContent="이메일과 비밀번호를 입력하세요."; return; }
+    var btn=document.getElementById("loginBtn"); btn.disabled=true;
+    sbFetch("/auth/v1/token?grant_type=password",{
+      method:"POST", useAnon:true, body:JSON.stringify({email:email,password:pw})
+    }).then(function(d){
+      sbSaveSession(d);
+      document.getElementById("loginPw").value="";
+      sbOnLogin();
+    }).catch(function(){
+      errEl.textContent="로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.";
+    }).finally(function(){ btn.disabled=false; });
+  }
+
+  function sbInit(){
+    document.getElementById("loginBtn").onclick=sbSignIn;
+    document.getElementById("syncLogout").onclick=function(){ sbOnLogout(); };
+    document.getElementById("loginPw").addEventListener("keydown",function(e){ if(e.key==="Enter") sbSignIn(); });
+    document.getElementById("loginEmail").addEventListener("keydown",function(e){ if(e.key==="Enter") document.getElementById("loginPw").focus(); });
+
+    var saved=null;
+    try{ saved=JSON.parse(localStorage.getItem(SESS_KEY)); }catch(e){}
+    if(saved&&saved.refresh_token&&saved.user&&saved.user.id){
+      sbRefresh=saved.refresh_token; sbUser=saved.user;
+      sbOnLogin();
+    }else{
+      document.getElementById("loginOverlay").classList.remove("hide");
+      sbSetBadge("☁️ 로그인 필요","err");
+    }
+
+    /* 다른 기기에서 고친 것 가져오기 / 밀린 저장 다시 밀기 */
+    document.addEventListener("visibilitychange",function(){
+      if(document.visibilityState!=="visible"||!sbReady) return;
+      if(sbPending) sbPush(true); else sbPull();
+    });
+    window.addEventListener("online",function(){ if(sbPending) sbPush(true); });
+  }
+
+  /* ---- backup ----
+     저장소가 브라우저 localStorage 하나뿐이라 인터넷 사용 기록 삭제 한 번에 전부 날아간다.
+     개선사항:
+      - 백업 파일을 JSON 대신 완전한 HTML로 저장 (바로 열어서 복원 가능)
+      - 최초 실행 시 폴더 설정 안내 다이얼로그
+      - 권한 만료 시 자동 재요청
+      - 저장 폴더: 내 문서 > 할일 권장 */
+  var BK_META="todo_app_v1_backup_meta";
+  var BK_SNAP="todo_app_v1_snapshots";
+  var HDB="todo_backup_v1", HSTORE="handles";
+  var bkHandle=null, bkTimer=null, bkMeta={mode:""};
+
+  function pad2(n){ return (n<10?"0":"")+n; }
+  function bkStampDay(d){ return d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate()); }
+  function bkStampFull(d){ return bkStampDay(d)+"_"+pad2(d.getHours())+pad2(d.getMinutes()); }
+  function bkSaveMeta(){ try{ localStorage.setItem(BK_META,JSON.stringify(bkMeta)); }catch(e){} }
+
+  /* 백업 파일 = 현재 데이터가 내장된 완전한 HTML 앱 파일 */
+  function bkHtmlPayload(){
+    var src=document.documentElement.outerHTML;
+    var marker='localStorage.setItem(KEY,JSON.stringify(snapshot()))';
+    /* 현재 state를 초기 데이터로 주입 — seed() 대신 load()가 localStorage에서 읽으므로
+       HTML 자체에 data를 박아두기 위해 별도 스크립트 블록 삽입 */
+    var dataJson=JSON.stringify(snapshot());
+    var inject='<script id="__bk_inject__">try{localStorage.setItem("'+KEY+'",'+JSON.stringify(dataJson)+');}catch(e){}<\/script>';
+    // </head> 직전에 삽입
+    src=src.replace('</head>', inject+'</head>');
+    return src;
+  }
+
+  /* 폴더 핸들 보관 (IndexedDB) */
+  function bkIdb(){
+    return new Promise(function(res,rej){
+      if(!window.indexedDB){ rej(new Error("indexedDB 없음")); return; }
+      var r=indexedDB.open(HDB,1);
+      r.onupgradeneeded=function(){ r.result.createObjectStore(HSTORE); };
+      r.onsuccess=function(){ res(r.result); };
+      r.onerror=function(){ rej(r.error); };
+    });
+  }
+  function bkIdbPut(k,v){
+    return bkIdb().then(function(db){ return new Promise(function(res,rej){
+      var tx=db.transaction(HSTORE,"readwrite"); tx.objectStore(HSTORE).put(v,k);
+      tx.oncomplete=function(){res();}; tx.onerror=function(){rej(tx.error);};
+    }); });
+  }
+  function bkIdbGet(k){
+    return bkIdb().then(function(db){ return new Promise(function(res,rej){
+      var tx=db.transaction(HSTORE,"readonly"); var q=tx.objectStore(HSTORE).get(k);
+      q.onsuccess=function(){res(q.result);}; q.onerror=function(){rej(q.error);};
+    }); });
+  }
+  function bkPerm(h,ask){
+    if(!h||!h.queryPermission) return Promise.resolve("granted");
+    return h.queryPermission({mode:"readwrite"}).then(function(p){
+      if(p==="granted"||!ask) return p;
+      return h.requestPermission({mode:"readwrite"});
+    });
+  }
+
+  function bkWriteFile(dir,name,txt){
+    return dir.getFileHandle(name,{create:true})
+      .then(function(fh){ return fh.createWritable(); })
+      .then(function(w){ return Promise.resolve(w.write(txt)).then(function(){ return w.close(); }); });
+  }
+
+  function bkWriteFolder(){
+    if(!bkHandle) return Promise.reject(new Error("폴더 미지정"));
+    var d=new Date();
+    var html=bkHtmlPayload();
+    return bkPerm(bkHandle,false).then(function(p){
+      if(p!=="granted"){
+        /* 권한 만료 — 사용자 동작(클릭)이 있어야 requestPermission 가능하므로 bkRender로 표시만 */
+        bkMeta.needPerm=true; bkSaveMeta(); bkRender();
+        throw new Error("폴더 권한 필요");
+      }
+      bkMeta.needPerm=false;
+      return bkWriteFile(bkHandle,"할일_최신.html",html);
+    }).then(function(){
+      return bkWriteFile(bkHandle,"할일_"+bkStampFull(d)+".html",html);
+    }).then(function(){
+      bkMeta.last=Date.now(); bkMeta.err=""; bkSaveMeta(); bkRender();
+    });
+  }
+
+  /* 다운로드 폴더 fallback */
+  function bkDownload(){
+    var d=new Date();
+    var name="할일_"+bkStampFull(d)+".html";
+    var html=bkHtmlPayload();
+    var url=URL.createObjectURL(new Blob([html],{type:"text/html"}));
+    var a=document.createElement("a"); a.href=url; a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); },1000);
+    bkMeta.last=Date.now(); bkMeta.err=""; bkSaveMeta(); bkRender();
+  }
+
+  /* 변경 후 잠시 뒤 한 번만 */
+  function bkSchedule(){
+    if(bkMeta.mode!=="folder"&&bkMeta.mode!=="download") return;
+    if(bkTimer) clearTimeout(bkTimer);
+    bkTimer=setTimeout(function(){
+      bkTimer=null;
+      if(bkMeta.mode==="folder"){
+        bkWriteFolder()["catch"](function(e){
+          if(!(e&&e.message&&e.message.indexOf("권한")>=0)){
+            bkMeta.err=String(e&&e.message||e); bkSaveMeta(); bkRender();
+          }
+        });
+      }else{
+        bkDownload();
+      }
+    }, bkMeta.mode==="folder"?2000:120000);
+  }
+
+  /* 브라우저 안 롤링 스냅샷 */
+  function bkSnapshot(force){
+    try{
+      var arr=JSON.parse(localStorage.getItem(BK_SNAP))||[];
+      var lastT=arr.length?arr[arr.length-1].t:0;
+      if(!force && Date.now()-lastT < 600000) return;
+      arr.push({t:Date.now(), d:JSON.stringify(snapshot())});
+      while(arr.length>5) arr.shift();
+      localStorage.setItem(BK_SNAP,JSON.stringify(arr));
+    }catch(e){}
+  }
+
+  /* 폴더 선택 다이얼로그 — 내 문서 > 할일 안내 포함 */
+  function bkSetup(silent){
+    if(!window.showDirectoryPicker){
+      bkFallback(new Error("이 브라우저는 폴더 저장을 지원하지 않음")); return;
+    }
+    if(!silent){
+      if(!confirm(
+        "📁 자동 백업 폴더를 지정합니다.\n\n" +
+        "권장 위치: 내 문서 › 할일\n" +
+        "(폴더가 없으면 먼저 만들어 두세요)\n\n" +
+        "• 변경이 있을 때마다 자동으로 저장됩니다.\n" +
+        "• 저장 파일은 할일_최신.html + 날짜별 파일입니다.\n" +
+        "• 파일을 잃어버린 경우 해당 HTML을 바로 열면 복원됩니다.\n\n" +
+        "확인을 누르면 폴더 선택 창이 열립니다."
+      )) return;
+    }
+    window.showDirectoryPicker({id:"todoBackup",mode:"readwrite",startIn:"documents"}).then(function(h){
+      bkHandle=h;
+      return bkIdbPut("dir",h)["catch"](function(){}).then(function(){
+        bkMeta.mode="folder"; bkMeta.name=h.name; bkMeta.needPerm=false; bkMeta.err=""; bkSaveMeta();
+        return bkWriteFolder();
+      }).then(function(){
+        bkRender();
+        alert("✅ 자동 백업 시작\n\n폴더: "+h.name+"\n파일: 할일_최신.html (최신본) + 날짜별 파일\n\n이제부터 변경이 있을 때마다 자동으로 저장됩니다.");
+      });
+    })["catch"](function(e){
+      if(e && e.name==="AbortError") return;
+      bkFallback(e);
+    });
+  }
+
+  function bkFallback(e){
+    if(confirm(
+      "폴더 자동 백업을 쓸 수 없습니다.\n("+(e&&e.message||e)+")\n\n" +
+      "대신 변경이 있을 때 다운로드 폴더에 자동 저장할까요?\n" +
+      "(브라우저에서 '여러 파일 다운로드 허용' 물으면 허용하세요)"
+    )){
+      bkMeta.mode="download"; bkMeta.name="다운로드"; bkMeta.needPerm=false; bkMeta.err=""; bkSaveMeta();
+      bkDownload(); bkRender();
+    }
+  }
+
+  /* 가져오기: HTML 백업 파일에서 data 추출, 또는 기존 JSON도 지원 */
+  function bkImportFile(file){
+    var r=new FileReader();
+    r.onload=function(){
+      var text=String(r.result);
+      var data=null;
+      /* HTML 백업 파일: __bk_inject__ 스크립트에서 data 추출 */
+      var m=text.match(/localStorage\.setItem\([^,]+,\s*(['"]{1})([\s\S]+?)\1\s*\)/);
+      if(m){
+        try{ data=JSON.parse(JSON.parse(m[2])); }catch(e){}
+      }
+      /* JSON 백업 파일 호환 */
+      if(!data){
+        try{
+          var d=JSON.parse(text);
+          data=(d && d.data) ? d.data : d;
+        }catch(e){}
+      }
+      if(!data || !(data.items instanceof Array)){
+        alert("백업 파일을 읽지 못했습니다.\nHTML 백업 파일(.html) 또는 JSON 백업 파일(.json)을 선택하세요."); return;
+      }
+      if(!confirm("현재 목록 "+state.items.length+"개를 백업본 "+data.items.length+"개로 바꿉니다.\n진행할까요? (현재 내용은 스냅샷으로 남습니다)")) return;
+      bkSnapshot(true);
+      state.items=data.items;
+      state.hideDone=!!data.hideDone;
+      if(typeof data.split==="number") state.split=data.split;
+      state.collapsed=data.collapsed||{};
+      state.items.forEach(normalizeItem);
+      save(); render();
+      alert("복원 완료 — "+state.items.length+"개 항목");
+    };
+    r.onerror=function(){ alert("파일을 읽지 못했습니다."); };
+    r.readAsText(file,"utf-8");
+  }
+
+  function bkRender(){
+    var b=document.getElementById("bkAuto"), s=document.getElementById("bkStatus");
+    var hb=document.getElementById("hbkBtn"), ht=document.getElementById("hbkTime");
+    var needAttn=false;
+    if(bkMeta.mode==="folder"){
+      if(bkMeta.needPerm){
+        if(b) b.textContent="⚠ 백업 권한 필요 — 클릭"; needAttn=true;
+      } else {
+        if(b) b.textContent="자동 백업: "+(bkMeta.name||"폴더");
+      }
+    } else if(bkMeta.mode==="download"){
+      if(b) b.textContent="자동 백업: 다운로드 폴더";
+    } else {
+      if(b) b.textContent="자동 백업 설정 — 클릭"; needAttn=true;
+    }
+    var stale=bkMeta.last && (Date.now()-bkMeta.last > 3*86400000);
+    if(stale||bkMeta.err) needAttn=true;
+    if(b) b.className=needAttn?"warn":"";
+    var t=bkMeta.last?new Date(bkMeta.last):null;
+    var txt=t?("마지막 백업 "+(t.getMonth()+1)+"/"+t.getDate()+" "+pad2(t.getHours())+":"+pad2(t.getMinutes())):"백업한 적 없음";
+    if(bkMeta.err) txt+=" · 오류: "+bkMeta.err;
+    else if(stale) txt+=" · 오래됨";
+    if(s){ s.textContent=txt; s.title="클릭하면 백업 폴더를 다시 지정합니다"; s.style.cursor="pointer"; }
+
+    /* ── 헤더 상태 표시 ── */
+    if(hb){
+      if(bkMeta.mode===""){
+        // 미설정 — 하단 bkAuto 버튼으로 유도, 헤더는 조용히 표시
+        hb.className="hbk-label warn"; hb.textContent="⚠ 백업 미설정";
+        hb.title="하단의 '자동 백업 설정' 버튼을 클릭하세요";
+        hb.style.cursor="default"; hb.onclick=null;
+      } else if(bkMeta.needPerm){
+        // 권한 만료 — 클릭으로 즉시 재요청
+        hb.className="hbk-label warn"; hb.textContent="⚠ 권한 만료 — 클릭";
+        hb.title="클릭하면 폴더 접근 권한을 다시 허용합니다";
+        hb.style.cursor="pointer";
+        hb.onclick=function(){
+          bkPerm(bkHandle,true).then(function(p){
+            if(p==="granted"){ bkMeta.needPerm=false; bkSaveMeta(); return bkWriteFolder(); }
+            bkRender();
+          })["catch"](function(e){ bkMeta.err=String(e&&e.message||e); bkSaveMeta(); bkRender(); });
+        };
+      } else if(bkMeta.err){
+        hb.className="hbk-label warn"; hb.textContent="⚠ 저장 오류";
+        hb.title=bkMeta.err; hb.style.cursor="default"; hb.onclick=null;
+      } else {
+        // 정상 — 표시만, 클릭 없음
+        hb.className="hbk-label ok"; hb.textContent="💾 자동 저장 중";
+        hb.title="변경 시 localStorage + "+(bkMeta.name||"지정 폴더")+"에 자동 저장됩니다";
+        hb.style.cursor="default"; hb.onclick=null;
+      }
+    }
+    if(ht){
+      if(t){
+        var mins=Math.floor((Date.now()-bkMeta.last)/60000);
+        var elapsed=mins<1?"방금":mins<60?(mins+"분 전"):Math.floor(mins/60)+"시간 전";
+        ht.textContent=elapsed; ht.style.color="";
+      } else {
+        ht.textContent="미저장"; ht.style.color="var(--urgent)";
+      }
+    }
+  }
+
+  function bkInit(){
+    try{ bkMeta=JSON.parse(localStorage.getItem(BK_META))||{mode:""}; }catch(e){ bkMeta={mode:""}; }
+    if(!bkMeta.mode) bkMeta.mode="";
+
+    document.getElementById("bkExport").onclick=function(){ bkDownload(); };
+    document.getElementById("bkImport").onclick=function(){ document.getElementById("bkFile").click(); };
+    document.getElementById("bkFile").onchange=function(){
+      var f=this.files&&this.files[0]; this.value="";
+      if(f) bkImportFile(f);
+    };
+    /* 상태 텍스트 클릭 → 폴더 재설정 */
+    document.getElementById("bkStatus").onclick=function(){ bkSetup(false); };
+
+    document.getElementById("bkAuto").onclick=function(){
+      if(bkMeta.mode===""){ bkSetup(false); return; }
+      if(bkMeta.mode==="folder"&&bkMeta.needPerm){
+        /* 권한 재요청 — 클릭 이벤트 안에서만 가능 */
+        bkPerm(bkHandle,true).then(function(p){
+          if(p==="granted"){ bkMeta.needPerm=false; bkSaveMeta(); return bkWriteFolder(); }
+          bkRender();
+        })["catch"](function(e){ bkMeta.err=String(e&&e.message||e); bkSaveMeta(); bkRender(); });
+        return;
+      }
+      /* 우클릭 느낌: 폴더 변경 or 끄기 선택 */
+      var choice=confirm(
+        "현재 백업 폴더: "+(bkMeta.name||"(미지정)")+"\n\n" +
+        "확인 → 폴더 변경\n취소 → 자동 백업 끄기"
+      );
+      if(choice){ bkSetup(false); }
+      else if(window.confirm("자동 백업을 끄겠습니까?")) {
+        bkMeta.mode=""; bkMeta.name=""; bkMeta.needPerm=false; bkMeta.err=""; bkSaveMeta(); bkRender();
+      }
+    };
+
+    if(bkMeta.mode==="folder"){
+      bkIdbGet("dir").then(function(h){
+        if(!h){ bkMeta.mode=""; bkSaveMeta(); bkRender(); return; }
+        bkHandle=h;
+        return bkPerm(h,false).then(function(p){
+          bkMeta.needPerm=(p!=="granted"); bkSaveMeta(); bkRender();
+          if(!bkMeta.needPerm) bkSchedule();
+        });
+      })["catch"](function(){ bkRender(); });
+    } else {
+      bkRender();
+    }
+
+    /* 최초 실행(백업 미설정)이면 3초 후 안내 */
+    if(bkMeta.mode===""){
+      setTimeout(function(){
+        if(bkMeta.mode!=="") return;  // 이미 설정됐으면 skip
+        if(confirm(
+          "📋 할 일 자동 백업 설정\n\n" +
+          "데이터가 브라우저에만 저장되어 있어 인터넷 기록 삭제 시\n" +
+          "모두 사라질 수 있습니다.\n\n" +
+          "지금 자동 백업 폴더를 지정하겠습니까?\n" +
+          "(내 문서 › 할일 폴더를 권장합니다)"
+        )){ bkSetup(true); }
+      },3000);
+    }
+  }
+
+  function seed(){
+    state.items=[
+      mk("프로파일 선택 버그 수정","개발","urgent","project","비표준 경사(30도 이상) 곡면 커튼월에서 프로파일 매칭 실패.\n재현 조건부터 정리하고 예외 케이스 분기 추가."),
+      mk("샵 드로잉 출력 테스트","개발","important","project","부재 번호가 도면에 제대로 찍히는지 확인. PDF/DXF 둘 다."),
+      mk("부재 번호 규칙 정리","설계","important","project",""),
+      mk("랜딩 페이지 초안 검토","기획","normal","project","Lovable로 만든 초안. 비표준 형상 처리 차별점을 헤드라인에 넣을지 결정."),
+      mk("이번 주 커밋 정리",null,"normal","project",""),
+      mk("거래처 미팅 일정 확정","미팅","urgent","personal","오후 중 가능 시간 회신 주기."),
+      mk("치과 예약 잡기",null,"important","personal",""),
+      mk("주간 회의 참석","미팅","normal","personal","오후 3시. 안건 미리 훑어보기.")
+    ];
+    save();
+  }
+  function mk(t,c,p,l,d){return {id:Date.now()+Math.random().toString(36).slice(2,6),text:t,category:c,priority:p,lane:l||"project",done:false,hidden:false,detail:textToHtml(d||""),dhtml:true};}
+
+  /* ---- date ---- */
+  function setDate(){
+    var d=new Date(), w=["일","월","화","수","목","금","토"][d.getDay()];
+    document.getElementById("date").textContent=d.getFullYear()+"년 "+(d.getMonth()+1)+"월 "+d.getDate()+"일 ("+w+")";
+  }
+
+  /* ---- add ---- */
+  function add(){
+    var inp=document.getElementById("inp"), raw=inp.value.trim(); if(!raw) return;
+    var cat=null, m=raw.match(/#(\S+)/);
+    if(m){ cat=m[1]; raw=raw.replace(/#\S+/,"").replace(/\s+/g," ").trim(); }
+    if(!raw) return;
+    state.items.push(mk(raw,cat,state.priority,state.lane,""));
+    inp.value=""; inp.focus(); save(); render();
+  }
+
+  /* ---- global format bar ---- */
+  function initGfmt(){
+    var bar=document.getElementById("gfmt");
+    bar.addEventListener("pointerdown",function(e){
+      var b=e.target.closest("button"); if(!b) return;
+      saveSelection();     // 선택 영역 저장
+      e.preventDefault();  // 포커스 이탈 방지
+    });
+    bar.addEventListener("click",function(e){
+      var b=e.target.closest("button"); if(!b) return;
+      if(!restoreSelection()) return;  // 선택 복원
+      if(b.dataset.cmd==="bold") document.execCommand("bold",false,null);
+      else if(b.dataset.cmd==="strike") document.execCommand("strikeThrough",false,null);
+      else if(b.classList.contains("swatch")){
+        var c=b.dataset.color==="default"?"#18181B":b.dataset.color;
+        document.execCommand("foreColor",false,c);
+      }
+      saveSelection(); // 연속 적용 대비 재저장
+      // 적용 대상(제목 또는 소항목)에 저장
+      var sel=window.getSelection();
+      if(!sel||!sel.rangeCount) return;
+      var node=sel.getRangeAt(0).commonAncestorContainer;
+      var el=node.nodeType===3?node.parentElement:node;
+      var de=el.closest(".detail-edit");
+      if(de){ var it=find(de.dataset.id); if(it){ it.detail=de.innerHTML; save(); } return; }
+      var tl=el.closest(".label[data-title]");
+      if(tl){ var ti=find(tl.dataset.id); if(ti){ ti.thtml=tl.innerHTML; ti.text=(tl.textContent||"").trim(); save(); } }
+    });
+  }
+
+  /* ---- inline title editing via top input ---- */
+  function startEditTitle(item){
+    var el=document.querySelector('.task[data-id="'+item.id+'"]');
+    if(el){ var ti=el.querySelector(".title-edit"); if(ti){ ti.focus(); ti.select(); } }
+  }
+  function applyEditTitle(){ cancelEditTitle(); }
+  function cancelEditTitle(){
+    editingId=null;
+    var inp=document.getElementById("inp");
+    inp.value=""; inp.style.fontWeight=""; inp.style.color="";
+    var btn=document.getElementById("addBtn");
+    btn.textContent="추가"; btn.style.background="";
+    document.querySelectorAll(".task").forEach(function(el){ el.style.outline=""; });
+  }
+
+  /* ---- render ---- */
+  function buildColumn(lane){
+    var key=lane[0];
+    // project 레인은 긴급·미팅만 표시 (중요·일반은 오른쪽 상단 패널에서 표시)
+    var SHOW_PR = key==="project"
+      ? PR.filter(function(p){return p[0]==="urgent"||p[0]==="meeting";})
+      : PR;
+    var col=document.createElement("div"); col.className="column col-"+key;
+    var active=state.items.filter(function(i){return i.lane===key && !i.hidden;});
+    var hiddenItems=state.items.filter(function(i){return i.lane===key && i.hidden;});
+    // 헤더 카운트는 해당 컬럼에서 보여주는 그룹의 항목만
+    var activeSub=key==="project"
+      ? active.filter(function(i){return i.priority==="urgent"||i.priority==="meeting";})
+      : active;
+    var done=activeSub.filter(function(i){return i.done;}).length;
+    var tot=activeSub.length;
+    var pc=tot?Math.round(done/tot*100):0;
+    col.innerHTML=
+      '<div class="col-head"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+lane[2]+'</svg></span>'+
+      '<span class="ctitle">'+lane[1]+'</span><span class="ccount">'+done+' / '+tot+'</span></div>'+
+      '<div class="col-bar"><div style="width:'+pc+'%"></div></div>';
+    var shownCount=0;
+    SHOW_PR.forEach(function(p){
+      var inGroup=active.filter(function(i){return i.priority===p[0] && !i.done;});
+      var g=document.createElement("div"); g.className="group g-"+p[0];
+      var dN=active.filter(function(i){return i.priority===p[0]&&i.done;}).length;
+      var tN=active.filter(function(i){return i.priority===p[0];}).length;
+      g.innerHTML='<div class="group-head"><span class="gdot"></span><span class="glabel">'+p[1]+'</span><span class="gcount">'+dN+'/'+tN+'</span></div>';
+      if(inGroup.length>0){
+        shownCount+=inGroup.length;
+        inGroup.forEach(function(item){ g.appendChild(row(item)); });
+        makeDropZone(g, key, p[0]); col.appendChild(g);
+      } else if(dragId){ makeDropZone(g, key, p[0]); col.appendChild(g); }
+    });
+
+    // 완료 그룹 — project는 lane 전체(긴급·중요·일반·미팅) 완료 항목을 한데 표시
+    var doneItems=key==="project"
+      ? active.filter(function(i){return i.done;})
+      : active.filter(function(i){return i.done;});
+    if(!state.hideDone && doneItems.length>0){
+      shownCount+=doneItems.length;
+      var gd=document.createElement("div"); gd.className="group g-done";
+      gd.innerHTML='<div class="group-head"><span class="gdot"></span><span class="glabel">완료</span><span class="gcount">'+doneItems.length+'</span></div>';
+      doneItems.forEach(function(item){ gd.appendChild(row(item)); });
+      col.appendChild(gd);
+    }
+    // 숨김 — project는 lane 전체 숨김 항목 표시
+    var hidSub=key==="project"
+      ? hiddenItems
+      : hiddenItems;
+    if(state.showHidden && hidSub.length>0){
+      shownCount+=hidSub.length;
+      var gh=document.createElement("div"); gh.className="group g-hidden";
+      gh.innerHTML='<div class="group-head"><span class="gdot"></span><span class="glabel">숨김</span><span class="gcount">'+hidSub.length+'</span></div>';
+      hidSub.forEach(function(item){ gh.appendChild(row(item)); });
+      col.appendChild(gh);
+    }
+    if(shownCount===0){
+      var e=document.createElement("div"); e.className="col-empty";
+      e.textContent=(tot===0&&hidSub.length===0)?"항목이 없어요.":"표시할 항목이 없어요.";
+      col.appendChild(e);
+    }
+    return col;
+  }
+
+  function render(){
+    var list=document.getElementById("list"); list.innerHTML="";
+    var board=document.createElement("div"); board.className="board"; board.id="board";
+
+    // 왼쪽: 프로젝트 (긴급·미팅 그룹)
+    board.appendChild(buildColumn(LANES[0]));
+
+    // 세로 구분선 (드래그)
+    var div=document.createElement("div"); div.className="divider";
+    div.setAttribute("role","separator"); div.setAttribute("tabindex","0"); div.title="드래그해서 좌우 폭 조절";
+    div.innerHTML='<div class="grip"></div>';
+    board.appendChild(div);
+
+    // 오른쪽: 상단=중요·일반(project), 하단=개인·일정
+    var rightCol=document.createElement("div"); rightCol.className="column col-right";
+
+    // 오른쪽 상단 — 프로젝트 중요·일반
+    rightCol.appendChild(buildImportantNormalColumn());
+
+    // 가로 구분선
+    var rowDiv=document.createElement("div"); rowDiv.className="row-divider";
+    rightCol.appendChild(rowDiv);
+
+    // 오른쪽 하단 — 개인·일정
+    rightCol.appendChild(buildColumn(LANES[1]));
+
+    board.appendChild(rightCol);
+    list.appendChild(board);
+    applySplit(); attachDivider(div, board); updateProgress();
+    requestAnimationFrame(updateBoardHeight);
+    document.getElementById("toggleDone").textContent=state.hideDone?"완료 항목 보기":"완료 항목 숨기기";
+    var hc=state.items.filter(function(i){return i.hidden;}).length;
+    document.getElementById("toggleHidden").textContent=state.showHidden?"숨긴 항목 닫기":("숨긴 항목 보기 ("+hc+")");
+  }
+
+  // 프로젝트 레인의 중요·일반 그룹만 렌더링 (오른쪽 상단 패널)
+  function buildImportantNormalColumn(){
+    var PR_SUB=[["important","중요"],["normal","일반"]];
+    var col=document.createElement("div"); col.className="column col-important";
+
+    var active=state.items.filter(function(i){return i.lane==="project" && !i.hidden;});
+    var hiddenItems=state.items.filter(function(i){return i.lane==="project" && i.hidden;});
+    var relevantActive=active.filter(function(i){return i.priority==="important"||i.priority==="normal";});
+    var done=relevantActive.filter(function(i){return i.done;}).length;
+    var tot=relevantActive.filter(function(i){return !i.done;}).length; // 완료 제외한 미완료 수만 표시
+    // 헤더: 미완료 수만 표시 (완료는 왼쪽 프로젝트에서 표시)
+    // 아이콘: 별표(중요)
+    var starSvg='<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>';
+    col.innerHTML=
+      '<div class="col-head"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+starSvg+'</svg></span>'+
+      '<span class="ctitle">중요 · 일반</span><span class="ccount">'+tot+'</span></div>'+
+      '<div class="col-bar"><div style="width:0%"></div></div>';
+
+    var shownCount=0;
+    PR_SUB.forEach(function(p){
+      var inGroup=active.filter(function(i){return i.priority===p[0] && !i.done;});
+      var g=document.createElement("div"); g.className="group g-"+p[0];
+      var tN=active.filter(function(i){return i.priority===p[0] && !i.done;}).length;
+      g.innerHTML='<div class="group-head"><span class="gdot"></span><span class="glabel">'+p[1]+'</span><span class="gcount">'+tN+'</span></div>';
+      if(inGroup.length>0){
+        shownCount+=inGroup.length;
+        inGroup.forEach(function(item){ g.appendChild(row(item)); });
+        makeDropZone(g,"project",p[0]); col.appendChild(g);
+      } else if(dragId){ makeDropZone(g,"project",p[0]); col.appendChild(g); }
+    });
+
+    // 완료는 왼쪽 프로젝트 컬럼에 통합 표시 — 여기서는 렌더링 안 함
+    // 숨김도 왼쪽 프로젝트 컬럼에 통합 표시 — 여기서는 렌더링 안 함
+    if(shownCount===0){
+      var e=document.createElement("div"); e.className="col-empty";
+      e.textContent=(tot===0&&hidSub&&hidSub.length===0)?"항목이 없어요.":"표시할 항목이 없어요.";
+      col.appendChild(e);
+    }
+    return col;
+  }
+
+  function updateBoardHeight(){
+    var head=document.querySelector(".head");
+    var add=document.querySelector(".add");
+    var gfmt=document.getElementById("gfmt");
+    var foot=document.querySelector(".foot");
+    var bodyPad=48;
+    var used=bodyPad;
+    if(head)  used+=head.offsetHeight+10;
+    if(add)   used+=add.offsetHeight;
+    if(gfmt)  used+=gfmt.offsetHeight;
+    if(foot)  used+=foot.offsetHeight+18;
+    var boardH=Math.max(300, window.innerHeight - used);
+    document.documentElement.style.setProperty("--board-h", boardH+"px");
+
+    // 개인·일정 패널 높이를 실측해 중요·일반의 max-height를 결정
+    // → 개인·일정이 항상 보이고, 중요·일반은 나머지 공간까지만 차지
+    var personal=document.querySelector(".col-personal");
+    if(personal){
+      var personalH=personal.offsetHeight;
+      var divH=13; // row-divider 포함 여백
+      var impMax=Math.max(80, boardH - personalH - divH);
+      document.documentElement.style.setProperty("--imp-max", impMax+"px");
+    }
+  }
+
+  function applySplit(){
+    var board=document.getElementById("board"); if(!board) return;
+    var p=board.querySelector(".col-project"); if(p) p.style.width=state.split+"%";
+  }
+
+  function attachDivider(div, board){
+    var dragging=false;
+    div.addEventListener("pointerdown",function(e){
+      if(window.innerWidth<=720) return;
+      e.preventDefault(); dragging=true; div.classList.add("dragging");
+      document.body.style.userSelect="none";
+      try{div.setPointerCapture(e.pointerId);}catch(_){}
+    });
+    div.addEventListener("pointermove",function(e){
+      if(!dragging) return;
+      var r=board.getBoundingClientRect();
+      state.split=Math.max(25,Math.min(80,(e.clientX-r.left)/r.width*100)); applySplit();
+    });
+    function up(){ if(!dragging)return; dragging=false; div.classList.remove("dragging"); document.body.style.userSelect=""; save(); }
+    div.addEventListener("pointerup",up); div.addEventListener("pointercancel",up);
+    div.addEventListener("keydown",function(e){
+      var s=0; if(e.key==="ArrowLeft")s=-3; else if(e.key==="ArrowRight")s=3; else return;
+      e.preventDefault(); state.split=Math.max(25,Math.min(80,state.split+s)); applySplit(); save();
+    });
+  }
+
+  /* ---- drag reorder ---- */
+  function makeDropZone(g, lane, priority){
+    g.addEventListener("dragover",function(e){ if(!dragId)return; e.preventDefault(); e.dataTransfer.dropEffect="move"; showIndicator(g,e.clientY); });
+    g.addEventListener("drop",function(e){
+      if(!dragId)return; e.preventDefault();
+      var beforeId=computeBefore(g,e.clientY); var id=dragId; clearIndicators(); moveItem(id,lane,priority,beforeId);
+    });
+  }
+  function rowsIn(g){ return Array.prototype.slice.call(g.querySelectorAll(".task")).filter(function(r){return r.dataset.id!==dragId;}); }
+  function computeBefore(g,y){ var rows=rowsIn(g); for(var i=0;i<rows.length;i++){var r=rows[i].getBoundingClientRect(); if(y<r.top+r.height/2) return rows[i].dataset.id;} return null; }
+  function showIndicator(g,y){
+    clearIndicators(); var rows=rowsIn(g); var line=document.createElement("div"); line.className="drop-line"; var ref=null;
+    for(var i=0;i<rows.length;i++){var r=rows[i].getBoundingClientRect(); if(y<r.top+r.height/2){ref=rows[i];break;}} if(ref) g.insertBefore(line,ref); else g.appendChild(line);
+  }
+  function clearIndicators(){ var ls=document.querySelectorAll(".drop-line"); for(var i=0;i<ls.length;i++) ls[i].remove(); }
+
+  function idx(id){ for(var k=0;k<state.items.length;k++) if(state.items[k].id===id) return k; return -1; }
+  function lastGroupIdx(lane,priority){ var r=-1; for(var k=0;k<state.items.length;k++){var it=state.items[k]; if(it.lane===lane&&it.priority===priority&&!it.hidden) r=k;} return r; }
+  function moveItem(id,lane,priority,beforeId){
+    var di=idx(id); if(di<0)return; var item=state.items[di]; state.items.splice(di,1);
+    item.lane=lane; item.priority=priority;
+    var at; if(beforeId){at=idx(beforeId); if(at<0)at=state.items.length;}
+    else{at=lastGroupIdx(lane,priority)+1; if(at<=0)at=state.items.length;}
+    state.items.splice(at,0,item); save(); render();
+  }
+  function moveStep(id,dir){
+    var it=find(id); if(!it)return;
+    var sibs=state.items.filter(function(x){return x.lane===it.lane&&x.priority===it.priority&&!x.hidden;});
+    var pos=sibs.indexOf(it), sp=pos+dir; if(sp<0||sp>=sibs.length)return;
+    var other=sibs[sp]; var ia=state.items.indexOf(it), ib=state.items.indexOf(other);
+    state.items[ia]=other; state.items[ib]=it; save(); render();
+  }
+  function setPriority(id,p){ var it=find(id); if(it){it.priority=p; save(); render();} }
+  function moveLane(id){ var it=find(id); if(it){it.lane=(it.lane==="project"?"personal":"project"); save(); render();} }
+
+  /* ---- row ---- */
+  function row(item){
+    var el=document.createElement("div");
+    el.className="task"+(item.done?" done":"")+(item.hidden?" hidden":"");
+    el.dataset.id=item.id;
+    el.oncontextmenu=function(e){ e.preventDefault(); openCtx(e.clientX,e.clientY,item); };
+
+    var main=document.createElement("div"); main.className="task-main";
+
+    if(!item.hidden){
+      var h=document.createElement("div"); h.className="handle";
+      h.setAttribute("draggable","true"); h.title="드래그해서 이동";
+      h.innerHTML=IC.grip;
+      h.addEventListener("dragstart",function(e){
+        dragId=item.id; e.dataTransfer.effectAllowed="move";
+        try{e.dataTransfer.setData("text/plain",item.id);}catch(_){}
+        try{e.dataTransfer.setDragImage(el,18,18);}catch(_){}
+        setTimeout(function(){el.classList.add("dragging-src");},0);
+      });
+      h.addEventListener("dragend",function(){dragId=null; el.classList.remove("dragging-src"); clearIndicators();});
+      main.appendChild(h);
+    }
+
+    // priority dot — 클릭 시 팝업으로 우선순위 변경
+    var pdot=document.createElement("button"); pdot.className="pri-dot";
+    pdot.setAttribute("data-p", item.priority);
+    pdot.title="우선순위 변경";
+    pdot.innerHTML='<span class="dot-inner"></span>';
+    pdot.addEventListener("click", function(e){
+      e.stopPropagation();
+      openPriPop(e.currentTarget, item);
+    });
+    main.appendChild(pdot);
+    var chev=document.createElement("button"); chev.className="chev";
+    chev.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    main.appendChild(chev);
+
+    // label — rich editable; select text then use 서식 bar for bold/color
+    var lbl=document.createElement("div"); lbl.className="label";
+    lbl.contentEditable="true";
+    lbl.setAttribute("data-id",item.id);
+    lbl.setAttribute("data-title","1");
+    lbl.setAttribute("data-placeholder","제목");
+    lbl.innerHTML=item.thtml||esc(item.text||"");
+    lbl.title="제목 편집 — 일부 선택 후 상단 서식 도구로 굵게·색 적용";
+    lbl.addEventListener("mouseup", saveSelection);
+    lbl.addEventListener("keyup", saveSelection);
+    lbl.addEventListener("input",function(){
+      item.thtml=lbl.innerHTML;
+      item.text=(lbl.textContent||"").trim();
+      chk.setAttribute("aria-label",item.text);
+      save();
+    });
+    lbl.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){ e.preventDefault(); lbl.blur(); }
+    });
+    lbl.addEventListener("paste",function(e){
+      e.preventDefault();
+      var t=((e.clipboardData||window.clipboardData).getData("text/plain"))||"";
+      document.execCommand("insertText",false,t);
+    });
+    lbl.addEventListener("contextmenu",function(e){ e.stopPropagation(); });
+    main.appendChild(lbl);
+
+    if(item.category){
+      var cat=document.createElement("span"); cat.className="cat"; cat.textContent=item.category;
+      main.appendChild(cat);
+    }
+
+    // check right
+    var chk=document.createElement("div"); chk.className="check";
+    chk.setAttribute("role","checkbox"); chk.setAttribute("aria-checked",item.done?"true":"false");
+    chk.setAttribute("tabindex","0"); chk.setAttribute("aria-label",item.text);
+    chk.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    chk.onclick=function(){toggle(item.id);};
+    chk.onkeydown=function(e){if(e.key===" "||e.key==="Enter"){e.preventDefault();toggle(item.id);}};
+    main.appendChild(chk);
+
+    var tuck=document.createElement("button"); tuck.className="tuck";
+    if(item.hidden){
+      tuck.setAttribute("aria-label","복원"); tuck.title="복원";
+      tuck.innerHTML=IC.restore; tuck.onclick=function(){setHidden(item.id,false);};
+    }else{
+      tuck.setAttribute("aria-label","숨기기"); tuck.title="숨기기 (지우지 않음)";
+      tuck.innerHTML=IC.archive; tuck.onclick=function(){setHidden(item.id,true);};
+    }
+    main.appendChild(tuck);
+    el.appendChild(main);
+
+    // detail panel — always visible
+    el.appendChild(buildDetail(item, chev));
+    return el;
+  }
+
+  function buildDetail(item, chev){
+    var wrap=document.createElement("div"); wrap.className="task-detail";
+    var visible=!state.collapsed[item.id]; // 저장된 상태 반영 (기본 펼침)
+
+    function applyVis(){
+      detWrap.style.display=visible?"":"none";
+      chev.style.transform=visible?"rotate(180deg)":"";
+      if(visible) delete state.collapsed[item.id];
+      else state.collapsed[item.id]=true;
+      save();
+    }
+    chev.onclick=function(){ visible=!visible; applyVis(); };
+
+    var detWrap=document.createElement("div");
+
+    // detail rich editor
+    var ed=document.createElement("div"); ed.className="detail-edit"; ed.contentEditable="true";
+    ed.setAttribute("data-id",item.id);
+    ed.setAttribute("data-placeholder","소항목 메모. 선택 후 상단 서식 도구로 굵게·색 적용 가능.");
+    ed.innerHTML=item.detail||"";
+    ed.addEventListener("mouseup", saveSelection);
+    ed.addEventListener("keyup", saveSelection);
+    ed.addEventListener("input",function(){ item.detail=ed.innerHTML; save(); });
+    ed.addEventListener("paste",function(e){
+      e.preventDefault();
+      var t=((e.clipboardData||window.clipboardData).getData("text/plain"))||"";
+      document.execCommand("insertText",false,t);
+    });
+    ed.addEventListener("contextmenu",function(e){ e.stopPropagation(); });
+    detWrap.appendChild(ed);
+
+    wrap.appendChild(detWrap);
+    applyVis();
+    return wrap;
+  }
+
+  function updateProgress(){
+    var act=state.items.filter(function(i){return !i.hidden;});
+    var tot=act.length, done=act.filter(function(i){return i.done;}).length;
+    var pc=tot?Math.round(done/tot*100):0;
+    document.getElementById("pct").textContent=pc+"%";
+    document.getElementById("frac").textContent=done+" / "+tot;
+    document.getElementById("ringFill").style.strokeDashoffset=CIRC-(CIRC*pc/100);
+  }
+
+  function toggle(id){var i=find(id); if(i){i.done=!i.done; save(); render();}}
+  function setHidden(id,v){var i=find(id); if(i){i.hidden=v; save(); render();}}
+  function remove(id){state.items=state.items.filter(function(x){return x.id!==id;}); save(); render();}
+  function find(id){for(var k=0;k<state.items.length;k++)if(state.items[k].id===id)return state.items[k];}
+
+  /* ---- context menu ---- */
+  var ctx=document.getElementById("ctx");
+  function setCtxDynamic(item){
+    document.getElementById("ctxTitle").textContent=item.text;
+    document.getElementById("ctxHide").innerHTML=item.hidden?IC.restore+"<span>복원</span>":IC.archive+"<span>숨기기</span>";
+    document.getElementById("ctxLane").innerHTML=IC.swap+"<span>"+(item.lane==="project"?"개인으로 이동":"프로젝트로 이동")+"</span>";
+    ctx.querySelectorAll(".pbtn").forEach(function(b){b.classList.toggle("on",b.dataset.p===item.priority);});
+  }
+  function openCtx(x,y,item){
+    ctxId=item.id; setCtxDynamic(item); ctx.hidden=false;
+    var w=ctx.offsetWidth, h=ctx.offsetHeight;
+    ctx.style.left=Math.max(8,Math.min(x,window.innerWidth-w-8))+"px";
+    ctx.style.top=Math.max(8,Math.min(y,window.innerHeight-h-8))+"px";
+  }
+  function closeCtx(){ ctx.hidden=true; ctxId=null; }
+  function refreshCtx(){ var i=find(ctxId); if(i) setCtxDynamic(i); else closeCtx(); }
+  function initCtx(){
+    document.getElementById("ctxUp").innerHTML=IC.up+"<span>위로</span>";
+    document.getElementById("ctxDown").innerHTML=IC.down+"<span>아래로</span>";
+    document.getElementById("ctxDel").innerHTML=IC.trash+"<span>지우기</span>";
+    document.getElementById("ctxUp").onclick=function(){moveStep(ctxId,-1); refreshCtx();};
+    document.getElementById("ctxDown").onclick=function(){moveStep(ctxId,1); refreshCtx();};
+    document.getElementById("ctxPri").addEventListener("click",function(e){
+      var b=e.target.closest(".pbtn"); if(!b)return; setPriority(ctxId,b.dataset.p); refreshCtx();
+    });
+    document.getElementById("ctxLane").onclick=function(){moveLane(ctxId); refreshCtx();};
+    document.getElementById("ctxHide").onclick=function(){var i=find(ctxId); if(i) setHidden(ctxId,!i.hidden); closeCtx();};
+    document.getElementById("ctxDel").onclick=function(){var id=ctxId; closeCtx(); remove(id);};
+    document.addEventListener("click",function(e){if(!ctx.hidden&&!ctx.contains(e.target)) closeCtx();});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape") closeCtx();});
+    window.addEventListener("scroll",closeCtx,true);
+    window.addEventListener("resize",closeCtx);
+  }
+
+  /* ---- priority dot popup ---- */
+  var priPop=null, priPopItem=null;
+  function openPriPop(btn, item){
+    if(!priPop) priPop=document.getElementById("priPop");
+    priPopItem=item;
+    priPop.querySelectorAll(".pp-btn").forEach(function(b){
+      b.classList.toggle("on", b.dataset.p===item.priority);
+    });
+    var r=btn.getBoundingClientRect();
+    priPop.hidden=false;
+    var pw=priPop.offsetWidth;
+    var left=Math.max(8, Math.min(r.left, window.innerWidth-pw-8));
+    var top=r.bottom+4;
+    if(top+priPop.offsetHeight > window.innerHeight-8) top=r.top-priPop.offsetHeight-4;
+    priPop.style.left=left+"px";
+    priPop.style.top=top+"px";
+  }
+  function closePriPop(){ if(priPop) priPop.hidden=true; priPopItem=null; }
+  function initPriPop(){
+    priPop=document.getElementById("priPop");
+    priPop.addEventListener("click", function(e){
+      var b=e.target.closest(".pp-btn"); if(!b||!priPopItem) return;
+      setPriority(priPopItem.id, b.dataset.p);
+      closePriPop();
+    });
+    document.addEventListener("click", function(e){
+      if(priPop&&!priPop.hidden&&!priPop.contains(e.target)&&!e.target.closest(".pri-dot")) closePriPop();
+    });
+    document.addEventListener("keydown", function(e){ if(e.key==="Escape") closePriPop(); });
+    window.addEventListener("scroll", closePriPop, true);
+    window.addEventListener("resize", closePriPop);
+  }
+
+  function init(){
+    load(); setDate(); initCtx(); initGfmt(); initPriPop(); bkInit(); sbInit();
+    setInterval(function(){ bkRender(); }, 60000); // 경과 시간 1분마다 갱신
+    document.getElementById("addBtn").onclick=add;
+    document.getElementById("inp").addEventListener("keydown",function(e){
+      if(e.key==="Enter") add();
+    });
+    document.getElementById("laneSeg").addEventListener("click",function(e){
+      var b=e.target.closest("button[data-l]"); if(!b)return;
+      state.lane=b.getAttribute("data-l");
+      this.querySelectorAll("button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on");
+    });
+    document.getElementById("seg").addEventListener("click",function(e){
+      var b=e.target.closest("button[data-p]"); if(!b)return;
+      state.priority=b.getAttribute("data-p");
+      this.querySelectorAll("button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on");
+    });
+    document.getElementById("toggleDone").onclick=function(){state.hideDone=!state.hideDone; save(); render();};
+    document.getElementById("toggleHidden").onclick=function(){state.showHidden=!state.showHidden; render();};
+    window.addEventListener("resize", function(){ updateBoardHeight(); });
+    render();
+  }
+  init();
+})();
+</script>
+
+
+</body></html>
