@@ -11,7 +11,7 @@ Rhino Curtainwall Plugin(RCW V5) 소개 사이트. 빌드 도구 없는 정적 H
 | `output.html` | 2단계 — FabNo → Molist·Cuttinglist → FDwg·FDDS → U2D·UF2D → FDstyle |
 | `contact.html` | 문의 폼 |
 | `admin.html` | (비공개) 관리자 — 고객·갱신·트라이얼·배포 현황. Supabase 로그인 |
-| `todo.html` | (비공개) 내 할 일. 같은 Supabase 계정으로 로그인, 목록은 `todo_state` 표에 저장돼 기기마다 따라온다. 표 만들기 = `docs/supabase-todo.sql` |
+| `todo.html` | (비공개) 내 할 일. 같은 Supabase 계정으로 로그인. **3단계 저장** — `todo_state`(지금) · `todo_day`(하루치 30일) · `todo_archive`(그 이전 전부, 한 줄). 표 만들기 = `docs/supabase-todo.sql` |
 | `img/` | 이미지 (사이트 사용분 20개만 git 추적, `.gitignore` 화이트리스트 참조) |
 | `docs/` | 기획 문서 · 구버전 시안 (사이트에 배포되지 않음) |
 

@@ -276,6 +276,30 @@
     font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; background:#fff;}
   .login-box button.primary{background:var(--ink); color:#fff; border-color:var(--ink);}
   .login-box .lerr{color:#D93025; font-size:12px; min-height:16px; margin-top:8px;}
+
+  /* ── 기록 · 되돌리기 ── */
+  #hxOverlay{position:fixed; inset:0; background:rgba(24,24,27,.55); display:flex;
+    align-items:center; justify-content:center; z-index:998; padding:16px;}
+  #hxOverlay.hide{display:none;}
+  .hx-box{background:#fff; border-radius:16px; width:100%; max-width:460px;
+    max-height:min(72vh,620px); display:flex; flex-direction:column;
+    box-shadow:0 20px 60px rgba(0,0,0,.25); overflow:hidden;}
+  .hx-head{display:flex; align-items:flex-start; gap:12px; padding:22px 22px 14px;
+    border-bottom:1px solid var(--line);}
+  .hx-head h2{font-size:16px; margin-bottom:4px;}
+  .hx-head p{font-size:12.5px; color:var(--muted); line-height:1.5;}
+  .hx-head button{font-family:inherit; font-size:12.5px; color:var(--muted); background:none;
+    border:1px solid var(--line); border-radius:8px; padding:5px 10px; cursor:pointer; white-space:nowrap;}
+  .hx-head button:hover{color:var(--ink); border-color:var(--ink);}
+  .hx-list{overflow-y:auto; padding:8px;}
+  .hx-row{display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    font-family:inherit; font-size:13px; color:var(--ink); background:none; border:none;
+    border-radius:9px; padding:10px 12px; cursor:pointer;}
+  .hx-row:hover{background:var(--bg);}
+  .hx-row .hx-day{font-weight:600; white-space:nowrap;}
+  .hx-row .hx-cnt{color:var(--muted); font-size:12.5px; flex:1 1 auto;}
+  .hx-row .hx-where{color:var(--faint); font-size:11.5px; white-space:nowrap;}
+  .hx-empty{padding:26px 16px; text-align:center; color:var(--muted); font-size:13px; line-height:1.6;}
 </style>
 </head>
 <body>
@@ -295,10 +319,6 @@
   <div class="head">
     <div class="head-left"><h1>할 일</h1><div class="date" id="date">2026년 8월 25일 (화)</div></div>
     <div class="head-bk">
-      <div class="hbk-status">
-        <span class="hbk-label" id="hbkBtn">💾 저장 중…</span>
-        <span class="hbk-time" id="hbkTime"></span>
-      </div>
       <div class="hbk-status">
         <span class="sync-badge" id="syncBadge">☁️ 연결 중…</span>
         <button id="syncLogout" title="로그아웃">로그아웃</button>
@@ -354,12 +374,23 @@
     <button id="toggleHidden">숨긴 항목 보기 (8)</button>
     <span class="spacer"></span>
     <span class="bk">
-      <span class="st" id="bkStatus">백업한 적 없음</span>
-      <button id="bkAuto" title="자동 백업 폴더 설정 (내 문서 › 할일 권장)" class="warn">자동 백업 설정 — 클릭</button>
-      <button id="bkExport" title="지금 HTML 파일로 저장 (다운로드 폴더)">💾 저장</button>
-      <button id="bkImport" title="백업 HTML 파일에서 복원">복원</button>
+      <span class="st" id="hxStatus">기록</span>
+      <button id="hxOpen" title="지난 날짜를 보고 그때로 되돌립니다">기록 · 되돌리기</button>
+      <button id="hxExport" title="지금 목록을 HTML 파일 한 벌로 내려받습니다 (수동)">내보내기</button>
     </span>
-    <input type="file" id="bkFile" accept="text/html,.html,application/json,.json" hidden="">
+  </div>
+</div>
+
+<div id="hxOverlay" class="hide">
+  <div class="hx-box">
+    <div class="hx-head">
+      <div>
+        <h2>기록 · 되돌리기</h2>
+        <p>날짜를 고르면 <b>그날의 마지막 상태</b>로 돌아갑니다. 되돌리기 직전 상태는 기록에 남습니다.</p>
+      </div>
+      <button id="hxCloseBtn" title="닫기 (Esc)">닫기</button>
+    </div>
+    <div class="hx-list" id="hxList"></div>
   </div>
 </div>
 
@@ -454,9 +485,7 @@
       return;
     }
     saveFailed=false;
-    bkSnapshot(false);
-    bkSchedule();
-    sbPush(false);
+    sbPush(false);          // 1단계. 2단계(하루치)는 이것이 성공한 뒤에 따라간다
   }
   /* ---- Supabase 클라우드 동기화 ----
      admin.html 과 같은 프로젝트·같은 계정을 쓴다. supabase-js CDN 없이
@@ -559,6 +588,7 @@
         /* 서버에는 ISO(UTC)로 보내고, 화면에는 내 시계로 보여준다.
            stamp 를 그대로 잘라 쓰면 12:35 가 03:35 로 나온다. */
         sbSetBadge("☁️ 동기화됨 "+new Date(stamp).toTimeString().slice(0,5),"ok");
+        hxTouchDay();           // 2단계 — 오늘 줄을 그날의 마지막 상태로 갱신
       }).catch(function(e){
         /* 실패를 초록으로 덮지 않는다 — 저장 안 된 것을 저장됐다고 하면
            그대로 날린다. 배지를 누르거나 다음 변경 때 다시 민다. */
@@ -597,6 +627,7 @@
       sbReady=true;
       if(row&&row.data){ sbRemoteStamp=row.updated_at; sbApplyRemote(row.data); sbSetBadge("☁️ 동기화됨","ok"); }
       else{ sbPush(true); }              // 서버에 아직 없으면 지금 로컬 것을 올린다
+      hxFold().then(hxRenderStatus);     // 3단계 — 30일 지난 하루치를 한 줄로 몰기(하루 한 번)
     }).catch(function(e){
       /* 로그인 자체가 만료된 것과, 로그인은 됐는데 표/정책이 없는 것을 가른다.
          전자만 다시 로그인시킨다 — 후자에서 로그인 창을 띄우면 엉뚱한 데를 고치게 된다. */
@@ -657,349 +688,218 @@
     window.addEventListener("online",function(){ if(sbPending) sbPush(true); });
   }
 
-  /* ---- backup ----
-     저장소가 브라우저 localStorage 하나뿐이라 인터넷 사용 기록 삭제 한 번에 전부 날아간다.
-     개선사항:
-      - 백업 파일을 JSON 대신 완전한 HTML로 저장 (바로 열어서 복원 가능)
-      - 최초 실행 시 폴더 설정 안내 다이얼로그
-      - 권한 만료 시 자동 재요청
-      - 저장 폴더: 내 문서 > 할일 권장 */
-  var BK_META="todo_app_v1_backup_meta";
-  var BK_SNAP="todo_app_v1_snapshots";
-  var HDB="todo_backup_v1", HSTORE="handles";
-  var bkHandle=null, bkTimer=null, bkMeta={mode:""};
+  /* ---- history — 3단계 저장 ----------------------------------
+       1단계  todo_state    지금 목록 (위 sbPush)
+       2단계  todo_day      하루에 한 줄 = 그날의 마지막 상태, 30일치
+       3단계  todo_archive  30일 지난 하루치를 한 줄에 몰아 둔 것
+
+     동기화는 백업이 아니다 — 잘못 지우면 1단계는 즉시 덮어써지고 모든 기기에서
+     같이 사라진다. 되돌릴 곳이 2·3단계다. 표 만들기 = docs/supabase-todo.sql
+     정리는 서버가 아니라 이 페이지가 한다(하루 한 번, 열 때). */
+  var HX_KEEP=30;                 // 2단계에 남기는 날수. 이보다 오래된 것은 3단계로 간다
+  var HX_FOLD_KEY="todo_hx_folded";
+  var hxDayTimer=null, hxLastDayWrite=0, hxWrittenDay="";
 
   function pad2(n){ return (n<10?"0":"")+n; }
-  function bkStampDay(d){ return d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate()); }
-  function bkStampFull(d){ return bkStampDay(d)+"_"+pad2(d.getHours())+pad2(d.getMinutes()); }
-  function bkSaveMeta(){ try{ localStorage.setItem(BK_META,JSON.stringify(bkMeta)); }catch(e){} }
+  function hxDayOf(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+  function hxToday(){ return hxDayOf(new Date()); }
+  function hxDaysAgo(n){ var d=new Date(); d.setDate(d.getDate()-n); return hxDayOf(d); }
 
-  /* 백업 파일 = 현재 데이터가 내장된 완전한 HTML 앱 파일 */
-  function bkHtmlPayload(){
-    var src=document.documentElement.outerHTML;
-    var marker='localStorage.setItem(KEY,JSON.stringify(snapshot()))';
-    /* 현재 state를 초기 데이터로 주입 — seed() 대신 load()가 localStorage에서 읽으므로
-       HTML 자체에 data를 박아두기 위해 별도 스크립트 블록 삽입 */
-    var dataJson=JSON.stringify(snapshot());
-    var inject='<script id="__bk_inject__">try{localStorage.setItem("'+KEY+'",'+JSON.stringify(dataJson)+');}catch(e){}<\/script>';
-    // </head> 직전에 삽입
-    src=src.replace('</head>', inject+'</head>');
-    return src;
-  }
-
-  /* 폴더 핸들 보관 (IndexedDB) */
-  function bkIdb(){
-    return new Promise(function(res,rej){
-      if(!window.indexedDB){ rej(new Error("indexedDB 없음")); return; }
-      var r=indexedDB.open(HDB,1);
-      r.onupgradeneeded=function(){ r.result.createObjectStore(HSTORE); };
-      r.onsuccess=function(){ res(r.result); };
-      r.onerror=function(){ rej(r.error); };
-    });
-  }
-  function bkIdbPut(k,v){
-    return bkIdb().then(function(db){ return new Promise(function(res,rej){
-      var tx=db.transaction(HSTORE,"readwrite"); tx.objectStore(HSTORE).put(v,k);
-      tx.oncomplete=function(){res();}; tx.onerror=function(){rej(tx.error);};
-    }); });
-  }
-  function bkIdbGet(k){
-    return bkIdb().then(function(db){ return new Promise(function(res,rej){
-      var tx=db.transaction(HSTORE,"readonly"); var q=tx.objectStore(HSTORE).get(k);
-      q.onsuccess=function(){res(q.result);}; q.onerror=function(){rej(q.error);};
-    }); });
-  }
-  function bkPerm(h,ask){
-    if(!h||!h.queryPermission) return Promise.resolve("granted");
-    return h.queryPermission({mode:"readwrite"}).then(function(p){
-      if(p==="granted"||!ask) return p;
-      return h.requestPermission({mode:"readwrite"});
-    });
-  }
-
-  function bkWriteFile(dir,name,txt){
-    return dir.getFileHandle(name,{create:true})
-      .then(function(fh){ return fh.createWritable(); })
-      .then(function(w){ return Promise.resolve(w.write(txt)).then(function(){ return w.close(); }); });
-  }
-
-  function bkWriteFolder(){
-    if(!bkHandle) return Promise.reject(new Error("폴더 미지정"));
-    var d=new Date();
-    var html=bkHtmlPayload();
-    return bkPerm(bkHandle,false).then(function(p){
-      if(p!=="granted"){
-        /* 권한 만료 — 사용자 동작(클릭)이 있어야 requestPermission 가능하므로 bkRender로 표시만 */
-        bkMeta.needPerm=true; bkSaveMeta(); bkRender();
-        throw new Error("폴더 권한 필요");
-      }
-      bkMeta.needPerm=false;
-      return bkWriteFile(bkHandle,"할일_최신.html",html);
-    }).then(function(){
-      return bkWriteFile(bkHandle,"할일_"+bkStampFull(d)+".html",html);
-    }).then(function(){
-      bkMeta.last=Date.now(); bkMeta.err=""; bkSaveMeta(); bkRender();
-    });
-  }
-
-  /* 다운로드 폴더 fallback */
-  function bkDownload(){
-    var d=new Date();
-    var name="할일_"+bkStampFull(d)+".html";
-    var html=bkHtmlPayload();
-    var url=URL.createObjectURL(new Blob([html],{type:"text/html"}));
-    var a=document.createElement("a"); a.href=url; a.download=name;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function(){ URL.revokeObjectURL(url); },1000);
-    bkMeta.last=Date.now(); bkMeta.err=""; bkSaveMeta(); bkRender();
-  }
-
-  /* 변경 후 잠시 뒤 한 번만 */
-  function bkSchedule(){
-    if(bkMeta.mode!=="folder"&&bkMeta.mode!=="download") return;
-    if(bkTimer) clearTimeout(bkTimer);
-    bkTimer=setTimeout(function(){
-      bkTimer=null;
-      if(bkMeta.mode==="folder"){
-        bkWriteFolder()["catch"](function(e){
-          if(!(e&&e.message&&e.message.indexOf("권한")>=0)){
-            bkMeta.err=String(e&&e.message||e); bkSaveMeta(); bkRender();
-          }
-        });
-      }else{
-        bkDownload();
-      }
-    }, bkMeta.mode==="folder"?2000:120000);
-  }
-
-  /* 브라우저 안 롤링 스냅샷 */
-  function bkSnapshot(force){
-    try{
-      var arr=JSON.parse(localStorage.getItem(BK_SNAP))||[];
-      var lastT=arr.length?arr[arr.length-1].t:0;
-      if(!force && Date.now()-lastT < 600000) return;
-      arr.push({t:Date.now(), d:JSON.stringify(snapshot())});
-      while(arr.length>5) arr.shift();
-      localStorage.setItem(BK_SNAP,JSON.stringify(arr));
-    }catch(e){}
-  }
-
-  /* 폴더 선택 다이얼로그 — 내 문서 > 할일 안내 포함 */
-  function bkSetup(silent){
-    if(!window.showDirectoryPicker){
-      bkFallback(new Error("이 브라우저는 폴더 저장을 지원하지 않음")); return;
+  /* 오늘 줄을 갱신한다. 하루 종일 덮어쓰다 보면 자정에 그날의 마지막 상태가 남는다.
+     ★ 1단계 저장이 성공한 뒤에만 부른다 — 지금 목록과 어긋난 하루치를 남기지 않게. */
+  function hxTouchDay(){
+    if(!sbRefresh||!sbUser) return;
+    var today=hxToday();
+    var soon=(today===hxWrittenDay) && (Date.now()-hxLastDayWrite < 60000);
+    if(soon){                       // 타자 칠 때마다 쏘지 않는다. 대신 잊지도 않는다
+      if(hxDayTimer) return;
+      hxDayTimer=setTimeout(function(){ hxDayTimer=null; hxTouchDay(); }, 60000);
+      return;
     }
-    if(!silent){
-      if(!confirm(
-        "📁 자동 백업 폴더를 지정합니다.\n\n" +
-        "권장 위치: 내 문서 › 할일\n" +
-        "(폴더가 없으면 먼저 만들어 두세요)\n\n" +
-        "• 변경이 있을 때마다 자동으로 저장됩니다.\n" +
-        "• 저장 파일은 할일_최신.html + 날짜별 파일입니다.\n" +
-        "• 파일을 잃어버린 경우 해당 HTML을 바로 열면 복원됩니다.\n\n" +
-        "확인을 누르면 폴더 선택 창이 열립니다."
-      )) return;
-    }
-    window.showDirectoryPicker({id:"todoBackup",mode:"readwrite",startIn:"documents"}).then(function(h){
-      bkHandle=h;
-      return bkIdbPut("dir",h)["catch"](function(){}).then(function(){
-        bkMeta.mode="folder"; bkMeta.name=h.name; bkMeta.needPerm=false; bkMeta.err=""; bkSaveMeta();
-        return bkWriteFolder();
-      }).then(function(){
-        bkRender();
-        alert("✅ 자동 백업 시작\n\n폴더: "+h.name+"\n파일: 할일_최신.html (최신본) + 날짜별 파일\n\n이제부터 변경이 있을 때마다 자동으로 저장됩니다.");
+    if(hxDayTimer){ clearTimeout(hxDayTimer); hxDayTimer=null; }
+    hxLastDayWrite=Date.now(); hxWrittenDay=today;
+    sbAuthed().then(function(){
+      return sbFetch("/rest/v1/todo_day",{
+        method:"POST",
+        headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},
+        body:JSON.stringify({user_id:sbUser.id,day:today,data:snapshot(),updated_at:new Date().toISOString()})
+      });
+    }).then(function(){ hxRenderStatus(); })
+      .catch(function(e){ hxWrittenDay=""; hxSetStatus("기록 저장 실패", (e&&e.message)||""); });
+  }
+
+  /* 30일 지난 하루치를 3단계 한 줄로 옮긴다. 하루에 한 번만.
+     ★ 순서 — 보관에 **넣고 나서** 지운다. 도중에 끊기면 하루치가 남아 다음에 다시 넣는다
+       (같은 날짜는 걸러내므로 두 번 들어가지 않는다). 반대로 하면 그 날은 사라진다. */
+  function hxFold(){
+    if(!sbRefresh||!sbUser) return Promise.resolve(0);
+    var today=hxToday();
+    try{ if(localStorage.getItem(HX_FOLD_KEY)===today) return Promise.resolve(0); }catch(e){}
+    var cut=hxDaysAgo(HX_KEEP);
+    var old=null;
+    return sbAuthed().then(function(){
+      return sbFetch("/rest/v1/todo_day?select=day,data&user_id=eq."+encodeURIComponent(sbUser.id)+"&day=lt."+cut+"&order=day.asc");
+    }).then(function(rows){
+      old=rows||[];
+      if(!old.length) return null;
+      return sbFetch("/rest/v1/todo_archive?select=data&user_id=eq."+encodeURIComponent(sbUser.id));
+    }).then(function(arows){
+      if(!old.length) return null;
+      var days=(arows&&arows[0]&&arows[0].data&&arows[0].data.days)||[];
+      var have={}; days.forEach(function(d){ have[d.day]=true; });
+      old.forEach(function(r){ if(!have[r.day]){ days.push({day:r.day,data:r.data}); have[r.day]=true; } });
+      days.sort(function(a,b){ return a.day<b.day?-1:(a.day>b.day?1:0); });
+      return sbFetch("/rest/v1/todo_archive",{
+        method:"POST",
+        headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},
+        body:JSON.stringify({user_id:sbUser.id,data:{days:days},updated_at:new Date().toISOString()})
+      });
+    }).then(function(){
+      if(!old.length) return 0;
+      // 넣기가 끝났다. 이제 지운다.
+      return sbFetch("/rest/v1/todo_day?user_id=eq."+encodeURIComponent(sbUser.id)+"&day=lt."+cut,
+        {method:"DELETE",headers:{"Prefer":"return=minimal"}}).then(function(){ return old.length; });
+    }).then(function(n){
+      try{ localStorage.setItem(HX_FOLD_KEY,today); }catch(e){}
+      if(n) hxRenderStatus();
+      return n;
+    })["catch"](function(e){
+      /* 실패해도 다음에 다시 한다 — 표시만 남긴다 */
+      hxSetStatus("기록 정리 실패", (e&&e.message)||"");
+      return 0;
+    });
+  }
+
+  /* ---- 되돌리기 화면 ---- */
+  var hxDays=null;                 // [{day, data, where}] 최신순
+
+  function hxLoadDays(){
+    return sbAuthed().then(function(){
+      return Promise.all([
+        sbFetch("/rest/v1/todo_day?select=day,data&user_id=eq."+encodeURIComponent(sbUser.id)+"&order=day.desc"),
+        sbFetch("/rest/v1/todo_archive?select=data&user_id=eq."+encodeURIComponent(sbUser.id))
+      ]);
+    }).then(function(r){
+      var out=[];
+      (r[0]||[]).forEach(function(x){ out.push({day:x.day,data:x.data,where:"최근"}); });
+      var days=(r[1]&&r[1][0]&&r[1][0].data&&r[1][0].data.days)||[];
+      days.slice().reverse().forEach(function(x){ out.push({day:x.day,data:x.data,where:"보관",label:x.label}); });
+      hxDays=out;
+      return out;
+    });
+  }
+
+  function hxCounts(d){
+    var items=(d&&d.items)||[];
+    var open=items.filter(function(i){ return !i.done && !i.hidden; }).length;
+    return items.length+"개 · 미완료 "+open;
+  }
+
+  function hxOpen(){
+    var ov=document.getElementById("hxOverlay");
+    var list=document.getElementById("hxList");
+    ov.classList.remove("hide");
+    list.innerHTML='<div class="hx-empty">불러오는 중…</div>';
+    hxLoadDays().then(function(rows){
+      if(!rows.length){ list.innerHTML='<div class="hx-empty">아직 기록이 없습니다. 오늘 것부터 하루에 하나씩 쌓입니다.</div>'; return; }
+      list.innerHTML="";
+      rows.forEach(function(r){
+        var b=document.createElement("button"); b.className="hx-row";
+        b.innerHTML='<span class="hx-day">'+esc(r.day)+'</span>'+
+                    '<span class="hx-cnt">'+esc(hxCounts(r.data))+'</span>'+
+                    '<span class="hx-where">'+esc(r.label||r.where)+'</span>';
+        b.onclick=function(){ hxRestore(r); };
+        list.appendChild(b);
       });
     })["catch"](function(e){
-      if(e && e.name==="AbortError") return;
-      bkFallback(e);
+      list.innerHTML='<div class="hx-empty">불러오지 못했습니다 — '+esc((e&&e.message)||e)+'</div>';
     });
   }
 
-  function bkFallback(e){
-    if(confirm(
-      "폴더 자동 백업을 쓸 수 없습니다.\n("+(e&&e.message||e)+")\n\n" +
-      "대신 변경이 있을 때 다운로드 폴더에 자동 저장할까요?\n" +
-      "(브라우저에서 '여러 파일 다운로드 허용' 물으면 허용하세요)"
-    )){
-      bkMeta.mode="download"; bkMeta.name="다운로드"; bkMeta.needPerm=false; bkMeta.err=""; bkSaveMeta();
-      bkDownload(); bkRender();
-    }
+  function hxClose(){ document.getElementById("hxOverlay").classList.add("hide"); }
+
+  function hxRestore(r){
+    if(!window.confirm(
+      r.day+" 상태로 되돌립니다.\n\n"+
+      "  지금: "+hxCounts(snapshot())+"\n"+
+      "  그날: "+hxCounts(r.data)+"\n\n"+
+      "되돌리기 직전 상태는 기록에 남겨 두므로 다시 되돌릴 수 있습니다.")) return;
+    var keep=snapshot();
+    var stamp=new Date();
+    hxSetStatus("되돌리는 중…","");
+    /* 되돌리기 전에 지금 것을 보관에 남긴다 — 오늘 줄은 곧 덮어써지니 그것만 믿으면 안 된다 */
+    sbAuthed().then(function(){
+      return sbFetch("/rest/v1/todo_archive?select=data&user_id=eq."+encodeURIComponent(sbUser.id));
+    }).then(function(arows){
+      var days=(arows&&arows[0]&&arows[0].data&&arows[0].data.days)||[];
+      days.push({day:hxDayOf(stamp)+" "+pad2(stamp.getHours())+":"+pad2(stamp.getMinutes()),
+                 label:"되돌리기 직전", data:keep});
+      return sbFetch("/rest/v1/todo_archive",{
+        method:"POST",
+        headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},
+        body:JSON.stringify({user_id:sbUser.id,data:{days:days},updated_at:stamp.toISOString()})
+      });
+    }).then(function(){
+      sbApplyRemote(r.data);        // 화면 + localStorage
+      hxWrittenDay="";              // 오늘 줄을 곧바로 다시 쓰게
+      sbPush(true);                 // 1단계로 올린다
+      hxClose(); hxRenderStatus();
+    })["catch"](function(e){
+      hxSetStatus("되돌리기 실패", (e&&e.message)||"");
+      alert("되돌리지 못했습니다. 아무것도 바뀌지 않았습니다.\n\n"+((e&&e.message)||e));
+    });
   }
 
-  /* 가져오기: HTML 백업 파일에서 data 추출, 또는 기존 JSON도 지원 */
-  function bkImportFile(file){
-    var r=new FileReader();
-    r.onload=function(){
-      var text=String(r.result);
-      var data=null;
-      /* HTML 백업 파일: __bk_inject__ 스크립트에서 data 추출 */
-      var m=text.match(/localStorage\.setItem\([^,]+,\s*(['"]{1})([\s\S]+?)\1\s*\)/);
-      if(m){
-        try{ data=JSON.parse(JSON.parse(m[2])); }catch(e){}
-      }
-      /* JSON 백업 파일 호환 */
-      if(!data){
-        try{
-          var d=JSON.parse(text);
-          data=(d && d.data) ? d.data : d;
-        }catch(e){}
-      }
-      if(!data || !(data.items instanceof Array)){
-        alert("백업 파일을 읽지 못했습니다.\nHTML 백업 파일(.html) 또는 JSON 백업 파일(.json)을 선택하세요."); return;
-      }
-      if(!confirm("현재 목록 "+state.items.length+"개를 백업본 "+data.items.length+"개로 바꿉니다.\n진행할까요? (현재 내용은 스냅샷으로 남습니다)")) return;
-      bkSnapshot(true);
-      state.items=data.items;
-      state.hideDone=!!data.hideDone;
-      if(typeof data.split==="number") state.split=data.split;
-      state.collapsed=data.collapsed||{};
-      state.items.forEach(normalizeItem);
-      save(); render();
-      alert("복원 완료 — "+state.items.length+"개 항목");
-    };
-    r.onerror=function(){ alert("파일을 읽지 못했습니다."); };
-    r.readAsText(file,"utf-8");
+  /* ---- 하단 표시 ---- */
+  function hxSetStatus(text,why){
+    var s=document.getElementById("hxStatus"); if(!s) return;
+    s.textContent=text; s.title=why||"";
+  }
+  function hxRenderStatus(){
+    if(!sbRefresh||!sbUser){ hxSetStatus("로그인하면 기록이 쌓입니다",""); return; }
+    sbAuthed().then(function(){
+      return Promise.all([
+        sbFetch("/rest/v1/todo_day?select=day&user_id=eq."+encodeURIComponent(sbUser.id)+"&order=day.desc"),
+        sbFetch("/rest/v1/todo_archive?select=data&user_id=eq."+encodeURIComponent(sbUser.id))
+      ]);
+    }).then(function(r){
+      var d=(r[0]||[]).length;
+      var a=((r[1]&&r[1][0]&&r[1][0].data&&r[1][0].data.days)||[]).length;
+      hxSetStatus("기록 "+d+"일치"+(a?" · 보관 "+a+"일":""),
+                  "최근 "+HX_KEEP+"일은 그대로 두고, 그보다 오래된 것은 한 줄로 몰아 둡니다.");
+    })["catch"](function(){ hxSetStatus("기록",""); });
   }
 
-  function bkRender(){
-    var b=document.getElementById("bkAuto"), s=document.getElementById("bkStatus");
-    var hb=document.getElementById("hbkBtn"), ht=document.getElementById("hbkTime");
-    var needAttn=false;
-    if(bkMeta.mode==="folder"){
-      if(bkMeta.needPerm){
-        if(b) b.textContent="⚠ 백업 권한 필요 — 클릭"; needAttn=true;
-      } else {
-        if(b) b.textContent="자동 백업: "+(bkMeta.name||"폴더");
-      }
-    } else if(bkMeta.mode==="download"){
-      if(b) b.textContent="자동 백업: 다운로드 폴더";
-    } else {
-      if(b) b.textContent="자동 백업 설정 — 클릭"; needAttn=true;
-    }
-    var stale=bkMeta.last && (Date.now()-bkMeta.last > 3*86400000);
-    if(stale||bkMeta.err) needAttn=true;
-    if(b) b.className=needAttn?"warn":"";
-    var t=bkMeta.last?new Date(bkMeta.last):null;
-    var txt=t?("마지막 백업 "+(t.getMonth()+1)+"/"+t.getDate()+" "+pad2(t.getHours())+":"+pad2(t.getMinutes())):"백업한 적 없음";
-    if(bkMeta.err) txt+=" · 오류: "+bkMeta.err;
-    else if(stale) txt+=" · 오래됨";
-    if(s){ s.textContent=txt; s.title="클릭하면 백업 폴더를 다시 지정합니다"; s.style.cursor="pointer"; }
-
-    /* ── 헤더 상태 표시 ── */
-    if(hb){
-      if(bkMeta.mode===""){
-        // 미설정 — 하단 bkAuto 버튼으로 유도, 헤더는 조용히 표시
-        hb.className="hbk-label warn"; hb.textContent="⚠ 백업 미설정";
-        hb.title="하단의 '자동 백업 설정' 버튼을 클릭하세요";
-        hb.style.cursor="default"; hb.onclick=null;
-      } else if(bkMeta.needPerm){
-        // 권한 만료 — 클릭으로 즉시 재요청
-        hb.className="hbk-label warn"; hb.textContent="⚠ 권한 만료 — 클릭";
-        hb.title="클릭하면 폴더 접근 권한을 다시 허용합니다";
-        hb.style.cursor="pointer";
-        hb.onclick=function(){
-          bkPerm(bkHandle,true).then(function(p){
-            if(p==="granted"){ bkMeta.needPerm=false; bkSaveMeta(); return bkWriteFolder(); }
-            bkRender();
-          })["catch"](function(e){ bkMeta.err=String(e&&e.message||e); bkSaveMeta(); bkRender(); });
-        };
-      } else if(bkMeta.err){
-        hb.className="hbk-label warn"; hb.textContent="⚠ 저장 오류";
-        hb.title=bkMeta.err; hb.style.cursor="default"; hb.onclick=null;
-      } else {
-        // 정상 — 표시만, 클릭 없음
-        hb.className="hbk-label ok"; hb.textContent="💾 자동 저장 중";
-        hb.title="변경 시 localStorage + "+(bkMeta.name||"지정 폴더")+"에 자동 저장됩니다";
-        hb.style.cursor="default"; hb.onclick=null;
-      }
-    }
-    if(ht){
-      if(t){
-        var mins=Math.floor((Date.now()-bkMeta.last)/60000);
-        var elapsed=mins<1?"방금":mins<60?(mins+"분 전"):Math.floor(mins/60)+"시간 전";
-        ht.textContent=elapsed; ht.style.color="";
-      } else {
-        ht.textContent="미저장"; ht.style.color="var(--urgent)";
-      }
-    }
+  /* ---- 내보내기 (수동) ----
+     3단계가 전부 같은 Supabase 프로젝트 안에 있다. 프로젝트가 통째로 잘못되면
+     셋 다 같이 없어진다. 그래서 손으로 한 벌 빼 두는 길을 남긴다 — 자동은 아니다. */
+  function hxExport(){
+    var d=new Date();
+    var name="할일_"+d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate())+"_"+pad2(d.getHours())+pad2(d.getMinutes())+".html";
+    var html=document.documentElement.outerHTML;
+    /* 연 즉시 지금 목록이 보이도록 데이터를 심어 둔다 */
+    var inject='<script id="__hx_inject__">try{localStorage.setItem("'+KEY+'",'+
+               JSON.stringify(JSON.stringify(snapshot()))+');}catch(e){}<'+'/script>';
+    if(html.indexOf("</head>")<0){ alert("내보내기에 실패했습니다(페이지 형태가 바뀌었습니다)."); return; }
+    html=html.replace("</head>",inject+"</head>");
+    var url=URL.createObjectURL(new Blob(["<!DOCTYPE html>"+html],{type:"text/html"}));
+    var a=document.createElement("a"); a.href=url; a.download=name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); },4000);
   }
 
-  function bkInit(){
-    try{ bkMeta=JSON.parse(localStorage.getItem(BK_META))||{mode:""}; }catch(e){ bkMeta={mode:""}; }
-    if(!bkMeta.mode) bkMeta.mode="";
-
-    document.getElementById("bkExport").onclick=function(){ bkDownload(); };
-    document.getElementById("bkImport").onclick=function(){ document.getElementById("bkFile").click(); };
-    document.getElementById("bkFile").onchange=function(){
-      var f=this.files&&this.files[0]; this.value="";
-      if(f) bkImportFile(f);
-    };
-    /* 상태 텍스트 클릭 → 폴더 재설정 */
-    document.getElementById("bkStatus").onclick=function(){ bkSetup(false); };
-
-    document.getElementById("bkAuto").onclick=function(){
-      if(bkMeta.mode===""){ bkSetup(false); return; }
-      if(bkMeta.mode==="folder"&&bkMeta.needPerm){
-        /* 권한 재요청 — 클릭 이벤트 안에서만 가능 */
-        bkPerm(bkHandle,true).then(function(p){
-          if(p==="granted"){ bkMeta.needPerm=false; bkSaveMeta(); return bkWriteFolder(); }
-          bkRender();
-        })["catch"](function(e){ bkMeta.err=String(e&&e.message||e); bkSaveMeta(); bkRender(); });
-        return;
-      }
-      /* 우클릭 느낌: 폴더 변경 or 끄기 선택 */
-      var choice=confirm(
-        "현재 백업 폴더: "+(bkMeta.name||"(미지정)")+"\n\n" +
-        "확인 → 폴더 변경\n취소 → 자동 백업 끄기"
-      );
-      if(choice){ bkSetup(false); }
-      else if(window.confirm("자동 백업을 끄겠습니까?")) {
-        bkMeta.mode=""; bkMeta.name=""; bkMeta.needPerm=false; bkMeta.err=""; bkSaveMeta(); bkRender();
-      }
-    };
-
-    if(bkMeta.mode==="folder"){
-      bkIdbGet("dir").then(function(h){
-        if(!h){ bkMeta.mode=""; bkSaveMeta(); bkRender(); return; }
-        bkHandle=h;
-        return bkPerm(h,false).then(function(p){
-          bkMeta.needPerm=(p!=="granted"); bkSaveMeta(); bkRender();
-          if(!bkMeta.needPerm) bkSchedule();
-        });
-      })["catch"](function(){ bkRender(); });
-    } else {
-      bkRender();
-    }
-
-    /* 최초 실행(백업 미설정)이면 3초 후 안내 */
-    if(bkMeta.mode===""){
-      setTimeout(function(){
-        if(bkMeta.mode!=="") return;  // 이미 설정됐으면 skip
-        if(confirm(
-          "📋 할 일 자동 백업 설정\n\n" +
-          "데이터가 브라우저에만 저장되어 있어 인터넷 기록 삭제 시\n" +
-          "모두 사라질 수 있습니다.\n\n" +
-          "지금 자동 백업 폴더를 지정하겠습니까?\n" +
-          "(내 문서 › 할일 폴더를 권장합니다)"
-        )){ bkSetup(true); }
-      },3000);
-    }
+  function hxInit(){
+    document.getElementById("hxOpen").onclick=hxOpen;
+    document.getElementById("hxExport").onclick=hxExport;
+    document.getElementById("hxCloseBtn").onclick=hxClose;
+    document.getElementById("hxOverlay").addEventListener("click",function(e){
+      if(e.target===this) hxClose();
+    });
+    document.addEventListener("keydown",function(e){
+      if(e.key==="Escape") hxClose();
+    });
+    hxSetStatus("기록","");
   }
-
-  function seed(){
-    state.items=[
-      mk("프로파일 선택 버그 수정","개발","urgent","project","비표준 경사(30도 이상) 곡면 커튼월에서 프로파일 매칭 실패.\n재현 조건부터 정리하고 예외 케이스 분기 추가."),
-      mk("샵 드로잉 출력 테스트","개발","important","project","부재 번호가 도면에 제대로 찍히는지 확인. PDF/DXF 둘 다."),
-      mk("부재 번호 규칙 정리","설계","important","project",""),
-      mk("랜딩 페이지 초안 검토","기획","normal","project","Lovable로 만든 초안. 비표준 형상 처리 차별점을 헤드라인에 넣을지 결정."),
-      mk("이번 주 커밋 정리",null,"normal","project",""),
-      mk("거래처 미팅 일정 확정","미팅","urgent","personal","오후 중 가능 시간 회신 주기."),
-      mk("치과 예약 잡기",null,"important","personal",""),
-      mk("주간 회의 참석","미팅","normal","personal","오후 3시. 안건 미리 훑어보기.")
-    ];
-    save();
-  }
-  function mk(t,c,p,l,d){return {id:Date.now()+Math.random().toString(36).slice(2,6),text:t,category:c,priority:p,lane:l||"project",done:false,hidden:false,detail:textToHtml(d||""),dhtml:true};}
 
   /* ---- date ---- */
   function setDate(){
@@ -1506,8 +1406,7 @@
   }
 
   function init(){
-    load(); setDate(); initCtx(); initGfmt(); initPriPop(); bkInit(); sbInit();
-    setInterval(function(){ bkRender(); }, 60000); // 경과 시간 1분마다 갱신
+    load(); setDate(); initCtx(); initGfmt(); initPriPop(); hxInit(); sbInit();
     document.getElementById("addBtn").onclick=add;
     document.getElementById("inp").addEventListener("keydown",function(e){
       if(e.key==="Enter") add();

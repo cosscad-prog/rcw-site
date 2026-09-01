@@ -5,7 +5,7 @@ const fs=require('fs');
 const path=require('path');
 const SITE=path.join(__dirname,'..','..');
 const page=fs.readFileSync(path.join(SITE,'todo.html'),'utf8');
-const src=page.slice(page.indexOf('  /* ---- Supabase '), page.indexOf('  /* ---- backup ----'));
+const src=page.slice(page.indexOf('  /* ---- Supabase '), page.indexOf('  /* ---- history '));
 if(!src) { console.error('todo.html 에서 동기화 블록을 못 찾았다'); process.exit(1); }
 
 // ---- 스텁 ----
@@ -24,6 +24,7 @@ let state={items:[],hideDone:false,split:60,collapsed:{}};
 function snapshot(){ return {items:state.items,hideDone:state.hideDone,split:state.split,collapsed:state.collapsed}; }
 function normalizeItem(i){ if(!i.lane) i.lane='project'; }
 let renders=0; function render(){ renders++; }
+let touched=0; function hxTouchDay(){ touched++; }   // 2단계. 여기서는 불렸는지만 본다
 
 // ---- 가짜 Supabase ----
 const UID='11111111-1111-1111-1111-111111111111';
@@ -42,7 +43,7 @@ function fetch(url,opts){
   const b=JSON.parse(opts.body); row={data:b.data,updated_at:b.updated_at}; return res(null,204);
 }
 const Promise_=Promise;
-const scope={localStorage,document,window,fetch,KEY,snapshot,normalizeItem,render,Object,Date,JSON,setTimeout,clearTimeout,encodeURIComponent,Promise,Error,console};
+const scope={localStorage,document,window,fetch,KEY,snapshot,normalizeItem,render,hxTouchDay,Object,Date,JSON,setTimeout,clearTimeout,encodeURIComponent,Promise,Error,console};
 const names=Object.keys(scope);
 const factory=new Function(...names,'state',src+'\n return {sbInit,sbPush,sbPull,sbSetBadge,get pending(){return sbPending},get ready(){return sbReady},get user(){return sbUser},get remoteStamp(){return sbRemoteStamp},setState:function(s){state=s;}};');
 const api=factory(...names.map(n=>scope[n]),state);
@@ -84,6 +85,7 @@ function chk(label,got,want){ const ok=String(got)===String(want); if(!ok) fails
   chk('서버 items 수', row.data.items.length, 1);
   chk('대기 해제', api.pending, false);
   chk('배지가 초록', els.syncBadge.className.indexOf('ok')>=0, true);
+  chk('1단계 성공 뒤 2단계(하루치)를 부름', touched>0, true);
 
   // 4) 저장 실패는 초록으로 덮이지 않는다
   P('4) 서버가 500 을 돌려줄 때');
