@@ -1,11 +1,13 @@
-/* todo.html 의 3단계 저장(history 절)을 그 파일에서 그대로 떼어 돌린다.
+/* todo.html 의 history 절(기록 보기 · 되돌리기)을 그 파일에서 그대로 떼어 돌린다.
    실행: node docs/_tests/todo-history.test.js
 
-     1단계  todo_state    지금 목록          (todo-sync.test.js 가 본다)
+     1단계  todo_state    지금 목록                    (todo-sync.test.js 가 본다)
      2단계  todo_day      하루에 한 줄, 30일치
      3단계  todo_archive  30일 지난 것을 한 줄에
 
-   여기서 제일 중요한 것은 hxFold 의 **순서**다. 보관에 넣기 전에 지우면 그 날은 없어진다. */
+   ⚠️ 2·3단계를 **만드는** 일은 2026-09-01 부터 브라우저가 하지 않는다 — DB 트리거가 한다
+      (docs/supabase-todo.sql). 그래서 여기서 볼 수 있는 것은 **읽고 되돌리는 쪽**뿐이다.
+      트리거 자체는 이 검사가 못 본다. 확인은 그 SQL 파일 끝의 자체시험(rollback)으로 한다. */
 const fs = require('fs');
 const path = require('path');
 const NL = String.fromCharCode(10);
@@ -24,22 +26,25 @@ const store = {};
 const localStorage = { getItem: k => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = String(v); }, removeItem: k => { delete store[k]; } };
 function El() {
   return { textContent: '', className: '', title: '', innerHTML: '', href: '', download: '', onclick: null,
+    children: [],
     classList: { s: new Set(), add(c) { this.s.add(c); }, remove(c) { this.s.delete(c); }, contains(c) { return this.s.has(c); } },
-    appendChild() {}, removeChild() {}, addEventListener() {}, click() {} };
+    appendChild(c) { this.children.push(c); return c; }, removeChild() {}, addEventListener() {}, click() {} };
 }
 const els = {};
 ['hxStatus', 'hxOpen', 'hxExport', 'hxCloseBtn', 'hxOverlay', 'hxList'].forEach(i => { els[i] = El(); });
 const document = { getElementById: i => els[i] || El(), createElement: El, addEventListener() {}, body: El(), documentElement: { outerHTML: '<head></head>' } };
-const window = { confirm: () => true, addEventListener() {} };
-const alert = () => {};
+let confirmAnswer = true;
+const window = { confirm: () => confirmAnswer, addEventListener() {} };
+let alerted = '';
+const alert = m => { alerted = m; };
 const URL = { createObjectURL: () => 'blob:x', revokeObjectURL() {} };
 const Blob = function () {};
 const esc = s => String(s);
 const KEY = 'todo_app_v1';
 
-/* 서버 — 세 표를 흉내낸다. 어떤 순서로 두드렸는지 기록한다. */
-let dayRows = [];            // [{day,data}]
-let archive = null;          // {days:[...]}
+/* 서버 — todo_day 와 todo_archive 를 읽기 위주로 흉내낸다 */
+let dayRows = [];
+let archive = null;
 let calls = [];
 let failArchiveWrite = false;
 function res(body, status) {
@@ -52,21 +57,7 @@ function sbFetch(pathq, opts) {
   const table = pathq.split('/rest/v1/')[1].split('?')[0];
   calls.push(method + ' ' + table);
   if (table === 'todo_day') {
-    if (method === 'GET') {
-      const eq = (pathq.split('day=eq.')[1] || '').split('&')[0];
-      if (eq) return res(dayRows.filter(r => r.day === eq), 200);
-      const lt = (pathq.split('day=lt.')[1] || '').split('&')[0];
-      const rows = lt ? dayRows.filter(r => r.day < lt) : dayRows.slice();
-      rows.sort((a, b) => (a.day < b.day ? -1 : 1));
-      return res(rows, 200);
-    }
-    if (method === 'DELETE') {
-      const lt = (pathq.split('day=lt.')[1] || '').split('&')[0];
-      dayRows = dayRows.filter(r => !(r.day < lt));
-      return res(null, 204);
-    }
-    const b = JSON.parse(opts.body);
-    dayRows = dayRows.filter(r => r.day !== b.day).concat([{ day: b.day, data: b.data, updated_at: b.updated_at }]);
+    if (method === 'GET') { const r = dayRows.slice(); r.sort((a, b) => (a.day < b.day ? 1 : -1)); return res(r, 200); }
     return res(null, 204);
   }
   if (table === 'todo_archive') {
@@ -94,7 +85,7 @@ const names = ['localStorage', 'document', 'window', 'alert', 'URL', 'Blob', 'es
 const vals = { localStorage, document, window, alert, URL, Blob, esc, KEY, sbFetch, sbRefresh, sbUser,
   sbAuthed, sbApplyRemote, sbPush, snapshot, setTimeout, clearTimeout, Date, JSON, Promise, encodeURIComponent, console };
 const factory = new Function(...names,
-  src + NL + 'return {hxWriteDay,hxBackfill,hxScheduleDaily,hxFold,hxLoadDays,hxRestore,hxToday,hxDaysAgo,hxDayOf,hxInit,hxRenderStatus,hxExport,HX_KEEP,HX_HOUR,HX_MIN};');
+  src + NL + 'return {hxLoadDays,hxOpen,hxClose,hxRestore,hxDayOf,hxInit,hxRenderStatus,hxExport,HX_KEEP};');
 const build = () => factory(...names.map(n => vals[n]));
 
 /* ── 검사 ───────────────────────────────────────────────── */
@@ -112,167 +103,94 @@ const item = (t, o) => Object.assign({ id: t, text: t, thtml: t, detail: '', dht
 (async () => {
   let hx = build();
 
-  // 1) 2단계 — 23:50 에 한 번
-  P('1) 하루치는 23:50 에 한 번 쓴다 (2단계)');
-  chk('예약 시각', hx.HX_HOUR + ':' + hx.HX_MIN, '23:50');
-  state.items = [item('a'), item('b')];
-  calls = [];
-  hx.hxScheduleDaily();
-  await sleep(20);
-  chk('예약만 하고 지금 쓰지는 않음', calls.filter(c => c === 'POST todo_day').length, 0);
+  P('0) 브라우저는 하루치를 만들지 않는다 — DB 트리거가 한다');
+  chk('todo_day 로 쓰는 코드가 없다', /todo_day[\s\S]{0,120}method:"POST"/.test(src), false);
+  chk('POST 하는 곳은 보관(되돌리기 직전) 한 군데뿐', (src.match(/method:"POST"/g) || []).length, 1);
 
-  P('   23:50 이 되면');
-  await hx.hxWriteDay(hx.hxToday(), snapshot());     // 타이머가 부르는 바로 그것
-  chk('오늘 줄이 생김', dayRows.length, 1);
-  chk('오늘 날짜', dayRows[0].day, hx.hxToday());
-  chk('그 줄에 담긴 항목 수', dayRows[0].data.items.length, 2);
-
-  P('   그 뒤 하루 종일 고쳐도 서버를 안 두드린다');
-  calls = [];
-  state.items.push(item('c'));
-  await sleep(20);
-  chk('추가 쓰기 없음', calls.length, 0);
-
-  // 2) 23:50 을 놓친 날 되메우기
-  P('2) 23:50 에 꺼져 있었으면 — 다음에 열 때 되메운다');
-  hx = build();
-  dayRows = []; calls = [];
-  state.items = [item('어제 끝낸 것')];
-  const 어제 = hx.hxDaysAgo(1);
-  const 어제저녁 = new Date(); 어제저녁.setDate(어제저녁.getDate() - 1); 어제저녁.setHours(18, 0, 0, 0);
-  chk('되메웠나', await hx.hxBackfill(어제저녁.toISOString()), true);
-  chk('되메운 날짜 = 목록이 마지막으로 바뀐 날', dayRows[0].day, 어제);
-  chk('담긴 내용', dayRows[0].data.items[0].text, '어제 끝낸 것');
-
-  P('   이미 줄이 있으면 다시 안 쓴다');
-  calls = [];
-  chk('되메우기 안 함', await hx.hxBackfill(어제저녁.toISOString()), false);
-  chk('쓰기 호출 0', calls.filter(c => c === 'POST todo_day').length, 0);
-
-  P('   그 줄을 쓴 뒤에 또 고쳐진 채 끝났으면 다시 쓴다');
-  const 어제밤 = new Date(); 어제밤.setDate(어제밤.getDate() - 1); 어제밤.setHours(23, 58, 0, 0);
-  dayRows[0].updated_at = 어제저녁.toISOString();
-  state.items = [item('23:55 에 고친 것')];
-  chk('다시 씀', await hx.hxBackfill(어제밤.toISOString()), true);
-  chk('내용이 갱신됨', dayRows[0].data.items[0].text, '23:55 에 고친 것');
-
-  P('   오늘 것은 되메우지 않는다 (23:50 이 아직 안 왔다)');
-  chk('오늘은 건너뜀', await hx.hxBackfill(new Date().toISOString()), false);
-
-  // 3) 3단계 — 30일 지난 것 몰기
-  P('3) 30일 지난 하루치를 보관으로 (3단계)');
-  hx = build();                      // 새 화면을 연 셈
-  delete store.todo_hx_folded;
+  P('1) 기록 목록 — 하루치와 보관을 한 줄로 세운다');
   dayRows = [
-    { day: hx.hxDaysAgo(60), data: { items: [item('아주 옛날')] } },
-    { day: hx.hxDaysAgo(40), data: { items: [item('옛날')] } },
-    { day: hx.hxDaysAgo(3),  data: { items: [item('최근')] } }
+    { day: '2026-08-30', data: { items: [item('그저께')] } },
+    { day: '2026-08-31', data: { items: [item('어제1'), item('어제2')] } }
   ];
-  archive = null; calls = [];
-  const moved = await hx.hxFold();
-  chk('옮긴 날 수', moved, 2);
-  chk('2단계에 남은 날 수', dayRows.length, 1);
-  chk('남은 것은 최근 것', dayRows[0].day, hx.hxDaysAgo(3));
-  chk('보관에 들어간 날 수', archive.days.length, 2);
-  chk('보관은 날짜 오름차순', archive.days[0].day < archive.days[1].day, true);
-  const iPut = calls.indexOf('POST todo_archive'), iDel = calls.indexOf('DELETE todo_day');
-  chk('★ 넣기가 지우기보다 먼저다', iPut >= 0 && iPut < iDel, true);
-
-  P('4) 같은 날 다시 열어도 또 하지 않는다');
-  calls = [];
-  chk('두 번째 정리는 0건', await hx.hxFold(), 0);
-  chk('서버를 두드리지 않음', calls.length, 0);
-
-  P('5) 보관 쓰기가 실패하면 — 하루치를 지우지 않는다');
-  hx = build(); delete store.todo_hx_folded;
-  dayRows = [{ day: hx.hxDaysAgo(50), data: { items: [item('지키자')] } }];
-  archive = null; calls = []; failArchiveWrite = true;
-  await hx.hxFold();
-  failArchiveWrite = false;
-  chk('하루치가 그대로 남음', dayRows.length, 1);
-  chk('지우기를 부르지 않음', calls.indexOf('DELETE todo_day'), -1);
-  P('   → 다음에 다시 시도한다');
-  hx = build(); delete store.todo_hx_folded;
-  chk('재시도로 옮겨짐', await hx.hxFold(), 1);
-  chk('이제 하루치는 빔', dayRows.length, 0);
-
-  P('6) 같은 날짜가 보관에 두 번 들어가지 않는다');
-  hx = build(); delete store.todo_hx_folded;
-  const d = hx.hxDaysAgo(45);
-  dayRows = [{ day: d, data: { items: [item('한 번')] } }];
-  await hx.hxFold();
-  const n1 = archive.days.length;
-  hx = build(); delete store.todo_hx_folded;
-  dayRows = [{ day: d, data: { items: [item('또')] } }];   // 지우기가 끊겼다고 치자
-  await hx.hxFold();
-  chk('보관 날 수가 안 늘어남', archive.days.length, n1);
-
-  // 7) 되돌리기
-  P('7) 되돌리기');
-  hx = build();
-  archive = { days: [{ day: '2026-08-01', data: { items: [item('그날 것')] } }] };
-  dayRows = [];
-  state.items = [item('지금 것1'), item('지금 것2'), item('지금 것3')];
-  applied = null; pushed = 0;
+  archive = { days: [
+    { day: '2026-07-01', data: { items: [item('7월')] } },
+    { day: '2026-08-01 14:20', label: '되돌리기 직전', data: { items: [] } }
+  ] };
   const rows = await hx.hxLoadDays();
-  chk('목록에 보관분이 보임', rows.length, 1);
-  await hx.hxRestore(rows[0]);
+  chk('줄 수 = 하루치 2 + 보관 2', rows.length, 4);
+  chk('맨 위는 가장 최근', rows[0].day, '2026-08-31');
+  chk('하루치 표시', rows[0].where, '최근');
+  chk('보관은 최신순으로 뒤에', rows[2].day, '2026-08-01 14:20');
+  chk('이름표가 있으면 그것을 쓴다', rows[2].label, '되돌리기 직전');
+  chk('보관 표시', rows[3].where, '보관');
+
+  P('2) 화면에 뿌리기');
+  hx = build();
+  hx.hxOpen();
+  await sleep(20);
+  chk('창이 열림', els.hxOverlay.classList.contains('hide'), false);
+  chk('줄이 그려짐', els.hxList.children.length, 4);
+  chk('첫 줄에 날짜', els.hxList.children[0].innerHTML.indexOf('2026-08-31') >= 0, true);
+  chk('개수 표시', els.hxList.children[0].innerHTML.indexOf('2개 · 미완료 2') >= 0, true);
+  hx.hxClose();
+  chk('닫힘', els.hxOverlay.classList.contains('hide'), true);
+
+  P('3) 기록이 없을 때');
+  hx = build();
+  dayRows = []; archive = null;
+  hx.hxOpen();
+  await sleep(20);
+  chk('안내 문구', els.hxList.innerHTML.indexOf('아직 기록이 없습니다') >= 0, true);
+
+  P('4) 되돌리기 — 직전 상태를 먼저 남기고 나서 바꾼다');
+  hx = build();
+  dayRows = [{ day: '2026-08-31', data: { items: [item('어제 것')] } }];
+  archive = null;
+  state.items = [item('지금1'), item('지금2'), item('지금3')];
+  applied = null; pushed = 0; calls = [];
+  const list = await hx.hxLoadDays();
+  hx.hxRestore(list[0]);
   await sleep(30);
-  chk('화면에 그날 것이 적용됨', applied.items[0].text, '그날 것');
+  chk('화면에 그날 것이 적용됨', applied.items[0].text, '어제 것');
   chk('1단계로 올림', pushed > 0, true);
-  chk('되돌리기 직전 상태가 보관에 남음', archive.days.length, 2);
-  const keep = archive.days[archive.days.length - 1];
-  chk('그 이름표', keep.label, '되돌리기 직전');
-  chk('거기 담긴 항목 수', keep.data.items.length, 3);
+  chk('직전 상태가 보관에 남음', archive.days.length, 1);
+  chk('그 이름표', archive.days[0].label, '되돌리기 직전');
+  chk('거기 담긴 항목 수', archive.days[0].data.items.length, 3);
+  chk('★ 보관에 쓰고 나서 화면을 바꿈', calls.indexOf('POST todo_archive') >= 0, true);
 
-  // 8) 예약 시각 계산 — 시계를 가짜로 두고 본다
-  P('8) 23:50 예약 — 시계를 돌려 본다');
-  {
-    /* 진짜 Date 를 감싸서 "지금"만 바꾼다. 타이머는 손으로 터뜨린다. */
-    let nowMs = 0;
-    const Real = Date;
-    function FakeDate(...a) { return a.length ? new Real(...a) : new Real(nowMs); }
-    FakeDate.prototype = Real.prototype;
-    FakeDate.now = () => nowMs;
-    let timer = null;
-    const fakeSetTimeout = (fn, ms) => { timer = { fn, ms }; return 1; };
-    const fakeClearTimeout = () => { timer = null; };
+  P('5) 아니오를 누르면 아무 일도 안 한다');
+  hx = build();
+  archive = null; applied = null; pushed = 0; calls = [];
+  confirmAnswer = false;
+  hx.hxRestore({ day: '2026-08-31', data: { items: [] } });
+  await sleep(30);
+  confirmAnswer = true;
+  chk('화면 안 바뀜', applied, null);
+  chk('보관에 안 씀', archive, null);
+  chk('서버를 안 두드림', calls.length, 0);
 
-    const v2 = Object.assign({}, vals, { Date: FakeDate, setTimeout: fakeSetTimeout, clearTimeout: fakeClearTimeout });
-    const hx8 = factory(...names.map(n => v2[n]));
+  P('6) 직전 상태를 못 남기면 되돌리지 않는다');
+  hx = build();
+  archive = null; applied = null; pushed = 0; alerted = '';
+  failArchiveWrite = true;
+  hx.hxRestore({ day: '2026-08-31', data: { items: [item('어제 것')] } });
+  await sleep(30);
+  failArchiveWrite = false;
+  chk('화면을 안 바꿈', applied, null);
+  chk('1단계로 안 올림', pushed, 0);
+  chk('알려 줌', alerted.indexOf('아무것도 바뀌지 않았습니다') >= 0, true);
 
-    // 2026-09-01 (화) 09:00 에 열었다면
-    nowMs = new Real(2026, 8, 1, 9, 0, 0).getTime();
-    dayRows = []; calls = [];
-    hx8.hxScheduleDaily();
-    chk('한 시간 뒤 다시 재라고 함(먼 시각이라)', timer.ms, 3600000);
-
-    // 23:00 이면 이제 진짜 예약이 잡힌다
-    nowMs = new Real(2026, 8, 1, 23, 0, 0).getTime();
-    hx8.hxScheduleDaily();
-    chk('23:00 → 50분 뒤로 예약', timer.ms, 50 * 60 * 1000);
-
-    // 23:50 을 지났으면 내일 것으로
-    nowMs = new Real(2026, 8, 1, 23, 55, 0).getTime();
-    hx8.hxScheduleDaily();
-    chk('23:55 → 하루 이상 남음(한 시간씩 끊어 잼)', timer.ms, 3600000);
-
-    // ★ 재웠다가 늦게 깨어나도 날짜가 밀리면 안 된다
-    P('   ★ 23:50 에 재워 두고 다음날 08:00 에 깨어나면');
-    nowMs = new Real(2026, 8, 1, 23, 0, 0).getTime();
-    state.items = [item('9월 1일에 하던 것')];
-    hx8.hxScheduleDaily();                       // 2026-09-01 23:50 을 겨냥해 예약
-    const fire = timer.fn;
-    nowMs = new Real(2026, 8, 2, 8, 0, 0).getTime();   // 깨어난 시각은 다음날 아침
-    fire();
-    await sleep(30);
-    chk('쓴 날짜 = 겨냥했던 9/1', dayRows.length ? dayRows[0].day : '(안 씀)', '2026-09-01');
-    chk('깨어난 날(9/2)로 안 밀림', dayRows.filter(r => r.day === '2026-09-02').length, 0);
-    chk('내용', dayRows[0].data.items[0].text, '9월 1일에 하던 것');
-  }
+  P('7) 하단 표시');
+  hx = build();
+  dayRows = [{ day: '2026-08-30', data: {} }, { day: '2026-08-31', data: {} }];
+  archive = { days: [{ day: '2026-07-01', data: {} }] };
+  hx.hxRenderStatus();
+  await sleep(30);
+  chk('문구', els.hxStatus.textContent, '기록 2일치 · 보관 1일');
 
   P('');
   P(fails ? ('실패 ' + fails + '개') : ('전부 통과 — 검사 ' + out.filter(l => l.indexOf('  PASS') === 0).length + '개'));
+  P('⚠️ 2·3단계를 만드는 트리거는 이 검사가 못 본다 — docs/supabase-todo.sql 끝의 자체시험으로 확인할 것.');
   console.log(out.join(NL));
   process.exit(fails ? 1 : 0);
 })();
