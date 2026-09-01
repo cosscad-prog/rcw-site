@@ -487,6 +487,25 @@
     saveFailed=false;
     sbPush(false);          // 1단계. 2단계(하루치)는 이것이 성공한 뒤에 따라간다
   }
+  /* 처음 여는 사람에게 보여줄 예시 목록.
+     ★ 이 둘은 원래 백업 절 끝에 얹혀 있었다(2026-09-01 에 그 절을 지우면서 같이 날아갔다).
+       백업과 아무 상관이 없으므로 있어야 할 자리인 여기에 둔다. */
+  function seed(){
+    state.items=[
+      mk("프로파일 선택 버그 수정","개발","urgent","project","비표준 경사(30도 이상) 곡면 커튼월에서 프로파일 매칭 실패.\n재현 조건부터 정리하고 예외 케이스 분기 추가."),
+      mk("샵 드로잉 출력 테스트","개발","important","project","부재 번호가 도면에 제대로 찍히는지 확인. PDF/DXF 둘 다."),
+      mk("부재 번호 규칙 정리","설계","important","project",""),
+      mk("랜딩 페이지 초안 검토","기획","normal","project","Lovable로 만든 초안. 비표준 형상 처리 차별점을 헤드라인에 넣을지 결정."),
+      mk("이번 주 커밋 정리",null,"normal","project",""),
+      mk("거래처 미팅 일정 확정","미팅","urgent","personal","오후 중 가능 시간 회신 주기."),
+      mk("치과 예약 잡기",null,"important","personal",""),
+      mk("주간 회의 참석","미팅","normal","personal","오후 3시. 안건 미리 훑어보기.")
+    ];
+    save();
+  }
+  /* 새 항목 한 개. add() 가 이것을 부른다 — 이게 없으면 "추가"가 아무 일도 안 한다. */
+  function mk(t,c,p,l,d){return {id:Date.now()+Math.random().toString(36).slice(2,6),text:t,category:c,priority:p,lane:l||"project",done:false,hidden:false,detail:textToHtml(d||""),dhtml:true};}
+
   /* ---- Supabase 클라우드 동기화 ----
      admin.html 과 같은 프로젝트·같은 계정을 쓴다. supabase-js CDN 없이
      REST/auth 끝점을 직접 부른다(사이트의 다른 페이지와 같은 방식).

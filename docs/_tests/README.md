@@ -6,6 +6,7 @@ Supabase 와 텔레그램에는 아무것도 나가지 않고, 설치할 것도 
 ```bash
 node docs/_tests/contact-api.test.js
 node docs/_tests/trial-api.test.js
+node docs/_tests/todo-names.test.js
 node docs/_tests/todo-sync.test.js
 node docs/_tests/todo-render.test.js
 node docs/_tests/todo-history.test.js
@@ -101,3 +102,29 @@ RLS 정책은 여기서 확인되지 않는다 — `docs/supabase-todo.sql` 을 
 - RLS 정책. 세 표 모두 `docs/supabase-todo.sql` 을 실제로 돌려야 산다.
 - 보관 한 줄이 몇 년 뒤 얼마나 커지는가. 하루치 한 개가 대략 몇 KB 라
   1년이면 몇 MB 수준이지만, 실제 크기는 화면 하단 "보관 N일" 로만 알 수 있다.
+
+## 할 일 — 없어진 이름 (`todo-names.test.js`)
+
+**부르는데 어디에도 선언이 없는 이름**을 찾는다. 한 가지만 본다.
+
+2026-09-01 에 백업 절을 통째로 지웠는데, 그 절 **끝에 얹혀 있던 `seed()` 와 `mk()`** 가
+같이 날아갔다. `mk()` 는 `add()` 가 부르는 것이라 **[추가] 버튼이 아무 일도 안 하게** 됐다.
+그런데 **문법 검사도, 다른 검사 네 개도 전부 통과했다** — `ReferenceError` 는 그 줄을
+지나야만 나기 때문이다. 화면은 멀쩡해 보였다(저장된 HTML 이라 옛 판이 그대로 박혀 있다).
+
+절을 지울 때는 **그 절에 원래 속하지 않은 함수가 딸려 나갔는지** 이것으로 확인한다.
+
+## ⚠️ 못 잡는 것
+
+정규식이지 파서가 아니다. **스코프를 안 본다** — "어느 함수 안에 선언됐나"는 못 가린다.
+그건 `todo-render.test.js` 가 실제로 그려 보며 잡는다(`hidSub` 가 그 경우였다).
+여기서 잡는 것은 **아예 아무 데도 없는 이름** 하나뿐이다.
+
+### 진짜로 눌러 보는 확인 (크롬 필요)
+
+검사 다섯 개가 다 통과해도 페이지가 죽어 있을 수 있다. 위가 정확히 그 경우였다.
+`todo.html` 사본의 `<head>` 에 `window.onerror` 수집기를, `</body>` 앞에 프로브를 끼우고
+헤드리스 크롬 `--dump-dom` 으로 한 번 돌리면 **init 중 예외 / [추가] 를 눌렀을 때 항목 수가
+느는지**까지 보인다. 타이머가 필요 없게 프로브를 **동기로** 짜는 것이 요령이다
+(`--virtual-time-budget` 을 쓰면 매달린다). 두 판을 본다 — **빈 브라우저**와
+**localStorage 에 목록이 이미 있는 브라우저**. 위 사고는 앞의 판에서만 다르게 터졌다.
