@@ -2,6 +2,49 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 여기 있는 것이 전부 나온다(2026-08-14): 맨 앞 하나는 펼쳐지고, 이전 버전은 버전마다 한 줄로 접혀 눌러야 내용이 보인다. 그래서 계속 쌓아 둘 것 — 언제 무엇을 고쳤는지 되짚는 기록이다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.2.2",
+      "date": "2026-09-03",
+      "deck": null,
+      "items": [
+        {
+          "ko": "<b>UF2D 가 상부 단면만 그리고 멈추던 것을 고쳤습니다.</b> 유닛을 회전시켜 두면 중심선을 자를 자리를 엉뚱한 곳에서 찾아 도면이 도중에 끊겼습니다. 오류 한 줄 없이 멈춰 무엇이 잘못됐는지 알기 어려웠습니다. <b>USec</b> 에도 같은 결함이 있어 함께 고쳤습니다.",
+          "en": "<b>Fixed UF2D drawing only the upper section and then stopping.</b> With the unit rotated, it looked for the centre line's cut position in the wrong place and the drawing broke off part-way - without a single line of error to say why. <b>USec</b> had the same fault and is fixed with it."
+        },
+        {
+          "ko": "<b>치수·중심선·번호가 2D 도면과 같은 평면에 놓입니다.</b> 전에는 이것들이 모델 쪽에 남아, 유닛이 원점에서 떨어져 있으면 도면과 치수가 깊이 방향으로 갈라져 보였습니다. 중심선은 <b>복사본</b>을 도면에 얹으므로 모델 쪽 중심선은 그대로 남습니다.",
+          "en": "<b>Dimensions, centre lines and number tags now sit on the same plane as the 2D drawing.</b> They used to stay behind in the model, so a unit set away from the origin showed its drawing and its dimensions split apart in depth. The centre lines are placed as <b>copies</b>, so the ones in the model stay where they were."
+        },
+        {
+          "ko": "<b>관통한 홀·노칭이 여러 장에 겹쳐 나오던 것을 정리했습니다.</b> 앞뒤로 뚫린 자리는 이제 켜 두신 뷰 가운데 정해진 <b>한 장에만</b> 적히고, 뒷면도 한 장만 씁니다. 길이 방향으로 뚫린 것은 표기하지 않습니다.",
+          "en": "<b>Features that pass right through are no longer written on several sheets at once.</b> A through hole or notch is now dimensioned on <b>one sheet only</b> - the first of the views you have switched on - and the back face uses a single sheet as well. Features running along the length are not marked."
+        },
+        {
+          "ko": "<b>얇게 스친 자국이 노칭으로 잡히던 것을 고쳤습니다.</b> 넓이가 넓다는 이유로 예외를 두던 규칙을 없애고 <b>두께 하나로</b> 판단합니다. 실제 도면에서 60×0.5 짜리 가짜 노칭을 살려내던 것이 그 예외였습니다.",
+          "en": "<b>Fixed thin grazes being picked up as notches.</b> The exception that kept a feature because its footprint was large has been removed; the judgement is now made on <b>thickness alone</b>. That exception was what kept a 60 x 0.5 phantom notch alive on a real drawing."
+        },
+        {
+          "ko": "<b>SST 로 선을 손봐도 저장해 둔 단면 정보가 지워지지 않습니다.</b> 전에는 SST 를 거친 커브에서 이름·가공 정보가 사라져 나중에 원인을 찾기 어려웠습니다.",
+          "en": "<b>Editing a curve with SST no longer wipes the section data saved on it.</b> Names and machining values used to disappear from any curve SST had touched, and the cause was hard to trace later."
+        },
+        {
+          "ko": "<b>Dtable 에도 계산식을 그대로 저장할 수 있습니다.</b> <b>Pname</b> 에서는 되던 <code>-75+13.5</code> 같은 식이 Dtable 에서는 막혀 있었습니다. 반대로 Pname 은 아무 값이나 받아 두었다가 <b>한참 뒤 모델링에서</b> 문제가 됐는데, 이제 저장할 때 숫자로 읽히지 않는 칸을 그 자리에서 알려 드립니다. 두 화면이 같은 기준으로 판단합니다.",
+          "en": "<b>Dtable now saves the same formulas Pname already accepted.</b> An entry such as <code>-75+13.5</code> worked in <b>Pname</b> but was refused in Dtable. Pname, for its part, accepted anything at all and the trouble surfaced <b>much later, during modelling</b>; it now tells you on the spot which box cannot be read as a number. Both screens judge by the same rule."
+        },
+        {
+          "ko": "<b>단면 경고창이 한 건씩 한 줄로 보입니다.</b> 창 폭이 정해져 있어 한 건이 두 줄로 접히던 것을 고쳤습니다 — 가장 긴 줄에 맞춰 창을 폅니다.",
+          "en": "<b>The section warning now shows one item per line.</b> A fixed dialog width used to fold a single item onto two lines; the window is now sized to its longest line."
+        },
+        {
+          "ko": "<b>Fab_ID 1번의 이름을 <code>Hole</code> 에서 <code>Line Limit</code> 으로 바꿨습니다.</b> 하는 일과 이름이 어긋나 있었습니다. 보이는 글자만 바뀌고 <b>저장된 값은 그대로</b>라, 이미 등록해 두신 단면은 손댈 것이 없습니다.",
+          "en": "<b>Fab_ID 1 is now named <code>Line Limit</code> instead of <code>Hole</code>.</b> The old name did not match what it does. Only the label changes - <b>the stored value is untouched</b> - so sections you have already registered need nothing done to them."
+        },
+        {
+          "ko": "<b>도움말 전체를 홈페이지에서 보실 수 있습니다.</b> 메뉴의 <b>Help문</b> 에서 설치 없이, 로그인 없이 열립니다. 플러그인 안의 도움말과 같은 내용이며 발행할 때마다 함께 갱신됩니다.",
+          "en": "<b>The whole help is now readable on the website.</b> Open <b>Help</b> from the menu - no installation, no sign-in. It is the same help that ships inside the plug-in, and it is refreshed with every release."
+        }
+      ]
+    },
+    {
       "version": "5.2.1",
       "date": "2026-09-01",
       "deck": null,
