@@ -246,6 +246,20 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
         -ConstantPrefix "var TRIAL_VERSION = '" `
         -CommitMessage "Say the trial downloads are $Version"
 
+    # 설치본에는 도움말이 함께 들어간다. 새 설치 파일을 올렸으면 홈페이지 도움말도
+    # 그 버전의 것이어야 한다 — 손으로 맞추면 어긋나므로 여기서 같이 올린다.
+    Write-Host "`n도움말 동기화" -ForegroundColor Cyan
+    . (Join-Path $PSScriptRoot '_site-help.ps1')
+    try {
+        Sync-SiteHelp -SiteRoot $PSScriptRoot -CommitMessage "Match the site help to $Version"
+    }
+    catch {
+        # 릴리스는 이미 나갔다. 여기서 멈추면 안 되고, 무엇을 해야 하는지 남긴다.
+        Write-Warning "도움말 동기화 실패: $_"
+        Write-Warning "  릴리스는 정상입니다. 사이트 도움말만 옛 판입니다 — 다음을 직접 실행하세요:"
+        Write-Warning "    pwsh -File .\publish-help.ps1 -Commit"
+    }
+
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"
     Write-Host "  사이트   https://rcw-site.vercel.app/trial"

@@ -51,8 +51,15 @@ Vercel + GitHub 연동. 프레임워크 프리셋 `Other`, 빌드 명령 없음,
 플러그인에 들어가는 도움말(`C:\std\RCW_V4_13.3\help`)을 **그대로 복사해** 웹에 올린다.
 주소는 <https://rcw-site.vercel.app/help> 이고 로그인 없이 누구나 볼 수 있다.
 
+**새 버전을 발행하면 자동으로 따라간다.** 설치본에는 도움말이 함께 들어가므로,
+`publish-trial.ps1` 과 `publish-customer.ps1` 이 릴리스를 올린 뒤 이어서 사이트 도움말을
+같은 판으로 맞추고 커밋·푸시한다(`_site-help.ps1` 의 `Sync-SiteHelp`).
+`-WhatIf` 로 돌리면 도움말도 건드리지 않는다.
+
+도움말만 따로 고쳤을 때는 손으로 올린다:
+
 ```powershell
-pwsh -File .\publish-help.ps1            # 복사만
+pwsh -File .\publish-help.ps1            # 복사만(확인용)
 pwsh -File .\publish-help.ps1 -Commit    # 복사 + 커밋 + 푸시(배포)
 ```
 
@@ -62,8 +69,9 @@ pwsh -File .\publish-help.ps1 -Commit    # 복사 + 커밋 + 푸시(배포)
 - 편집기·임베디드 파이썬·집필 지침(`*.md`)·편집기 백업(`*.bak`)은 복사에서 빠진다.
 - `help\index.html` 은 `/help` 로 들어온 사람을 프레임으로 보내는 스크립트 생성물이다
   (원본에는 없다). 매 실행마다 다시 만들어진다.
-- 도움말 문서를 고친 뒤에는 검색 인덱스도 다시 만들어야 한다:
-  `python help/build_search_index.py` (편집기로 저장하면 자동).
+- 검색 인덱스(`search_index.js`)는 생성물이다. 동기화할 때 **인덱스보다 새 문서가 몇 개인지 세어**
+  알려 준다 — 숫자가 0 이 아니면 `python help/build_search_index.py` 를 돌리라는 뜻이다
+  (편집기로 저장하면 자동으로 만들어진다). 낡으면 사이트에서도 설치본에서도 그 문서가 검색되지 않는다.
 
 ## 남은 작업
 
