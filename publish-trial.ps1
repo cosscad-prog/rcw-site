@@ -246,19 +246,6 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
         -ConstantPrefix "var TRIAL_VERSION = '" `
         -CommitMessage "Say the trial downloads are $Version"
 
-    # 설치본에는 도움말이 함께 들어간다. 새 설치 파일을 올렸으면 홈페이지 도움말도
-    # 그 버전의 것이어야 한다 — 손으로 맞추면 어긋나므로 여기서 같이 올린다.
-    Write-Host "`n도움말 동기화" -ForegroundColor Cyan
-    . (Join-Path $PSScriptRoot '_site-help.ps1')
-    try {
-        Sync-SiteHelp -SiteRoot $PSScriptRoot -CommitMessage "Match the site help to $Version"
-    }
-    catch {
-        # 릴리스는 이미 나갔다. 여기서 멈추면 안 되고, 무엇을 해야 하는지 남긴다.
-        Write-Warning "도움말 동기화 실패: $_"
-        Write-Warning "  릴리스는 정상입니다. 사이트 도움말만 옛 판입니다 — 다음을 직접 실행하세요:"
-        Write-Warning "    pwsh -File .\publish-help.ps1 -Commit"
-    }
 
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"
@@ -274,4 +261,26 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
     Write-Host "`n첨부 파일 SHA-256" -ForegroundColor Cyan
     Write-Host "  릴리스 노트에는 싣지 않는다(GitHub 이 자체 제공). 발행 기록 문서에 옮겨 적을 것." -ForegroundColor DarkGray
     foreach ($f in $plan) { Write-Host ("  {0,-34} {1,6:N1} MB  {2}" -f $f.UploadName, $f.SizeMB, $f.Sha256) }
+}
+
+# 설치본에는 도움말이 함께 들어간다. 새 설치 파일을 올렸으면 홈페이지 도움말도
+# 그 버전의 것이어야 한다 — 손으로 맞추면 어긋나므로 발행이 이어서 올린다.
+#
+# ⚠ 일부러 릴리스 ShouldProcess 블록 **밖**에 둔다. -WhatIf 로 점검할 때도
+#   도움말이 몇 개 바뀌는지·검색 인덱스가 낡았는지 보여야 하기 때문이다.
+#   실제로 복사·커밋할지는 Sync-SiteHelp 가 자기 ShouldProcess 로 다시 판단하므로
+#   -WhatIf 에서는 세어 보여 주기만 하고 아무것도 바꾸지 않는다.
+#   릴리스가 실패하면 그 자리에서 throw 되어 여기까지 오지 않는다.
+#   (-Confirm 으로 릴리스를 거절한 경우에는 여기까지 오지만, 그때도 이 단계가
+#    다시 한 번 묻는다 — 도움말은 저장소에 있는 그 내용이라 앞서 올려도 해가 없다.)
+Write-Host "`n도움말 동기화" -ForegroundColor Cyan
+. (Join-Path $PSScriptRoot '_site-help.ps1')
+try {
+    Sync-SiteHelp -SiteRoot $PSScriptRoot -CommitMessage "Match the site help to $Version"
+}
+catch {
+    # 릴리스는 이미 나갔다. 여기서 멈추면 안 되고, 무엇을 해야 하는지 남긴다.
+    Write-Warning "도움말 동기화 실패: $_"
+    Write-Warning "  릴리스는 정상입니다. 사이트 도움말만 옛 판입니다 — 다음을 직접 실행하세요:"
+    Write-Warning "    pwsh -File .\publish-help.ps1 -Commit"
 }
