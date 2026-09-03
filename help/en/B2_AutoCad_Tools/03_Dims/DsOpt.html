@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>DsOpt - 03_Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>DsOpt &nbsp;—&nbsp; 03_Dims</h1>
+<p><span class="cmd-box">DsOpt</span></p>
+<p>
+  A command that displays an <strong>option panel for setting variables used in dimension commands</strong>
+  such as <code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code> / <code>DAA</code>.<br>
+  No object selection is required — a dockable panel (PaletteSet) appears on the screen in AutoCAD.
+</p>
+<h2>Purpose</h2>
+<p>
+  Preset dimension line distances, intervals, angle distances, and NC data-related variables
+  in the panel before executing dimension commands. Set values are immediately applied to all subsequent dimension commands.
+</p>
+<h2>Panel Settings Items</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:20%"><col style="width:58%"></colgroup>
+  <tbody><tr><th>Item</th><th>Default Value</th><th>Description</th></tr>
+  <tr><td><strong>Dimension Group</strong></td><td></td><td></td></tr>
+  <tr><td>1. First Dist</td><td>50</td><td>Distance from object to first dimension line</td></tr>
+  <tr><td>2. Dim Gap</td><td>20</td><td>Spacing between dimension lines</td></tr>
+  <tr><td>3. Angle Dist</td><td>50</td><td>Distance used for angle dimensions (<code>DAA</code>)</td></tr>
+  <tr><td>4. LnR Dist</td><td>20</td><td>Left/Right dimension distance</td></tr>
+  <tr><td>Top_Max</td><td>✔ Checked</td><td>Whether to display maximum dimension in Top direction</td></tr>
+  <tr><td>Left_Max</td><td>✔ Checked</td><td>Whether to display maximum dimension in Left direction</td></tr>
+  <tr><td>Right_Max</td><td>Unchecked</td><td>Whether to display maximum dimension in Right direction</td></tr>
+  <tr><td>Bottom_Max</td><td>Unchecked</td><td>Whether to display maximum dimension in Bottom direction</td></tr>
+  <tr><td>TTS (Textsize)</td><td>Current value</td><td>Dimension text size (same as <code>TTS</code> command)</td></tr>
+  <tr><td><strong>NC Data Group</strong></td><td></td><td></td></tr>
+  <tr><td>Slot Hole Dist</td><td>0 × 4</td><td>Slot hole spacing values (4 items)</td></tr>
+  <tr><td>Hole Min, Max</td><td>3 / 25</td><td>Hole size filter range</td></tr>
+  <tr><td>NC data Dist</td><td>100</td><td>NC data output distance</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Enter <code>DsOpt</code> in the command line and press Enter.</li>
+  <li>The <strong>Dim Panel</strong> panel appears on the AutoCAD screen.</li>
+  <li>Modifying any item value is immediately reflected in the dimension command variables.</li>
+  <li>To close the panel, click the × in the upper right corner of the panel or use the <code>HIDEDimPanel</code> command.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/C2410_DsOpt.mp4" autoplay muted loop playsinline aria-label="DsOpt execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>DsOpt — Example of displaying Dim Panel option panel</figcaption>
+  </figure>
+</div>
+<div class="note">
+  <strong>Note:</strong> When panel values are changed, they are immediately applied to subsequently executed <code>DST</code>, <code>DSB</code>, <code>DSL</code>, <code>DSR</code>, <code>DSA</code>, <code>DAA</code> commands.
+  Always verify values before executing dimension commands.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

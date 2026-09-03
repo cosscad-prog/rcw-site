@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FFB - 18_Insert_Frame</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FFB &nbsp;—&nbsp; 18_Insert_Frame</h1>
+<p><span class="cmd-box">FFB</span></p>
+<p>
+  A command that measures the size of selected Rhino drawing objects and <strong>inserts the Frame Form block saved with <code>SFB</code> into the drawing at an automatic scale</strong>.<br>
+  It automatically fills the Form placeholders with the drawing number, quantity, scale, panel size, pad size, and length text.
+</p>
+<h2>Purpose</h2>
+<p>
+  When you select 2D drawing objects, it measures the overall drawing size against the current CPlane and
+  computes the scale and insertion position so that the Frame Form chosen in <code>SFB</code> wraps around the drawing.
+  Since it automatically fills the Form text placeholders with the drawing and size information,
+  repetitive frame insertion work can be handled quickly.
+</p>
+<h2>Workflow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:5%"><col style="width:28%"><col style="width:67%"></colgroup>
+  <tbody><tr><th>Order</th><th>Step</th><th>Description</th></tr>
+  <tr><td>1</td><td>Select drawing objects</td><td>Select the drawing objects to wrap with the Frame Form. Annotation, Curve, Brep, Hatch, and Point can be selected.</td></tr>
+  <tr><td>2</td><td>Recognize drawing number/quantity</td><td>Reads the Text on layers starting with <code>Profile</code>. Text starting with <code>Qnt-</code> is used as the quantity; the first other text is used as the drawing number.</td></tr>
+  <tr><td>3</td><td>Recognize size info</td><td>Reads panel/pad W,H values from <code>PSize_WH</code> layer text, and the length value from <code>Steel 7</code> layer text.</td></tr>
+  <tr><td>4</td><td>Measure drawing size</td><td>Computes the BoundingBox of the selected objects, excluding text and Annotation, against the current CPlane.</td></tr>
+  <tr><td>5</td><td>Auto-compute scale</td><td>Compares the drawing size with the Frame Form's inner area to derive the optimal scale at which the Form wraps the drawing.</td></tr>
+  <tr><td>6</td><td>Insert Frame Form</td><td>Inserts the Form block on the <code>Form-Frame</code> layer at the computed scale and position.</td></tr>
+  <tr><td>7</td><td>Place polylines/text</td><td>Copies the polylines and text saved by SFB with the same move/scale transform as the Form and updates their contents.</td></tr>
+</tbody></table>
+<h2>SFB → FFB Workflow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:20%"><col style="width:66%"></colgroup>
+  <tbody><tr><th>Command</th><th>Role</th><th>Description</th></tr>
+  <tr><td><code>SFB</code></td><td>Select/save Frame Form</td><td>Selects the Form block, text placeholders, and polylines and saves them to memory.</td></tr>
+  <tr><td><code>FFB</code></td><td>Insert Frame Form</td><td>Selects drawing objects to measure the size, and inserts the Form saved by SFB at an automatic scale.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Run <code>SFB</code> first to select the Frame Form block to use.</li>
+  <li>Type <code>FFB</code> in the Rhino command line and press Enter.</li>
+  <li>At the <em>"FFB: Select drawing content (objects)"</em> prompt, select all drawing objects to wrap with the Frame Form.<br>
+      To auto-fill the drawing number, quantity, and size values, the related text objects must also be included in the selection.</li>
+  <li>Press Enter to insert the Frame Form at the automatic scale/position, with the text placeholders filled with actual values.</li>
+  <li>The drawing number, quantity, and computed scale are printed in the command line.</li>
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/C2320_FFB.mp4" autoplay muted loop playsinline aria-label="FFB running process" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>FFB - inserting the Frame Form after auto-measuring the drawing size</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Prerequisite</td><td><code>SFB</code> must be run first so the Frame Form block is saved in memory.</td></tr>
+  <tr><td>Selection target</td><td>Select the drawing objects together with the Text objects needed for auto-fill. The selection filter is Annotation, Curve, Brep, Hatch, Point.</td></tr>
+  <tr><td>Size-measure exclusion</td><td>TextEntity and AnnotationBase are excluded from the drawing-size BoundingBox calculation.</td></tr>
+  <tr><td>Scale calculation</td><td>Automatically determines the optimal scale by comparing the drawing width/height with the Frame Form inner area.</td></tr>
+  <tr><td>Insertion layer</td><td>The Form block is inserted on the <code>Form-Frame</code> layer. If the layer is missing, it is auto-created in yellow.</td></tr>
+  <tr><td>Text replacement</td><td>Replaces the drawing number, quantity, scale, panel W/H, pad W/H, and length placeholders with the actual values read from the drawing.</td></tr>
+  <tr><td>View move</td><td>After insertion, zooms the view to the BoundingBox of the newly added objects.</td></tr>
+  <tr><td>Environment</td><td>Rhino</td></tr>
+</tbody></table>
+<h2>Input Text Reference</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Drawing number</td><td>Uses the first ordinary text on a layer starting with <code>Profile</code>.</td></tr>
+  <tr><td>Quantity</td><td>Uses the trailing value of text starting with <code>Qnt-</code> on a layer starting with <code>Profile</code>.</td></tr>
+  <tr><td>Panel W/H</td><td>Sorts <code>PSize_WH</code> layer text by position and extracts the panel size values.</td></tr>
+  <tr><td>Pad W/H</td><td>Sorts <code>PSize_WH</code> layer text by position and extracts the pad size values.</td></tr>
+  <tr><td>Length</td><td>Uses the first text value on the <code>Steel 7</code> layer.</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Frame Form block insertion</td><td>The Frame Form block is placed on the <code>Form-Frame</code> layer at a scale matching the drawing size.</td></tr>
+  <tr><td>Polyline placement</td><td>The boundary polyline saved in SFB is copied/placed with the same transform as the Form.</td></tr>
+  <tr><td>Auto text fill</td><td>The drawing number, quantity, scale, panel/pad size, and length are automatically filled in at the corresponding text positions of the Form.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> <code>FFB</code> uses Frame Form information registered from <code>SFB</code> (screen selection) or the FDstyle panel's [Drawing Template] (external 3DM files).
+  The registered template information is <strong>saved together with the current document (.3dm)</strong> and auto-restored when reopened, so there is no need to re-register on the same file.
+  (If no template has been registered, no Form will be inserted.)
+</div>
+<div class="note">
+  <strong>Hidden templates insert normally:</strong> Template instances registered from external 3DM files are <strong>hidden</strong> on the screen,
+  but the templates (block, polylines, text) inserted via <code>FFB</code> appear normally <strong>visible</strong>.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> If the needed Text objects are not included in the drawing selection range,
+  the Form may be inserted with its drawing-number/quantity/size fields left empty.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

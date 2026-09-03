@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Molist - 프레임 자재 리스트</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { max-width:600px; border:1px solid #ccc; background:#fff; margin:4px 8px 8px 0; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Molist &nbsp;—&nbsp; 프레임 자재 리스트</h1>
+<p><span class="cmd-box">Molist</span></p>
+<p><strong>Molist</strong>는 선택한 프레임 모델의 ProfileData와 Block 정보를 읽어 자재 수량 리스트를 생성하는 명령입니다. Group, NBlock, 혼합 선택을 자동으로 판별하고 결과를 하나의 리스트로 집계합니다.</p>
+<h2>사용 목적</h2>
+<p>프레임 모델 전체의 자재 수량과 중량을 한 리스트로 집계할 때 사용합니다. 절단 계획 전 전체 소요 자재를 파악하거나 발주 수량을 확인하는 용도이며, <code>Excel_File_On</code> 옵션으로 외부 집계와 연동할 수 있습니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li><code>FabNo</code>로 ProfileData와 Fab No를 먼저 작성합니다.</li>
+  <li>Rhino 명령창에 <code>Molist</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>필요하면 <code>Excel_File_On</code> 옵션을 On으로 바꿉니다.</li>
+  <li><strong>Select Brep, Block objects for Molist</strong> 프롬프트에서 대상 Brep, 일반 Block, NBlock을 선택합니다.</li>
+  <li>Enter를 누르면 화면에 리스트가 작성되고, 옵션이 On이면 Excel 파일도 저장됩니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <video src="../../../img/Molist_demo.mp4" autoplay muted loop playsinline aria-label="Molist 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>선택 모드</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>모드</th><th>설명</th></tr>
+  <tr><td>Group Mode</td><td>Brep와 일반 Block에서 ProfileData / InstanceInfo를 추출합니다.</td></tr>
+  <tr><td>Block Mode</td><td>NBlock 내부 Brep와 중첩 Block 정보를 추출합니다.</td></tr>
+  <tr><td>Mixed Mode</td><td>Group Mode 결과와 Block Mode 결과를 합쳐서 집계합니다.</td></tr>
+</tbody></table>
+<h2>출력 항목</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Unit No</td><td>ProfileData의 Unit 번호입니다.</td></tr>
+  <tr><td>SHAPE Name</td><td>Profile 이름 또는 Block 이름입니다.</td></tr>
+  <tr><td>FAB NO</td><td><code>FabNo</code>에서 부여된 제작 번호입니다.</td></tr>
+  <tr><td>Cut Length / Quantity</td><td>부재 절단 길이와 수량입니다.</td></tr>
+  <tr><td>Unit_Weight / Weight</td><td>단중과 수량을 반영한 중량입니다.</td></tr>
+  <tr><td>Description</td><td>SectionCustomData 또는 Block Description에서 읽은 설명입니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>FabNo</code></td><td>Molist 집계에 필요한 Fab No와 ProfileData를 생성합니다.</td></tr>
+  <tr><td><code>PMolist</code></td><td>Profile 중심의 간단한 자재 리스트를 작성합니다.</td></tr>
+  <tr><td><code>Cuttinglist</code></td><td>절단 계획과 장바 리스트를 생성합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 부분 선택하면 선택한 객체만 기준으로 부분 Molist가 작성됩니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

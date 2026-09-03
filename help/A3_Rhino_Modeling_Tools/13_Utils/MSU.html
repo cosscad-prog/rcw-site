@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>MSU - 13_Utils</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>MSU &nbsp;—&nbsp; 13_Utils</h1>
+<p><span class="cmd-box">MSU</span></p>
+<p>여러 Solid/Brep 대상에서 여러 Cutting Solid를 한 번에 Boolean Difference 처리하는 명령입니다. Rhino 기본 <code>BooleanDifference</code>와 유사하지만 Cutting Solid는 삭제하지 않습니다.</p>
+<h2>사용 목적</h2>
+<p>여러 절단 또는 Boolean Subtract 작업을 반복 적용해야 할 때, 대상과 차감 객체를 한 번에 처리해 모델 정리 시간을 줄이는 유틸리티입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>MSU</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><code>Select Cutted Solid Object(자르는 대상)</code> 프롬프트에서 잘릴 대상 Solid/Brep을 선택합니다.</li>
+  <li><code>Select Cutting Solid Object(자르는 기준)</code> 프롬프트에서 빼낼 기준 Solid/Brep을 선택합니다.</li>
+  <li>각 대상 객체에 대해 선택한 Cutting Solid 전체를 사용해 Boolean Difference를 수행합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/3930_MSU.mp4" autoplay muted loop playsinline aria-label="MSU example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>코드 기준 동작</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 대상</td><td>잘릴 대상과 자르는 기준 모두 <code>ObjectType.Brep</code> 객체를 여러 개 선택합니다.</td></tr>
+  <tr><td>Boolean 처리</td><td>각 대상 Brep을 하나씩 <code>Brep.CreateBooleanDifference</code>로 처리합니다. Cutting Brep 목록은 모든 대상에 공통으로 적용됩니다.</td></tr>
+  <tr><td>대상 객체</td><td>Boolean 결과가 생성되면 새 Brep을 추가하고 기존 대상 객체는 삭제합니다.</td></tr>
+  <tr><td>Cutting 객체</td><td>자르는 기준 객체는 삭제하지 않습니다.</td></tr>
+  <tr><td>속성 유지</td><td>새 결과 객체에는 원본 대상 객체의 Attribute와 UserData를 복사합니다.</td></tr>
+  <tr><td>Hole 체크</td><td>결과 객체의 원통 Face 중 지름이 <code>3.5</code>인 Hole을 찾으면 중심축 방향의 선을 생성합니다.</td></tr>
+  <tr><td>Hole 표시 Layer</td><td>Hole 중심선은 <code>Layer 12</code> 레이어에 생성되며, 레이어 색상은 Red로 설정됩니다.</td></tr>
+  
+</tbody></table>
+<div class="note"><strong>참고:</strong> Cutting Solid는 유지되지만, 잘리는 대상 객체는 Boolean 성공 시 결과 객체로 대체됩니다. 원본 대상 형상을 보존해야 한다면 실행 전에 별도 복사본을 만들어 두세요.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

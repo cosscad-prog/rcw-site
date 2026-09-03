@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>DsOpt - 03_Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:flex; flex-wrap:wrap; gap:6px; align-items:flex-start; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>DsOpt &nbsp;—&nbsp; 03_Dims</h1>
+<p><span class="cmd-box">DsOpt</span></p>
+<p>Dimension Style과 RCW 치수 옵션을 설정하는 패널을 여는 명령입니다. 현재 Rhino DimStyle 선택과 <code>DST</code>, <code>DSR</code>, <code>DSB</code>, <code>DSL</code> 치수 생성 간격을 관리합니다.</p>
+<h2>사용 목적</h2>
+<p>자동 치수 명령에서 사용할 첫 치수 거리, 치수 간격, 방향별 최대 치수 표시 여부를 미리 설정할 때 사용합니다. DST/DSR/DSL/DSB의 치수 배치 품질을 좌우하는 옵션 패널입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  
+  
+  <li>Rhino 명령창에 <code>DsOpt</code>를 입력합니다.</li>
+  <li>패널 목록에서 사용할 DimStyle을 더블클릭하여 현재 DimStyle로 선택합니다.</li>
+  <li><code>First Dist</code>, <code>Dim Gap</code>, <code>Angle Dist</code>, <code>LnR Dist</code>, Max 옵션을 작업 조건에 맞게 조정합니다.</li>
+  <li>설정한 값은 <code>DST</code>, <code>DSR</code>, <code>DSB</code>, <code>DSL</code> 및 제작 가공도 치수 작성에 사용됩니다.</li>
+
+
+
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../img/3131_Dimstyle1.png" alt="DimStyle panel example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>DimStyle 선택 영역 예시</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../img/3131_DimStyle2.png" alt="DimStyle option example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>치수 간격과 Max 옵션 설정 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 옵션</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>DimStyle 선택</td><td>목록에서 더블클릭하여 현재 문서의 Dimension Style을 선택합니다.</td></tr>
+  <tr><td>First Dist</td><td><code>DST/DSR/DSB/DSL</code>이 만드는 첫 번째 치수선의 거리입니다.</td></tr>
+  <tr><td>Dim Gap</td><td>Max 치수 등 추가 치수선과 첫 번째 치수선 사이의 간격입니다.</td></tr>
+  <tr><td>Angle Dist</td><td>Angle 치수 작성 시 사용하는 거리 옵션입니다.</td></tr>
+  <tr><td>LnR Dist</td><td>Left/Right 방향 치수 또는 관련 치수 배치에 사용하는 거리 옵션입니다.</td></tr>
+  <tr><td>Top/Left/Right/Bottom Max</td><td>방향별 전체 Max Dimension을 추가로 만들지 결정합니다.</td></tr>
+</tbody></table>
+<h2>사용되는 곳</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>명령</th><th>설명</th></tr>
+  <tr><td><code>DST, DSR, DSB, DSL</code></td><td><code>Dim_Points</code> 기반 자동 Linear Dimension 작성 시 거리와 Max 옵션을 사용합니다.</td></tr>
+  <tr><td><code>FDwg</code></td><td>Frame 제작 가공도 치수 작성에 사용됩니다.</td></tr>
+  <tr><td><code>Gsfd</code></td><td>Glass 가공도 치수 작성에 사용됩니다.</td></tr>
+  <tr><td><code>Bpfd</code></td><td>BackPanel 가공도 치수 작성에 사용됩니다.</td></tr>
+</tbody></table>
+<div class="warning"><strong>중요:</strong> Rhino에서 Text Size는 일반적으로 <code>Font Height × DimensionScale</code>과 연결됩니다. 치수 Text는 현재 DimStyle의 영향을 받습니다.</div>
+<div class="note"><strong>참고:</strong> 여기서 설정한 <code>First Dist</code>, <code>Dim Gap</code>, 방향별 Max 옵션이 <code>DST/DSR/DSL/DSB</code> 자동 치수 생성 위치에 그대로 반영됩니다.</div>
+<div class="note"><strong>이름이 바뀌었습니다:</strong> 예전에는 <code>DimStyle</code>로도 이 패널을 열 수 있었으나, Rhino 자체 명령 <code>DimStyle</code>(문서 속성 &gt; 주석 스타일)과 이름이 겹쳐 <code>DsOpt</code> 하나로 정리했습니다. 명령창에 <code>DimStyle</code>을 입력하면 이제 Rhino 기본 명령이 실행됩니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

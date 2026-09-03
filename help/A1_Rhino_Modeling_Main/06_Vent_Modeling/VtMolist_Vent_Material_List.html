@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>VtMolist - 벤트 부재 리스트</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .col-table { border-collapse:collapse; width:100%; margin-top:8px; font-size:12px; }
+    .col-table th { background:#dce8f8; border:1px solid #aac4e8; padding:4px 8px; text-align:center; font-weight:bold; word-break:keep-all;}
+    .col-table td { border:1px solid #c8d8ec; padding:4px 8px; text-align:center; word-break:keep-all;}
+    .col-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>VtMolist &nbsp;—&nbsp; 벤트 부재 리스트</h1>
+<p><span class="cmd-box">VtMolist</span></p>
+<p>선택한 <strong>벤트 그룹 안에 들어 있는 개별 프로파일 부재</strong>를 집계하여 부재 리스트(Molist)를 생성합니다.<br>
+프레임 등 다른 모델이 함께 선택되어도 <strong>벤트 그룹에 속한 부재만 골라서</strong> 집계하므로, 전체 모델을 한 번에 선택해도 됩니다.<br>
+Rhino 화면에 텍스트 표로 출력하며, 옵션으로 <strong>Excel 파일</strong>로도 저장할 수 있습니다.</p>
+<h2>사용 목적</h2>
+<p>벤트를 발주·가공 단위로 넘기려면 벤트 자체의 크기가 아니라 벤트를 구성하는 프로파일의 절단 길이와 수량이 필요합니다.
+<strong>VtMolist</strong>는 벤트 그룹을 풀어서 그 안의 프로파일을 형상명·절단길이별로 묶어 집계합니다.</p>
+<p>프레임과 벤트는 보통 한 도면에 함께 있습니다. <strong>VtMolist</strong>는 선택 범위와 관계없이 벤트 그룹에 속한 부재만 남기므로,
+프레임 부재를 일일이 피해서 선택할 필요 없이 <strong>전체 모델을 창 선택으로 한 번에 잡아도 벤트 리스트만</strong> 나옵니다.</p>
+<h2>VtList · Molist 와의 차이</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>집계 단위</th></tr>
+  <tr><td><strong>VtList</strong></td><td>벤트 그룹 <strong>1개 = 1행</strong>. 벤트의 폭·높이·코드 등 완제품 기준 수량 리스트입니다.</td></tr>
+  <tr><td><strong>VtMolist</strong></td><td>벤트 그룹 안의 <strong>프로파일 부재 1종 = 1행</strong>. 형상명·절단길이·수량·중량 기준의 부재 리스트입니다.<br>
+  <strong>벤트 그룹에 속한 부재만</strong> 집계합니다.</td></tr>
+  <tr><td><strong>Molist</strong></td><td>같은 표 형식이지만 <strong>선택한 것을 모두</strong> 집계합니다. 프레임·벤트를 함께 선택하면 한 리스트에 섞여 나옵니다.</td></tr>
+</tbody></table>
+<p>즉 <strong>Molist</strong>는 "선택한 전부", <strong>VtMolist</strong>는 "선택한 것 중 벤트만" 입니다. 같은 객체를 선택해도 결과가 다릅니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Rhino 명령창에 <strong>VtMolist</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>Excel 파일 저장 여부를 옵션(<strong>Excel_File_On</strong>)으로 설정합니다.</li>
+  <li>집계할 객체를 선택합니다. 그룹 선택이 켜져 있으므로 그룹 안의 객체를 하나만 클릭해도 그룹 전체가 선택됩니다.<br>
+  <strong>벤트만 골라서 선택할 필요는 없습니다.</strong> 프레임을 포함한 전체 모델을 창 선택으로 잡아도 됩니다.</li>
+  <li>Enter 를 눌러 선택을 마칩니다.</li>
+  <li>벤트 그룹에 속하지 않은 객체는 자동으로 제외되고, <strong>제외된 개수가 명령창에 표시</strong>됩니다.<br>
+  <code>[VtMolist] Vent Group 에 속하지 않은 객체 34개를 제외했습니다. 남은 것 — Brep: 12개, …</code></li>
+  <li>부재 리스트가 현재 작업평면에 텍스트 표로 작성됩니다. 옵션이 On이면 저장할 파일 이름을 입력받아 Excel 파일도 저장합니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <video src="../../img/VtMolist.mp4" autoplay muted loop playsinline aria-label="VtMolist" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>전체 모델을 선택해도 벤트 그룹만 집계됩니다. 출력 표의 형식은 Frame <strong>Molist</strong> 와 동일하고, 집계 대상만 벤트 그룹으로 좁혀집니다.</figcaption>
+  </figure>
+</div>
+<h2>옵션</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>옵션</th><th>설명</th></tr>
+  <tr><td><strong>Excel_File_On</strong></td><td>
+    <code>Off</code> — Rhino 화면 출력만 수행합니다.<br>
+    <code>On</code> — 저장할 파일 이름을 명령창에서 입력받아 Excel 파일로 저장합니다.<br>
+    저장 위치는 현재 .3dm 파일 경로 앞부분에 입력한 이름을 붙인 <code>[문서경로]-[입력한 이름]</code> 형식입니다.
+  </td></tr>
+</tbody></table>
+<h2>선택 대상 — 무엇이 집계되고 무엇이 빠지나</h2>
+<p>선택한 것을 그대로 집계하지 않고, <strong>벤트 그룹에 속하는지</strong>를 먼저 판정합니다.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 28%;">
+    <col style="width: 72%;">
+  </colgroup>
+  <tbody><tr><th>대상</th><th>처리</th></tr>
+  <tr><td><strong>벤트 그룹의 Brep</strong></td><td><strong>집계</strong> — 프로파일 데이터를 읽어 형상명·절단길이별로 묶습니다.</td></tr>
+  <tr><td>벤트 그룹 밖의 Brep</td><td><strong>제외</strong> — 프레임 프로파일 등은 벤트 그룹에 속하지 않으므로 리스트에 들어가지 않습니다.</td></tr>
+  <tr><td>Block (Instance)</td><td>Description 이 <code>NBlock:</code> 으로 시작하면 Named Block 으로 인식합니다.
+  블록 안에 벤트가 들어 있으면 <strong>그 벤트 부재만</strong> 집계하고, 같은 블록 안의 프레임 부재는 제외합니다.
+  벤트가 없는 블록은 통째로 제외됩니다.</td></tr>
+</tbody></table>
+<p>도면 위의 벤트 그룹과 블록 안의 벤트를 함께 선택하면 두 결과를 하나의 리스트로 합쳐 출력합니다.</p>
+<div class="note">벤트 그룹 판정 기준: <strong>VT1 ~ VT9</strong> 모델링이 그룹에 기록해 둔 그룹 정보를 읽어 판정합니다.
+따라서 수동으로 묶은 그룹이나, 벤트 모델링을 거치지 않은 객체는 벤트로 인식되지 않습니다.<br>
+블록 안의 벤트는 <strong>NBlock 을 만들 때 함께 저장된 정보</strong>로 판정합니다. NBlock 기능이 들어오기 전에 만들어진 오래된 블록은
+그 정보가 없어 벤트를 찾지 못할 수 있습니다 — 이 경우 블록을 다시 만드십시오.</div>
+<h2>출력 항목 (컬럼 순서)</h2>
+<table class="col-table">
+  <colgroup>
+    <col style="width: 10%;">
+    <col style="width: 40%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <tbody><tr><th>순번</th><th>컬럼명</th><th>내용</th></tr>
+  <tr><td>1</td><td>NO</td><td>일련번호</td></tr>
+  <tr><td>2</td><td>Unit No</td><td>유닛 번호</td></tr>
+  <tr><td>3</td><td>SHAPE Name</td><td>프로파일 형상 이름</td></tr>
+  <tr><td>4</td><td>FAB NO</td><td>가공 번호 (Fab 문자 + 번호)</td></tr>
+  <tr><td>5</td><td>Cut Length(L)</td><td>절단 길이 (mm)</td></tr>
+  <tr><td>6</td><td>Quantity</td><td>수량</td></tr>
+  <tr><td>7</td><td>FINISH</td><td>표면 처리</td></tr>
+  <tr><td>8</td><td>Unit_Weight(Kg/M)</td><td>미터당 단위 중량</td></tr>
+  <tr><td>9</td><td>Weight(Kg)</td><td>절단길이 × 수량 × 단위중량으로 계산한 중량</td></tr>
+  <tr><td>10</td><td>Description</td><td>프로파일 설명</td></tr>
+</tbody></table>
+<p>알루미늄 부재 다음에 <code>Alum.Total</code> 소계 행이 들어가고, 마지막에 전체 수량과 중량 합계 행이 추가됩니다.</p>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>VT1 ~ VT9</strong></td><td>벤트 모델링 — 집계 전에 먼저 생성합니다.</td></tr>
+  <tr><td><strong>VtNo</strong></td><td>벤트 번호 부여 — 리스트의 Unit No 와 연동됩니다.</td></tr>
+  <tr><td><strong>VtList</strong></td><td>벤트 그룹 단위 수량 리스트 — 완제품 기준 집계입니다.</td></tr>
+  <tr><td><strong>Molist</strong></td><td>프레임 부재 리스트 — 같은 출력 형식을 사용합니다.</td></tr>
+  <tr><td><strong>GrMolist</strong></td><td>그릴 그룹의 부재 리스트 — 벤트와 같은 방식으로 동작합니다.</td></tr>
+</tbody></table>
+<div class="note">참고: 이전 버전의 명령어 이름은 <code>VMolist</code> 였습니다. 다른 벤트 명령(<code>VtList</code>, <code>VtNo</code>, <code>VtTable</code>)과 표기를 맞추기 위해 <code>VtMolist</code> 로 변경되었습니다. 동작은 동일합니다.</div>
+<div class="warning">주의: 프로파일 데이터가 없는 객체는 집계되지 않습니다. 리스트가 비어 있으면 명령창의 메시지를 먼저 확인하십시오.
+<ul style="margin:6px 0 0 0; padding-left:18px;">
+  <li><strong>ProfileData 를 찾지 못했습니다</strong> — 프로파일 데이터는 <strong>VtNo</strong> 가 기록합니다. <strong>VtNo</strong> 를 먼저 실행한 뒤 다시 실행하십시오.</li>
+  <li><strong>Vent Group 에 속한 것이 없습니다</strong> — 선택한 것 중 벤트가 없다는 뜻입니다. 벤트를 포함해 다시 선택하십시오.</li>
+</ul>
+그래도 비어 있으면 <strong>Pname</strong> 으로 단면 정보가 입력되었는지 확인하십시오.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

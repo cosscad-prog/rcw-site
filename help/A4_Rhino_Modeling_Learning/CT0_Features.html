@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>CT0 - Center0 기능</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0 0 16px; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    .image-row { display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; margin:14px 0 8px; }
+    .image-row figure { margin:0; flex:1 1 220px; }
+    .image-row img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .image-row figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>CT0 &nbsp;—&nbsp; Center0 기능</h1>
+<p><span class="cmd-box">CT0</span></p>
+<p>Transom 방향을 Mullion 각도와 관계없이 수직 방향으로 유지하기 위해 <code>Center1</code> 대신 <code>Center0</code>를 사용하는 기능입니다.</p>
+<h2>Mullion 기준</h2>
+<p>Mullion은 별도의 방향점이 존재하므로 Mullion Section의 <code>Center1</code> 점들이 Mullion Line의 시작점, 끝점, 방향점에 맞춰 정렬됩니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Section 기준점</th><th>Mullion Line 정렬 기준</th></tr>
+  <tr><td>P1</td><td>Mullion Line의 시작점 M1에 Align됩니다.</td></tr>
+  <tr><td>P2</td><td>Center1 시작점의 수직 방향점이며 Mullion Line의 끝점 M2에 Align됩니다.</td></tr>
+  <tr><td>P3</td><td>Center1 끝점이며 Mullion Line의 방향점 M3에 Align됩니다.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../img/Mullion_02.png" alt="Mullion Center1 방향점 정렬 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Mullion Line 방향점 기준으로 Center1이 정렬되는 예시</figcaption>
+  </figure>
+</div>
+<h2>Transom 기준</h2>
+<p>Transom은 방향점이 별도로 존재하지 않으며, 양쪽 2개의 Mullion을 기준으로 방향점을 만듭니다. 두 Mullion의 방향이 같으면 두 Mullion 끝점 사이의 중간점이 Transom <code>Center1</code>의 방향점이 됩니다.</p>
+<p>두 Mullion의 방향이 서로 다른 경우에는 어느 한쪽에 치우치지 않는 중간점을 사용합니다. 이때 Mullion의 유리면과 Transom의 유리면이 정확히 일치하지 않을 수 있으며, Transom이 뒤로 살짝 누운 각도로 모델링될 수 있습니다.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../img/Transom_Direction_01.png" alt="Transom 방향점 예시 1" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>그림1: 두 Mullion 기준 Transom 방향점</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../img/Transom_Direction_02.png" alt="Transom 방향점 예시 2" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>그림2: 방향이 다른 Mullion 조건의 Transom 형상</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../img/Transom_Direction_03.png" alt="Transom 방향점 예시 3" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>그림3: Center0 사용 시 수직 방향 유지</figcaption>
+  </figure>
+</div>
+<h2>CT0 적용</h2>
+<p>Unit의 Head, Sill처럼 Mullion 각도와 관계없이 항상 수평 또는 수직 기준을 유지해야 하는 경우, 방향선을 <code>Center1</code> 대신 <code>Center0</code>로 작성합니다. 명령어 <code>CT0</code>를 사용하면 Transom 방향이 항상 수직 방향으로 나타납니다.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 35%; min-width:220px; max-width:35%;">
+    <img src="../img/Transom_Direction_04.png" alt="Center0 CT0 적용 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Center1 대신 Center0를 사용하여 Transom 방향을 수직으로 유지하는 예시</figcaption>
+  </figure>
+</div>
+<div class="note"><strong>참고:</strong> Mullion 방향을 따라야 하는 일반 Transom은 <code>Center1</code>을 사용하고, Head/Sill처럼 일정한 방향을 유지해야 하는 조건에서는 <code>Center0</code>를 사용합니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

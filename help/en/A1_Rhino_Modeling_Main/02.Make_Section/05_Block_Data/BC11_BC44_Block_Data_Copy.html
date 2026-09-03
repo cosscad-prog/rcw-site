@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>BC11~BC44 - Copy Block Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:13px; font-weight:bold; color:#003d80; margin:0 4px 6px 0; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .matrix-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; text-align:center; }
+    .matrix-table th { background:#dce8f8; border:1px solid #aac4e8; padding:6px 8px; font-weight:bold; }
+    .matrix-table td { border:1px solid #c8d8ec; padding:7px 8px; vertical-align:middle; }
+    .matrix-table td:first-child { background:#f0f4ff; font-weight:bold; color:#003d80; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>BC11 ~ BC44 &nbsp;—&nbsp; Copy Block Data</h1>
+<p>
+  <span class="cmd-box">BC11</span><span class="cmd-box">BC12</span><span class="cmd-box">BC13</span><span class="cmd-box">BC14</span>
+  <span class="cmd-box">BC21</span><span class="cmd-box">BC22</span><span class="cmd-box">BC23</span><span class="cmd-box">BC24</span>
+  <span class="cmd-box">BC31</span><span class="cmd-box">BC32</span><span class="cmd-box">BC33</span><span class="cmd-box">BC34</span>
+  <span class="cmd-box">BC41</span><span class="cmd-box">BC42</span><span class="cmd-box">BC43</span><span class="cmd-box">BC44</span>
+</p>
+<p>
+  A 4×4 set of commands that copies Block Data from one Block slot to another within a Section.
+  The first digit is the source Block number and the second digit is the destination Block number.
+</p>
+
+<h2>Purpose</h2>
+<p>Quickly copies Block Data settings from one Block to another position within a Section. By using pre-defined command names (BC11–BC44), repeated Block configurations can be applied efficiently without manual data entry for each position.</p>
+
+<h2>Command Number Rules</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>First Digit</td><td>Source Block number. Example: <strong>BC31</strong> uses <strong>Block-3</strong> data as the source.</td></tr>
+  <tr><td>Second Digit</td><td>Destination Block number. Example: <strong>BC31</strong> copies data to the <strong>Block-1</strong> slot.</td></tr>
+  <tr><td>Format</td><td><code>BC + SourceNo + DestNo</code>. Source and destination numbers range from 1 to 4.</td></tr>
+</tbody></table>
+<h2>Copy Combination Table</h2>
+<table class="matrix-table">
+  <colgroup><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"></colgroup>
+  <tbody><tr>
+    <th>Source \ Dest</th>
+    <th>→ Block-1</th>
+    <th>→ Block-2</th>
+    <th>→ Block-3</th>
+    <th>→ Block-4</th>
+  </tr>
+  <tr>
+    <td>Block-1</td>
+    <td><strong>BC11</strong><br>Block-1 → Block-1</td>
+    <td><strong>BC12</strong><br>Block-1 → Block-2</td>
+    <td><strong>BC13</strong><br>Block-1 → Block-3</td>
+    <td><strong>BC14</strong><br>Block-1 → Block-4</td>
+  </tr>
+  <tr>
+    <td>Block-2</td>
+    <td><strong>BC21</strong><br>Block-2 → Block-1</td>
+    <td><strong>BC22</strong><br>Block-2 → Block-2</td>
+    <td><strong>BC23</strong><br>Block-2 → Block-3</td>
+    <td><strong>BC24</strong><br>Block-2 → Block-4</td>
+  </tr>
+  <tr>
+    <td>Block-3</td>
+    <td><strong>BC31</strong><br>Block-3 → Block-1</td>
+    <td><strong>BC32</strong><br>Block-3 → Block-2</td>
+    <td><strong>BC33</strong><br>Block-3 → Block-3</td>
+    <td><strong>BC34</strong><br>Block-3 → Block-4</td>
+  </tr>
+  <tr>
+    <td>Block-4</td>
+    <td><strong>BC41</strong><br>Block-4 → Block-1</td>
+    <td><strong>BC42</strong><br>Block-4 → Block-2</td>
+    <td><strong>BC43</strong><br>Block-4 → Block-3</td>
+    <td><strong>BC44</strong><br>Block-4 → Block-4</td>
+  </tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Identify the source and destination Block numbers.</li>
+  <li>Enter the corresponding command in the Rhino command line. Example: to copy Block-2 data to Block-4, type <strong>BC24</strong>.</li>
+  <li>Select the reference or Section objects as prompted.</li>
+  <li>Verify that the data in the destination Block slot has been copied or updated.</li>
+</ol>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>BCXX</strong></td><td>Copy Block Data by manually entering the source/destination number combination.</td></tr>
+  <tr><td><strong>BBC4</strong></td><td>Batch-copies the 4×4 Block Data combinations at once.</td></tr>
+  <tr><td><strong>RBB</strong></td><td>Reorganize Block Data names or link information.</td></tr>
+  <tr><td><strong>DBB / SDBB</strong></td><td>Delete all or selected Block Data.</td></tr>
+</tbody></table>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

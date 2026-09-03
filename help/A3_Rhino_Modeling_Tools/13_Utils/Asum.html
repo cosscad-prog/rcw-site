@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Asum - 13_Utils</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Asum &nbsp;—&nbsp; 13_Utils</h1>
+<p><span class="cmd-box">Asum</span></p>
+<p>선택한 Surface/Brep의 평면 Face 면적을 합산하고, 합계 값을 도면 위 Text로 작성하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<p>선택한 Surface/Brep 면적을 합산해 패널, 유리, 백패널 등 면적 검토값을 빠르게 확인할 때 사용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>Asum</code>을 입력하고 Enter를 누릅니다.</li>
+  <li><code>Select Surface Object</code> 프롬프트에서 면적을 합산할 Brep/Surface 객체를 하나 이상 선택합니다.</li>
+  <li>합계 Text를 작성할 위치를 찍습니다.</li>
+  <li>선택 객체의 면적 합계가 <code>mm2</code>와 <code>M2</code> 두 줄 Text로 작성됩니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/3910_ASum.mp4" autoplay muted loop playsinline aria-label="ASum example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>코드 기준 동작</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 대상</td><td><code>ObjectType.Brep</code> 객체를 여러 개 선택합니다.</td></tr>
+  <tr><td>계산 대상</td><td>각 Brep의 Face 중 현재 모델 허용오차 기준으로 <code>IsPlanar</code>인 평면 Face만 면적 합산에 포함합니다.</td></tr>
+  <tr><td>면적 출력</td><td>명령창에는 객체 번호와 Face 번호별 면적이 <code>SurFace Area</code> 형식으로 출력됩니다.</td></tr>
+  <tr><td>도면 Text</td><td>선택한 점을 기준으로 현재 CPlane에 맞춰 <code>합계 mm2</code>와 <code>합계 M2</code> Text를 작성합니다.</td></tr>
+  <tr><td>Layer</td><td>Text는 <code>Text</code> 레이어에 작성됩니다. 레이어가 없으면 생성됩니다.</td></tr>
+  <tr><td>Text 크기</td><td>현재 Dimension/Text 설정을 기준으로 <code>Func.TextSize_CurrentDim()</code>에서 가져옵니다.</td></tr>
+  
+</tbody></table>
+<div class="note"><strong>참고:</strong> 비평면 Face는 합산에서 제외됩니다. 곡면까지 포함한 전체 Brep 면적 합계가 필요한 경우에는 Rhino 기본 면적 계산과 결과가 다를 수 있습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

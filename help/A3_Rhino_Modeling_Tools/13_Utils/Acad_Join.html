@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Acad_Join - AutoCAD 식 결합</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>Acad_Join &nbsp;—&nbsp; AutoCAD 식 결합</h1>
+<p><span class="cmd-box">Acad_Join</span></p>
+<p>
+  고른 것을 <b>한 번에</b> 결합합니다. Rhino 내장 <code>Join</code> 처럼 <b>하나씩 다시 묻지 않습니다.</b>
+  곡선은 물론 <b>서피스·폴리서피스</b>도 받습니다.
+</p>
+
+<h2>사용 목적</h2>
+<p>
+  Rhino 의 <code>Join</code> 은 명령을 먼저 실행하면 <b>대상을 하나 찍은 뒤 다음 것을 다시</b> 찍게 합니다.
+  AutoCAD 의 <code>JOIN</code> 에 익숙하면 이 흐름이 번거롭습니다.
+  <code>Acad_Join</code> 은 <b>윈도우·크로싱으로 여러 개를 한꺼번에</b> 잡고 <b>Enter</b> 로 끝냅니다.
+  <b>선택을 먼저 하고 명령을 실행하는</b> 기존 방식도 그대로 됩니다.
+</p>
+
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li><code>Acad_Join</code> 을 실행합니다. (명령창: <em>결합할 곡선·서피스·폴리서피스 선택</em>)</li>
+  <li>결합할 것을 고릅니다 — <b>하나씩 찍어도, 윈도우·크로싱으로 쓸어 담아도</b> 됩니다. <b>최소 2개</b>가 필요합니다.</li>
+  <li><b>Enter</b> 로 확정합니다.</li>
+</ol>
+<div class="note">선택을 먼저 해 두고 <code>Acad_Join</code> 을 실행해도 됩니다.</div>
+
+<h2>알아 둘 것</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>곡선과 면을 <b>함께 골라도</b> 됩니다</td>
+      <td>곡선과 서피스는 서로 붙지 않으므로 <b>같은 종류끼리만</b> 결합합니다.
+          한쪽만 결합되면 <b>그쪽만</b> 반영합니다.</td></tr>
+  <tr><td>받는 것</td><td>곡선 · 서피스 · 폴리서피스 · <b>압출(Extrusion)</b>. 압출은 결합할 때 Brep 으로 바꿔 처리합니다
+          (Rhino 내장 <code>Join</code> 도 같은 자리에서 그렇게 합니다).</td></tr>
+  <tr><td>결과의 속성</td><td><b>가장 먼저 고른 것</b>의 레이어·색을 따릅니다. Rhino 내장 <code>Join</code> 과 같은 규칙입니다.</td></tr>
+  <tr><td>붙는 기준</td><td><b>모델 허용오차</b> 안에서 끝점(곡선)·모서리(면)가 만나야 붙습니다.</td></tr>
+  <tr><td>모서리·면(서브오브젝트)</td><td>결합 대상이 아니라 <b>고를 수 없습니다.</b></td></tr>
+</tbody></table>
+
+<h2>안 될 때</h2>
+<table class="desc-table">
+  <colgroup><col style="width:52%"><col style="width:48%"></colgroup>
+  <tbody><tr><th>명령창에 나오는 말</th><th>뜻</th></tr>
+  <tr><td><em>결합하려면 같은 종류의 객체가 2개 이상 필요합니다.</em></td>
+      <td>곡선 1개 + 서피스 1개처럼 <b>종류별로는 하나씩</b>만 골랐습니다.</td></tr>
+  <tr><td><em>모델 허용오차 안에서 만나는 곡선 끝점이 없어 곡선은 결합되지 않았습니다.</em></td>
+      <td>끝점이 <b>떨어져 있습니다.</b> 허용오차를 확인하거나 끝점을 맞추십시오.</td></tr>
+  <tr><td><em>모델 허용오차 안에서 만나는 서피스 모서리가 없어 서피스는 결합되지 않았습니다.</em></td>
+      <td>면들의 <b>모서리가 맞닿아 있지 않습니다.</b></td></tr>
+</tbody></table>
+<div class="note">
+  결합에 성공하면 <b>몇 개를 몇 개로 합쳤는지</b> 명령창에 나옵니다 —
+  <em>곡선 5개를 1개로 결합했습니다</em> 처럼.
+</div>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>Erase</code></td><td>AutoCAD 의 <code>ERASE</code> 처럼 <b>선택 전후 어느 쪽이든</b> 받아 지웁니다.</td></tr>
+  <tr><td><code>SST</code></td><td>AutoCAD 의 <code>STRETCH</code> 처럼 드래그 방향으로 Window/Crossing 을 가릅니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

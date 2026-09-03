@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>ToWebFile</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>ToWebFile</h1>
+<p><span class="cmd-box">ToWebFile</span></p>
+<p>Command to save the selected Rhino model as a single HTML file with embedded GLB data. The saved HTML file can be opened in a Web Browser by double-clicking without Rhino, and can be shared with other users to share the model.</p>
+<h2>Purpose</h2>
+<p>Used to export the selected model as a web-viewable file and HTML viewer format to create external reviews or 3D previews for sharing.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Type <code>ToWebFile</code> in the Rhino command line and press Enter.</li>
+  <li>At the <code>ToWeb: Select objects to save as HTML</code> prompt, select objects to export to HTML.</li>
+  <li>At the <code>Polygon reduce ratio (0.1~1.0, Enter=original)</code> prompt, enter the reduce ratio. Pressing only Enter uses the original ratio <code>1.0</code>.</li>
+  <li>At the <code>Use KHR_mesh_quantization compression? (Y/N, Enter=N)</code> prompt, select the compression option. Default is <code>N</code>.</li>
+  <li>In the save dialog, specify the HTML filename and location.</li>
+  <li>After saving is complete, the generated HTML file opens immediately in the default browser.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <video src="../../../img/ToWebFile.mp4" autoplay muted loop playsinline aria-label="ToWebFile example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Code-Based Operation</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Can select <code>ObjectType.AnyObject</code>, and also allows group selection with <code>GroupSelect = true</code>. SubObject selection is not used.</td></tr>
+  <tr><td>Reduce Ratio</td><td>Can input from <code>0.1</code> to <code>1.0</code>. Smaller values reduce polygons to decrease file size, but may simplify the shape.</td></tr>
+  <tr><td>Quantization</td><td>Entering <code>Y</code> or <code>YES</code> uses <code>KHR_mesh_quantization</code> compression. Default is not used.</td></tr>
+  <tr><td>GLB Conversion</td><td><code>RhinoMeshExporterGLB</code> converts selected objects to GLB. Includes color, layer, block color inheritance, and text conversion data for WebViewer display.</td></tr>
+  <tr><td>HTML Saving</td><td>Converts GLB binary to Base64 data and embeds it in HTML as <code>EMBEDDED_GLB</code> variable. For large models, streams 3MB units to reduce memory burden.</td></tr>
+  <tr><td>Default Save Location</td><td>If Rhino document is saved, uses the same folder and filename as defaults. If no document path exists, uses desktop and <code>rhino-model.html</code> as defaults.</td></tr>
+  
+</tbody></table>
+<h2>Difference from WebV</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Command</th><th>Difference</th></tr>
+  <tr><td><code>WebV</code></td><td>Converts selected model to temporary GLB and views directly in the <code>localhost:8765</code> WebViewer on the current PC. Not intended for file saving.</td></tr>
+  <tr><td><code>ToWebFile</code></td><td>Saves a standalone HTML file with embedded GLB. The saved HTML can be opened by double-clicking and can be shared with other users.</td></tr>
+</tbody></table>
+<h2>Using Saved HTML</h2>
+<ol class="step-list">
+  
+  <li>Double-click the saved <code>.html</code> file.</li>
+  <li>Rhino Web Viewer opens in the browser and loads the embedded model.</li>
+  <li>Since the model data is included in the file, no separate GLB file or local server is needed.</li>
+  <li>When sharing with other users, only pass the generated HTML file.</li>
+
+</ol>
+<h2>Web Viewer Basic Operations</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Operation</th><th>Description</th></tr>
+  <tr><td>Orbit</td><td>With the <code>Orbit</code> button selected in the top toolbar, drag the right mouse button to rotate the model.</td></tr>
+  <tr><td>Pan</td><td>With the <code>Pan</code> button selected in the top toolbar, drag the right mouse button to pan the view.</td></tr>
+  <tr><td>Zoom</td><td>Roll the mouse wheel to zoom in/out.</td></tr>
+  <tr><td>Reset</td><td>Resets camera direction to initial Isometric state and fits the entire model to the screen.</td></tr>
+  <tr><td>Fit</td><td>Executes Zoom Extents to fit the entire current model in view.</td></tr>
+  <tr><td>Help</td><td>Opens an operation shortcut guide panel within the WebViewer.</td></tr>
+</tbody></table>
+<h2>Zoom Window Usage</h2>
+<ol class="step-list">
+  
+  <li>Press keyboard <code>W</code> on the browser screen.</li>
+  <li>Then press <code>Space</code> or <code>Enter</code> to activate Zoom Window mode.</li>
+  <li>Drag the left mouse button to define a rectangle over the area you want to zoom in.</li>
+  <li>Release the mouse button to zoom to the center of the defined area.</li>
+  <li>Press <code>Esc</code> to cancel during the process.</li>
+
+</ol>
+<h2>Keyboard Shortcuts</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Shortcut</th><th>Action</th></tr>
+  <tr><td><code>ZX</code> + <code>Space/Enter</code></td><td>Executes Zoom Extents (fit all).</td></tr>
+  <tr><td><code>W</code> + <code>Space/Enter</code></td><td>Activates Zoom Window mode.</td></tr>
+  <tr><td><code>TV</code>, <code>FV</code>, <code>RV</code>, <code>LV</code> + <code>Space/Enter</code></td><td>Switches to Top, Front, Right, Left View.</td></tr>
+  <tr><td><code>SE</code>, <code>SW</code> + <code>Space/Enter</code></td><td>Switches to South-East or South-West Isometric View.</td></tr>
+  <tr><td><code>Esc</code></td><td>Cancels/closes input shortcut, Zoom Window mode, or help panel.</td></tr>
+</tbody></table>
+<h2>Display Options</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Option</th><th>Description</th></tr>
+  <tr><td>Shaded / Ghost / Grid</td><td>Toggles normal shaded display, semi-transparent display, and reference grid display.</td></tr>
+  <tr><td>Section</td><td>Toggles Section Cut on/off. In <code>Panel</code>, adjust X/Y/Z cutting axis and cutting position.</td></tr>
+  <tr><td>Panel</td><td>Opens and closes the right <code>Display Control</code> panel. Can adjust Background, Ambient, Projection, Explode, and Section Cut.</td></tr>
+  <tr><td>Save</td><td>Saves the current model again as standalone HTML from the browser.</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Command Line Output</td><td>Outputs number of selected objects, conversion time, GLB size, save path, and final HTML file size.</td></tr>
+  <tr><td>Saved File</td><td>A <code>.html</code> file with embedded model data is generated.</td></tr>
+  <tr><td>Browser Launch</td><td>After saving is complete, the generated HTML file opens immediately in the default browser.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> ToWebFile is intended for generating shareable HTML files. To quickly view the current model, use <code>WebV</code>.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

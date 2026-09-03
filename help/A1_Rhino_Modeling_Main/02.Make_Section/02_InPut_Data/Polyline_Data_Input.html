@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Polyline Data Input - InPut Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Polyline Data Input &nbsp;—&nbsp; InPut Data</h1>
+<p><span class="cmd-box">PolyLine Data Input</span></p>
+<p>Polyline Data는 Surface를 Subtract할 형상과 방식을 지정합니다. Mullion과 Transom이 교차하는 구간, 홀 가공, 절단이 필요한 구간에 사용합니다.</p>
+<h2>사용 목적</h2>
+<p>Surface에서 잘라낼(Subtract) 형상과 방식을 지정할 때 사용합니다. Mullion·Transom 교차부, 홀 가공, 절단 구간처럼 단면 일부를 제거해야 하는 위치에 Polyline을 두고 Subtracter 종류를 지정하면, 모델링 시 해당 형상이 단면에서 자동으로 빠집니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>Subtract 기준이 될 Polyline을 작성합니다.</li>
+  <li>잘라야 하는 Surface와 같은 Layer를 사용합니다.</li>
+  <li><code>Pname</code>에서 Polyline의 Material_ID 또는 Subtracter 종류를 지정합니다.</li>
+
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 45%; min-width:220px; max-width:45%;">
+    <img src="../../../img/Polyline.png" alt="Polyline.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>4번부터 8번까지 사용한다.</figcaption>
+  </figure>
+</div>
+<h2>옵션</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>4. Subtracter</td><td>Mullion 또는 Transom Surface 형상을 따낼 때 사용하는 기본 Subtracter입니다.</td></tr>
+  <tr><td>5. Inter-Subtracter</td><td>Mullion과 Transom의 Subtracter가 만나는 교차 부분만 Subtract할 때 사용합니다.</td></tr>
+  <tr><td>6. Sub-Subtracter</td><td>Subtracter 자체를 다시 자르거나 보호할 영역을 만들 때 사용합니다.</td></tr>
+  <tr><td><span style="font-family: &quot;Malgun Gothic&quot;, &quot;맑은 고딕&quot;, sans-serif;"><span style="font-family: Arial, sans-serif;"><span style="font-family: Arial, sans-serif;"><span style="font-family: Consolas, monospace;">7. Milling-Subtracter</span></span></span></span></td><td>지정된 위치의 Surface를 직접 가공할 때 사용합니다.</td></tr><tr><td><span style="font-family: &quot;Malgun Gothic&quot;, &quot;맑은 고딕&quot;, sans-serif;"><span style="font-family: Consolas, monospace;">8<span style="font-family: &quot;Malgun Gothic&quot;, sans-serif; background-color: rgba(219, 234, 254, 0.5);">. Bracket-Inter</span></span><span style="font-family: &quot;Malgun Gothic&quot;, sans-serif; background-color: rgba(219, 234, 254, 0.5);"></span></span><span style="font-family: &quot;Malgun Gothic&quot;, sans-serif; background-color: rgba(219, 234, 254, 0.5);"></span></td><td>M-Bracket, T-Bracket 을 생성할때 사용합니다.</td></tr>
+</tbody></table>
+<h2>주의할 점</h2>
+<div class="warning">주의: 일반 Subtracter는 Polyline Layer와 같은 Layer의 Surface만 자릅니다. 단, Layer 0은 모든 Layer의 Surface를 대상으로 사용할 수 있습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

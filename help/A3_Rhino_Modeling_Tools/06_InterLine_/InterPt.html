@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>InterPt - 06_InterLine_</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>InterPt &nbsp;—&nbsp; 06_InterLine_</h1>
+<p><span class="cmd-box">InterPt</span></p>
+<p>선택한 Surface와 Line이 서로 만나는 위치에 Point를 생성하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>교차점 확인</td><td>Surface와 Line의 교차 위치를 Point로 표시합니다.</td></tr>
+  <tr><td>기준점 작성</td><td>후속 모델링이나 검토 작업에서 사용할 교차 기준점을 생성합니다.</td></tr>
+  <tr><td>검토 보조</td><td>Line이 Surface와 실제로 만나는 위치를 화면에서 직접 확인할 수 있습니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>InterPt</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>교차 위치를 찾을 Surface를 선택합니다.</li>
+  <li>Surface와 만나는 Line을 선택합니다.</li>
+  <li>Surface와 Line이 만나는 위치에 생성된 Point를 Rhino 화면에서 확인합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/3510_InterPt.mp4" autoplay muted loop playsinline aria-label="InterPt command example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Surface와 Line의 교차 위치에 Point를 생성하는 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  
+  
+  <tr><td>대상 객체</td><td>Surface와 Line</td></tr>
+  <tr><td>생성 객체</td><td>Surface와 Line이 만나는 위치의 Point</td></tr>
+  
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>처리 결과</td><td>선택된 Surface와 Line의 교차 위치에 Point가 생성됩니다.</td></tr>
+  <tr><td>확인 위치</td><td>Rhino 화면에서 Surface와 Line이 만나는 위치의 Point 객체를 확인합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 먼저 Curve들을 선택하고, 다음 단계에서 Surface/Brep를 선택합니다. 교차점은 <code>Surface_inter_Pt</code> 레이어에 만들어지므로, 결과가 안 보이면 해당 레이어 표시 상태를 확인하십시오.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

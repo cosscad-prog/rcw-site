@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>SSW - 07_Surface_</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>SSW &nbsp;—&nbsp; 07_Surface_</h1>
+<p><span class="cmd-box">SSW</span></p>
+<p>선택한 Surface의 Edge Line을 추출하고 그룹으로 묶는 명령입니다.</p>
+<h2>사용 목적</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Edge 추출</td><td>선택 Surface의 Edge Line을 추출합니다.</td></tr>
+  <tr><td>ExtractWireframe 차이</td><td>Rhino 기본 <code>ExtractWireframe</code>처럼 Edge Line을 만들지만, 면 기준으로 추출하고 결과를 Group으로 묶습니다.</td></tr>
+  <tr><td>부분 면 처리</td><td>Solid의 일부 면을 기준으로 Edge를 추출할 때 사용합니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>SSW</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>Edge를 추출할 Surface를 선택합니다.</li>
+  <li>선택을 완료합니다.</li>
+  <li>Surface 기준으로 추출된 Edge Line과 Group 상태를 확인합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/3671_SSW.mp4" autoplay muted loop playsinline aria-label="SSW command example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>선택 Surface의 Edge Line을 추출하고 Group으로 묶는 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  
+  
+  <tr><td>대상 객체</td><td>Edge를 추출할 Surface</td></tr>
+  <tr><td>생성 객체</td><td>Surface Edge에서 추출된 Line 객체 그룹</td></tr>
+  
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>처리 결과</td><td>선택 Surface의 Edge Line이 추출되고 Group으로 정리됩니다.</td></tr>
+  <tr><td>확인 위치</td><td>Rhino 화면에서 추출된 Edge Line과 Group 상태를 확인합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 선택 Surface의 모든 Edge Curve를 먼저 생성한 뒤 Join을 시도합니다. 닫힌 PolyCurve로 결합되면 개별 Edge Curve는 지우고 닫힌 경계선만 남기므로, 면 외곽선을 한 덩어리로 얻을 때 유용합니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

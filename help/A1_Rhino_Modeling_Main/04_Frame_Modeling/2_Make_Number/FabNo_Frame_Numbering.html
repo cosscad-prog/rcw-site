@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>FabNo - 프레임 제작 번호 부여</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { max-width:600px; border:1px solid #ccc; background:#fff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FabNo &nbsp;—&nbsp; 프레임 제작 번호 부여</h1>
+<p><span class="cmd-box">FabNo</span></p>
+<p><strong>FabNo</strong>는 선택한 프레임 Brep, 일반 Block, NBlock을 분석하여 ProfileData와 제작 번호를 작성하는 명령입니다. 같은 Profile 이름과 형상 조건을 비교해 동일 부재에는 같은 Fab No를 부여합니다.</p>
+<h2>사용 목적</h2>
+<p>모델링된 프레임 부재에 ProfileData와 제작 번호(Fab No)를 부여해 동일 부재를 같은 번호로 묶을 때 사용합니다. 이후 자재 리스트(<code>Molist</code>)·절단 리스트(<code>Cuttinglist</code>)·제작 테이블(<code>FabTable</code>)·제작 도면 작성의 기준 데이터가 되는 필수 선행 단계입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  <li>Rhino 명령창에 <code>FabNo</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>필요하면 명령 옵션 <code>Data_Option</code>을 On/Off로 변경합니다.</li>
+  <li><strong>Select Brep, Block, NBlock objects for FabNo</strong> 프롬프트에서 대상 객체를 선택합니다.</li>
+  <li>NBlock만 선택한 경우 가공도 앞 문자를 입력합니다. 기본값은 <code>F</code>입니다.</li>
+  <li>Enter를 누르면 객체 분석 후 <code>Fab_No_Text</code> 레이어에 번호 텍스트가 작성됩니다.</li>
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/FabNo_demo.mp4" autoplay muted loop playsinline aria-label="FabNo 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>선택 모드</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>모드</th><th>설명</th></tr>
+  <tr><td>Group Mode</td><td>Brep 또는 일반 Block을 선택한 경우입니다. 그룹 안의 Brep와 일반 Block을 분석합니다.</td></tr>
+  <tr><td>Block Mode</td><td>Description이 <code>NBlock:</code>으로 시작하는 NBlock만 선택한 경우입니다. NBlock 내부 Brep를 분석합니다.</td></tr>
+  <tr><td>Mixed Mode</td><td>Group 대상과 NBlock을 함께 선택한 경우입니다. 두 결과를 통합해서 처리합니다.</td></tr>
+</tbody></table>
+<h2>옵션</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>옵션</th><th>On일 때 결과</th></tr>
+  <tr><td><code>Data_Option</code></td><td>Fab No가 달라지는 지점을 확인하기 위한 비교 데이터 표를 지정 위치에 추가로 출력합니다.</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>ProfileData</td><td>Brep에 Unit No, Profile Name, Fab No, 길이/형상 비교 데이터가 기록됩니다.</td></tr>
+  <tr><td>번호 텍스트</td><td><code>Fab_No_Text</code> 레이어에 <code>ProfileName F1</code> 같은 확인용 텍스트가 배치됩니다.</td></tr>
+  <tr><td>브라켓 번호</td><td>브라켓 객체는 별도 하위 레이어에서 더 작은 텍스트로 표시될 수 있습니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>UMD</code></td><td>FabNo를 부여할 프레임 모델을 생성합니다.</td></tr>
+  <tr><td><code>CheckPfData</code></td><td>ProfileData 누락 객체를 검사합니다.</td></tr>
+  <tr><td><code>Molist</code></td><td>Fab No 기준으로 수량 리스트를 작성합니다.</td></tr>
+  <tr><td><code>FDwg</code></td><td>Fab No와 ProfileData를 사용해 제작 가공도를 생성합니다.</td></tr>
+</tbody></table>
+<div class="warning"><strong>주의:</strong> FabNo 실행 후에는 전체 PolySurface 수와 작성된 번호 텍스트 수를 비교해 누락 객체가 없는지 확인하는 것이 좋습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

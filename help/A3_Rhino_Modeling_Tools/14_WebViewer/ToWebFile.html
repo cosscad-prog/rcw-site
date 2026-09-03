@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>ToWebFile - 14_WebViewer</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>ToWebFile &nbsp;—&nbsp; 14_WebViewer</h1>
+<p><span class="cmd-box">ToWebFile</span></p>
+<p>선택한 Rhino 모델을 GLB 데이터가 내장된 단일 HTML 파일로 저장하는 명령입니다. 저장된 HTML 파일은 Rhino 없이 더블클릭해 Web Browser에서 열 수 있으며, 다른 사용자에게 전달해 모델을 공유할 수 있습니다.</p>
+<h2>사용 목적</h2>
+<p>선택 모델을 웹에서 볼 수 있는 파일과 HTML 뷰어 형태로 내보내 외부 검토나 공유용 3D 미리보기를 만들 때 사용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>ToWebFile</code>을 입력하고 Enter를 누릅니다.</li>
+  <li><code>ToWeb: HTML로 저장할 오브젝트를 선택하세요</code> 프롬프트에서 HTML로 내보낼 객체를 선택합니다.</li>
+  <li><code>폴리곤 감소율 (0.1~1.0, Enter=원본)</code> 프롬프트에서 Reduce 비율을 입력합니다. Enter만 누르면 원본 비율 <code>1.0</code>을 사용합니다.</li>
+  <li><code>KHR_mesh_quantization 압축 사용? (Y/N, Enter=N)</code> 프롬프트에서 압축 옵션을 선택합니다. 기본값은 <code>N</code>입니다.</li>
+  <li>저장 대화상자에서 HTML 파일 이름과 위치를 지정합니다.</li>
+  <li>저장이 완료되면 생성된 HTML 파일이 기본 브라우저에서 바로 열립니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <video src="../../img/ToWebFile.mp4" autoplay muted loop playsinline aria-label="ToWebFile example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>코드 기준 동작</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 대상</td><td><code>ObjectType.AnyObject</code>를 선택할 수 있으며, <code>GroupSelect = true</code>로 그룹 선택도 허용합니다. SubObject 선택은 사용하지 않습니다.</td></tr>
+  <tr><td>Reduce 비율</td><td><code>0.1</code>부터 <code>1.0</code>까지 입력할 수 있습니다. 값이 작을수록 폴리곤을 줄여 파일 크기를 줄이지만 형상이 단순화될 수 있습니다.</td></tr>
+  <tr><td>Quantization</td><td><code>Y</code> 또는 <code>YES</code>를 입력하면 <code>KHR_mesh_quantization</code> 압축을 사용합니다. 기본값은 사용하지 않음입니다.</td></tr>
+  <tr><td>GLB 변환</td><td><code>RhinoMeshExporterGLB</code>가 선택 객체를 GLB로 변환합니다. 색상, 레이어, 블록 색상 상속과 Text 변환 등 WebViewer 표시용 데이터를 포함합니다.</td></tr>
+  <tr><td>HTML 저장</td><td>GLB 바이너리를 Base64 데이터로 변환해 HTML 안에 <code>EMBEDDED_GLB</code> 변수로 내장합니다. 대용량 모델에서도 메모리 부담을 줄이기 위해 3MB 단위로 스트리밍 저장합니다.</td></tr>
+  <tr><td>기본 저장 위치</td><td>Rhino 문서가 저장되어 있으면 같은 폴더와 같은 파일명을 기본값으로 사용합니다. 문서 경로가 없으면 바탕화면과 <code>rhino-model.html</code>을 기본값으로 사용합니다.</td></tr>
+  
+</tbody></table>
+<h2>WebV와 차이</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>명령</th><th>차이점</th></tr>
+  <tr><td><code>WebV</code></td><td>선택 모델을 임시 GLB로 변환해 현재 PC의 <code>localhost:8765</code> WebViewer에서 바로 확인합니다. 파일 저장이 목적이 아닙니다.</td></tr>
+  <tr><td><code>ToWebFile</code></td><td>GLB가 내장된 standalone HTML 파일을 저장합니다. 저장된 HTML은 더블클릭으로 열 수 있고, 다른 사용자에게 전달해 공유할 수 있습니다.</td></tr>
+</tbody></table>
+<h2>저장된 HTML 사용법</h2>
+<ol class="step-list">
+  
+  <li>저장된 <code>.html</code> 파일을 더블클릭합니다.</li>
+  <li>브라우저에서 Rhino Web Viewer가 열리고 내장된 모델이 로드됩니다.</li>
+  <li>파일 안에 모델 데이터가 포함되어 있으므로 별도의 GLB 파일이나 로컬 서버가 필요하지 않습니다.</li>
+  <li>다른 사용자에게 공유할 때는 생성된 HTML 파일 하나만 전달하면 됩니다.</li>
+
+</ol>
+<h2>웹 뷰어 기본 조작</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>조작</th><th>설명</th></tr>
+  <tr><td>Orbit</td><td>상단 툴바의 <code>Orbit</code> 버튼을 선택한 상태에서 마우스 오른쪽 버튼을 드래그하면 모델을 회전합니다.</td></tr>
+  <tr><td>Pan</td><td>상단 툴바의 <code>Pan</code> 버튼을 선택한 상태에서 마우스 오른쪽 버튼을 드래그하면 화면을 평행 이동합니다.</td></tr>
+  <tr><td>Zoom</td><td>마우스 휠을 굴려 확대/축소합니다.</td></tr>
+  <tr><td>Reset</td><td>카메라 방향을 초기 Isometric 상태로 되돌리고 전체 모델을 화면에 맞춥니다.</td></tr>
+  <tr><td>Fit</td><td>현재 모델 전체가 보이도록 Zoom Extents를 실행합니다.</td></tr>
+  <tr><td>도움말</td><td>WebViewer 안의 조작 단축키 안내 패널을 엽니다.</td></tr>
+</tbody></table>
+<h2>Zoom Window 사용법</h2>
+<ol class="step-list">
+  
+  <li>브라우저 화면에서 키보드 <code>W</code>를 누릅니다.</li>
+  <li>이어서 <code>Space</code> 또는 <code>Enter</code>를 누르면 Zoom Window 모드가 켜집니다.</li>
+  <li>확대하고 싶은 영역을 마우스 왼쪽 버튼으로 드래그해 사각형으로 지정합니다.</li>
+  <li>마우스 버튼을 놓으면 지정한 영역 중심으로 화면이 확대됩니다.</li>
+  <li>도중에 취소하려면 <code>Esc</code>를 누릅니다.</li>
+
+</ol>
+<h2>키보드 단축키</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>단축키</th><th>동작</th></tr>
+  <tr><td><code>ZX</code> + <code>Space/Enter</code></td><td>전체 보기(Zoom Extents)를 실행합니다.</td></tr>
+  <tr><td><code>W</code> + <code>Space/Enter</code></td><td>Zoom Window 모드를 켭니다.</td></tr>
+  <tr><td><code>TV</code>, <code>FV</code>, <code>RV</code>, <code>LV</code> + <code>Space/Enter</code></td><td>Top, Front, Right, Left View로 전환합니다.</td></tr>
+  <tr><td><code>SE</code>, <code>SW</code> + <code>Space/Enter</code></td><td>South-East 또는 South-West Isometric View로 전환합니다.</td></tr>
+  <tr><td><code>Esc</code></td><td>입력 중인 단축키, Zoom Window 모드, 도움말 패널을 취소/닫습니다.</td></tr>
+</tbody></table>
+<h2>표시 옵션</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>옵션</th><th>설명</th></tr>
+  <tr><td>Shaded / Ghost / Grid</td><td>일반 음영 표시, 반투명 표시, 기준 Grid 표시를 켜고 끕니다.</td></tr>
+  <tr><td>Section</td><td>Section Cut을 켜고 끕니다. <code>Panel</code>에서 X/Y/Z 절단축과 절단 위치를 조정합니다.</td></tr>
+  <tr><td>Panel</td><td>오른쪽 <code>Display Control</code> 패널을 열고 닫습니다. Background, Ambient, Projection, Explode, Section Cut을 조정할 수 있습니다.</td></tr>
+  <tr><td>Save</td><td>브라우저에서 현재 모델을 다시 standalone HTML로 저장합니다.</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>명령창 출력</td><td>선택 객체 수, 변환 시간, GLB 크기, 저장 경로, 최종 HTML 파일 크기가 출력됩니다.</td></tr>
+  <tr><td>저장 파일</td><td>모델 데이터가 내장된 <code>.html</code> 파일이 생성됩니다.</td></tr>
+  <tr><td>브라우저 실행</td><td>저장이 완료되면 생성된 HTML 파일을 기본 브라우저로 바로 엽니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> ToWebFile은 공유용 HTML 파일 생성이 목적입니다. 단순히 현재 모델을 빠르게 확인하려면 <code>WebV</code>를 사용하세요.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

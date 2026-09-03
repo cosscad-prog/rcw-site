@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CP - View</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>CP &nbsp;—&nbsp; View</h1>
+<p><span class="cmd-box">CP</span></p>
+<p>A command to set the construction plane (CPlane) of the current active viewport based on the direction of the selected Surface.</p>
+<h2>Purpose</h2>
+<p>Used to align only the CPlane of the current viewport with the center and normal direction of the selected Surface. Suitable when you want to keep the View direction while attaching the working plane to the surface.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <code>CP</code> in the Rhino command line and press Enter.</li>
+  <li>At the <code>Select Surface Brep Objects</code> prompt, select the Surface to be used as the reference.</li>
+  <li>The CPlane of the active viewport is changed based on the center and normal direction of the selected Surface.</li>
+</ol>
+<h2>Operation Standards</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Select Surface/Brep Face.</td></tr>
+  <tr><td>CPlane Origin</td><td>Uses the area centroid point (<code>AreaMassProperties.Centroid</code>) of the selected Surface.</td></tr>
+  <tr><td>CPlane Direction</td><td>Finds the closest UV position from the Surface center point and uses the Surface Normal at that position as the normal direction of the CPlane.</td></tr>
+  <tr><td>Application Scope</td><td>Changes only the Construction Plane of the current active viewport.</td></tr>
+  <tr><td>View Change</td><td>Does not change the screen View direction. Changes only the working plane.</td></tr></tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Processing Result</td><td>CPlane matching the selected Surface is applied to the active viewport and the screen is redrawn.</td></tr>
+  <tr><td>Grid Settings</td><td>Within the command, CPlane Grid Line Count is set to 10 and Grid Spacing is set to 10.</td></tr></tbody></table>
+
+<div class="note"><strong>Note:</strong> If Surface selection is canceled or Surface center/normal calculation fails, the default Plane value in the code may be used. For accurate results, select a valid Surface Face.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

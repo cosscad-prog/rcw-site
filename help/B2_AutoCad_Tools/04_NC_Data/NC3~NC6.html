@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>NC3~NC6 - 04_NC_Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>NC3 / NC4 / NC5 / NC6 &nbsp;—&nbsp; 04_NC_Data</h1>
+<p>
+  <span class="cmd-box">NC3</span>&nbsp;
+  <span class="cmd-box">NC4</span>&nbsp;
+  <span class="cmd-box">NC5</span>&nbsp;
+  <span class="cmd-box">NC6</span>
+</p>
+<p>
+  선택한 형상에서 <code>DiametricDimension</code>(지름 치수) 객체를 읽어
+  NC 가공용 <strong>홀 데이터 테이블</strong>을 도면에 자동으로 생성하는 명령입니다.<br>
+  NC3~NC6은 원점 기준 모서리(좌상/좌하/우상/우하)만 다르며, 나머지 동작은 동일합니다.<br></p>
+<h2>사용 목적</h2>
+<p>
+  도면에 기입된 지름 치수(<code>DiametricDimension</code>)를 자동으로 수집하여,
+  각 홀의 X/Y 좌표(원점 기준 상대거리)와 지름 정보를 NC 데이터 테이블로 변환합니다.
+  원점 기준 모서리를 NC3~NC6 중 선택하여 가공 기계의 원점 설정에 맞게 테이블을 생성할 수 있습니다.
+</p>
+<h2>명령별 원점 위치</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:30%"><col style="width:56%"></colgroup>
+  <tbody><tr><th>명령</th><th>원점 기준</th><th>설명</th></tr>
+  <tr><td><code>NC3</code></td><td>좌측 상단 (Left-Top)</td><td>선택 형상 영역의 최소 X, 최대 Z(Y) 좌표를 원점으로 사용합니다.</td></tr>
+  <tr><td><code>NC4</code></td><td>좌측 하단 (Left-Bottom)</td><td>선택 형상 영역의 최소 X, 최소 Z(Y) 좌표를 원점으로 사용합니다.</td></tr>
+  <tr><td><code>NC5</code></td><td>우측 상단 (Right-Top)</td><td>선택 형상 영역의 최대 X, 최대 Z(Y) 좌표를 원점으로 사용합니다.</td></tr>
+  <tr><td><code>NC6</code></td><td>우측 하단 (Right-Bottom)</td><td>선택 형상 영역의 최대 X, 최소 Z(Y) 좌표를 원점으로 사용합니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  <li><code>DsOpt</code>를 실행하여 <strong>Hole Min / Hole Max</strong>, <strong>Slot Hole Dist</strong>, <strong>NC data Dist</strong> 값을 확인하고 필요 시 조정합니다.</li>
+  <li>도면에 <code>DiametricDimension</code>(지름 치수)이 기입되어 있는지 확인합니다. 없으면 테이블이 생성되지 않습니다.</li>
+  <li>원점 기준에 맞는 명령(<code>NC3</code> / <code>NC4</code> / <code>NC5</code> / <code>NC6</code>)을 명령창에 입력합니다.</li>
+  <li><em>"Select objects Include X_Gap Data ? [Yes/No] &lt;...&gt;:"</em> 프롬프트에서 필요한 객체를 선택합니다.<br>
+      X_Gap Data 포함 여부를 바꾸려면 선택 전에 <code>Yes</code> 또는 <code>No</code>를 키보드로 입력합니다.</li>
+  <li>Enter를 눌러 선택을 완료합니다.</li>
+  <li>원점 위치에 마커(동심원 3개)가 생성되고, 선택 영역 오른쪽에 NC 홀 데이터 테이블이 도면에 출력됩니다.</li>
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <img src="../../img/C2110_NC3_NC6.png" alt="NC3~NC6 실행 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>NC3~NC6 — 홀 데이터 테이블 생성 예시</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 35%; min-width:220px; max-width:35%;">
+    <img src="../../img/C2110_Dsopt.png" alt="DsOpt NC 설정 항목" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>DsOpt — NC Data 관련 설정 항목</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 대상</td><td>필터 없이 임의 객체를 선택합니다. 내부적으로 <code>Shape_Curve</code> / <code>Shape_Hidden</code> / <code>Dim_Curve</code> / <code>Dim_Sub</code> 레이어의 Line/PolyLine에서 형상 범위를 추출하고, <code>DiametricDimension</code>에서 홀 데이터를 읽습니다.</td></tr>
+  <tr><td>홀 데이터 소스</td><td><code>DiametricDimension</code>(지름 치수) 객체만 인식합니다. 일반 Circle이나 Arc는 읽지 않습니다.</td></tr>
+  <tr><td>홀 필터</td><td><code>DsOpt</code>의 <strong>Hole Min / Hole Max</strong> 값 범위 안에 있는 지름만 테이블에 포함됩니다.</td></tr>
+  <tr><td>슬롯 홀</td><td><code>DsOpt</code>의 <strong>Slot Hole Dist</strong>(4개) 값과 일치하는 간격의 홀 쌍을 슬롯 홀로 분류합니다.</td></tr>
+  <tr><td>X_Gap 옵션</td><td>선택 시 <code>[Yes/No]</code> 키워드로 <strong>X_Gap Data</strong>(인접 홀 간 X 거리) 포함 여부를 전환합니다. 이전 선택값이 기본값으로 유지됩니다.</td></tr>
+  <tr><td>원점 마커</td><td>산출된 원점 위치에 <code>NC_Data</code> 레이어 Point와 동심원(직경 5 / 12 / 13)이 자동 생성됩니다.</td></tr>
+  <tr><td>테이블 위치</td><td>선택 영역 최대 X에서 <code>NC_data_Dist</code>(기본 100) 만큼 오른쪽에 테이블이 생성됩니다.</td></tr>
+  <tr><td>텍스트 크기</td><td>현재 AutoCAD <code>TEXTSIZE</code> 시스템 변수를 사용합니다 (최소 3, 최대 50).</td></tr>
+  <tr><td>레이어</td><td>원점 마커와 테이블 텍스트는 <code>NC_Data</code> 레이어(색상 40)에 생성됩니다.</td></tr>
+  <tr><td>다중 영역 지원</td><td>선택된 엔티티가 Z 방향으로 분리된 복수 영역(최대 4개)을 포함하면 각 영역별로 테이블을 나누어 생성합니다.</td></tr>
+  <tr><td>적용 환경</td><td>AutoCAD / BricsCAD (Rhino 미지원)</td></tr>
+</tbody></table>
+<h2>DsOpt 관련 설정 항목</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:20%"><col style="width:54%"></colgroup>
+  <tbody><tr><th>항목</th><th>기본값</th><th>설명</th></tr>
+  <tr><td>Slot Hole Dist (×4)</td><td>0 × 4</td><td>슬롯 홀로 분류할 홀 간격 거리 (4개까지 지정)</td></tr>
+  <tr><td>Hole Min</td><td>3</td><td>테이블에 포함할 홀 최소 지름</td></tr>
+  <tr><td>Hole Max</td><td>25</td><td>테이블에 포함할 홀 최대 지름</td></tr>
+  <tr><td>NC data Dist</td><td>100</td><td>선택 영역 오른쪽 끝에서 테이블까지의 거리</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>원점 마커</td><td>선택 형상 범위의 지정 모서리에 Point + 동심원(직경 5 / 12 / 13)이 생성됩니다.</td></tr>
+  <tr><td>홀 데이터 테이블</td><td>각 홀의 X/Y 좌표(원점 기준), 지름, 슬롯 홀 여부가 도면 텍스트로 출력됩니다.</td></tr>
+  <tr><td>레이어</td><td>생성된 모든 요소는 <code>NC_Data</code> 레이어(색상 40)에 배치됩니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> 홀 데이터 소스는 반드시 <code>DiametricDimension</code>(지름 치수) 객체여야 합니다.
+  Circle이나 Arc를 직접 선택해도 홀로 인식하지 않습니다.
+  원점 위치는 <code>Shape_Curve</code> / <code>Shape_Hidden</code> / <code>Dim_Curve</code> / <code>Dim_Sub</code> 레이어의
+  Line/PolyLine 범위에서 자동 산출됩니다.
+</div>
+<div class="warning">
+  <strong>주의:</strong>&nbsp;&nbsp;<code>DsOpt</code>의 Hole Min/Max 범위 밖의 홀은 테이블에 포함되지 않으므로,
+  명령 실행 전에 범위를 반드시 확인하세요.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

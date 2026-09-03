@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>TTD - 08_DotText</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>TTD &nbsp;—&nbsp; 08_DotText</h1>
+<p><span class="cmd-box">TTD</span></p>
+<p>선택한 일반 Text를 DotText 객체로 변환하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>DotText 변환</td><td>선택된 일반 Text를 DotText로 변환합니다.</td></tr>
+  <tr><td>표시 크기</td><td>DotText 크기는 <code>TTS</code> 명령으로 조절합니다.</td></tr>
+  <tr><td>기준 표기</td><td>번호, 기준점, 반복 DotText 작업에 사용할 Text를 DotText 형식으로 바꿀 때 사용합니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>TTD</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>DotText로 변환할 Text를 선택합니다.</li>
+  <li>선택을 완료합니다.</li>
+  <li>변환된 DotText 객체를 Rhino 화면에서 확인합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/3730_TTD.mp4" autoplay muted loop playsinline aria-label="TTD command example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>일반 Text를 DotText로 변환하는 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  
+  
+  <tr><td>입력</td><td>일반 Text 객체</td></tr>
+  <tr><td>출력</td><td>DotText 객체</td></tr>
+  
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>처리 결과</td><td>선택 Text가 DotText로 변환됩니다.</td></tr>
+  <tr><td>확인 위치</td><td>Rhino 화면에서 변환된 DotText 객체를 확인합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 선택한 일반 Text의 PlainText를 읽어 BoundingBox 중심에 TextDot을 만들고, 변환이 성공하면 원래 Text는 삭제합니다. Text 서식은 보존되지 않고 문자열만 DotText로 옮겨집니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

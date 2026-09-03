@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Gmd - 유리 면 모델링</title>
+  <style>
+    body {
+      font-family: "맑은 고딕", "Malgun Gothic", sans-serif;
+      font-size: 13px;
+      color: #222;
+      margin: 20px 30px;
+      line-height: 1.7;
+    }
+    h1 {
+      font-size: 18px;
+      border-bottom: 2px solid #0066cc;
+      padding-bottom: 6px;
+      color: #0066cc;
+    }
+    h2 {
+      font-size: 14px;
+      border-left: 4px solid #0066cc;
+      padding-left: 8px;
+      margin-top: 24px;
+      color: #003d80;
+    }
+    .cmd-box {
+      display: inline-block;
+      background: #f0f4ff;
+      border: 1px solid #99bbee;
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+      font-weight: bold;
+      color: #003d80;
+      margin-bottom: 10px;
+    }
+    .desc-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .desc-table th {
+      background: #dce8f8;
+      border: 1px solid #aac4e8;
+      padding: 5px 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+    .desc-table td {
+      border: 1px solid #c8d8ec;
+      padding: 5px 10px;
+      vertical-align: top;
+    }
+    .desc-table tr:nth-child(even) td {
+      background: #f7faff;
+    }
+    .note {
+      background: #fffbe6;
+      border-left: 4px solid #f0c040;
+      padding: 8px 12px;
+      margin-top: 16px;
+      font-size: 12px;
+    }
+    .step-list {
+      padding-left: 20px;
+    }
+    .step-list li {
+      margin-bottom: 6px;
+    }
+    .gif-placeholder {
+      width: 100%;
+      max-width: 600px;
+      height: 340px;
+      background: #e8eef8;
+      border: 2px dashed #99bbee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #668;
+      margin: 12px 0;
+      border-radius: 4px;
+    }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Gmd &nbsp;—&nbsp; 유리 면 모델링</h1>
+<p><span class="cmd-box">Gmd</span></p>
+<p>
+  선택한 Brep(솔리드 또는 서피스) 면을 기준으로 유리 서피스를 자동 생성합니다.<br>
+  <strong>GsOpt</strong> 패널에서 설정된 유리 타입 정보를 바탕으로 Glass 레이어에 서피스를 배치합니다.
+</p>
+<h2>사용 목적</h2>
+<p>커튼월 면을 기준으로 유리 서피스를 자동 생성할 때 사용합니다. <code>GsOpt</code>에 설정된 유리 타입 정보를 적용해 Glass 레이어에 일괄 배치하므로, 유리 모델을 빠르게 구성하는 핵심 단계입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  <li><strong>GsOpt</strong> 패널에서 적용할 유리 타입을 먼저 선택합니다.</li>
+  <li>Rhino 명령창에 <strong>Gmd</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>유리를 생성할 Brep 면(서피스)을 선택합니다.</li>
+  <li>옵션으로 <strong>Distance</strong>(거리 기준) 또는 <strong>Section</strong>(단면 기준) 분할 방식을 선택할 수 있습니다.</li>
+  <li>Enter 를 눌러 실행하면 Glass 레이어에 서피스가 생성됩니다.</li>
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../img/Gmd_demo.mp4" autoplay muted loop playsinline aria-label="Gmd 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>옵션</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr>
+    <th>옵션</th>
+    <th>설명</th>
+  </tr>
+  <tr>
+    <td><strong>Distance</strong></td>
+    <td>뮬리언 간 거리를 기준으로 유리 면을 분할합니다.</td>
+  </tr>
+  <tr>
+    <td><strong>Section</strong></td>
+    <td>단면 데이터를 기준으로 유리 면을 분할합니다.</td>
+  </tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr>
+    <th>항목</th>
+    <th>설명</th>
+  </tr>
+  <tr>
+    <td>레이어</td>
+    <td><code>Glass_XX</code> 레이어에 서피스가 생성됩니다. (XX = 유리 타입 번호)</td>
+  </tr>
+  <tr>
+    <td>서피스</td>
+    <td>선택한 Brep 면을 기준으로 뮬리언에 맞춰 분할된 서피스가 배치됩니다.</td>
+  </tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr>
+    <th>명령어</th>
+    <th>설명</th>
+  </tr>
+  <tr>
+    <td><strong>GsOpt</strong></td>
+    <td>유리 타입 옵션 패널 열기 — 실행 전 유리 타입을 설정합니다.</td>
+  </tr>
+  <tr>
+    <td><strong>GMDC</strong></td>
+    <td>유리 면 초기화 — 생성된 Glass_XX 레이어 서피스를 전체 삭제합니다.</td>
+  </tr>
+  <tr>
+    <td><strong>GsNo</strong></td>
+    <td>유리 번호 부여 — 생성된 유리 서피스에 번호를 자동 배치합니다.</td>
+  </tr>
+  <tr>
+    <td><strong>GRV</strong></td>
+    <td>유리 반투명 표시 — Glass 레이어 객체를 투명하게 토글합니다.</td>
+  </tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

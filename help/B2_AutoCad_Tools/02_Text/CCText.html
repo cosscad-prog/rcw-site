@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>CCText - 02_Text</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>CCText &nbsp;—&nbsp; 02_Text</h1>
+<p><span class="cmd-box">CCText</span></p>
+<p>
+  지정한 <strong>시작 번호부터 순차적으로 번호가 있는 원문자(Circle + 번호 텍스트)</strong>를
+  클릭하는 위치마다 연속으로 생성하는 명령입니다.<br>
+  텍스트 크기는 AutoCAD 시스템 변수 <code>TEXTSIZE</code>를 따르며,
+  <code>TTS</code> 명령으로 미리 조절합니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  도면의 여러 위치에 부품 번호, 상세 번호 등 원형으로 감싼 일련번호를 빠르게 배치할 때 사용합니다.
+  시작 번호를 지정하면 클릭할 때마다 번호가 자동으로 증가하므로,
+  다수의 위치에 연속 번호를 부여하는 작업에 적합합니다.
+</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>원문자 크기가 필요한 경우 먼저 <code>TTS</code> 명령으로 <code>TEXTSIZE</code>를 설정합니다.</li>
+  <li>명령창에 <code>CCText</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><em>"Enter Start number :"</em> 프롬프트에 시작 번호(1 이상 정수)를 입력하고 Enter를 누릅니다.</li>
+  <li><em>"Pick Point"</em> 프롬프트에 따라 원문자를 배치할 위치를 클릭합니다.<br>
+      클릭할 때마다 번호가 1씩 증가하며 원문자가 생성됩니다.</li>
+  <li>ESC 또는 Enter를 눌러 명령을 종료합니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/C2210_CCText.mp4" autoplay muted loop playsinline aria-label="CCText 실행 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>CCText — 시작 번호부터 클릭 위치마다 원문자 연속 생성 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>시작 번호</td><td>명령 실행 후 시작 번호를 입력합니다. 이후 클릭할 때마다 1씩 증가합니다.</td></tr>
+  <tr><td>생성 방식</td><td>클릭한 위치마다 원(Circle)과 번호 텍스트를 함께 생성합니다. ESC 또는 Enter로 종료합니다.</td></tr>
+  <tr><td>텍스트 크기</td><td>AutoCAD 시스템 변수 <code>TEXTSIZE</code>를 사용합니다. 최솟값은 2입니다.</td></tr>
+  <tr><td>크기 조절</td><td><code>TTS</code> 명령으로 <code>TEXTSIZE</code>를 미리 변경한 뒤 실행합니다.</td></tr>
+  <tr><td>적용 환경</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>생성 객체</td><td>클릭 위치마다 원(Circle)과 번호 텍스트가 함께 생성됩니다.</td></tr>
+  <tr><td>번호 증가</td><td>시작 번호부터 클릭할 때마다 1씩 자동 증가합니다.</td></tr>
+  <tr><td>종료 방법</td><td>ESC 또는 Enter를 누르면 명령이 종료됩니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> 원문자 크기는 명령 실행 시점의 <code>TEXTSIZE</code> 값을 적용합니다.
+  크기를 바꾸려면 명령 실행 전에 <code>TTS</code>로 조절하세요.
+  <code>TEXTSIZE</code>가 2 미만이면 자동으로 2로 보정됩니다.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

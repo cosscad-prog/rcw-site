@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>BP1~BP5 - 백패널 모델링</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:6px; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>BP1 ~ BP5 &nbsp;—&nbsp; 백패널 모델링</h1>
+<p>
+  <span class="cmd-box">BP1</span>
+  <span class="cmd-box">BP2</span>
+  <span class="cmd-box">BP3</span>
+  <span class="cmd-box">BP4</span>
+  <span class="cmd-box">BP5</span>
+</p>
+<p>
+  유리 면(Glass Surface)을 기준으로 <strong>백패널(Back Panel) 3D 솔리드</strong>를 자동 생성합니다.<br>
+  BP1 ~ BP5 는 각각 <strong>BpOpt</strong> 패널에서 미리 설정해 둔 백패널 타입 1~5 번에 대응합니다.
+</p>
+<h2>사용 목적</h2>
+<p><code>BpOpt</code>에 설정해 둔 백패널 타입 1~5를 골라 유리 면을 기준으로 백패널 3D 솔리드를 즉시 생성할 때 사용합니다. 타입별 단축 명령이라 여러 사양의 백패널(스팬드럴 패널)을 면마다 빠르게 배치할 수 있으며, Distance·Section 분할 방식을 선택할 수 있습니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li><strong>BpOpt</strong> 패널에서 적용할 백패널 타입(두께·이격거리·절곡 타입 등)을 먼저 설정합니다.</li>
+  <li>Rhino 명령창에 <strong>BP1</strong> (또는 BP2~BP5) 을 입력하고 Enter 를 누릅니다.</li>
+  <li>마우스로 유리 면 위를 클릭하여 백패널을 생성할 영역을 선택합니다.</li>
+  <li>옵션으로 <strong>Distance</strong>(거리 기준) 또는 <strong>Section</strong>(단면 기준) 분할 방식을 선택할 수 있습니다.</li>
+  <li>Enter 를 눌러 완료하면 BackPanel 레이어에 솔리드가 생성됩니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <video src="../../img/BP1_demo.mp4" autoplay muted loop playsinline aria-label="BP1 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>BP 번호와 타입의 관계</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>BP1</strong></td><td>BpOpt 패널의 1번 타입 설정으로 백패널을 생성합니다.</td></tr>
+  <tr><td><strong>BP2</strong></td><td>BpOpt 패널의 2번 타입 설정으로 백패널을 생성합니다.</td></tr>
+  <tr><td><strong>BP3</strong></td><td>BpOpt 패널의 3번 타입 설정으로 백패널을 생성합니다.</td></tr>
+  <tr><td><strong>BP4</strong></td><td>BpOpt 패널의 4번 타입 설정으로 백패널을 생성합니다.</td></tr>
+  <tr><td><strong>BP5</strong></td><td>BpOpt 패널의 5번 타입 설정으로 백패널을 생성합니다.</td></tr>
+</tbody></table>
+<h2>옵션</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>옵션</th><th>설명</th></tr>
+  <tr><td><strong>Distance</strong></td><td>뮬리언 간 거리를 기준으로 백패널 면을 분할합니다.</td></tr>
+  <tr><td><strong>Section</strong></td><td>단면 데이터를 기준으로 백패널 면을 분할합니다.</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어</td><td><code>BackPanel_XX</code> 레이어에 솔리드 객체가 생성됩니다.</td></tr>
+  <tr><td>형상</td><td>유리 면으로부터 이격 거리만큼 떨어진 위치에 Sheet·Panel·Insulation 층으로 구성된 3D 솔리드가 생성됩니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>BpOpt</strong></td><td>백패널 타입 옵션 패널 — 실행 전 타입을 설정합니다.</td></tr>
+  <tr><td><strong>BpNo</strong></td><td>백패널 번호 부여</td></tr>
+  <tr><td><strong>BpList</strong></td><td>백패널 수량 리스트 생성</td></tr>
+  <tr><td><strong>BpTable</strong></td><td>백패널 제작 도면 테이블 생성</td></tr>
+  <tr><td><strong>BpFd</strong></td><td>백패널 가공도 생성</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

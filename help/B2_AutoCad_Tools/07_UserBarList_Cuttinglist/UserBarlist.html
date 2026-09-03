@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>UserBarlist - 07_UserBarList_Cuttinglist</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>UserBarlist &nbsp;—&nbsp; 07_UserBarList_Cuttinglist</h1>
+<p>
+  <span class="cmd-box">UserBarlist</span>&nbsp;
+  <span class="cmd-box">UBarlist</span>
+</p>
+<p>
+  프로파일별 사용 장바 길이를 입력·저장하는 외부 옵션 창(<code>Barlist_Option.exe</code>)을 실행하는 명령입니다.<br>
+  저장된 장바 데이터 파일은 <code>Cuttinglist</code> 명령의 <strong>User 모드</strong>에서 불러와 절단 리스트 산출에 사용합니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  공장에서 실제 보유·발주하는 장바 규격이 AutoCAD 기본값(3000~6500mm)과 다를 때,
+  프로파일별로 사용할 장바 길이를 직접 지정하여 절단 최적화를 할 수 있습니다.
+  <code>UserBarlist</code>로 장바 데이터를 저장해 두면, <code>Cuttinglist</code> 실행 시
+  <code>User</code> 모드를 선택하여 해당 파일을 불러올 수 있습니다.
+</p>
+<h2>UserBarlist → Cuttinglist 워크플로</h2>
+<table class="desc-table">
+  <colgroup><col style="width:16%"><col style="width:84%"></colgroup>
+  <tbody><tr><th>단계</th><th>설명</th></tr>
+  <tr><td><code>UserBarlist</code></td><td>Barlist_Option.exe를 열어 프로파일별 장바 길이를 입력하고 <code>.txt</code>로 저장합니다.</td></tr>
+  <tr><td><code>Cuttinglist</code></td><td>실행 시 <code>[User]</code>를 선택하면 파일 열기 창이 표시됩니다. 저장한 <code>.txt</code>를 선택하면 해당 장바로 절단 리스트가 산출됩니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>명령창에 <code>UserBarlist</code>(또는 <code>UBarlist</code>)를 입력하고 Enter를 누릅니다.</li>
+  <li><code>Barlist_Option.exe</code> 창이 열립니다.</li>
+  <li>프로파일 이름별로 사용할 장바 길이(mm)를 입력합니다.</li>
+  <li>저장 버튼을 눌러 <code>.txt</code> 파일로 저장합니다.</li>
+  <li>이후 <code>Cuttinglist</code> 실행 시 <code>[User]</code>를 선택하고 저장한 파일을 불러옵니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../img/3121_Barlist_Option_Window.png" alt="Barlist_Option.exe 옵션 창" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>UserBarlist — Barlist_Option.exe 옵션 창</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>실행 방식</td><td>AutoCAD API를 사용하지 않고, 외부 독립 실행 프로그램 <code>Barlist_Option.exe</code>를 시작합니다.</td></tr>
+  <tr><td>입력 내용</td><td>프로파일 이름별로 사용 가능한 장바 길이(mm)를 하나 이상 입력합니다.</td></tr>
+  <tr><td>저장 형식</td><td>입력한 데이터는 텍스트 파일(<code>.txt</code>)로 저장됩니다. 파일 형식은 <code>프로파일명,길이1,길이2,...</code> (콤마 구분)입니다.</td></tr>
+  <tr><td>연동 명령</td><td><code>Cuttinglist</code> 실행 시 <code>[User]</code> 모드를 선택하면 저장된 파일을 불러와 해당 프로파일에 맞는 장바로 절단 리스트를 산출합니다.</td></tr>
+  <tr><td>명령 별칭</td><td><code>UBarlist</code>도 동일한 동작을 합니다.</td></tr>
+  <tr><td>적용 환경</td><td>AutoCAD / BricsCAD / Rhino (외부 EXE 실행이므로 플랫폼 무관)</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> 프로파일 이름과 <code>Line</code> 레이어 이름이 정확히 일치해야
+  <code>Cuttinglist</code>에서 해당 장바가 적용됩니다.
+  파일에 프로파일 이름이 없으면 기본 장바 목록(<code>3000, 4000, 5000, 6000, 6500</code>)이 사용됩니다.
+</div>
+<div class="warning">
+  <strong>주의:</strong> <code>Barlist_Option.exe</code> 는 RCW 와 함께 설치됩니다. 지워졌다면 RCW 를 다시 설치하십시오.
+  해당 파일이 없으면 명령이 오류 없이 종료되지만 창이 열리지 않습니다.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Tlist - 02_Text</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Tlist &nbsp;—&nbsp; 02_Text</h1>
+<p><span class="cmd-box">Tlist</span></p>
+<p>
+  A command that <strong>classifies selected Text objects by content, aggregates quantities, and displays as a table on screen</strong>.<br>
+  Optionally can be <strong>saved as an Excel file (.xls)</strong>.
+</p>
+<h2>Purpose</h2>
+<p>
+  Use to classify scattered Text objects by content type and understand quantities.
+  In drawings where identical texts (part numbers, material names, specifications, etc.) are repeatedly used,
+  you can quickly create a quantity aggregation table for each item.
+</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Enter <code>Tlist</code> in the command line and press Enter.</li>
+  <li>Select <strong>Text objects</strong> to aggregate quantities and press Enter.</li>
+  <li>Click on the screen to place the table at the desired location.</li>
+  <li>Aggregation results are displayed simultaneously on screen and in the command window.</li>
+  <li>At the <em>"Enter Excel File Name :"</em> prompt:<br>
+      — Enter a file name to save as <code>filename.xls</code>.<br>
+      — Press Enter without entering to exit without saving.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/C2640_Tlist.mp4" autoplay muted loop playsinline aria-label="Tlist execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Tlist — Example of creating quantity aggregation table by text content</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Recognizes only TEXT, MTEXT, and DBText objects. Other entities are automatically filtered.</td></tr>
+  <tr><td>Sort Method</td><td>Text content is <strong>sorted alphabetically</strong> and then quantities are aggregated.</td></tr>
+  <tr><td>Screen Output</td><td>Aggregation results are generated as a table on screen (No / Content / Quantity / Total).</td></tr>
+  <tr><td>Command Window Output</td><td>Each item and quantity are also output to the command window.</td></tr>
+  <tr><td>Excel Save</td><td>Entering a file name saves in <code>.xls</code> format. No save occurs if blank.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Screen Table</td><td>A table consisting of No / Text Content / Quantity columns is generated on the drawing. The last row displays the Total sum.</td></tr>
+  <tr><td>Command Window</td><td>Each item and quantity are output to the command window.</td></tr>
+  <tr><td>Excel File</td><td>When a file name is entered, the same content is saved as a <code>.xls</code> file.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> Only texts with completely identical content are aggregated as the same item.
+  Differences in case or spaces are treated as separate items.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

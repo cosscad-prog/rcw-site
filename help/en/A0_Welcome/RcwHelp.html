@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>RcwHelp - Open Help</title>
+  <style>
+    body { font-family:"Segoe UI",Arial,sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<h1>RcwHelp &nbsp;—&nbsp; Open Help</h1>
+<p><span class="cmd-box">RcwHelp</span></p>
+<p>Opens the installed RCW help in your default web browser. This document is part of that help.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>RcwHelp</strong> in the Rhino command line and press Enter.</li>
+  <li>Your default web browser opens on the help start page.</li>
+  <li>Expand a command group in the left navigation and select the command you need.</li>
+</ol>
+
+<h2>Which File Opens</h2>
+<p>The file that opens depends on the RCW display language.</p>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Display language</th><th>File opened</th></tr>
+  <tr><td>Korean</td><td><code>help\Help_index.html</code> in the plug-in installation folder</td></tr>
+  <tr><td>Any other language</td><td><code>help\en\index.html</code> in the plug-in installation folder (English help)</td></tr>
+</tbody></table>
+
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Help window</td><td>Opens in the default web browser rather than inside Rhino, so it can stay open beside your model.</td></tr>
+  <tr><td>Model changes</td><td>None. The command does not modify the document.</td></tr>
+</tbody></table>
+
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>RCWLicense</strong></td><td>Imports an issued license file into the current user profile.</td></tr>
+  <tr><td><strong>RCWMachineCode</strong></td><td>Shows this workstation's machine code, which is required to issue a license.</td></tr>
+  <tr><td><strong>RCWCustomerCode</strong></td><td>Saves the customer code used to sign in to the customer page on this computer.</td></tr>
+  <tr><td><strong>RCWVersion</strong></td><td>Prints the running build's version, edition, build date and loaded file path in the command line.</td></tr>
+  <tr><td><strong>RCWUpdate</strong></td><td>Checks whether a newer version exists, and turns the startup check on or off.</td></tr>
+</tbody></table>
+<p style="margin-top:8px">All five are documented in full under <b>A3 Rhino Modeling Tools &gt; 19 License &gt; License / Version</b> in the contents.</p>
+
+<div class="warn">Caution: if the help file cannot be found, the command prints the path it looked for and stops. Check that the <code>help</code> folder was installed with the plug-in.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

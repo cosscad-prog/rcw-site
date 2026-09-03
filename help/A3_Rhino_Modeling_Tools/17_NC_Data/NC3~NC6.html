@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>NC3~NC6 - 17_NC_Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>NC3 / NC4 / NC5 / NC6 &nbsp;—&nbsp; 17_NC_Data</h1>
+<p>
+  <span class="cmd-box">NC3</span>&nbsp;
+  <span class="cmd-box">NC4</span>&nbsp;
+  <span class="cmd-box">NC5</span>&nbsp;
+  <span class="cmd-box">NC6</span>
+</p>
+<p>
+  선택한 Rhino 형상에서 홀 정보를 읽어 NC 가공용 <strong>홀 데이터 테이블</strong>을 자동으로 생성하는 명령입니다.<br>
+  NC3~NC6은 원점 기준 모서리(좌상/좌하/우상/우하)만 다르며, 나머지 동작은 동일합니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  도면에 배치된 홀 치수와 원형/장공 형상을 수집하여 각 홀의 X/Y 좌표(원점 기준 상대거리)와 지름 정보를
+  NC 데이터 테이블로 변환합니다. 원점 기준 모서리를 NC3~NC6 중 선택하여 가공 기계의 원점 설정에 맞는
+  테이블을 생성할 수 있습니다.
+</p>
+<h2>명령별 원점 위치</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:30%"><col style="width:56%"></colgroup>
+  <tbody><tr><th>명령</th><th>원점 기준</th><th>설명</th></tr>
+  <tr><td><code>NC3</code></td><td>좌측 상단 (Left-Top)</td><td>선택 그룹 영역의 최소 U, 최대 V 좌표를 원점으로 사용합니다.</td></tr>
+  <tr><td><code>NC4</code></td><td>좌측 하단 (Left-Bottom)</td><td>선택 그룹 영역의 최소 U, 최소 V 좌표를 원점으로 사용합니다.</td></tr>
+  <tr><td><code>NC5</code></td><td>우측 상단 (Right-Top)</td><td>선택 그룹 영역의 최대 U, 최대 V 좌표를 원점으로 사용합니다.</td></tr>
+  <tr><td><code>NC6</code></td><td>우측 하단 (Right-Bottom)</td><td>선택 그룹 영역의 최대 U, 최소 V 좌표를 원점으로 사용합니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>도면에 홀 치수 또는 홀 형상이 준비되어 있는지 확인합니다.</li>
+  <li>원점 기준에 맞는 명령(<code>NC3</code> / <code>NC4</code> / <code>NC5</code> / <code>NC6</code>)을 Rhino 명령창에 입력합니다.</li>
+  <li><em>"NCn: 객체를 선택하세요 (Gap=X_Gap 컬럼 포함 여부)"</em> 프롬프트에서 필요한 객체를 선택합니다.</li>
+  <li>X_Gap 컬럼을 포함하려면 선택 전에 명령 옵션 <code>Gap=Yes</code>로 전환합니다. 기본값은 <code>No</code>입니다.</li>
+  <li>Enter를 눌러 선택을 완료합니다.</li>
+  <li>원점 위치에 마커가 생성되고, 선택 영역 오른쪽에 NC 홀 데이터 테이블이 출력됩니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <img src="../../img/C2110_NC3_NC6.png" alt="NC3~NC6 실행 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>NC3~NC6 - 홀 데이터 테이블 생성 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 대상</td><td>Annotation, Curve, Point, Brep, Hatch를 선택할 수 있습니다. SubObject 선택은 사용하지 않습니다.</td></tr>
+  <tr><td>좌표 기준</td><td>현재 활성 뷰의 CPlane을 기준으로 U/V 좌표를 계산합니다.</td></tr>
+  <tr><td>그룹 분리</td><td><code>NC_BottomPoint</code> 또는 <code>NC_TopPoint</code> 레이어의 Point가 있으면 기준점별 그룹으로 나눕니다. 없으면 <code>Cut_Curve</code>, 그 다음 <code>Shape_Curve</code>/<code>Shape_Hidden</code>/<code>Dim_Curve</code>/<code>Dim_Sub</code> 레이어 곡선 범위로 그룹을 만듭니다.</td></tr>
+  <tr><td>홀 데이터 소스</td><td><code>Hole_Dia</code> 레이어의 RadialDimension 또는 원형 Curve, <code>Slot_Hole_Dia</code> 레이어의 장공 Curve/치수 텍스트를 인식합니다.</td></tr>
+  <tr><td>최소 홀 크기</td><td>지름 <code>3.0</code> 미만의 홀은 제외합니다.</td></tr>
+  <tr><td>카운터싱크 홀</td><td>같은 중심에 지름이 다른 일반 홀 2개가 있으면 <code>CS1</code>, <code>CS2</code> 형식의 카운터싱크 홀로 분류합니다.</td></tr>
+  <tr><td>장공</td><td><code>Slot_Hole_Dia</code> 레이어이거나 치수 텍스트가 <code>Ø10-20LG</code> 형식이면 <code>SL1</code>, <code>SL2</code> 형식의 장공으로 분류합니다.</td></tr>
+  <tr><td>X_Gap 옵션</td><td><code>Gap=Yes</code>일 때 인접 홀 간 X 거리 컬럼을 추가합니다. 첫 홀의 X_Gap은 원점에서 첫 홀까지의 X 거리입니다.</td></tr>
+  <tr><td>테이블 위치</td><td>각 그룹의 최대 U 좌표에서 오른쪽으로 <code>100</code> 떨어진 위치에 테이블을 생성합니다.</td></tr>
+  <tr><td>텍스트 크기</td><td>현재 Rhino DimensionStyle의 TextHeight와 DimensionScale을 사용합니다. 값이 너무 작으면 <code>3.5</code>를 사용합니다.</td></tr>
+  <tr><td>레이어</td><td>생성된 원점 마커와 테이블은 <code>NC_Data</code> 레이어에 배치됩니다. 레이어가 없으면 주황색으로 자동 생성합니다.</td></tr>
+  <tr><td>적용 환경</td><td>Rhino</td></tr>
+</tbody></table>
+<h2>테이블 출력 순서</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>분류</th><th>설명</th></tr>
+  <tr><td>CS 홀</td><td>카운터싱크 홀을 먼저 출력합니다. 번호는 <code>CS1</code>, <code>CS2</code> 순서입니다.</td></tr>
+  <tr><td>Slot 홀</td><td>장공을 두 번째로 출력합니다. 번호는 <code>SL1</code>, <code>SL2</code> 순서입니다.</td></tr>
+  <tr><td>일반 홀</td><td>일반 원형 홀을 마지막에 출력합니다. 번호는 <code>1</code>, <code>2</code> 순서입니다.</td></tr>
+  <tr><td>X 정렬</td><td><code>NC3</code>/<code>NC4</code>는 X 오름차순, <code>NC5</code>/<code>NC6</code>은 X 내림차순으로 정렬합니다.</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>원점 마커</td><td>선택 그룹 범위의 지정 모서리에 Point와 동심원 3개가 생성됩니다.</td></tr>
+  <tr><td>홀 번호</td><td>각 홀 위치 옆에 홀 번호 텍스트가 생성됩니다.</td></tr>
+  <tr><td>홀 데이터 테이블</td><td>각 홀의 위치 번호, Dia, X, Y, 선택 시 X_Gap 값이 도면 텍스트와 사각 테이블로 출력됩니다.</td></tr>
+  <tr><td>레이어</td><td>생성된 모든 요소는 <code>NC_Data</code> 레이어에 배치됩니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> Rhino 버전은 현재 코드 기준으로 고정 기본값 <code>Hole Min=3.0</code>,
+  <code>NC data Dist=100.0</code>을 사용합니다. AutoCAD 도움말의 <code>DsOpt</code> 설정 항목과는 동작 방식이 다릅니다.
+</div>
+<div class="warning">
+  <strong>주의:</strong> 홀 객체가 <code>Hole_Dia</code> 또는 <code>Slot_Hole_Dia</code> 레이어에 없으면 홀 데이터로 인식되지 않습니다.
+  필요한 객체가 선택 범위에 포함되지 않으면 테이블이 생성되지 않을 수 있습니다.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

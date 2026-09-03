@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>SST - 16_Stretch</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>SST &nbsp;—&nbsp; 16_Stretch</h1>
+<p><span class="cmd-box">SST</span></p>
+<p>
+  Rhino에서 AutoCAD <code>STRETCH</code>와 유사하게 동작하도록 만든 스트레치 명령입니다.<br>
+  드래그한 창 내부의 제어점 또는 객체를 기준점에서 이동점까지의 벡터만큼 이동하여 형상을 늘리거나 줄입니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  도면 일부를 선택해 끝점, 치수 끝점, 블록 삽입점, 포인트 등을 이동시키고,
+  선택되지 않은 부분은 유지한 상태로 곡선과 치수를 변형할 때 사용합니다.
+  특히 2D 도면에서 AutoCAD의 Crossing Window 기반 Stretch 작업을 Rhino 안에서 수행하기 위한 명령입니다.
+</p>
+<h2>선택 방식</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>드래그 방향</th><th>동작</th></tr>
+  <tr><td>오른쪽 방향 드래그</td><td>Window 선택입니다. BoundingBox가 선택창 안에 완전히 들어온 객체만 선택합니다. 화면에는 파란색 창으로 표시됩니다.</td></tr>
+  <tr><td>왼쪽 방향 드래그</td><td>Crossing 선택입니다. BoundingBox가 선택창과 겹치는 객체를 선택합니다. 화면에는 초록색 창으로 표시됩니다.</td></tr>
+  <tr><td>우클릭 또는 Esc</td><td>명령을 취소합니다.</td></tr>
+</tbody></table>
+<h2>동작 흐름</h2>
+<table class="desc-table">
+  <colgroup><col style="width:5%"><col style="width:28%"><col style="width:67%"></colgroup>
+  <tbody><tr><th>순서</th><th>단계</th><th>설명</th></tr>
+  <tr><td>1</td><td>드래그 창 정의</td><td>마우스로 Stretch 대상 영역을 드래그합니다. 선택창은 현재 뷰의 CPlane 기준 U/V 좌표로 계산됩니다.</td></tr>
+  <tr><td>2</td><td>객체 수집</td><td>잠김, 숨김, 삭제 객체를 제외하고 Window 또는 Crossing 조건에 맞는 객체를 수집합니다.</td></tr>
+  <tr><td>3</td><td>제어점 추출</td><td>선택창 내부에 있는 Curve 제어점, Brep Vertex, Point, Block 삽입점, LinearDimension 끝점 등을 찾습니다.</td></tr>
+  <tr><td>4</td><td>선택 하이라이트</td><td>선택된 객체를 노란색으로 미리 표시합니다.</td></tr>
+  <tr><td>5</td><td>기준점 입력</td><td><em>"기준점 (Base point)"</em> 프롬프트에서 이동 기준점을 지정합니다.</td></tr>
+  <tr><td>6</td><td>이동점 입력</td><td><em>"이동점 (To point)"</em> 프롬프트에서 이동할 점을 지정합니다. 이동 중 노란색 DynamicDraw 미리보기가 표시됩니다.</td></tr>
+  <tr><td>7</td><td>객체 수정</td><td>객체 타입별 규칙에 따라 창 내부 제어점 또는 객체 전체를 이동합니다.</td></tr>
+  <tr><td>8</td><td>정리</td><td>선택을 해제하고 <code>_PointsOff</code>를 실행하여 남아 있는 제어점 표시를 끕니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  <li>Rhino 명령창에 <code>SST</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><em>"드래그하여 Crossing Window를 정의하세요. (Esc: 취소)"</em> 메시지가 나오면 Stretch할 영역을 드래그합니다.</li>
+  <li>오른쪽으로 드래그하면 완전 포함 객체만, 왼쪽으로 드래그하면 걸친 객체까지 선택됩니다.</li>
+  <li><em>"기준점 (Base point)"</em> 프롬프트에서 기준점을 찍습니다.</li>
+  <li><em>"이동점 (To point)"</em> 프롬프트에서 이동할 위치를 찍습니다.</li>
+  <li>선택창 내부 제어점 또는 객체가 기준점-이동점 벡터만큼 이동되고, 명령창에 수정된 객체 수가 출력됩니다.</li>
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../img/SST.mp4" autoplay muted loop playsinline aria-label="SST" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>SST 예시</figcaption>
+  </figure>
+</div>
+<h2>객체 타입별 처리</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>객체 타입</th><th>처리 방식</th></tr>
+  <tr><td>Curve</td><td>NURBS Curve로 변환한 뒤 선택창 내부의 제어점만 이동합니다. 선택창 밖 제어점은 그대로 유지됩니다.</td></tr>
+  <tr><td>Brep</td><td>BoundingBox가 선택창 안에 완전히 들어온 경우에만 Brep 전체를 이동합니다. 일부 Vertex만 이동하지는 않습니다.</td></tr>
+  <tr><td>Block</td><td>Block Instance의 삽입점이 선택창 내부에 있으면 블록 전체를 이동합니다.</td></tr>
+  <tr><td>Point</td><td>BoundingBox가 선택창 안에 완전히 들어온 경우 전체 이동합니다.</td></tr>
+  <tr><td>Hatch</td><td>BoundingBox가 선택창 안에 완전히 들어온 경우 전체 이동합니다.</td></tr>
+  <tr><td>LinearDimension</td><td>치수의 두 ExtensionLine 끝점을 개별 판별합니다. 한쪽 끝점만 창 내부이면 해당 끝점만 이동하고, 양쪽 모두 내부이면 치수 전체를 이동합니다.</td></tr>
+  <tr><td>기타 Annotation</td><td>BoundingBox가 선택창 안에 완전히 들어온 경우 전체 이동합니다.</td></tr>
+</tbody></table>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>좌표 기준</td><td>선택창과 내부 판정은 현재 뷰포트의 CPlane 기준으로 계산합니다.</td></tr>
+  <tr><td>이동량</td><td>기준점에서 이동점까지의 3D 벡터를 그대로 사용합니다.</td></tr>
+  <tr><td>미리보기</td><td>이동점 입력 중 Curve 변형 결과와 완전 포함 객체 이동 결과를 노란색으로 표시합니다.</td></tr>
+  <tr><td>0 이동량</td><td>기준점과 이동점이 같아 이동량이 0이면 객체를 수정하지 않습니다.</td></tr>
+  <tr><td>수정 결과</td><td>명령 완료 시 <code>SST 완료: n개 객체 수정됨.</code> 메시지가 출력됩니다.</td></tr>
+  <tr><td>적용 환경</td><td>Rhino</td></tr>
+</tbody></table>
+<h2>AutoCAD Stretch와의 차이</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 입력</td><td>Rhino 기본 선택 프롬프트가 아니라 명령 자체의 마우스 드래그 창을 사용합니다.</td></tr>
+  <tr><td>Curve 처리</td><td>선택된 Curve는 NURBS 제어점 기반으로 변형합니다. Curve 종류에 따라 제어점 변형 결과가 원본 형상과 다르게 보일 수 있습니다.</td></tr>
+  <tr><td>Brep 처리</td><td>Brep은 부분 Stretch가 아니라 완전 포함된 경우 전체 이동만 수행합니다.</td></tr>
+  <tr><td>Block 처리</td><td>삽입점 기준으로 전체 이동합니다. 블록 내부 형상은 부분 Stretch하지 않습니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> SST는 선택창 내부 제어점이 하나 이상 있어야 실행됩니다.
+  객체가 선택되더라도 창 내부에 이동 가능한 제어점이나 기준점이 없으면 실행되지 않습니다.
+</div>
+<div class="warning">
+  <strong>주의:</strong> 선택창 판정은 CPlane 기준입니다. 도면 방향과 CPlane 방향이 맞지 않으면 예상과 다른 객체가 선택되거나 변형될 수 있습니다.
+  실행 전에 작업 뷰와 CPlane을 확인하세요.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

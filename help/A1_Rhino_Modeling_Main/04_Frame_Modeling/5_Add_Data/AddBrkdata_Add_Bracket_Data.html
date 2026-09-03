@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>AddBrkdata - 브라켓 데이터 추가</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+<h1>AddBrkdata &nbsp;—&nbsp; 브라켓 데이터 추가</h1>
+<p><span class="cmd-box">AddBrkdata</span></p>
+<p><strong>AddBrkdata</strong>는 선택한 브라켓 Brep에 SectionCustomData를 기록하고, 선택한 Mullion Brep의 BrkIDdata 목록에 브라켓 ID를 추가하는 보조 명령입니다.</p>
+<h2>사용 목적</h2>
+<p>AddBrkdata 는 선택한 브라켓 Brep에 SectionCustomData를 기록하고, 선택한 Mullion Brep의 BrkIDdata 목록에 브라켓 ID를 추가하는 보조 명령입니다.</p>
+
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <code>AddBrkdata</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><strong>Select Bracket Objects</strong> 프롬프트에서 Mullion에 연결할 브라켓 객체를 여러 개 선택합니다.</li>
+  <li>Enter를 누른 뒤 <strong>Select Mullion Objects</strong> 프롬프트에서 기준 Mullion 객체 하나를 선택합니다.</li>
+  <li>명령이 브라켓 ID 목록을 정리하고 Mullion의 BrkIDdata에 추가합니다.</li>
+</ol>
+
+<h2>기록되는 데이터</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Bracket SectionCustomData</td><td>브라켓 이름을 <code>P_name</code>에 기록하고, <code>Profile_ID = 1</code>, <code>MnT_ID = 9</code>로 설정합니다.</td></tr>
+  <tr><td>Mullion BrkIDdata</td><td>기존 BrkIDdata가 있으면 유효한 ID만 남긴 뒤 새 브라켓 ID를 중복 없이 추가합니다.</td></tr>
+  <tr><td>완료 메시지</td><td>추가된 브라켓 개수를 Rhino 명령창에 출력합니다.</td></tr>
+</table>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>FabNo</code></td><td>브라켓 위치까지 반영해 Fab No를 재분석할 때 사용합니다.</td></tr>
+  <tr><td><code>FDwg</code></td><td>브라켓 부착 치수와 가공도 생성에 BrkIDdata를 참조할 수 있습니다.</td></tr>
+  <tr><td><code>CheckPfData</code></td><td>데이터 누락 여부를 검사합니다.</td></tr>
+</table>
+
+<div class="warn"><strong>주의:</strong> 선택한 브라켓 객체가 Brep가 아니거나 Mullion 객체에 Brep 데이터가 없으면 데이터가 정상적으로 기록되지 않을 수 있습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

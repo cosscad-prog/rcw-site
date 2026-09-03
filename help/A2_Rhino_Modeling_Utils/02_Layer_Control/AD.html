@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>AD - 02_Layer_Control</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>AD &nbsp;—&nbsp; 02_Layer_Control</h1>
+<p><span class="cmd-box">AD</span></p>
+<p>선택 객체가 속한 레이어와 관련 상위/하위 레이어만 켜서 화면을 정리하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<p>선택 객체가 속한 레이어만 켜서 복잡한 모델에서 필요한 부재 계열만 집중해 확인할 때 사용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>AD</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>필요한 경우 대상 객체나 레이어를 선택합니다.</li>
+  <li>Enter를 눌러 명령을 완료하고 Rhino 화면 또는 명령창 결과를 확인합니다.</li>
+
+</ol>
+<h2>관련 Layer 제어 명령</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:26%"><col style="width:60%"></colgroup>
+  <tbody><tr><th>명령어</th><th>동작 요약</th><th>사용 상황</th></tr>
+  <tr><td><code>AD</code></td><td>선택 객체 Layer만 켜기</td><td>선택한 객체가 속한 Layer와 관련 상위/하위 Layer만 보이게 하고 나머지는 숨겨 작업 대상을 집중해서 볼 때 사용합니다.</td></tr>
+  <tr><td><code>AF</code></td><td>선택 객체 Layer 끄기</td><td>선택한 객체가 속한 Layer를 화면에서 숨겨, 확인이 끝난 부재나 방해되는 Layer를 빠르게 제외할 때 사용합니다.</td></tr>
+  <tr><td><code>LO</code></td><td>전체 Layer 켜기</td><td>숨겨진 Layer를 다시 표시합니다. 잠금 상태는 유지되므로 잠긴 Layer는 별도로 해제해야 합니다.</td></tr>
+  <tr><td><code>ADF</code></td><td>선택 객체 Layer만 편집 가능</td><td>선택 객체가 속한 Layer만 작업 가능하게 남기고 다른 Layer를 잠가 특정 부재군 작업에 집중할 때 사용합니다.</td></tr>
+  <tr><td><code>ALO</code></td><td>전체 Layer 켜기 + 잠금 해제</td><td>숨김/잠금 처리된 Layer를 한 번에 복구해 전체 모델을 다시 확인하고 편집 가능한 상태로 돌릴 때 사용합니다.</td></tr>
+  <tr><td><code>LC</code></td><td>선택 객체 Layer 잠금</td><td>선택한 객체가 속한 Layer를 잠가 기준 객체를 보이게 유지하면서 실수로 편집되지 않게 보호할 때 사용합니다.</td></tr>
+</tbody></table>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 85%; min-width:220px; max-width:85%;">
+    <video src="../../img/AD.mp4" autoplay muted loop playsinline aria-label="AD 실행 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<div class="note"><strong>참고:</strong> 선택 객체의 레이어와 관련 상위/하위 레이어를 켜고, 그 외 레이어는 작업 집중을 위해 숨기는 방식으로 동작합니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

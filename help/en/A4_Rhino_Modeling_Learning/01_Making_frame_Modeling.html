@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Frame Modeling Workflow Order</title>
+<style>
+  body {
+    font-family: "맑은 고딕", "Malgun Gothic", sans-serif;
+    font-size: 13px;
+    color: #1e293b;
+    margin: 24px 32px;
+    line-height: 1.7;
+  }
+  h1 {
+    font-size: 20px;
+    color: #0f172a;
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 8px;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    color: #64748b;
+    font-size: 12px;
+    margin-bottom: 28px;
+  }
+  /* prerequisite box */
+  .prereq {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 12px 16px;
+    margin-bottom: 28px;
+    border-radius: 0 6px 6px 0;
+  }
+  .prereq h3 {
+    margin: 0 0 6px;
+    font-size: 13px;
+    color: #1e40af;
+  }
+  .prereq ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  /* step card */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .step {
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+  /* vertical connector */
+  .step:not(:last-child) .step-line::after {
+    content: "";
+    position: absolute;
+    left: 19px;
+    top: 44px;
+    bottom: -16px;
+    width: 2px;
+    background: #cbd5e1;
+    z-index: 0;
+  }
+  .step-line {
+    position: relative;
+    width: 40px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+  }
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+    position: relative;
+  }
+  .step-num.optional {
+    background: #94a3b8;
+  }
+  .step-body {
+    flex: 1;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 4px 0 16px 12px;
+  }
+  .step-body:hover {
+    border-color: #93c5fd;
+    background: #f0f7ff;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .cmd-badge {
+    display: inline-block;
+    background: #1e293b;
+    color: #fff;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  .cmd-badge.optional {
+    background: #64748b;
+  }
+  .step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .step-desc {
+    color: #334155;
+    font-size: 12.5px;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+  .step-result {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 12px;
+    color: #0369a1;
+    background: #e0f2fe;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+  .step-result::before {
+    content: "→";
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .optional-label {
+    font-size: 11px;
+    color: #64748b;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 1px 7px;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+  /* group label */
+  .group-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #2563eb;
+    background: #dbeafe;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  /* link */
+  .detail-link {
+    font-size: 11px;
+    color: #2563eb;
+    text-decoration: none;
+    margin-top: 4px;
+    display: inline-block;
+  }
+  .detail-link:hover { text-decoration: underline; }
+  /* parallel step */
+  .parallel-note {
+    font-size: 11px;
+    color: #64748b;
+    font-style: italic;
+    margin: -8px 0 8px 52px;
+  }
+  /* summary table */
+  .summary {
+    margin-top: 32px;
+    border-top: 2px solid #e2e8f0;
+    padding-top: 20px;
+  }
+  .summary h2 {
+    font-size: 15px;
+    color: #0f172a;
+    margin-bottom: 12px;
+  }
+  .summary table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .summary th {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .summary td {
+    border: 1px solid #e2e8f0;
+    padding: 6px 10px;
+    vertical-align: top;
+  }
+  .summary tr:nth-child(even) td { background: #f8fafc; }
+  .tag-must  { color: #1d4ed8; font-weight: 700; }
+  .tag-opt   { color: #64748b; }
+  .note-box {
+    background: #fffbe6;
+    border-left: 4px solid #f0c040;
+    padding: 10px 14px;
+    margin-top: 24px;
+    font-size: 12px;
+    border-radius: 0 6px 6px 0;
+  }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Frame Modeling Workflow Order</h1>
+<p class="subtitle">A step-by-step guide for first-time users — RCW Rhino Plugin</p>
+
+<div class="prereq">
+  <h3>📋 Before You Start</h3>
+  <ul>
+    <li>The Wire Frame (Mullion/Transom reference lines) must be completed.</li>
+    <li>Section data (Profile, Block information) must be registered.</li>
+    <li>Each Unit group must be defined.</li>
+  </ul>
+</div>
+
+<div class="steps">
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num">1</div>
+    </div>
+    <div class="step-body">
+      <div class="group-label">Run modeling</div>
+      <div class="step-header">
+        <span class="cmd-badge">UMD</span>
+        <span class="step-title">Unit Frame modeling</span>
+      </div>
+      <p class="step-desc">
+        Analyzes the Mullion/Transom reference lines of the Unit group selected in the Wire Frame and
+        automatically generates the frame Solid and related Blocks.<br>
+        This is the most central step and the basis for all subsequent work.
+      </p>
+      <div class="step-result">Frame Solid model and Blocks auto-generated</div>
+      <a class="detail-link" href="1_Run_Modeling/UMD_Unit_Modeling.html" target="content">▶ UMD detailed help</a>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num">2</div>
+    </div>
+    <div class="step-body">
+      <div class="group-label">Data check</div>
+      <div class="step-header">
+        <span class="cmd-badge">CheckPfData</span>
+        <span class="step-title">ProfileData check</span>
+      </div>
+      <p class="step-desc">
+        After running UMD, verifies that the generated frame's ProfileData is recorded correctly.
+        Numbering and list creation in later steps only work properly if there are no data errors.
+      </p>
+      <div class="step-result">Outputs a list of error items — if no errors, proceed to the next step</div>
+      <a class="detail-link" href="6_Check_Data/CheckPfData_Check_Profile_Data.html" target="content">▶ CheckPfData detailed help</a>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num">3</div>
+    </div>
+    <div class="step-body">
+      <div class="group-label">Add data (optional)</div>
+      <div class="step-header">
+        <span class="cmd-badge optional">AddBrkdata</span>
+        <span class="step-title">Add bracket data</span>
+        <span class="optional-label">Optional</span>
+      </div>
+      <p class="step-desc">
+        If there are brackets, records the additional data needed on those bracket objects.
+        Projects without brackets skip this step.
+      </p>
+      <div class="step-result">Records data such as position and type on bracket objects</div>
+      <a class="detail-link" href="5_Add_Data/AddBrkdata_Add_Bracket_Data.html" target="content">▶ AddBrkdata detailed help</a>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num">4</div>
+    </div>
+    <div class="step-body">
+      <div class="group-label">Numbering</div>
+      <div class="step-header">
+        <span class="cmd-badge">FabNo</span>
+        <span class="step-title">Assign fab numbers</span>
+      </div>
+      <p class="step-desc">
+        Analyzes the modeled frame Breps/Blocks and automatically assigns fab numbers to the ProfileData.
+        Identical Profiles share the same number, and this becomes the basis for later list and drawing work.
+      </p>
+      <div class="step-result">Assigns a unique fab number (FabNo) to each frame</div>
+      <a class="detail-link" href="2_Make_Number/FabNo_Frame_Numbering.html" target="content">▶ FabNo detailed help</a>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num">5</div>
+    </div>
+    <div class="step-body">
+      <div class="group-label">Create list</div>
+      <div class="step-header">
+        <span class="cmd-badge">Molist</span>
+        <span class="step-title">Create material list</span>
+      </div>
+      <p class="step-desc">
+        Reads the ProfileData and Block information of the selected frames to generate a material quantity list.
+        Used for quantity/weight aggregation and serves as the basis for ordering and process planning.
+      </p>
+      <div class="step-result">Frame material quantity table generated (inserted into the Rhino drawing)</div>
+      <a class="detail-link" href="3_Make_List/Molist_Frame_Material_List.html" target="content">▶ Molist detailed help</a>
+    </div>
+  </div>
+
+  <p class="parallel-note">※ The two lists below are created alongside Molist as needed.</p>
+
+  <!-- STEP 5b -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num" style="background:#3b82f6;font-size:11px">5-1</div>
+    </div>
+    <div class="step-body">
+      <div class="step-header">
+        <span class="cmd-badge" style="background:#3b82f6">PMolist</span>
+        <span class="step-title">Profile material list</span>
+        <span class="optional-label">Optional</span>
+      </div>
+      <p class="step-desc">A Profile-centric quantity/weight list. Used when calculating Profile unit prices or preparing purchase orders.</p>
+      <a class="detail-link" href="3_Make_List/PMolist_Profile_Material_List.html" target="content">▶ PMolist detailed help</a>
+    </div>
+  </div>
+
+  <!-- STEP 5c -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num" style="background:#3b82f6;font-size:11px">5-2</div>
+    </div>
+    <div class="step-body">
+      <div class="step-header">
+        <span class="cmd-badge" style="background:#3b82f6">Cuttinglist</span>
+        <span class="step-title">Create cutting plan</span>
+        <span class="optional-label">Optional</span>
+      </div>
+      <p class="step-desc">Aggregates by cut length and calculates stock-bar length and Loss to generate a cutting plan. Used as a factory cutting work order.</p>
+      <a class="detail-link" href="3_Make_List/Cuttinglist_Frame_Cutting_List.html" target="content">▶ Cuttinglist detailed help</a>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num">6</div>
+    </div>
+    <div class="step-body">
+      <div class="group-label">Fab drawing</div>
+      <div class="step-header">
+        <span class="cmd-badge">FabTable</span>
+        <span class="step-title">Create fab number table</span>
+      </div>
+      <p class="step-desc">
+        Based on the fab numbers assigned in FabNo, creates a per-number quantity/length table.
+        Used as the parts table of the fab drawing.
+      </p>
+      <div class="step-result">Per-fab-number quantity/length table generated</div>
+      <a class="detail-link" href="4_Make_Fab_Dwg/FabTable_Frame_Fab_Table.html" target="content">▶ FabTable detailed help</a>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step">
+    <div class="step-line">
+      <div class="step-num">7</div>
+    </div>
+    <div class="step-body">
+      <div class="step-header">
+        <span class="cmd-badge">FDwg</span>
+        <span class="step-title">Auto-generate fab drawing</span>
+      </div>
+      <p class="step-desc">
+        Analyzes the selected frame group objects and automatically generates the fabrication drawing (Fab Drawing).
+        The DimStyle follows the style set in DsOpt, and the Profile information must be registered in the Fdds.dat file.
+      </p>
+      <div class="step-result">Per-frame fab drawing auto-output</div>
+      <a class="detail-link" href="4_Make_Fab_Dwg/FDDS_Frame_Fab_Drawing.html" target="content">▶ FDDS detailed help</a>
+    </div>
+  </div>
+
+</div><!-- /.steps -->
+
+<div class="note-box">
+  <strong>Recommended order for first-time use:</strong>
+  Proceed in the order 1 → 2 → 4 → 5 (Molist) → 6 → 7.
+  If there are no data errors, you can briefly confirm CheckPfData (step 2) and move on.
+  AddBrkdata, PMolist, and Cuttinglist are used optionally depending on project conditions.
+</div>
+
+<!-- summary table -->
+<div class="summary">
+  <h2>Command Summary</h2>
+  <table>
+    <tbody><tr>
+      <th>Order</th><th>Command</th><th>Role</th><th>Required/Optional</th>
+    </tr>
+    <tr><td>1</td><td><code>UMD</code></td><td>Wire Frame → Frame Solid auto modeling</td><td class="tag-must">Required</td></tr>
+    <tr><td>2</td><td><code>CheckPfData</code></td><td>ProfileData error check</td><td class="tag-must">Required</td></tr>
+    <tr><td>3</td><td><code>AddBrkdata</code></td><td>Record additional bracket data</td><td class="tag-opt">Optional</td></tr>
+    <tr><td>4</td><td><code>FabNo</code></td><td>Assign frame fab numbers</td><td class="tag-must">Required</td></tr>
+    <tr><td>5</td><td><code>Molist</code></td><td>Create material quantity list</td><td class="tag-must">Required</td></tr>
+    <tr><td>5-1</td><td><code>PMolist</code></td><td>Profile quantity/weight list</td><td class="tag-opt">Optional</td></tr>
+    <tr><td>5-2</td><td><code>Cuttinglist</code></td><td>Create cutting plan</td><td class="tag-opt">Optional</td></tr>
+    <tr><td>6</td><td><code>FabTable</code></td><td>Create fab number table</td><td class="tag-must">Required</td></tr>
+    <tr><td>7</td><td><code>FDwg</code></td><td>Auto-generate fab drawing</td><td class="tag-must">Required</td></tr></tbody></table>
+</div>
+
+<script>
+if (window.parent !== window) {
+  window.parent.postMessage({ action: "pageLoaded", href: window.location.href }, "*");
+}
+</script>
+</body>
+</html>
+

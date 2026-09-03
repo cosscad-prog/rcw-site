@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GAD, GAF, GLO - Vision</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>GAD, GAF, GLO &nbsp;—&nbsp; Vision</h1>
+<p><span class="cmd-box">GAD</span> <span class="cmd-box">GAF</span> <span class="cmd-box">GLO</span></p>
+<p>Commands to toggle the Vision state of objects on a Group basis. Changes object display properties independently of Layer display state, hiding/showing objects without deletion.</p>
+<h2>Purpose</h2>
+<p>Used to hide or display objects by Group, allowing focused review of specific component groups in complex models. Adjusts object display properties without turning off Layers.</p>
+<h2>Command Functions</h2>
+<table class="desc-table">
+  <colgroup><col style="width:18%"><col style="width:34%"><col style="width:48%"></colgroup>
+  <tbody><tr><th>Command</th><th>Function</th><th>Operation</th></tr>
+  <tr><td><code>GAD</code></td><td>Selected Group Object Vision On</td><td>Shows only the selected Group and hides other Group objects.</td></tr>
+  <tr><td><code>GAF</code></td><td>Selected Group Object Vision Off</td><td>Hides only objects belonging to the selected Group.</td></tr>
+  <tr><td><code>GLO</code></td><td>All Group Object Vision On</td><td>Restores the display properties of objects, including hidden ones.</td></tr></tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Run <code>GAD</code> and the <code>Select Group objects</code> prompt appears. Select one or more Group objects to keep visible.</li>
+  <li>Run <code>GAF</code> and the <code>Select Group objects</code> prompt appears. Select one or more Group objects to hide.</li>
+  <li>Run <code>GLO</code> without additional selection. Hidden objects' display properties are restored and the screen is refreshed.</li>
+</ol>
+<h2>Code-Based Operation</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Group Selection</td><td>Uses <code>GroupSelect = true</code> in <code>GetObject</code>. Previous selection is cleared before command execution, and PreSelect is disabled so only newly selected Groups are processed.</td></tr>
+  <tr><td>Group Index Collection</td><td>Gets the first Group Index from <code>Attributes.GetGroupList()</code> of selected objects and creates a unique list of selected Groups.</td></tr>
+  <tr><td>GAD Processing</td><td>Iterates through all Groups in the document. Sets <code>Visible = true</code> for objects in selected Groups and <code>Visible = false</code> for objects in unselected Groups.</td></tr>
+  <tr><td>GAF Processing</td><td>For each selected Group Index, finds Group objects with <code>doc.Objects.FindByGroup(index)</code> and sets their <code>Visible</code> value to <code>false</code>.</td></tr>
+  <tr><td>GLO Processing</td><td>Gets the document object list including Hidden, Locked, and Reference objects, then sets each object's <code>Visible</code> value to <code>true</code>.</td></tr>
+  <tr><td>Relationship with Layer</td><td>Not a command to turn Layers on or off. Changes object display/hide properties independently of Layer state.</td></tr>
+  <tr><td>Screen Refresh</td><td>Each command redraws the Rhino View after processing.</td></tr></tbody></table>
+<h2>Cautions</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>No Deletion</td><td>Objects are not deleted. Only their hidden state is changed.</td></tr>
+  <tr><td>GAD Result</td><td>Hides unselected Group objects, used to view a specific Group only.</td></tr>
+  <tr><td>GAF Result</td><td>All objects belonging to the selected Group are hidden. Does not hide only some objects within a Group.</td></tr>
+  <tr><td>GLO Result</td><td>Referenced as Group Object Vision On, but the current code implementation restores display properties of document objects overall without Group filtering.</td></tr></tbody></table>
+
+<div class="note"><strong>Note:</strong> GAD/GAF operates based on objects belonging to Groups. Selecting objects without Groups will not include them in the selected Group list, potentially producing unexpected results.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>B1~B8 - 01_Block</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>B1 ~ B8 &nbsp;—&nbsp; 01_Block</h1>
+<p>
+  <span class="cmd-box">B1</span>&nbsp;
+  <span class="cmd-box">B2</span>&nbsp;
+  <span class="cmd-box">B3</span>&nbsp;
+  <span class="cmd-box">B4</span>&nbsp;
+  <span class="cmd-box">B5</span>&nbsp;
+  <span class="cmd-box">B6</span>&nbsp;
+  <span class="cmd-box">B7</span>&nbsp;
+  <span class="cmd-box">B8</span>
+</p>
+<p>
+  A command that inserts the Block corresponding to a number from the Block list saved by <code>SSBlock</code> at a <strong>Pick Point (directly clicked)</strong> location,
+  and immediately <strong>explodes</strong> it into individual entities.<br>
+  <span style="color:#c80000;">▶ After insertion, the Block status is released and it is converted into individual objects rather than remaining a Block.</span>
+</p>
+<h2>Purpose</h2>
+<p>
+  Use to quickly place a Block of desired number (1~8) from those previously registered with <code>SSBlock</code> at a specific location on the screen.
+  Since it explodes immediately upon insertion, it is suitable for tasks where Block definition is not maintained and components (lines, circles, etc.) need to be edited directly.
+</p>
+<h2>Command List</h2>
+<table class="desc-table">
+  <colgroup><col style="width:15%"><col style="width:85%"></colgroup>
+  <tbody><tr><th>Command</th><th>Action</th></tr>
+  <tr><td><code>B1</code></td><td>Insert and explode Block number 1 from SSBlock list at Pick Point location</td></tr>
+  <tr><td><code>B2</code></td><td>Insert and explode Block number 2 from SSBlock list at Pick Point location</td></tr>
+  <tr><td><code>B3</code></td><td>Insert and explode Block number 3 from SSBlock list at Pick Point location</td></tr>
+  <tr><td><code>B4</code></td><td>Insert and explode Block number 4 from SSBlock list at Pick Point location</td></tr>
+  <tr><td><code>B5</code></td><td>Insert and explode Block number 5 from SSBlock list at Pick Point location</td></tr>
+  <tr><td><code>B6</code></td><td>Insert and explode Block number 6 from SSBlock list at Pick Point location</td></tr>
+  <tr><td><code>B7</code></td><td>Insert and explode Block number 7 from SSBlock list at Pick Point location</td></tr>
+  <tr><td><code>B8</code></td><td>Insert and explode Block number 8 from SSBlock list at Pick Point location</td></tr>
+</tbody></table>
+<h2>B1~B8 vs BB1~BB8 Difference</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+  <tbody><tr><th>Item</th><th>B1~B8</th><th>BB1~BB8</th></tr>
+  <tr><td>Insertion Location</td><td>Click screen directly (Pick Point)</td><td>Select existing Point / Line entities to extract location. If none, substitute with Pick Point</td></tr>
+  <tr><td>Explode</td><td>Explode immediately after insertion ✔</td><td>No explode — maintains Block status</td></tr>
+  <tr><td>Result Objects</td><td>Individual entities (lines, circles, etc.)</td><td>Block Reference</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>First, use <code>SSBlock</code> command to select Block objects in order and save them to memory.<br>
+      The selection order becomes the number (number 1, number 2, …).</li>
+  <li>Enter the command corresponding to the number to insert (<code>B1</code> ~ <code>B8</code>) in the AutoCAD or BricsCAD command line and press Enter.</li>
+  <li>Click on the screen to select the insertion location according to the command prompt <em>"Select location:"</em>.</li>
+  <li>The Block is inserted at the clicked location and immediately exploded into individual objects.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <video src="../../../img/C2530_BB1_BB8.mp4" autoplay muted loop playsinline aria-label="B1~B8 execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>B1~B8 — Example of Block insertion at Pick Point location followed by Explode</figcaption>
+  </figure>
+</div>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Insertion Location</td><td>Pick Point clicked by user</td></tr>
+  <tr><td>Inserted Block</td><td>The n-th Block from the list saved by SSBlock (if B<em>n</em> then n-th)</td></tr>
+  <tr><td>Explode</td><td>Decomposed immediately upon insertion — remains as individual entities, not Block Reference</td></tr>
+</tbody></table>
+<div class="warning">
+  <strong>Caution:</strong> Since it explodes after insertion, the original Block definition is not affected, but the inserted objects cannot be re-edited as a Block.
+  Use <code>BB1~BB8</code> if you want to insert while maintaining Block status.
+</div>
+<div class="note">
+  <strong>Note:</strong> The command does not work if no Block is saved by <code>SSBlock</code> or if there is no Block corresponding to the specified number.
+  First run <code>SSBlock</code> to register Blocks before using this command.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

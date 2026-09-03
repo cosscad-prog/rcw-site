@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GrMolist - Grill Material List</title>
+  <style>
+    body { font-family:"Segoe UI",Arial,sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .col-table { border-collapse:collapse; width:100%; margin-top:8px; font-size:12px; }
+    .col-table th { background:#dce8f8; border:1px solid #aac4e8; padding:4px 8px; text-align:center; font-weight:bold; }
+    .col-table td { border:1px solid #c8d8ec; padding:4px 8px; text-align:center; }
+    .col-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>GrMolist &nbsp;—&nbsp; Grill Material List</h1>
+<p><span class="cmd-box">GrMolist</span></p>
+<p>Tallies the <strong>individual profile members contained in the selected grill groups</strong> and generates a material list (Molist).<br>
+Frames and other models may be selected along with the grills — <strong>only the members belonging to a grill group are tallied</strong>, so you can select the whole model at once.<br>
+The table is written into the Rhino viewport and can optionally be saved as an <strong>Excel file</strong>.</p>
+<h2>Purpose</h2>
+<p>Ordering and fabricating a grill needs the cut lengths and quantities of the profiles that make it up, not the overall size of the grill.
+<strong>GrMolist</strong> opens the grill group and aggregates the profiles inside it by shape name and cut length.</p>
+<p>Frames and grills normally share one document. <strong>GrMolist</strong> keeps only the members that belong to a grill group, whatever the selection contains,
+so there is no need to pick around the frame profiles — <strong>a window selection over the whole model still produces a grill-only list</strong>.</p>
+<h2>Difference from GrList and Molist</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Unit of aggregation</th></tr>
+  <tr><td><strong>GrList</strong></td><td><strong>One row per grill group</strong>. A finished-product quantity list with grill width, height and code.</td></tr>
+  <tr><td><strong>GrMolist</strong></td><td><strong>One row per profile member</strong> inside the grill groups. A material list with shape name, cut length, quantity and weight.<br>
+  Only members <strong>belonging to a grill group</strong> are tallied.</td></tr>
+  <tr><td><strong>Molist</strong></td><td>Same table format, but tallies <strong>everything selected</strong>. Select frames and grills together and they are mixed into one list.</td></tr>
+</tbody></table>
+<p>In short, <strong>Molist</strong> lists "everything selected" while <strong>GrMolist</strong> lists "only the grills among what was selected". The same selection gives different results.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  <li>Type <strong>GrMolist</strong> in the Rhino command line and press Enter.</li>
+  <li>Set whether to save an Excel file using the <strong>Excel_File_On</strong> option.</li>
+  <li>Select the objects to tally. Group selection is enabled, so clicking one object selects the whole group.<br>
+  <strong>There is no need to isolate the grills.</strong> A window selection over the whole model, frames included, is fine.</li>
+  <li>Press Enter to finish the selection.</li>
+  <li>Objects that do not belong to a grill group are dropped automatically, and <strong>the number excluded is reported in the command line</strong>.<br>
+  <code>[GrMolist] Excluded 99 objects that are not in a Grill group. Remaining — Breps: 34, …</code></li>
+  <li>The material list is written as a text table on the current construction plane. If the option is On, you are prompted for a file name and an Excel file is also saved.</li>
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <video src="../../../img/GrMolist.mp4" autoplay muted loop playsinline aria-label="GrMolist" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Selecting the whole model still tallies the grill groups only. The output table uses the same format as the frame <strong>Molist</strong>; only the scope of what is tallied is narrowed.</figcaption>
+  </figure>
+</div>
+<h2>Options</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Option</th><th>Description</th></tr>
+  <tr><td><strong>Excel_File_On</strong></td><td>
+    <code>Off</code> — Rhino viewport output only.<br>
+    <code>On</code> — prompts for a file name in the command line and saves an Excel file.<br>
+    The file is saved as <code>[DocumentPath]-[EnteredName]</code>, next to the current .3dm file.
+  </td></tr>
+</tbody></table>
+<h2>Accepted Selection — What Is Tallied and What Is Dropped</h2>
+<p>The selection is not tallied as-is. Each object is first tested for <strong>membership in a grill group</strong>.</p>
+<table class="desc-table">
+  <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+  <tbody><tr><th>Object</th><th>Handling</th></tr>
+  <tr><td><strong>Brep in a grill group</strong></td><td><strong>Tallied</strong> — its profile data is read and grouped by shape name and cut length.</td></tr>
+  <tr><td>Brep outside a grill group</td><td><strong>Dropped</strong> — frame profiles and the like do not belong to a grill group, so they never reach the list.</td></tr>
+  <tr><td>Block (instance)</td><td>A block whose description starts with <code>NBlock:</code> is treated as a named block.
+  If it holds a grill, <strong>only that grill's members</strong> are tallied; frame profiles in the same block are dropped.
+  A block with no grill in it is skipped entirely.</td></tr>
+</tbody></table>
+<p>Grill groups placed in the document and grills held inside blocks can be selected together; both results are merged into a single list.</p>
+<div class="note">How grill membership is decided: from the group information that <strong>GR1 – GR5</strong> modeling wrote onto the group.
+A group assembled by hand, or an object that never went through grill modeling, is therefore not recognized as a grill.<br>
+A grill inside a block is decided from <strong>information stored when the NBlock was built</strong>. An older block created before that
+information existed carries none, and its grills cannot be found — rebuild such a block.</div>
+<h2>Output Columns</h2>
+<table class="col-table">
+  <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>#</th><th>Column</th><th>Content</th></tr>
+  <tr><td>1</td><td>NO</td><td>Sequential number</td></tr>
+  <tr><td>2</td><td>Unit No</td><td>Unit number</td></tr>
+  <tr><td>3</td><td>SHAPE Name</td><td>Profile shape name</td></tr>
+  <tr><td>4</td><td>FAB NO</td><td>Fabrication number (fab prefix + number)</td></tr>
+  <tr><td>5</td><td>Cut Length(L)</td><td>Cut length in mm</td></tr>
+  <tr><td>6</td><td>Quantity</td><td>Quantity</td></tr>
+  <tr><td>7</td><td>FINISH</td><td>Surface finish</td></tr>
+  <tr><td>8</td><td>Unit_Weight</td><td>Unit weight per meter</td></tr>
+  <tr><td>9</td><td>Weight</td><td>Cut length x quantity x unit weight</td></tr>
+  <tr><td>10</td><td>Description</td><td>Profile description</td></tr>
+</tbody></table>
+<p>An <code>Alum.Total</code> subtotal row follows the aluminum members, and a final row adds the total quantity and weight.</p>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GR1 - GR5</strong></td><td>Grill modeling. Create the grills before tallying them.</td></tr>
+  <tr><td><strong>GrNo</strong></td><td>Grill numbering. Feeds the Unit No column.</td></tr>
+  <tr><td><strong>GrList</strong></td><td>Grill quantity list per group, for finished-product counts.</td></tr>
+  <tr><td><strong>Molist</strong></td><td>Frame material list, which uses the same output format.</td></tr>
+  <tr><td><strong>VtMolist</strong></td><td>Material list for vent groups; it works the same way.</td></tr>
+</tbody></table>
+<div class="warning">Caution: objects without profile data are not tallied. If the list comes out empty, read the command line message first.
+<ul style="margin:6px 0 0 0; padding-left:18px;">
+  <li><strong>No ProfileData was found</strong> — profile data is written by <strong>GrNo</strong>. Run <strong>GrNo</strong> first, then run this command again.</li>
+  <li><strong>None of the selected objects belong to a Grill group</strong> — the selection contained no grills. Select again, including the grills.</li>
+</ul>
+If it is still empty, check that the section data was entered with <strong>Pname</strong>.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

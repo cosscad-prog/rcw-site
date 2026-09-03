@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>BB1~BB8 - 01_Block</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>BB1 ~ BB8 &nbsp;—&nbsp; 01_Block</h1>
+<p>
+  <span class="cmd-box">BB1</span>&nbsp;
+  <span class="cmd-box">BB2</span>&nbsp;
+  <span class="cmd-box">BB3</span>&nbsp;
+  <span class="cmd-box">BB4</span>&nbsp;
+  <span class="cmd-box">BB5</span>&nbsp;
+  <span class="cmd-box">BB6</span>&nbsp;
+  <span class="cmd-box">BB7</span>&nbsp;
+  <span class="cmd-box">BB8</span>
+</p>
+<p>
+  <code>SSBlock</code>으로 저장된 Block 목록에서 번호에 해당하는 Block을,
+  화면에서 선택한 <strong>Point 또는 Line 엔티티의 위치</strong>에 삽입하는 명령입니다.<br>
+  선택한 객체가 없으면 직접 클릭(Pick Point)으로 대체되며,
+  삽입된 Block은 <strong>Explode하지 않고 Block Reference 상태를 유지</strong>합니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  도면에 이미 배치된 Point 객체(<code>DBPoint</code>)나 Line의 끝점을 기준으로
+  Block을 정확한 위치에 반복 배치할 때 사용합니다.
+  좌표를 직접 입력하지 않고 기존 형상에서 삽입점을 자동으로 추출하므로,
+  다수의 위치에 동일한 Block을 빠르게 배치하는 작업에 적합합니다.
+</p>
+<h2>명령 목록</h2>
+<table class="desc-table">
+  <colgroup><col style="width:15%"><col style="width:85%"></colgroup>
+  <tbody><tr><th>명령</th><th>동작</th></tr>
+  <tr><td><code>BB1</code></td><td>SSBlock 목록의 1번 Block을 선택 Point/Line 위치에 삽입 (Block Reference 유지)</td></tr>
+  <tr><td><code>BB2</code></td><td>SSBlock 목록의 2번 Block을 선택 Point/Line 위치에 삽입 (Block Reference 유지)</td></tr>
+  <tr><td><code>BB3</code></td><td>SSBlock 목록의 3번 Block을 선택 Point/Line 위치에 삽입 (Block Reference 유지)</td></tr>
+  <tr><td><code>BB4</code></td><td>SSBlock 목록의 4번 Block을 선택 Point/Line 위치에 삽입 (Block Reference 유지)</td></tr>
+  <tr><td><code>BB5</code></td><td>SSBlock 목록의 5번 Block을 선택 Point/Line 위치에 삽입 (Block Reference 유지)</td></tr>
+  <tr><td><code>BB6</code></td><td>SSBlock 목록의 6번 Block을 선택 Point/Line 위치에 삽입 (Block Reference 유지)</td></tr>
+  <tr><td><code>BB7</code></td><td>SSBlock 목록의 7번 Block을 선택 Point/Line 위치에 삽입 (Block Reference 유지)</td></tr>
+  <tr><td><code>BB8</code></td><td>SSBlock 목록의 8번 Block을 선택 Point/Line 위치에 삽입 (Block Reference 유지)</td></tr>
+</tbody></table>
+<h2>삽입 위치 결정 방식</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>선택 객체</th><th>삽입 위치 결정 방법</th></tr>
+  <tr><td>DBPoint (점 객체)</td><td>Point의 Position을 직접 삽입점으로 사용합니다.</td></tr>
+  <tr><td>Line (선 객체)</td><td>선택된 모든 Line의 StartPoint / EndPoint를 수집하여 Z값이 가장 작은(아래) 점들 중 X값이 가장 작은(왼쪽) 점을 삽입점으로 사용합니다.</td></tr>
+  <tr><td>객체 미선택 / 기타</td><td>직접 클릭(Pick Point)으로 대체됩니다.</td></tr>
+</tbody></table>
+<h2>B1~B8 vs BB1~BB8 차이</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+  <tbody><tr><th>항목</th><th>B1~B8</th><th>BB1~BB8</th></tr>
+  <tr><td>삽입 위치 지정</td><td>화면을 직접 클릭 (Pick Point)</td><td>기존 Point / Line 엔티티 선택 → 위치 자동 추출. 없으면 Pick Point로 대체</td></tr>
+  <tr><td>Explode 여부</td><td>삽입 후 즉시 Explode ✔</td><td>Explode 없음 — Block Reference 유지 ✔</td></tr>
+  <tr><td>결과 객체</td><td>개별 엔티티 (선, 원 등)</td><td>Block Reference</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>먼저 <code>SSBlock</code> 명령으로 사용할 Block 객체들을 순서대로 선택하여 메모리에 저장합니다.<br>
+      선택 순서가 번호(1번, 2번 …)가 됩니다.</li>
+  <li>AutoCAD 또는 BricsCAD 명령창에 삽입할 번호에 해당하는 명령(<code>BB1</code> ~ <code>BB8</code>)을 입력하고 Enter를 누릅니다.</li>
+  <li>삽입 위치 기준으로 사용할 <strong>Point 또는 Line 객체</strong>를 선택하고 Enter를 누릅니다.<br>
+      — DBPoint를 선택하면 해당 점 위치에 삽입됩니다.<br>
+      — Line을 선택하면 가장 아래·왼쪽 끝점을 삽입점으로 사용합니다.<br>
+      — 객체를 선택하지 않으면 직접 클릭(Pick Point)으로 전환됩니다.</li>
+  <li>Block이 지정된 위치에 Block Reference로 삽입됩니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <video src="../../img/C2530_BB1_BB8.mp4" autoplay muted loop playsinline aria-label="BB1~BB8 실행 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>BB1~BB8 — Point/Line 엔티티 위치 기반 Block 삽입 예시</figcaption>
+  </figure>
+</div>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>삽입 위치</td><td>선택한 Point/Line 엔티티에서 추출한 위치 (없으면 Pick Point)</td></tr>
+  <tr><td>삽입 Block</td><td>SSBlock으로 저장된 목록의 n번째 Block (BB<em>n</em>이면 n번째)</td></tr>
+  <tr><td>Explode</td><td>없음 — 삽입 후에도 Block Reference 상태를 유지합니다</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> <code>SSBlock</code>으로 저장된 Block이 없거나 지정 번호에 해당하는 Block이 없으면 명령이 동작하지 않습니다.
+  먼저 <code>SSBlock</code>을 실행하여 Block을 등록한 뒤 사용하세요.
+</div>
+<div class="warning">
+  <strong>주의:</strong> 삽입 후 Explode가 필요하다면 <code>B1~B8</code>을 사용하세요.
+  <code>BB1~BB8</code>은 Block Reference 상태를 유지하므로, 이후 내용 수정은 Block 편집(<code>REFEDIT</code> 또는 <code>BEDIT</code>)으로 해야 합니다.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

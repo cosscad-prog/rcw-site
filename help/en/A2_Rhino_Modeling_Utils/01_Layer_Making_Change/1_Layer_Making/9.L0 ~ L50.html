@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>9. L0 ~ L50 - Layer Making</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>9.L0 ~ L50 &nbsp;—&nbsp; Layer Making</h1>
+<p><span class="cmd-box">L0 ~ L50</span></p>
+<p>A set of commands to create basic numbered Layers from <code>Layer 00</code> to <code>Layer 50</code>.</p>
+
+<h2>Included Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:18%"><col style="width:52%"><col style="width:30%"></colgroup>
+  <tbody><tr><th>Command</th><th>Created Layer</th><th>Colour / Attributes</th></tr>
+  <tr><td><code>L0</code></td><td>Creates <code>Layer 00</code>.</td><td>Colour 7 [CAD Colour Number]</td></tr>
+  <tr><td><code>L1</code></td><td>Creates <code>Layer 01</code>.</td><td>Colour 1 [CAD Colour Number]</td></tr>
+  <tr><td><code>L2</code></td><td>Creates <code>Layer 02</code>.</td><td>Colour 2 [CAD Colour Number]</td></tr>
+  <tr><td><code>L3</code> ~ <code>L47</code></td><td>Creates <code>Layer 03</code> ~ <code>Layer 47</code> in the same manner.</td><td>CAD Colour Number as specified in the command code</td></tr>
+  <tr><td><code>L48</code></td><td>Creates <code>Layer 48</code>.</td><td>Colour 48 [CAD Colour Number]</td></tr>
+  <tr><td><code>L49</code></td><td>Creates <code>Layer 49</code>.</td><td>Colour 49 [CAD Colour Number]</td></tr>
+  <tr><td><code>L50</code></td><td>Creates <code>Layer 50</code>.</td><td>Colour 50 [CAD Colour Number]</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> Commands <code>L0</code> and <code>L1</code> create two-digit numbered Layers like <code>Layer 00</code> and <code>Layer 01</code>. Each command applies the CAD Colour Number specified in the command code.</div>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type the required command in the Rhino command line and press Enter.</li>
+  <li>Commands <code>L0</code> and <code>L1</code> create two-digit numbered Layers (e.g., <code>Layer 00</code>, <code>Layer 01</code>).</li>
+  <li>Verify the Layer name, Colour, and Linetype in the Rhino Layer panel.</li>
+</ol>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer Series</td><td><code>Layer 00</code> ~ <code>Layer 50</code></td></tr>
+  <tr><td>Target Commands</td><td><code>L0</code> ~ <code>L50</code></td></tr>
+</tbody></table>
+<h2>Verifying Results</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer Name</td><td>Confirm the created Layer name matches the Created Layer in the table above.</td></tr>
+  <tr><td>Layer Colour</td><td>Confirm the CAD Colour Number or RGB value from the Colour/Attributes column has been applied.</td></tr>
+  <tr><td>Command Line</td><td>Check the guidance or completion message displayed after running the command.</td></tr>
+</tbody></table>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

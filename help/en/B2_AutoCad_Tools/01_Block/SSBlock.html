@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>SSBlock - 01_Block</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>SSBlock &nbsp;—&nbsp; 01_Block</h1>
+<p><span class="cmd-box">SSBlock</span></p>
+<p>
+  A command that <strong>selects Block objects to be used in B1~B8 / BB1~BB8 commands and saves them to memory</strong>.<br>
+  The selection order becomes the number — the first selected Block is number 1 (<code>B1</code>/<code>BB1</code>), the second is number 2 (<code>B2</code>/<code>BB2</code>), …
+</p>
+<h2>Purpose</h2>
+<p>
+  A preparation command that registers Block objects to be used before inserting Blocks.
+  Multiple types of Blocks can be managed by number,
+  and the registered Blocks can then be quickly placed using <code>B1~B8</code> (Explode insertion) or <code>BB1~BB8</code> (Block Reference insertion) commands.
+</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Enter <code>SSBlock</code> in the AutoCAD or BricsCAD command line and press Enter.</li>
+  <li>Select <strong>Block objects</strong> to be used for insertion in order.<br>
+      The first selected Block becomes number 1, the second becomes number 2.</li>
+  <li>Press Enter to complete the selection.</li>
+  <li>Verify the selected Block names in the command window.</li>
+  <li>Subsequently insert registered Blocks using <code>B1</code>~<code>B8</code> or <code>BB1</code>~<code>BB8</code> commands.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/C2530_BB1_BB8.mp4" autoplay muted loop playsinline aria-label="SSBlock execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>SSBlock — Example of selecting Block objects and saving to memory</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Recognizes only <strong>Block Reference objects</strong>. Other entities such as Lines, Text, and dimensions are ignored even if selected.</td></tr>
+  <tr><td>Save Method</td><td>Saves the names (Definition Names) of selected Blocks in order to memory (<code>BlockNameList</code>).</td></tr>
+  <tr><td>Numbering</td><td>Numbers are assigned in selection order. First selection = number 1, second = number 2, …, maximum number 8.</td></tr>
+  <tr><td>Command Window Output</td><td>The name of each selected Block is output to the command window.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Saved List</td><td>Selected Block names are saved in order to <code>BlockNameList</code>.</td></tr>
+  <tr><td>Command Window Output</td><td>Each Block's name is output to the command window so you can verify the registration.</td></tr>
+  <tr><td>Next Step</td><td>Insert registered Blocks using <code>B1</code>~<code>B8</code> or <code>BB1</code>~<code>BB8</code> commands.</td></tr>
+</tbody></table>
+<div class="warning">
+  <strong>Caution:</strong> If you run <code>SSBlock</code> again, the previously saved list will be <strong>completely overwritten</strong>.
+  If you need the existing registration, verify it before re-running.
+</div>
+<div class="note">
+  <strong>Note:</strong> Objects that are not Block References (Lines, Text, dimensions, etc.) will not be added to the list even if selected.
+  You must select Block instances inserted in the drawing.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

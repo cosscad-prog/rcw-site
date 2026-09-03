@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>SFB - 18_Insert_Frame</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>SFB &nbsp;—&nbsp; 18_Insert_Frame</h1>
+<p><span class="cmd-box">SFB</span></p>
+<p>
+  A Rhino command that <strong>selects a Frame Form block and saves it to memory</strong>.<br>
+  Afterwards, when <code>FFB</code> runs, it auto-inserts this Frame Form into the selected drawing at a matching scale and position.
+</p>
+<h2>Purpose</h2>
+<p>
+  By pre-selecting a company-specific frame form block, <code>FFB</code> later automatically computes the scale matching the drawing size
+  and inserts the Frame Form. <code>SFB</code> only handles Form selection and saves the
+  selected block, text placeholder, and polyline information to the current Rhino session's memory.
+</p>
+<h2>Required Components Inside the Frame Form</h2>
+<table class="desc-table">
+  <colgroup><col style="width:32%"><col style="width:68%"></colgroup>
+  <tbody><tr><th>Component</th><th>Role</th></tr>
+  <tr><td>Block Instance</td><td>The drawing form block body. Must be included in the SFB selection range.</td></tr>
+  <tr><td>2 Points (inside the block definition)</td><td>The min/max reference points of the inner area where the drawing goes. If absent, the whole block BoundingBox is used as the reference.</td></tr>
+  <tr><td>Text — <code>DWG_NO</code>, <code>DWG-NO</code>, <code>DWGNO</code></td><td>The drawing-number placeholder. FFB replaces it with the drawing name text.</td></tr>
+  <tr><td>Text — <code>Scale</code> layer or content <code>SCALE</code></td><td>The scale placeholder. FFB replaces it with the auto-computed scale string (<code>1 / N</code>).</td></tr>
+  <tr><td>Text — <code>Qnt</code> layer or content <code>QNT</code></td><td>The quantity placeholder. FFB replaces it with the quantity text read from the drawing.</td></tr>
+  <tr><td>Text — <code>SIZE_W</code>, <code>SIZE_H</code>, <code>PAD_W</code>, <code>PAD_H</code>, <code>LENGTH</code></td><td>Placeholders to auto-fill with panel size, pad size, and length values.</td></tr>
+  <tr><td>PolylineCurve</td><td>The frame boundary polyline. A closed polyline is saved first, and FFB copies and places it together with the Form.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Confirm that the Frame Form block, text placeholders, and polyline are placed in the Rhino file.</li>
+  <li>Type <code>SFB</code> in the Rhino command line and press Enter.</li>
+  <li>At the <em>"SFB: Select the Frame Form (including block, polyline, text)"</em> prompt, select the Form block, text, and polyline all together and press Enter.</li>
+  <li>The selected Frame Form information is saved to memory. Afterwards, insert the Frame Form into the drawing with <code>FFB</code>.</li>
+
+</ol>
+<h2>Registering Templates from External 3DM Files (FDstyle Panel [Drawing Template] Button)</h2>
+<p>
+  In addition to <code>SFB</code> where you select directly on screen, you can also register <strong>pre-made external 3DM template files</strong>
+  via the <strong>[Drawing Template] button in the FDstyle panel</strong>. The same Frame Form mechanism applies; only the template source differs.
+</p>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Step</th><th>Action</th></tr>
+  <tr><td>File selection</td><td>When you select a template 3DM file in the file dialog, it is imported into the current document.</td></tr>
+  <tr><td>Pre-check</td><td>Checks whether the <strong>imported template's block name conflicts</strong> with existing templates, alerting you if there is an issue.</td></tr>
+  <tr><td>Auto-unique naming</td><td>If block names overlap, <strong>unique names are automatically assigned</strong>, so different templates (e.g., for Profile_A, Profile_B) don't mix.</td></tr>
+  <tr><td>Display isolation</td><td>Registered template instances are <strong>hidden</strong> so they don't clutter the viewport. (Inserted templates display normally)</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> Templates registered from external files are also saved with the document (.3dm) and auto-restored when reopened. Multiple different template files can coexist, each with its own unique name.</div>
+
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../img/C2310_SFB_Form.png" alt="SFB - Frame Form component example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>SFB - Frame Form block and component selection example</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection target</td><td>Selects Annotation, Curve, and InstanceReference. The block, text, and polyline must be <strong>selected together</strong>.</td></tr>
+  <tr><td>Saved content</td><td>Keeps the block name, block position, block scale, text placeholder IDs, and polyline ID in memory.</td></tr>
+  <tr><td>Polyline selection</td><td>If there is a closed PolylineCurve among the selected objects, it is saved first; otherwise the first PolylineCurve is saved.</td></tr>
+  <tr><td>Other text</td><td>Text not matching the placeholders above is saved as attribute text copied as-is.</td></tr>
+  <tr><td>Environment</td><td>Rhino</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> <code>SFB</code> saves Frame Form information only; it does not insert new objects into the drawing.
+  The actual Frame Form insertion is performed with <code>FFB</code> (or the [Insert Template] button in the FDstyle panel).
+  Template information is <strong>saved together with the current document (.3dm)</strong> and auto-restored when reopened —
+  <strong>no need to re-register on the same file</strong>. (However, if the registered template object is deleted, re-registration is needed.)
+</div>
+<div class="warning">
+  <strong>Caution:</strong> If the needed text placeholders are missing inside the Frame Form block, those items are not filled when <code>FFB</code> runs.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

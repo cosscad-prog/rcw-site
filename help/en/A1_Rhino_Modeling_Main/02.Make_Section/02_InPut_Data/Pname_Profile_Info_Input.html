@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Pname - InPut Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { display:block; max-width:720px; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Pname / PPI &nbsp;—&nbsp; InPut Data</h1>
+<p><span class="cmd-box">Pname</span> <span class="cmd-box">PPI</span></p>
+<p><code>Pname</code> is the command for entering Surface, Polyline, and Block information into a Section Profile. Profile name, unit weight, additional length, purpose, and Block Data are all managed in a single panel.</p>
+<h2>Purpose</h2>
+<p>Used to input and edit properties required for modeling (profile name, unit weight, additional length, purpose, Block Data, etc.) for Section elements (Surface, Polyline, Block) in a single panel. The values entered here become the reference data for Unit modeling (<code>UMD</code>) and list/drawing creation, so organizing this information immediately after creating the section is a critical step.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Select the Section element to enter data for.</li>
+  <li>Run the <code>Pname</code> or <code>PPI</code> command.</li>
+  <li>Enter Surface, Polyline, and Block values appropriate to the element type.</li>
+  <li>Verify that the entered values are reflected in the list and modeling result.</li>
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../../img/Pname_milling.png" alt="The Pname window - the Milling tab and the Start field of Additional Length" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>The two arrows mark what changed - the <b>Milling</b> tab on the right (new) and the <b>Start</b> field in Additional Length (two fields became one).</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../../img/Pname_demo.mp4" autoplay muted loop playsinline aria-label="Pname_demo" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Surface Data</td><td>Enter Material_ID, Profile_ID, Fab_ID, Additional Length, etc.</td></tr>
+  <tr><td>Polyline Data</td><td>Specify the Subtracter type and machining method.</td></tr>
+  <tr><td>Block Data</td><td>Enter Block insert type, reference, position, spacing, and quantity.</td></tr>
+  <tr><td>Milling</td><td>Cuts the profile bar to the shape of a section polyline. Entered on the <b>Milling</b> tab at the right.</td></tr>
+</tbody></table>
+
+<h2>Additional Length &nbsp;&mdash;&nbsp; bar length and end pieces</h2>
+<p>The <b>Additional Length</b> box at the bottom of the panel decides how far the profile bar runs past its center line, and how many pieces sit at that end. The two rows are the two ends of the bar.</p>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Row</th><th>Which end</th></tr>
+  <tr><td>Top/Left</td><td><b>Top</b> end for a mullion, <b>left</b> end for a transom.</td></tr>
+  <tr><td>Bot/Right</td><td><b>Bottom</b> end for a mullion, <b>right</b> end for a transom.</td></tr>
+</tbody></table>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Field</th><th>Description</th></tr>
+  <tr><td>Start</td><td>How far the bar runs <b>past that end</b> (mm). The center line end is pushed out by this much. Formulas such as <code>100+5</code> are accepted.</td></tr>
+  <tr><td>Length</td><td><b>0 makes one bar</b> from end to end. With a value, only a <b>piece of that length</b> is made at that end, leaving the middle empty - for brackets, sleeves and anything that only sits at the ends.</td></tr>
+  <tr><td>Interval</td><td>Spacing (mm) when several pieces are placed. Several comma separated values such as <code>D100,D200</code> are read against the dummy points.</td></tr>
+  <tr><td>Quantity</td><td>How many to place. Fill in either interval or quantity and the other follows.</td></tr>
+  <tr><td>Symmetric</td><td>Places the same spacing from the opposite end as well.</td></tr>
+</tbody></table>
+<div class="note"><b>Changed in 5.1.3 &mdash; the <code>Mullion</code> and <code>Transom</code> fields became one <code>Start</code> field.</b><br>
+A section is either a mullion or a transom, never both, so only one of the two was ever in use. One value now applies whichever way the section is used. <b>Existing drawings open unchanged</b>; saving such a section merges its two old values into one.</div>
+<div class="note">A polyline section whose Profile ID is <code>0. Not Select</code> and whose Start is <code>0</code> at both ends gets a <b>default additional length of 50mm</b>.</div>
+
+<h2>Selecting a curve locks the Block Insert and Milling tabs</h2>
+<p>When a <b>Polyline, PolyCurve or Line</b> is selected, the <b>Block Insert</b> and <b>Milling</b> tabs on the right go grey and accept no input. Both tabs exist for section <b>surfaces</b>; values entered on a curve do nothing during modelling.</p>
+<div class="warn"><b>Why it is blocked &mdash; a stray value later stops <code>SSP</code>.</b><br>Once a curve carries block information, copying or moving that curve leaves the recorded Block ID pointing outside its own group, and <code>SSP</code> halts with &quot;the block cannot be found&quot;. Polylines usually share the same name, so the warning alone makes it very hard to tell which one is at fault.</div>
+<div class="note"><b>To clean a polyline that already carries such values:</b> select the curve with <code>Pname</code> and press <b>Save</b> at the bottom of the dialog. Saving a curve clears all four block slots and all four milling slots, and the command line reports what was cleared. (<code>DBB</code> and <code>SDBB</code> handle surfaces only, so they cannot clear a curve.)</div>
+<div class="note">Everything else on a curve &mdash; profile name, unit weight, description, IDs and additional length &mdash; is still entered and saved as before. Only the two tabs are locked.</div>
+
+<h2>Milling tab &nbsp;—&nbsp; cutting the bar</h2>
+<p>Cuts slots or grooves into a profile bar. Use the <b>Milling</b> tab next to <b>Block Insert</b> in the right-hand column; a profile can hold four entries, <code>Mill 1</code> through <code>Mill 4</code>.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../../img/PName_Milling.mp4" autoplay muted loop playsinline aria-label="Cutting a profile with a closed polyline from the Milling tab" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Pick one closed polyline and <code>UMD</code> cuts the bar to that shape.</figcaption>
+  </figure>
+</div>
+<div class="note"><b>It used to take</b> a separate solid, built and then subtracted, to put in a slot or a groove. <b>One polyline drawn on the section</b> is now enough - <code>UMD</code> does the cutting.</div>
+<div class="note"><b>The two tabs are laid out alike.</b> <b>Block Insert</b> and <b>Milling</b> keep their fields in the same places, so <b>nothing moves when you switch tabs</b>, and both read spacing and quantity by the same rule.</div>
+<div class="note"><b>To see which polyline an entry holds,</b> click the <code>Mill 1</code>-<code>Mill 4</code> <b>name field</b>. A <b>numbered dot</b> appears at the center of that polyline - one at a time. It clears itself when you <b>Save</b> or close the window.</div>
+<ol class="step-list">
+  <li>Draw the cut shape as a <b>closed polyline</b> on the <b>same section plane</b> as the profile.</li>
+  <li>On the <b>Milling</b> tab press <code>Mill 1</code> and pick that polyline.</li>
+  <li>Fill in the values below and press <b>Save</b>.</li>
+  <li>Run <code>UMD</code> — the bar is cut to that shape.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Cut Type</td><td><b>2. Subtract Only</b> — cut only. <b>3. Subtract &amp; Show</b> — cut, then keep a copy of each cutter on the <code>Subtract_Block</code> layer so you can see where they landed.</td></tr>
+  <tr><td>Location</td><td>Array reference. <b>1. By Brep</b> — the actual ends of the bar solid. <b>2. By Line</b> — the ends of the center line. The two differ when a bar end is cut at an angle.</td></tr>
+  <tr><td>Length</td><td>Length of one cutter <b>along the bar axis</b> (mm). A polyline is a section and has no length of its own, so it is extruded by this amount. Each array point sits at the <b>middle</b> of that length.</td></tr>
+  <tr><td>Top/Left</td><td>How far <b>outside</b> the bar end the cutter at that end sits (mm). That end is the <b>top for a mullion, the left for a transom</b>. 0 puts it flush with the end; <b>a negative value pulls it inward</b> (-50 sits 50&nbsp;mm inside the end).</td></tr>
+  <tr><td>Spacing</td><td><b>An upper limit on the spacing (mm).</b> One cutter goes at <b>each end first</b>, and the run between them is divided into the fewest steps that keep each step at or under this value. So the actual spacing is always <b>at or below</b> what you enter, and equals it exactly when it divides evenly. <b>Nothing is left over at the end.</b> Fill this in and the <b>Quantity</b> box below follows on its own.<br>0.5 · 1/4 · 1/6 · 1/8 are read as <b>center / symmetric placement</b>, the same convention as blocks (0.5 = one at the center, the others = a symmetric pair).</td></tr>
+  <tr><td>Bot/Right</td><td>The same for the far end, negative values included.</td></tr>
+  <tr><td>Quantity</td><td><b>Leave Spacing empty and fill this in instead</b>, and the run is divided into that many cutters with the <b>spacing worked out for you</b> (both ends included). When Spacing holds a value the count comes from that, so this box is ignored. In short, <b>fill in either one and the other follows.</b></td></tr>
+  <tr><td>Interval and quantity<br>on the Top/Left row</td><td>A separate group counted from the starting end. Used <b>only when Spacing is empty</b>.</td></tr>
+  <tr><td>Interval and quantity<br>on the Bot/Right row</td><td>The same, counted from the far end.</td></tr>
+</tbody></table>
+<div class="note"><b>Spacing wins.</b> When the Spacing box holds a value, the <b>interval and quantity</b> boxes on the Top/Left and Bot/Right rows are ignored even if they hold numbers. The <b>first box</b> on each of those rows (the Top/Left and Bot/Right allowance) still applies and shifts the start and the far limit.</div>
+<div class="note"><b>This works the same way as "Equal spacing" on the Block Insert tab.</b> On a 1250&nbsp;mm run, entering 100 takes 13 steps to stay at or under 100, so you get <b>14 cutters spaced 96.15&nbsp;mm</b>. On a 1200&nbsp;mm run, 200 divides evenly in 6 steps, so you get <b>7 cutters spaced exactly 200&nbsp;mm</b>. Either way there is <b>always one cutter at each end</b>.</div>
+<div class="warning">The cutting polyline must be <b>closed</b> and <b>planar</b>. If it is open or non-planar no cutter is built — a warning is logged and the slot is skipped. The same applies when <code>Length</code> is 0.</div>
+
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>Pname</code></td><td>Opens the Profile information input panel.</td></tr>
+  <tr><td><code>PPI</code></td><td>Same purpose as Pname — Profile information input.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

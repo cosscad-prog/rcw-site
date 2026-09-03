@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>RCWFolder - Your Editable RCW Files</title>
+  <style>
+    body { font-family:"Segoe UI",Arial,sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<h1>RCWFolder &nbsp;—&nbsp; Your Editable RCW Files</h1>
+<p><span class="cmd-box">RCWFolder</span></p>
+<p>Opens the one folder that holds every RCW file you are meant to edit: your data tables, your
+blocks, your drawing forms and the hatch pattern. You never need to know or type the path.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>RCWFolder</strong> in the Rhino command line and press Enter.</li>
+  <li>The folder opens in Windows Explorer.</li>
+  <li>Edit the file you want. Blocks are in <code>Blocks</code>, drawing forms in <code>Forms</code>;
+      everything else is in the folder itself.</li>
+</ol>
+
+<h2>What Is In The Folder</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>What it is</th></tr>
+  <tr><td><code>Blocks\*.3dm</code></td><td>The blocks offered by the BlockOpt panel. Add your own 3dm files here and they appear in the list.</td></tr>
+  <tr><td><code>Forms\*.3dm</code></td><td>Frame form templates you select with SFB or the Form button on the FDstyle panel.</td></tr>
+  <tr><td><code>Forms\*.dwg</code></td><td>Drawing form sheets used by FDwgStyle.</td></tr>
+  <tr><td><code>RCW_Hatch.pat</code></td><td>The hatch pattern used by the fabrication drawings.</td></tr>
+  <tr><td><code>*.dat</code>, <code>*.txt</code></td><td>Data tables: glass types, vent types, grill types, back panel types, die data, system defaults and the bar list.</td></tr>
+</tbody></table>
+
+<h2>Shared With AutoCAD and BricsCAD</h2>
+<p><strong>RCWFolder</strong> exists under the same name in the RCW_V5 plug-ins for AutoCAD and
+BricsCAD. Whichever product you type it in, <strong>the same folder opens</strong>. Edit a file
+once and all three products use it. Adding the CAD plug-ins later will not split your settings.</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:28%"><col style="width:48%"></colgroup>
+  <tbody><tr><th>File</th><th>CAD command that uses it</th><th>Relationship to Rhino</th></tr>
+  <tr><td><code>System_Default.dat</code></td><td>[D] on the DsOpt panel</td>
+      <td><strong>Shared.</strong> One file, separate keys: the values CAD writes start with
+      <code>CAD_</code>, and saving never removes the keys Rhino wrote.</td></tr>
+  <tr><td><code>AutoScale.dat</code></td><td>FSC, NC4, SFB</td>
+      <td><strong>Shared.</strong> The same file Rhino's FSC reads.</td></tr>
+  <tr><td><code>LongBarList.dat</code></td><td>Cuttinglist</td>
+      <td>CAD only. Rhino never reads it.</td></tr>
+  <tr><td><code>barlist.txt</code></td><td>UBarlist, Cuttinglist</td>
+      <td>Same format. The name is not fixed - both products pick the file from a dialog - so one
+      file can serve both.</td></tr>
+</tbody></table>
+<p>Those four are all the CAD plug-ins read. Everything else here, including <code>Blocks</code>,
+<code>Forms</code> and <code>RCW_Hatch.pat</code>, is for Rhino only.</p>
+
+<h2>Your Edits Survive Updates</h2>
+<p>Installing a newer RCW release never overwrites a file you have edited. A file that a new
+release adds — a new block, for example — appears on its own, while everything you changed stays
+as you left it.</p>
+<div class="note">Do not edit anything inside the program installation folder under
+<code>Program Files</code>. Each release installs into a folder named after its version, so an
+edit made there is lost as soon as you update. The folder this command opens is the only place to
+work in.</div>
+
+<h2>Restoring The Installed Defaults</h2>
+<p>Because your files always win, a file you have broken stays broken. Use the restore option to
+put the shipped version back.</p>
+<ol class="step-list">
+  <li>Run <strong>RCWFolder</strong> and choose <strong>Restore</strong>.</li>
+  <li>Choose what to restore: <strong>All</strong>, or just <strong>Data</strong>,
+      <strong>Blocks</strong>, <strong>Forms</strong> or <strong>Hatch</strong>.</li>
+  <li>The command lists the files that will change. Confirm with <strong>Yes</strong>.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Backup</td><td>Your current files are copied to a timestamped backup folder before anything is replaced. The command prints the location.</td></tr>
+  <tr><td>Your own files</td><td>Blocks and forms you added yourself are never touched. Restore puts the shipped files back; it does not empty the folder.</td></tr>
+  <tr><td>Model changes</td><td>None. The command does not modify the document.</td></tr>
+</tbody></table>
+
+<div class="note">Restore is a Rhino-only option. In the AutoCAD and BricsCAD
+plug-ins, <strong>RCWFolder</strong> only opens the folder and reports where each file is being
+read from.</div>
+
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>BlockOpt</strong></td><td>Inserts a block from the <code>Blocks</code> folder.</td></tr>
+  <tr><td><strong>SFB</strong></td><td>Selects a frame form, either on screen or from a file in the <code>Forms</code> folder.</td></tr>
+  <tr><td><strong>FDwgStyle</strong></td><td>Builds a layout sheet from a drawing form DWG in the <code>Forms</code> folder.</td></tr>
+</tbody></table>
+
+<div class="warn">Caution: a block or form already inserted into a model keeps the definition stored
+in that model. Editing the source file changes new insertions only; use Rhino's BlockManager to
+refresh a model you already made.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

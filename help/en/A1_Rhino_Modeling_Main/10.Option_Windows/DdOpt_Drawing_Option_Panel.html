@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>DdOpt - Drawing Option Panel</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; align-items:start; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>DdOpt &nbsp;—&nbsp; Drawing Option Panel</h1>
+<p><span class="cmd-box">DdOpt</span></p>
+<p><strong>DdOpt</strong> is the Drawing Option panel for setting View and dimension generation methods before exporting FDDS fabrication drawings after modeling.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>Type <code>DdOpt</code> in the Rhino command line and press Enter.</li>
+  <li>Set the required View, dimension, distance, and auxiliary model display options in the Drawing Option panel.</li>
+  <li>Run <code>FDwg</code> to generate Frame fabrication drawings based on the current settings.</li>
+
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 34%; min-width:200px; max-width:34%;">
+    <img src="../../../img/DdOpt_panel_guide_en.png" alt="DdOpt panel guide" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>The DdOpt Drawing Option panel, at its default settings</figcaption>
+  </figure>
+</div>
+<h2>Overview</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Main Command</td><td>Specifies View, distance, dimension, and auxiliary model display options when creating <code>FDDS</code> fabrication drawings.</td></tr>
+  <tr><td>Save Current Selection as Default</td><td>The small <b>D</b> button at the top of the panel. Saves the current panel settings as the default to <code>System_Default.dat</code>.</td></tr>
+  <tr><td>Panel Behavior</td><td>Running <code>DdOpt</code> opens the Drawing Option Dockable Panel. On open, saved defaults are automatically loaded.</td></tr>
+</tbody></table>
+<h2>The "D" button &nbsp;&mdash;&nbsp; save the current selection as default</h2>
+<p>The small <b>D</b> button at the top of the panel. Clicking it saves <strong>all current panel option values (Group 1–4)</strong> as the default to <code>System_Default.dat</code>. The <b>full path is printed to the command line</b> when it saves.</p>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Action</th><th>Description</th></tr>
+  <tr><td>Button click (save)</td><td>Saves the current panel values as the default. <b>The D button turns blue</b> to confirm the save.</td></tr>
+  <tr><td>On value change</td><td>If any checkbox or input value is changed after saving, <b>the D button returns to its normal color</b>.</td></tr>
+  <tr><td>On panel open</td><td>If saved defaults exist, they are automatically loaded and applied to each item.</td></tr>
+  <tr><td>Save file</td><td><code>System_Default.dat</code> is a per-installation file stored alongside other feature settings such as FabList (values do not overwrite each other).</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> The former <code>Apply File Data</code> checkbox is no longer used. File data application is now handled by <strong>FDstyle (Record/Playback)</strong>; if no recorded data exists, the current panel values are used.</div>
+<h2>Group 1 — View / Max Only / Side Dim</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../../img/1910_DdOpt1.png" alt="DdOpt view group" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>View direction and dimension expression settings</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>View Column</td><td>Selects which directions to generate: Back, Top, Front, Bottom, Back-series Views.</td></tr>
+  <tr><td>Max Only</td><td>Shows only overall maximum dimensions for that View.</td></tr>
+  <tr><td>Side Dim</td><td>Shows left/right Side Dimensions in detail or only at Max level.</td></tr>
+</tbody></table>
+<h2>Group 2 — Drawing Distance</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../../img/1910_DdOpt2.png" alt="DdOpt distance group" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Drawing placement, spacing, and Hole Dia range</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Fab Start Point</td><td>Reference start position for the fabrication drawing (X, Z values).</td></tr>
+  <tr><td>Dwg Distance</td><td>X = distance between left Section and main drawing; Z = distance between upper/lower drawings.</td></tr>
+  <tr><td>Fab No Distance</td><td>X and Z distances from the last drawing's lower-left corner for Fab No text.</td></tr>
+  <tr><td>Hole Dia</td><td>Min/Max Hole Dia range to annotate in the fabrication drawing.</td></tr>
+</tbody></table>
+<h3>Distance item examples</h3>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../../img/1911_DDOpt_005.png" alt="Fab Start Point example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fab Start Point — reference start position for the drawing (X, Z)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 25%; min-width:220px; max-width:25%;">
+    <img src="../../../img/1911_DDOpt_006.png" alt="Dwg Distance example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Dwg Distance — Section ↔ main drawing gap (X), vertical gap (Z)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../../img/1911_DDOpt_007.png" alt="Fab No Distance example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fab No Distance — Fab No text placement (X, Z)</figcaption>
+  </figure>
+</div>
+<h2>Group 3 — Extra Dim OnOff</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../../img/1910_DdOpt3.png" alt="DdOpt extra dim group" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Additional dimensions and auxiliary line toggle</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>90° Angle Dim</td><td>Switches <b>the 90 degree angles only</b> on and off. On writes every angle, right angles included; off leaves out <b>only the 90s</b> while 45 degrees and the rest are still written - a bevel angle is a value the drawing has to state. <code>[F]</code> angles follow the same rule, so <b>only [F]90</b> is left out. See the <code>FDwg</code> and <code>FDDS</code> pages for the full rule.</td></tr>
+  <tr><td>Center Dim</td><td>Annotates dimensions between Center Lines when present.</td></tr>
+  <tr><td>Hole Dim</td><td>Shows hole and slot dimensions. (formerly <code>Cutting Dim</code>)</td></tr>
+  <tr><td>Unit No</td><td>Displays Unit No information in the fabrication drawing.</td></tr>
+  <tr><td>Attach Dim</td><td>When an Attach Profile such as a Bracket is present, creates Dim Points from the left/right maxima of the Attach and draws the dimensions.</td></tr>
+  <tr><td>P_Section</td><td>Shows the section line - creates a separator line between the left Section and the main drawing. (formerly <code>SectionLine</code>)</td></tr>
+</tbody></table>
+<h2>Group 4 — Model View</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../../img/1910_DdOpt4.png" alt="DdOpt model view group" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Auxiliary 3D model retention after 2D generation</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Shape Model</td><td>Keeps the original Shape 3D model visible with the 2D drawing.</td></tr>
+  <tr><td>Dim Model</td><td>Keeps the dimension-calculation 3D model visible.</td></tr>
+  <tr><td>Angle Model</td><td>Keeps the angle-calculation 3D model visible.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>FDwg</code></td><td>Generates Frame fabrication drawings using DdOpt settings.</td></tr>
+</tbody></table>
+<div class="warning"><strong>Caution:</strong> DdOpt only sets the fabrication-drawing options. The actual drawing is generated when FDwg runs.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

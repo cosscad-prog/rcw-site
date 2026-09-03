@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GRV - Glass Transparency Toggle</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-image { display:block; max-width:600px; width:100%; height:auto; border:1px solid #ccc; background:#fff; margin:12px 0; }
+    .toggle-box { display:flex; gap:16px; margin-top:8px; }
+    .toggle-state { flex:1; border:1px solid #c8d8ec; border-radius:4px; padding:10px 14px; background:#f7faff; }
+    .toggle-state strong { display:block; margin-bottom:4px; color:#003d80; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>GRV &nbsp;—&nbsp; Glass Transparency Toggle</h1>
+<p><span class="cmd-box">GRV</span></p>
+<p>Toggles all surfaces on <code>Glass*</code> layers between <strong>80% transparency</strong> material and the original state. Running the command repeatedly alternates between transparent ON and OFF.</p>
+
+<h2>Purpose</h2>
+<p>Used to display glass surfaces as 80% semi-transparent so you can see the underlying structural members and bracing without the glass blocking the view. Repeating the command toggles transparency ON/OFF for easy review during modeling.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>GRV</strong> in the Rhino command line and press Enter.</li>
+  <li>All objects on <code>Glass*</code> layers switch to a semi-transparent material.</li>
+  <li>Run <strong>GRV</strong> again to restore the original layer material.</li>
+</ol>
+<h2>Example</h2>
+<video src="../../../img/GRV_demo.mp4" autoplay muted loop playsinline aria-label="GRV operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+
+<h2>Toggle States</h2>
+<div class="toggle-box">
+  <div class="toggle-state">
+    <strong>ON (Semi-transparent)</strong>
+    80% transparency material applied<br>
+    Layer colour brightened for display<br>
+    Switches to Rendered viewport mode
+  </div>
+  <div class="toggle-state">
+    <strong>OFF (Original display)</strong>
+    Restored to layer material<br>
+    Display mode override removed<br>
+    Object colour source restored to layer
+  </div>
+</div>
+<h2>Target Objects</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Target Layers</td><td>All layers whose names start with <code>Glass</code> (case-insensitive)</td></tr>
+  <tr><td>Transparency</td><td>80% (MaterialTransparency = 0.8)</td></tr>
+  <tr><td>Display Mode</td><td>Rendered viewport mode override applied</td></tr>
+  <tr><td>Colour Adjustment</td><td>Layer colour blended with 50% white → displayed in a lighter tint</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>Gmd</strong></td><td>Glass surface modeling — creates the glass surfaces to display transparently.</td></tr>
+  <tr><td><strong>GsNo</strong></td><td>Glass numbering — easier to verify number positions with glass transparent.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> Execution is cancelled if the Rendered viewport mode cannot be found in the current environment.</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

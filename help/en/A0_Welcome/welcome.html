@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RCW V5 Help</title>
+
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, sans-serif;
+      font-size: 13px;
+      color: #1e293b;
+      background: #f4f6fa;
+      line-height: 1.5;
+      letter-spacing: -0.4px;
+    }
+    body.building .build-step {
+      opacity: 0;
+      transform: translateY(14px) scale(.985);
+      filter: blur(3px);
+    }
+    body.building .build-step.is-visible {
+      animation: buildIn .56s cubic-bezier(.2,.75,.2,1) forwards;
+    }
+    body.building .flow-item.build-step {
+      transform: translateX(-10px);
+    }
+    body.building .link-item.build-step {
+      transform: translateY(8px);
+    }
+    @keyframes buildIn {
+      to {
+        opacity: 1;
+        transform: translate(0,0) scale(1);
+        filter: blur(0);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body.building .build-step {
+        opacity: 1;
+        transform: none;
+        filter: none;
+      }
+      body.building .build-step.is-visible {
+        animation: none;
+      }
+    }
+
+    .hero {
+      background: #ffffff;
+      padding: 24px 0;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 4px rgba(15,23,42,0.02);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      min-height: 70px;
+    }
+    .hero-bg-watermark {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 300px;
+      height: auto;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 1;
+      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+      mask-image: linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+    }
+
+    .hero-info {
+      position: relative;
+      z-index: 2;
+      padding-left: 20px;
+    }
+    .hero-info h1 {
+      font-family: 'Malgun Gothic','Segoe UI', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .hero-info h1 span {
+      color: #e11d48;
+      margin-left: 4px;
+    }
+    .hero-info .sub-desc-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .hero-info .sub-desc-text {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: -0.3px;
+    }
+
+    .hero-meta {
+      text-align: right;
+      position: relative;
+      z-index: 2;
+    }
+    .badge-v {
+      display: inline-block;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #e11d48;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-family: Consolas, monospace;
+      font-size: 11px;
+    }
+    .env-tags {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .env-tags span {
+      font-size: 11px;
+      color: #64748b;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .main-layout {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 24px 50px 60px;
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 26px;
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-self: flex-start;
+      position: sticky;
+      top: 24px;
+    }
+    .sidebar {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px 18px;
+      box-shadow: 0 4px 18px rgba(15,23,42,0.04);
+      border: 1px solid #e2e8f0;
+    }
+    .whats-new {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+    .whats-new .wn-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #92400e;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .whats-new .wn-title::before { content: '★'; font-size: 10px; color: #f59e0b; }
+    .whats-new ul { padding-left: 14px; }
+    .whats-new ul li {
+      font-size: 11px;
+      color: #78350f;
+      line-height: 1.9;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 18px;
+      padding-left: 4px;
+    }
+    .flow-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      position: relative;
+    }
+    .flow-list::before {
+      content: '';
+      position: absolute;
+      left: 21px; top: 20px; bottom: 20px;
+      width: 2px; background: #e2e8f0;
+      z-index: 1;
+    }
+    .flow-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 10px;
+      border-radius: 8px;
+      position: relative;
+      z-index: 2;
+    }
+    .flow-item .step-num {
+      width: 24px; height: 24px;
+      background: #fff;
+      color: #64748b;
+      border: 2px solid #cbd5e1;
+      font-size: 11px; font-weight: 700;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .flow-item .step-text { display: flex; flex-direction: column; }
+    .flow-item .step-name { font-size: 12.5px; font-weight: 700; color: #334155; }
+    .flow-item .step-desc { font-size: 11px; color: #64748b; margin-top: 1px; line-height: 1.3; }
+
+    .flow-item:hover .step-num {
+      background: #64748b;
+      color: #fff;
+      border-color: #64748b;;
+    }
+    .flow-item:hover .step-name { color: #2357ff; }
+
+    /* ── New Feature GIF Showcase ── */
+    .nf-section { margin-bottom: 24px; }
+    .nf-section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .nf-section-header::before {
+      content: '';
+      width: 4px; height: 15px;
+      background: #e11d48;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .nf-section-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .nf-header-badge {
+      background: #e11d48;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.6px;
+    }
+    .nf-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .nf-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.18s;
+      position: relative;
+    }
+    .nf-card:hover {
+      box-shadow: 0 8px 24px rgba(225,29,72,0.10);
+      border-color: #fca5a5;
+      transform: translateY(-3px);
+    }
+    .nf-card-badge {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: #e11d48;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      z-index: 3;
+    }
+    .nf-gif-wrap {
+      width: 100%;
+      height: 148px;
+      background: #f1f5f9;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .nf-gif-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .nf-gif-swap .swap-a,
+    .nf-gif-swap .swap-b {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .nf-gif-swap .swap-a { animation: gifSwapA 10s infinite; z-index: 2; }
+    .nf-gif-swap .swap-b { z-index: 1; }
+    @keyframes gifSwapA {
+      0%, 44%  { opacity: 1; }
+      50%, 94% { opacity: 0; }
+      100%     { opacity: 1; }
+    }
+    .nf-card-info { padding: 10px 12px 12px; }
+    .nf-card-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
+    .nf-card-name em {
+      font-style: normal;
+      color: #e11d48;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .nf-card-desc {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .nf-card-desc .cmd-tag {
+      display: inline-block;
+      margin-top: 3px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 10px;
+      font-family: Consolas, monospace;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .cate-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 30px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cate-title::before {
+      content: '';
+      width: 4px; height: 15px;
+      background: #e11d48;
+      border-radius: 2px;
+    }
+
+    .module-box {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 12px rgba(15,23,42,0.02);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .module-header {
+      background: #f8fafc;
+      padding: 12px 20px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .module-header .mod-id {
+      background: #334155;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .module-header .mod-name { font-size: 13.5px; font-weight: 700; color: #0f172a; }
+    .module-header .mod-desc { font-size: 12px; color: #64748b; }
+
+    .link-list {
+      padding: 14px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 4px 16px;
+    }
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease-in-out;
+    }
+    .link-item::before {
+      content: '•';
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    .link-item .name {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #475569;
+    }
+
+    .link-item:hover { background: #fff1f2; }
+    .link-item:hover::before { content: '➔'; font-size: 10px; color: #94a3b8; }
+    .link-item:hover .name { color: #475569; font-weight: 600; padding-left: 2px; }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 20px;
+      font-size: 11px;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .trademark-notice {
+      margin: 10px 0 0;
+      font-size: 10px;
+      line-height: 1.5;
+      color: #94a3b8;
+    }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body class="building">
+
+<div class="hero">
+  <img class="hero-bg-watermark" src="SplashBg.png" alt="Rhino Base Screen">
+
+  <div class="hero-container">
+    <div class="hero-info">
+      <h1>Rhino Curtainwall Plugin <span>RCW</span></h1>
+
+      <div class="sub-desc-block">
+        <div class="sub-desc-text">A Rhino 7 and Rhino 8 plugin that automates the entire curtainwall design and fabrication workflow.</div>
+        <div class="sub-desc-text">From Wire Frame creation to 3D modeling, quantity takeoff, and fabrication drawing output — all in one environment.</div>
+      </div>
+    </div>
+
+    <div class="hero-meta">
+      <div class="badge-v">RCW V5</div>
+      <div class="env-tags">
+        <span>Rhino 7</span>
+        <span>Rhino 8</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main-layout">
+
+  <div class="left-col">
+
+  <div class="whats-new" id="whats-new-box">
+    <div class="wn-title" id="wn-title"></div>
+    <ul id="wn-list"></ul>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-title">Design Process Map</div>
+    <div class="flow-list">
+      <div class="flow-item">
+        <span class="step-num">1</span>
+        <div class="step-text"><span class="step-name">Wire Frame</span><span class="step-desc">Mullion / Transom placement</span></div>
+      </div>
+      <div class="flow-item">
+        <span class="step-num">2</span>
+        <div class="step-text"><span class="step-name">Section Setup</span><span class="step-desc">Profile data entry</span></div>
+      </div>
+      <div class="flow-item">
+        <span class="step-num">3</span>
+        <div class="step-text"><span class="step-name">Select Section</span><span class="step-desc">Assign targets with SSP</span></div>
+      </div>
+      <div class="flow-item">
+        <span class="step-num">4</span>
+        <div class="step-text"><span class="step-name">3D Modeling</span><span class="step-desc">Generate Frame · Glass · Vent</span></div>
+      </div>
+      <div class="flow-item">
+        <span class="step-num">5</span>
+        <div class="step-text"><span class="step-name">Numbering</span><span class="step-desc">Auto-assign FabNo</span></div>
+      </div>
+      <div class="flow-item">
+        <span class="step-num">6</span>
+        <div class="step-text"><span class="step-name">List &amp; Drawing</span><span class="step-desc">Quantity list &amp; drawing output</span></div>
+      </div>
+    </div>
+  </aside>
+
+  </div><!-- end left-col -->
+
+  <main class="content-area">
+
+    <!-- 🆕 New Feature GIF Showcase -->
+    <div class="nf-section">
+      <div class="nf-section-header">
+        <span class="nf-section-label">RCW V5 Highlights</span>
+        <span class="nf-header-badge">NEW</span>
+      </div>
+      <div class="nf-grid">
+
+        <!-- 1. FDstyle -->
+        <div class="nf-card build-step" onclick="goTo('A1_Rhino_Modeling_Main/04_Frame_Modeling/4_Make_Fab_Dwg/FDstyle_Pipeline_Panel.html')">
+          <span class="nf-card-badge">NEW</span>
+          <div class="nf-gif-wrap">
+            <img src="../../img/FDStyle_en.png" alt="FDstyle demo">
+          </div>
+          <div class="nf-card-info">
+            <div class="nf-card-name">FDstyle</div>
+            <div class="nf-card-desc">Fab Drawing Process Recording &amp; Replay — save &amp; batch apply styles</div>
+          </div>
+        </div>
+
+        <!-- 2. FabList Type_B -->
+        <div class="nf-card build-step" onclick="goTo('A1_Rhino_Modeling_Main/12.Make_2D/Fablist_Fabrication_List.html')">
+          <span class="nf-card-badge">NEW</span>
+          <div class="nf-gif-wrap">
+            <video src="../../img/fabList_demo2.mp4" autoplay muted loop playsinline aria-label="FabList Type_B demo"></video>
+          </div>
+          <div class="nf-card-info">
+            <div class="nf-card-name">FabList <em>Type_B</em></div>
+            <div class="nf-card-desc">Elevation material tag — line-based mini table style</div>
+          </div>
+        </div>
+
+        <!-- 3. F3D -->
+        <div class="nf-card build-step" onclick="goTo('A1_Rhino_Modeling_Main/04_Frame_Modeling/4_Make_Fab_Dwg/F3D_Detail_3D_View.html')">
+          <span class="nf-card-badge">NEW</span>
+          <div class="nf-gif-wrap">
+            <video src="../../img/F3d.mp4" autoplay muted loop playsinline aria-label="F3D demo"></video>
+          </div>
+          <div class="nf-card-info">
+            <div class="nf-card-name">F3D</div>
+            <div class="nf-card-desc">Insert 3D isometric view into fab drawing</div>
+          </div>
+        </div>
+
+        <!-- 4. LeaderTextMove + TextBoxLeaderMove -->
+        <div class="nf-card build-step" onclick="goTo('A1_Rhino_Modeling_Main/04_Frame_Modeling/4_Make_Fab_Dwg/LeaderTextMove_Label_Move.html')">
+          <span class="nf-card-badge">NEW</span>
+          <div class="nf-gif-wrap nf-gif-swap">
+            <video class="swap-b" src="../../img/TextBoxleaderMove.mp4" autoplay muted loop playsinline aria-label="TextBoxLeaderMove"></video>
+            <video class="swap-a" src="../../img/LeadertextMove.mp4" autoplay muted loop playsinline aria-label="LeaderTextMove"></video>
+          </div>
+          <div class="nf-card-info">
+            <div class="nf-card-name">LeaderTextMove</div>
+            <div class="nf-card-desc">Auto-move leader &amp; text box position<br><span class="cmd-tag">TextBoxLeaderMove</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="cate-title">Rhino Plugin Functions</div>
+
+    <!-- A1 -->
+    <div class="module-box">
+      <div class="module-header">
+        <span class="mod-id">A1</span>
+        <span class="mod-name">Rhino Modeling</span>
+        <span class="mod-desc">— Core curtainwall 3D modeling functions</span>
+      </div>
+      <div class="link-list">
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/01.Make_Wire_Frame/index.html')"><span class="name">Make Wire Frame</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/02.Make_Section/index.html')"><span class="name">Make Section</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/03.Select_Section/SSP_Select_Section_Profile.html')"><span class="name">Select Section</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/04_Frame_Modeling/index.html')"><span class="name">Frame Modeling</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/05_Glass_Modeling/index.html')"><span class="name">Glass Modeling</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/06_Vent_Modeling/index.html')"><span class="name">Vent Modeling</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/07_Grill_Modeling/index.html')"><span class="name">Grill Modeling</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/08_BackPanel_Modeling/index.html')"><span class="name">BackPanel Modeling</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/09_Xtract_Modeling/index.html')"><span class="name">Xtract Modeling</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/10.Option_Windows/index.html')"><span class="name">Option Windows</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/11.Modeling_Options/index.html')"><span class="name">Modeling Options</span></a>
+        <a class="link-item" onclick="goTo('A1_Rhino_Modeling_Main/12.Make_2D/index.html')"><span class="name">Make 2D</span></a>
+      </div>
+    </div>
+
+    <!-- A2 -->
+    <div class="module-box">
+      <div class="module-header">
+        <span class="mod-id">A2</span>
+        <span class="mod-name">Rhino Utils</span>
+        <span class="mod-desc">— Common Rhino utilities</span>
+      </div>
+      <div class="link-list">
+        <a class="link-item" onclick="goTo('A2_Rhino_Modeling_Utils/01_Layer_Making_Change/1_Layer_Making/index.html')"><span class="name">Layer Making</span></a>
+        <a class="link-item" onclick="goTo('A2_Rhino_Modeling_Utils/01_Layer_Making_Change/2_Layer_Change/index.html')"><span class="name">Layer Change</span></a>
+        <a class="link-item" onclick="goTo('A2_Rhino_Modeling_Utils/01_Layer_Making_Change/3_Color_Change/index.html')"><span class="name">Color Change</span></a>
+        <a class="link-item" onclick="goTo('A2_Rhino_Modeling_Utils/02_Layer_Control/index.html')"><span class="name">Layer Control</span></a>
+        <a class="link-item" onclick="goTo('A2_Rhino_Modeling_Utils/03_Match_Property/index.html')"><span class="name">Match Property</span></a>
+        <a class="link-item" onclick="goTo('A2_Rhino_Modeling_Utils/04_Move_Zero/index.html')"><span class="name">Move Zero</span></a>
+        <a class="link-item" onclick="goTo('A2_Rhino_Modeling_Utils/05_Rotate/index.html')"><span class="name">Rotate</span></a>
+        <a class="link-item" onclick="goTo('A2_Rhino_Modeling_Utils/06_Union/index.html')"><span class="name">Union</span></a>
+      </div>
+    </div>
+
+    <!-- A3 -->
+    <div class="module-box">
+      <div class="module-header">
+        <span class="mod-id">A3</span>
+        <span class="mod-name">Rhino Tools</span>
+        <span class="mod-desc">— Supplemental Rhino workflow tools</span>
+      </div>
+      <div class="link-list">
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/01_Block/index.html')"><span class="name">Block</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/02_Text/index.html')"><span class="name">Text</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/03_Dims/index.html')"><span class="name">Dims</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/04_Angle_/index.html')"><span class="name">Angle</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/05_Cylinder_/index.html')"><span class="name">Cylinder</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/06_InterLine_/index.html')"><span class="name">InterLine</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/07_Surface_/index.html')"><span class="name">Surface</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/08_DotText/index.html')"><span class="name">DotText</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/09_Trim/index.html')"><span class="name">Trim</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/10_View/index.html')"><span class="name">View</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/11_Vision/index.html')"><span class="name">Vision</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/12_UserBarlist/index.html')"><span class="name">UserBarlist</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/13_Utils/index.html')"><span class="name">Utils</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/14_WebViewer/index.html')"><span class="name">WebViewer</span></a>
+        <a class="link-item" onclick="goTo('A3_Rhino_Modeling_Tools/15_BimData/index.html')"><span class="name">BimData</span></a>
+      </div>
+    </div>
+
+    <!-- A4 -->
+    <div class="module-box">
+      <div class="module-header">
+        <span class="mod-id">A4</span>
+        <span class="mod-name">Rhino Modeling Learning</span>
+        <span class="mod-desc">— Modeling examples &amp; special condition guide</span>
+      </div>
+      <div class="link-list">
+        <a class="link-item" onclick="goTo('A4_Rhino_Modeling_Learning/index.html')"><span class="name">Learning Index</span></a>
+        <a class="link-item" onclick="goTo('A4_Rhino_Modeling_Learning/Mullion_Modeling.html')"><span class="name">Mullion Modeling</span></a>
+        <a class="link-item" onclick="goTo('A4_Rhino_Modeling_Learning/Profile_Length_Change.html')"><span class="name">Profile Length Change</span></a>
+        <a class="link-item" onclick="goTo('A4_Rhino_Modeling_Learning/CT0_Features.html')"><span class="name">CT0</span></a>
+        <a class="link-item" onclick="goTo('A4_Rhino_Modeling_Learning/Bracket_Modeling.html')"><span class="name">Bracket Modeling</span></a>
+        <a class="link-item" onclick="goTo('A4_Rhino_Modeling_Learning/Temp_Profile.html')"><span class="name">Temp Profile</span></a>
+        <a class="link-item" onclick="goTo('A4_Rhino_Modeling_Learning/F45_Processing.html')"><span class="name">F45 Processing</span></a>
+        <a class="link-item" onclick="goTo('A4_Rhino_Modeling_Learning/R45_Processing.html')"><span class="name">R45 Processing</span></a>
+      </div>
+    </div>
+
+    <div class="cate-title">AutoCAD / BricsCAD Functions</div>
+
+    <div class="grid-2col">
+      <!-- B1 -->
+      <div class="module-box">
+        <div class="module-header">
+          <span class="mod-id">B1</span>
+          <span class="mod-name">AutoCad Utils</span>
+        </div>
+        <div class="link-list" style="grid-template-columns: 1fr;">
+          <a class="link-item" onclick="goTo('B1_AutoCad_Utils/01_Layer_Making/index.html')"><span class="name">Layer Making</span></a>
+          <a class="link-item" onclick="goTo('B1_AutoCad_Utils/02_Layer_Change/index.html')"><span class="name">Layer Change</span></a>
+          <a class="link-item" onclick="goTo('B1_AutoCad_Utils/03_Color_Change/index.html')"><span class="name">Color Change</span></a>
+          <a class="link-item" onclick="goTo('B1_AutoCad_Utils/04_Layer_Control/index.html')"><span class="name">Layer Control</span></a>
+          <a class="link-item" onclick="goTo('B1_AutoCad_Utils/05_Match_Property/index.html')"><span class="name">Match Property</span></a>
+          <a class="link-item" onclick="goTo('B1_AutoCad_Utils/06_Move_Zero/index.html')"><span class="name">Move Zero</span></a>
+          <a class="link-item" onclick="goTo('B1_AutoCad_Utils/07_Rotate/index.html')"><span class="name">Rotate</span></a>
+        </div>
+      </div>
+
+      <!-- B2 -->
+      <div class="module-box">
+        <div class="module-header">
+          <span class="mod-id">B2</span>
+          <span class="mod-name">AutoCad Tools</span>
+        </div>
+        <div class="link-list" style="grid-template-columns: 1fr;">
+          <a class="link-item" onclick="goTo('B2_AutoCad_Tools/01_Block/index.html')"><span class="name">Block</span></a>
+          <a class="link-item" onclick="goTo('B2_AutoCad_Tools/02_Text/index.html')"><span class="name">Text</span></a>
+          <a class="link-item" onclick="goTo('B2_AutoCad_Tools/03_Dims/index.html')"><span class="name">Dims</span></a>
+          <a class="link-item" onclick="goTo('B2_AutoCad_Tools/04_NC_Data/index.html')"><span class="name">NC Data</span></a>
+          <a class="link-item" onclick="goTo('B2_AutoCad_Tools/05_Drawing_Shortening/index.html')"><span class="name">Drawing Shortening</span></a>
+          <a class="link-item" onclick="goTo('B2_AutoCad_Tools/06_Insert_Form/index.html')"><span class="name">Insert Form</span></a>
+          <a class="link-item" onclick="goTo('B2_AutoCad_Tools/07_UserBarList_Cuttinglist/index.html')"><span class="name">UserBarList Cuttinglist</span></a>
+          <a class="link-item" onclick="goTo('B2_AutoCad_Tools/08_AutoCad_Utils/index.html')"><span class="name">AutoCad Utils</span></a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <span>RCW V5  |  Rhino 7 &amp; 8</span>
+      <span>by Beimptech</span>
+    </footer>
+    <p class="trademark-notice">
+      Rhinoceros&reg; and Rhino&reg; are registered trademarks of TLM, Inc. d.b.a. Robert McNeel &amp; Associates.<br>
+      RCW is an independent third-party plug-in.
+    </p>
+
+  </main>
+</div>
+
+<script src="version_info.js"></script>
+<script>
+  function goTo(path) {
+    parent.postMessage({action:'navigate', path:path}, '*');
+  }
+
+  document.getElementById('wn-title').textContent = VERSION_INFO.title;
+  const ul = document.getElementById('wn-list');
+  VERSION_INFO.items.forEach(text => {
+    const li = document.createElement('li');
+    li.textContent = text;
+    ul.appendChild(li);
+  });
+
+  function queueBuild(selector, start, gap, list) {
+    document.querySelectorAll(selector).forEach((el, index) => {
+      el.classList.add('build-step');
+      list.push({ el, delay: start + index * gap });
+    });
+  }
+
+  function runWelcomeBuild() {
+    const sequence = [];
+    queueBuild('.hero', 0, 0, sequence);
+    queueBuild('.whats-new', 130, 0, sequence);
+    queueBuild('.flow-item', 220, 45, sequence);
+    queueBuild('.nf-card', 330, 60, sequence);
+    queueBuild('.cate-title', 560, 180, sequence);
+    queueBuild('.module-box', 650, 95, sequence);
+    queueBuild('.footer', 1180, 0, sequence);
+
+    sequence.forEach(item => {
+      window.setTimeout(() => item.el.classList.add('is-visible'), item.delay);
+    });
+    window.setTimeout(() => document.body.classList.remove('building'), 1800);
+  }
+
+  requestAnimationFrame(runWelcomeBuild);
+</script>
+</body>
+</html>
+
+

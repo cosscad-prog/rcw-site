@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GC1 ~ GC5, GCL - 01_Layer_Making</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>GC1 ~ GC5, GCL &nbsp;—&nbsp; 01_Layer_Making</h1>
+<p><span class="cmd-box">GC1 ~ GC5</span><span class="cmd-box">GCL</span></p>
+<h2>Purpose</h2>
+<p>Create <code>G_Center</code> layers for Glass center line work and standardize Glass reference line colors at once.</p>
+<p>A collection of commands to quickly generate <code>G_Center</code> series layers in AutoCAD / BricsCAD drawings.</p>
+<h2>Included Commands</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:14%"><col style="width:46%"><col style="width:40%"></colgroup>
+  <tr><th>Command</th><th>Created Layer</th><th>Color / Properties</th></tr>
+  <tr><td><code>GCL</code></td><td>Creates <code>G_CenterXX</code> layer. Supports numeric and alphanumeric input.</td><td>CAD Color Number (when numeric)</td></tr>
+  <tr><td><code>GC1</code></td><td>Creates <code>G_Center1</code> layer.</td><td>RGB(0,191,255)</td></tr>
+  <tr><td><code>GC2</code></td><td>Creates <code>G_Center2</code> layer.</td><td>RGB(0,151,255)</td></tr>
+  <tr><td><code>GC3</code></td><td>Creates <code>G_Center3</code> layer.</td><td>RGB(0,151,255)</td></tr>
+  <tr><td><code>GC4</code></td><td>Creates <code>G_Center4</code> layer.</td><td>RGB(0,151,255)</td></tr>
+  <tr><td><code>GC5</code></td><td>Creates <code>G_Center5</code> layer.</td><td>RGB(0,151,255)</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Enter the required command in the AutoCAD or BricsCAD command line and press Enter.</li>
+  <li>Commands in <code>*L</code> format attach the numeric or alphanumeric input directly to the base layer name.</li>
+  <li>When entering numbers, the number is used as the CAD Color Number. Numbers greater than 256 use the remainder after dividing by 256 as the Color Number.</li>
+
+  <li>Verify the created layer name, color, and Linetype in the layer list.</li>
+</ol>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer Series</td><td><code>G_Center</code></td></tr>
+  <tr><td>Target Commands</td><td><code>GC1 ~ GC5</code>, <code>GCL</code></td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer Name</td><td>Verify that the created layer name matches the Created Layer column in the table.</td></tr>
+  <tr><td>Layer Color</td><td>Verify that the CAD Color Number or RGB value from the Color / Properties column is applied.</td></tr>
+  <tr><td>Linetype</td><td>For layers with specified Linetype like Center series, verify the Linetype is applied correctly.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

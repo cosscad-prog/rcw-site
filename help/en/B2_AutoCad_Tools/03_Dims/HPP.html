@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>HPP - 03_Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>HPP &nbsp;—&nbsp; 03_Dims</h1>
+<p><span class="cmd-box">HPP</span></p>
+<p>
+  A command that <strong>automatically extracts characteristic points</strong> from selected entities
+  (Line, PolyLine, Circle, Arc) and creates Points on the <code>Dim_Points</code> layer.<br>
+  Use to quickly place reference Points before executing <code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code> dimension commands.
+</p>
+<h2>Purpose</h2>
+<p>
+  Automatically extract dimension reference points (endpoints, center points, nodes) from shape entities
+  without clicking individually, creating Points on the <code>Dim_Points</code> layer.
+  Quickly create multiple dimension reference points in complex drawings all at once.
+</p>
+<h2>Point Creation Location by Entity Type</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Selected Entity</th><th>Point Creation Location</th></tr>
+  <tr><td>Line</td><td>2 Points at start point (StartPoint) and end point (EndPoint)</td></tr>
+  <tr><td>PolyLine</td><td>Points created at each vertex (Node) location</td></tr>
+  <tr><td>Circle</td><td>1 Point at circle center (Center)</td></tr>
+  <tr><td>Arc</td><td>1 Point at arc center (Center)</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Enter <code>HPP</code> in the command line and press Enter.</li>
+  <li>Follow the <em>"Select Entity"</em> prompt and select entities to extract dimension reference points.<br>
+      (Can select mixed Line, PolyLine, Circle, Arc)</li>
+  <li>Press Enter to complete.</li>
+  <li>Points on <code>Dim_Points</code> layer are created at each characteristic point location of selected entities.</li>
+  <li>Subsequently select created Points with dimension commands like <code>DST</code> / <code>DSB</code> to add dimensions.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/C2450_HPP.mp4" autoplay muted loop playsinline aria-label="HPP execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>HPP — Example of automatically creating Dim_Points layer Points at entity characteristic points</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer</td><td>Created Points are placed on <code>Dim_Points</code> layer (color: 40). Layer is auto-created if absent.</td></tr>
+  <tr><td>Selection Target</td><td>Can select Line, PolyLine, Circle, Arc. Mixed selection is supported.</td></tr>
+  <tr><td>Next Step</td><td>Select created Points with <code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code> commands to add dimensions.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD (including Rhino)</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Created Point</td><td>Points are created at characteristic points (endpoints/center points/nodes) of each entity.</td></tr>
+  <tr><td>Layer</td><td>Placed on <code>Dim_Points</code> layer (color 40).</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> <code>HPP</code> automatically extracts characteristic points from shapes.
+  Use <code>PP</code> command to directly click and place Points one by one at specific locations.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

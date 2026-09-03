@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>PNamechange - Profile Name Change</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>PNamechange &nbsp;—&nbsp; Profile Name Change</h1>
+<p><span class="cmd-box">PNamechange</span></p>
+<p>Replaces hyphens (<code>-</code>) in the Profile name (<code>P_name</code>) of selected Surfaces with underscores (<code>_</code>) and prints the change list to the Rhino command line.</p>
+
+<h2>Purpose</h2>
+<p>Hyphens (<code>-</code>) in Profile names can cause problems in file names and data processing, so this command unifies naming conventions by replacing them with underscores (<code>_</code>). It updates both the Surface's UserData and object names. Objects without Section Data display an <code>N_Error</code> indicator.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>PNamechange</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the Profile or related objects to rename.</li>
+  <li>Enter the new name.</li>
+  <li>Confirm the before/after names shown in the command line.</li>
+</ol>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Changed Data</td><td>Profile names with hyphens are replaced with underscores; UserData and object names are both updated.</td></tr>
+  <tr><td>Output Message</td><td>The before and after names are displayed in the Rhino command line.</td></tr>
+  </tbody>
+</table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>Pname</strong></td><td>Enter Section Profile name and properties</td></tr>
+  <tr><td><strong>SSP</strong></td><td>Select the created Section Profile group</td></tr>
+  <tr><td><strong>SSC</strong></td><td>Reset the Section selection state</td></tr>
+</tbody></table>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

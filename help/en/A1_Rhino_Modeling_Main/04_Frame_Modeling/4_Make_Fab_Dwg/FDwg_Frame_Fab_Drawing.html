@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FDwg - Frame Fab Drawing (Elevation Hole Representation)</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    h3 { font-size:13px; margin-top:18px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .col-table { border-collapse:collapse; width:100%; margin-top:8px; font-size:12px; }
+    .col-table th { background:#dce8f8; border:1px solid #aac4e8; padding:4px 8px; text-align:center; font-weight:bold; word-break:keep-all;}
+    .col-table td { border:1px solid #c8d8ec; padding:4px 8px; vertical-align:top; word-break:keep-all;}
+    .col-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .new { background:#eefaf0; border-left:4px solid #38b86a; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .mini { font-size:12px; color:#555; }
+    .image-panel { display:flex; gap:18px; align-items:flex-start; margin:14px 0 8px; }
+    .image-panel img { width:52%; max-width:720px; min-width:360px; border:1px solid #c8d8ec; background:#fff; }
+    .callout-list { flex:1; min-width:240px; background:#f7faff; border:1px solid #c8d8ec; padding:10px 14px; }
+    .callout-list p { margin:0 0 8px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    @media (max-width:900px) { .image-panel { display:block; } .image-panel img { width:100%; min-width:0; } .callout-list { margin-top:10px; } }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>FDwg &nbsp;—&nbsp; Frame Fab Drawing (Elevation Hole Representation)</h1>
+<p><span class="cmd-box">FDwg</span></p>
+<p>
+  <strong>FDwg</strong> analyzes the selected frame group objects in the same way as <strong>FDDS</strong> to automatically generate a fabrication drawing (Fab Drawing).
+  It copies/aligns the model to the drawing position, then for each selected View creates 2D lines, sections, hole diameters, overall dimensions, center-line dimensions, angle dimensions,
+  and Fab No / Quantity / Unit No text.
+</p>
+<div>
+  <strong>Additionally, FDwg displays hole information on the Bar elevation views (Front / Top / Bottom, etc.) and generates a drawing where you can easily understand how deeply each hole penetrates through the material via Hidden Lines.</strong>
+</div>
+<div class="new">
+  <strong>FDDS → FDwg key differences:</strong>
+  <ul style="margin:6px 0 0 0; padding-left:18px;">
+    <li>Shape Curve layer is represented as OutLine Layer.</li>
+    <li>All other options, dimensions, text, and layer operations are <strong>identical to FDDS</strong>.</li>
+  </ul>
+</div>
+<div class="note"><strong>Note:</strong> The DimStyle follows the DimStyle applied in [DsOpt]. For per-profile automation, Fdds.dat is required and must contain the Profile Name and needed information. If that information is missing, the Drawing options in the DdOpt panel are used.</div>
+<div class="note"><strong>FDstyle Record/Playback:</strong> FDwg/FDDS follows the mode of the <strong>FDstyle panel</strong> — in <strong>Record (ON)</strong> mode it records options, NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates per profile, and in <strong>Playback (OFF, default)</strong> mode it automatically reproduces them. For details, see the "FDstyle Record / Playback Mode" section in the FDDS help documentation.</div>
+<h2>Purpose</h2>
+<p>FDwg analyzes the selected frame group objects to auto-generate a fabrication drawing and lets you confirm hole position and penetration depth at a glance on the elevation view as well.</p>
+<h2>Basic Usage</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <li>Open the Drawing option panel with <strong>DdOpt</strong> and set the required View, dimension, and distance options.</li>
+  <li>ProfileData / Fab No must first be assigned to the frame model (e.g. via <strong>FabNo</strong>).</li>
+  <li>Type <strong>FDwg</strong> in the Rhino command line and press Enter.</li>
+  <li>If the <strong>DdOpt or DsOpt panel is closed, FDwg opens it</strong> and then asks whether to continue
+      with the values now shown there. <strong>Yes</strong> draws with those values; <strong>No</strong> stops —
+      check or change them and run FDwg again. With both panels already open you are not asked.</li>
+  <li>At the <strong>Select Group objects</strong> prompt, select the frame group to generate the fab drawing for.</li>
+  <li>Press Enter to generate the drawing model and dimensions per group, with hole depth Hidden Lines drawn on the elevation.</li>
+
+
+
+
+
+
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <video src="../../../../img/FDwg.mp4" autoplay muted loop playsinline aria-label="FDwg fabrication drawing example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Difference between FDDS and FDwg</figcaption>
+  </figure>
+</div>
+<h2>Execution Flow</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Step</th><th>Description</th></tr>
+  <tr><td>1. Select group</td><td>Select the frame group in GroupSelect mode. Group-level processing is assumed, not single sub-object selection.</td></tr>
+  <tr><td>2. Check hatch patterns</td><td>Reads hatch patterns from <code>Hatch\acad.pat</code>, in the folder <code>RCWFolder</code> opens, and verifies <code>ANGLE</code>, <code>ANSI31~ANSI38</code> exist.</td></tr>
+  <tr><td>3. Prepare layers</td><td>Uses layers such as <code>DIMS</code>, <code>Section_Curve</code>, <code>Dim_Point</code>, <code>Hole_Dia</code>, <code>Hole_Points</code>, <code>DimBox</code>, <code>Shape_Hidden</code>.</td></tr>
+  <tr><td>4. Align model</td><td>Finds the Shape model, DimBox model, and cut-face data in the selected group and copies/aligns to the drawing position.</td></tr>
+  <tr><td>5. Create views</td><td>Only the views enabled in DdOpt are created. Top Back, Top, Front, Bottom, Bottom Back can be created individually.</td></tr>
+  <tr><td>6. Dimensions/notes</td><td>Writes overall/detail dimensions, hole diameters, angle dimensions, sections, Fab No, quantity, Unit No per view per options.</td></tr>
+  <tr><td>7. Elevation hole depth <span class="mini">(FDwg addition)</span></td><td>Selects hidden lines at the same depth as holes from the 2D projection and draws them as dashed lines on the elevation.</td></tr>
+</tbody></table>
+<h2>Elevation Hole Depth Representation (FDwg Addition)</h2>
+<p>
+  When building the drawing, FDwg uses Rhino's 2D projection (<code>HiddenLineDrawing</code>) and
+  <strong>selects only those hidden lines located at the same depth (Z) as the holes</strong>, drawing them on the elevation.
+</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%;"><col style="width:76%;"></colgroup>
+  <tbody>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Representation</td><td>The section where the hole passes through the material is drawn as a <strong>Hidden Line (dashed)</strong>. Hole position and penetration depth can be confirmed on the elevation at the same time.</td></tr>
+  <tr><td>Matching basis</td><td>Hidden lines whose depth value matches each hole's (HolePoint) Brep bounding-box depth are picked automatically. Hidden lines unrelated to the hole (e.g. the opposite wall) are excluded.</td></tr>
+  <tr><td>Layer</td><td>The selected hole hidden lines are drawn on the <code>Shape_Hidden</code> layer (Hidden linetype) — treated as ordinary hidden lines, not emphasized lines.</td></tr>
+  <tr><td>Applied views</td><td>Applied identically to all generated elevation views (FR / TO / BO / TB / BB) and appears automatically on the appropriate view depending on profile orientation.</td></tr>
+  <tr><td>Existing markers kept</td><td>Existing markers — hole center line (<code>Hole_Center</code>), section hatch (<code>Hole_Hatch</code>), hole points (<code>Hole_Points</code>) — are kept, and the depth Hidden Line is added on top.</td></tr>
+  </tbody>
+</table>
+<h2>DdOpt Option Window Sample</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../../img/DdOpt_panel_guide_en.png" alt="DdOpt_panel_guide_en.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<p>Like FDDS, FDwg uses the DdOpt panel settings for View generation, distance values, extra dimensions, and auxiliary 3D display as-is. The panel appearance may differ depending on the OS theme or display scaling, but the meaning of the items and the order they are applied are identical.</p>
+<h2>Generated Main Objects and Layers</h2>
+<table class="col-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Layer</th><th>Content</th></tr>
+  <tr><td><code>DIMS</code></td><td>General, overall, and detail dimensions</td></tr>
+  <tr><td><code>DIMS_Center</code></td><td>Center-line dimensions</td></tr>
+  <tr><td><code>DIMS_Angle</code></td><td>Angle dimensions. Right angles are switched on and off by <b>90° Angle Dim</b> (see below)</td></tr>
+  <tr><td><code>Section_Curve</code></td><td>Section 2D lines</td></tr>
+  <tr><td><code>Separate_Curve</code></td><td>Separation lines created when the SectionLine option is on</td></tr>
+  <tr><td><code>Hole_Dia</code></td><td>Hole diameter labels</td></tr>
+  <tr><td><code>Hole_Center</code>, <code>Hole_Hatch</code></td><td>Hole center line and section hatch</td></tr>
+  <tr><td><code>Hole_Points</code></td><td>Hole position points for verification</td></tr>
+  <tr><td><code>Shape_Hidden</code> <span class="mini">(FDwg elevation hole depth)</span></td><td>Elevation hole penetration-depth Hidden Lines (dashed). Only hidden lines at the same depth as holes are selected.</td></tr>
+  <tr><td><code>DimBox</code>, <code>DimBox1</code></td><td>Dimension reference models</td></tr>
+  <tr><td><code>Profile_No_Qnt</code></td><td>Fab No, Quantity, Unit No text</td></tr>
+  <tr><td><code>NC_TopPoint</code>, <code>NC_BottomPoint</code></td><td>Top/bottom reference points for NC data calculation</td></tr>
+</tbody></table>
+<h2>Options / Dimension Settings</h2>
+<p>
+  FDwg's View selection, distances, extra dimensions, auxiliary 3D display, and DsOpt / DimStyle dimension placement options behave
+  <strong>exactly like FDDS</strong>. For detailed descriptions of each option, refer to the FDDS help document.
+</p>
+<table class="desc-table">
+  <colgroup><col style="width:28%;"><col style="width:72%;"></colgroup>
+  <tbody>
+  <tr><th>Option group</th><th>Summary</th></tr>
+  <tr><td>DdOpt Group 1 (View/Max Only/Side Dim)</td><td>Specifies the View directions to generate and the dimension notation method for each View.</td></tr>
+  <tr><td>DdOpt Group 2 (Distance/Hole size)</td><td>Adjusts the drawing start position, View spacing, Fab No position, and hole recognition diameter (Hole Dia Min).</td></tr>
+  <tr><td>DdOpt Group 3 (Extra Dim OnOff)</td><td>Toggles the 90° Angle / Center / Hole / Unit No / P_Section / Attach extra information.</td></tr>
+  <tr><td>DdOpt Group 4 (Model View)</td><td>Decides whether to leave the Shape / Dim / Angle auxiliary models in the drawing.</td></tr>
+  <tr><td>DsOpt / DimStyle</td><td>Decides dimension-line placement/size such as First Dist, Dim Gap, Angle Dist, and TextSize.</td></tr>
+  </tbody>
+</table>
+<div class="note">
+  <strong>Option priority:</strong> In <strong>Playback mode</strong>, if <code>FDDS_Data.dat</code> contains a matching die row, the file values take priority over the panel. If there is no row or no file, the DdOpt panel values are used.
+</div>
+<h2>Cautions</h2>
+<div class="warning">
+  <strong>Hatch patterns:</strong> If <code>Hatch\acad.pat</code>, in the folder <code>RCWFolder</code> opens, and required patterns are missing, FDwg stops with a message. Import acad.pat in Rhino's Hatch settings.
+</div>
+<div class="warning">
+  <strong>Group data:</strong> FDwg looks for the Profiles-layer Shape model, ProfileData, Fab No, DimBox/DimBox1, and cut-face data in the selected group. If FabNo is not assigned or the group structure is broken, errors like <code>Group Model Error</code> or <code>CutSurface Error</code> may occur.
+</div>
+<div class="warning">
+  <strong>Hole recognition:</strong> Holes are found from cylindrical Brep faces, and only those with diameter ≥ Hole Dia Min are labeled. A value too small catches even unnecessary circular faces, while a value too large may miss actual holes.
+</div>
+<div class="warning">
+  <strong>Elevation hole depth Hidden Line:</strong> Depth is computed from the actually machined shape in the model. If a hole is not recognized (not a cylindrical face) or the material shape is abnormal, the Hidden Line may not appear. If dashed lines are excessive or missing, check the hole/section geometry of the model first.
+</div>
+<h2>Related Commands</h2>
+<table class="desc-table">
+    <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>FDDS</strong></td><td><b>Retired command.</b> The old base fab drawing command; FDwg is FDDS plus elevation hole-depth representation.</td></tr>
+  <tr><td><strong>DdOpt</strong></td><td>Opens the Drawing option panel used by FDwg / FDDS.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>The panel that toggles <strong>Record (ON) / Playback (OFF)</strong> mode for FDwg/FDDS. In Playback it automatically reproduces NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates.</td></tr>
+  <tr><td><strong>FabNo</strong></td><td>Assigns fab numbers and ProfileData to frame objects. Required before running FDwg.</td></tr>
+  <tr><td><strong>FabTable</strong></td><td>Creates the frame fab number/quantity table to complete the drawing set with FDwg.</td></tr>
+</tbody></table>
+
+<h2>The 90° Angle Dim option &nbsp;&mdash;&nbsp; it switches right angles on and off</h2>
+<p><b>90° Angle Dim</b> in <code>DdOpt</code> governs <b>the 90 degree angles only</b>. Every other angle, 45 degrees for instance, is <b>always drawn regardless of the option</b> - a bevel angle is a value the drawing has to state.</p>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>90° Angle Dim</th><th>Angles drawn</th></tr>
+  <tr><td><b>On</b></td><td><b>All</b> of them, right angles included</td></tr>
+  <tr><td><b>Off</b></td><td><b>Only the 90 degree ones are left out</b>; the rest are drawn as usual</td></tr>
+</tbody></table>
+<p>So on a member where <code>FR</code> measures 90 and <code>TP</code> measures 45, turning 90° Angle Dim off <b>removes the 90 and keeps the 45.</b> <code>[F]</code> angles (true 3D angles) follow the same rule, so <b>only [F]90</b> is left out.</p>
+<div class="note"><b>What counts as 90:</b> a value that would read <code>90</code> on the drawing (within 0.05 degrees of 90). So <code>89.96&deg;</code> and <code>90.04&deg;</code> count as right angles and are dropped, while <code>89.9&deg;</code> and <code>90.1&deg;</code> do not and are drawn.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>FDDS - 프레임 제작 가공도 생성</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    h3 { font-size:13px; margin-top:18px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .col-table { border-collapse:collapse; width:100%; margin-top:8px; font-size:12px; }
+    .col-table th { background:#dce8f8; border:1px solid #aac4e8; padding:4px 8px; text-align:center; font-weight:bold; word-break:keep-all;}
+    .col-table td { border:1px solid #c8d8ec; padding:4px 8px; vertical-align:top; word-break:keep-all;}
+    .col-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+    .mini { font-size:12px; color:#555; }
+    .image-panel { display:flex; gap:18px; align-items:flex-start; margin:14px 0 8px; }
+    .image-panel img { width:52%; max-width:720px; min-width:360px; border:1px solid #c8d8ec; background:#fff; }
+    .callout-list { flex:1; min-width:240px; background:#f7faff; border:1px solid #c8d8ec; padding:10px 14px; }
+    .callout-list p { margin:0 0 8px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    @media (max-width:900px) { .image-panel { display:block; } .image-panel img { width:100%; min-width:0; } .callout-list { margin-top:10px; } }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FDDS &nbsp;—&nbsp; 프레임 제작 가공도 생성</h1>
+<p><span class="cmd-box">FDDS</span></p>
+<div class="warn"><strong>폐기된 명령입니다 &nbsp;—&nbsp; <code>FDwg</code> 을 쓰십시오.</strong><br>
+  <code>FDDS</code> 는 더 이상 가공도를 만들지 않습니다. 명령을 실행하면
+  <em>"더이상 사용하지 않는 명령어 입니다. FDwg 사용하십시요"</em> 안내만 나옵니다.<br>
+  가공도는 <code>FDwg</code> 하나로 만듭니다. 아래 설명은 <strong>옛 도면을 살펴볼 때를 위해</strong> 남겨 둡니다.</div>
+<p>
+  <strong>FDDS</strong>는 선택한 프레임 그룹 객체를 분석하여 제작 가공도(Fab Drawing)를 자동 생성하는 명령입니다.
+<br>모델을 가공도 위치로 복사·정렬한 뒤, 선택된 View 별로 2D 선, 단면, 홀 지름, 외곽 치수, 중심선 치수, 각도 치수,
+  Fab No / Quantity / Unit No 텍스트를 작성합니다.
+</p>
+<h2>사용 목적</h2>
+<p>선택한 프레임 부재의 제작 가공도(Fab Drawing)를 자동으로 생성할 때 사용합니다. 부재별 2D 외형·단면·홀 지름·치수·제작 번호를 한 번에 작성해 수작업 도면화를 자동화하는 용도이며, <code>Fdds.dat</code>의 Profile별 설정과 <code>DsOpt</code>/<code>DdOpt</code> 옵션에 따라 도면 표기가 정밀하게 맞춰집니다.</p>
+<div class="note"><strong>참고:</strong> 이때 DimStyle 은 [DsOpt] 에 적용된 DimStyle 을 따른다. Profile 별 자동화를 위해 Fdds.dat 이 필요하며,&nbsp; Fdds.dat 에 Profile Name 및 해당 필요정보가 있어야 한다. Fdds.dat 해당 정보가 없다면 DdOpt 패널의 Drawing 옵션을 따른다.</div>
+<h2>기본 사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  
+  
+  <li><strong>DdOpt</strong> 명령으로 Drawing 옵션 패널을 열고 필요한 View, 치수, 거리 옵션을 설정합니다.</li>
+  <li>프레임 모델에 <strong>FabNo</strong> 등으로 ProfileData / Fab No 정보가 먼저 입력되어 있어야 합니다.</li>
+  <li>Rhino 명령창에 <strong>FDDS</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>명령 프롬프트 <strong>Select Group objects</strong> 에서 제작 가공도를 만들 프레임 그룹을 선택합니다.</li>
+  <li>Enter 를 누르면 그룹별로 가공도 모델과 치수가 생성됩니다.</li>
+
+
+
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 65%; min-width:220px; max-width:65%;">
+    <video src="../../../img/FDDS_demo.mp4" autoplay muted loop playsinline aria-label="FDDS 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<div class="note">
+  <strong>FDwg 안내:</strong> 홀 정보를 단면 View뿐 아니라 <strong>Bar 입면도</strong>에도 표시하고, 홀의 <strong>관통 깊이를 Hidden Line</strong>으로 함께 보고 싶다면 <strong>FDwg</strong> 명령을 사용하세요. 기본 동작은 FDDS와 동일합니다.
+</div>
+<h2>실행 흐름</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>단계</th><th>설명</th></tr>
+  <tr><td>1. 그룹 선택</td><td>GroupSelect 모드로 프레임 그룹을 선택합니다. 하위 객체 단독 선택이 아니라 그룹 단위 처리를 전제로 합니다.</td></tr>
+  <tr><td>2. 해치 패턴 확인</td><td><code>RCWFolder</code> 폴더의 <code>Hatch\acad.pat</code>에서 해치 패턴을 읽고 <code>ANGLE</code>, <code>ANSI31~ANSI38</code> 패턴이 있는지 확인합니다.</td></tr>
+  <tr><td>3. 레이어 준비</td><td><code>DIMS</code>, <code>Section_Curve</code>, <code>Dim_Point</code>, <code>Hole_Dia</code>, <code>Hole_Points</code>, <code>DimBox</code>, <code>Dim_Points</code>, <code>DIMS_Center</code>, <code>DIMS_Angle</code> 레이어를 사용합니다.</td></tr>
+  <tr><td>4. 모델 정렬</td><td>선택 그룹에서 Shape 모델, DimBox 모델, 절단면 정보를 찾고 가공도 위치로 복사·정렬합니다.</td></tr>
+  <tr><td>5. View 생성</td><td>DdOpt에서 켜진 View만 생성합니다. Top Back, Top, Front, Bottom, Bottom Back을 개별적으로 만들 수 있습니다.</td></tr>
+  <tr><td>6. 치수/주기 작성</td><td>각 View에 외곽 치수, 세부 치수, 홀 지름, 각도 치수, 단면, Fab No, 수량, Unit No를 옵션에 따라 작성합니다.</td></tr>
+</tbody></table>
+<h2>DdOpt 옵션 창 샘플</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../img/DdOpt_panel_guide.png" alt="DdOpt_panel_guide.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<p>DdOpt 패널은 View 생성 여부, 거리값, 추가 치수, 보조 3D 표시 여부를 한곳에서 조정합니다. 운영체제 테마나 화면 배율에 따라 패널 외형은 달라도 항목의 의미와 적용 순서는 동일합니다.</p>
+<h2>FDstyle 기록 / 재생 모드</h2>
+<p>
+  FDDS 는 <strong>FDstyle 패널</strong>의 모드에 따라 동작합니다. 패널 상단 배너를 눌러
+  <strong>기록(ON)</strong> 과 <strong>재생(OFF, 기본)</strong> 을 전환합니다.
+</p>
+<table class="desc-table">
+  <colgroup><col style="width: 20%;"><col style="width: 80%;"></colgroup>
+  <tbody><tr><th>모드</th><th>동작</th></tr>
+  <tr><td><strong>기록 (ON)</strong></td><td>FDDS 로 만든 가공도의 옵션과 추가 작업 — NC 테이블, FSC 압축, 주석/지시선, 부속자재 표, 부분확대(F3D), 도면 양식 등 — 을 Profile별로 <code>FDDS_Data.dat</code> 등에 <strong>기록</strong>합니다.</td></tr>
+  <tr><td><strong>재생 (OFF, 기본)</strong></td><td>기록된 데이터를 읽어, 같은 Profile 의 가공도에 NC 테이블·FSC 압축·주석·부속자재 표·부분확대·양식을 <strong>자동으로 재현</strong>합니다. 기록된 데이터가 없으면 현재 DdOpt 패널 설정값을 사용합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 파일 데이터 적용은 <strong>재생 모드</strong>에서 자동으로 이루어집니다(해당 Profile 행이 있을 때). 기록된 행이 없으면 DdOpt 패널의 현재 설정값을 사용합니다. 파일 포맷은 <code>FDDS_Data.dat</code> 도움말을 참고하세요.</div>
+<h2>옵션 적용 우선순위</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 24%;">
+    <col style="width: 76%;">
+  </colgroup>
+  <tbody><tr><th>조건</th><th>적용 방식</th></tr>
+  <tr><td><strong>재생 + 일치 행 있음</strong></td><td><code>FDDS_Data.dat</code>를 읽고, 선택 그룹의 금형명(ProfileName 또는 객체 이름의 앞부분)과 일치하는 행이 있으면 파일 값을 우선 적용합니다.</td></tr>
+  <tr><td>일치 행 없음 / 기록 데이터 없음</td><td>DdOpt 패널의 현재 체크박스·텍스트박스 값을 사용합니다.</td></tr>
+  <tr><td>파일이 없는 경우</td><td>명령창에 <code>FDDS_Data.dat file이 없습니다.</code> 같은 메시지가 나올 수 있습니다. 재생이 필요한 작업이면 파일 위치·이름을 확인하세요.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>정리:</strong> 같은 모델이라도 <strong>재생 모드</strong>에서 해당 금형 행이 존재하면, 패널에서 보이는 값과 다른 결과가 나올 수 있습니다.
+  반복 제작 품목은 기록해 둔 데이터(재생)를 쓰고, 일회성 확인 작업은 패널 값을 직접 조정하는 방식이 안전합니다.
+</div>
+<h2>DdOpt Group 1 - View / Max / Side / Angle</h2>
+<p>
+  Group 1은 어떤 방향의 제작도를 만들지, 그리고 그 View 안에서 어떤 치수를 표시할지를 결정합니다.
+  각 행은 하나의 View를 의미하고, 같은 행의 <strong>Max Only</strong>, <strong>Side Dim</strong>은 해당 View에만 영향을 줍니다.
+</p>
+<table class="col-table">
+  
+  <tbody><tr><th>View 행</th><th>코드</th><th>생성 위치/방향</th><th>켜짐 결과</th><th>꺼짐 결과</th></tr>
+  <tr><td>Top Back</td><td>TB</td><td>상부 Back 방향. Top 계열처럼 X축 기준 90도 회전 후 Back 방향 보정.</td><td>Top Back View를 생성합니다.</td><td>Top Back View를 만들지 않습니다.</td></tr>
+  <tr><td>Top</td><td>TO</td><td>상부 방향. 원본 기준 위쪽에 배치됩니다.</td><td>Top View를 생성합니다.</td><td>Top View를 만들지 않습니다.</td></tr>
+  <tr><td>Front</td><td>FR</td><td>정면 방향. 회전 없이 기준 View로 사용됩니다.</td><td>Front View를 생성합니다.</td><td>Front View를 만들지 않습니다.</td></tr>
+  <tr><td>Bottom</td><td>BO</td><td>하부 방향. X축 기준 -90도 회전 후 아래쪽에 배치됩니다.</td><td>Bottom View를 생성합니다.</td><td>Bottom View를 만들지 않습니다.</td></tr>
+  <tr><td>Bottom Back</td><td>BB</td><td>하부 Back 방향. Bottom 계열처럼 회전 후 Back 방향 보정.</td><td>Bottom Back View를 생성합니다.</td><td>Bottom Back View를 만들지 않습니다.</td></tr>
+</tbody></table>
+<h2>Max 옵션</h2>
+<table class="desc-table">
+  <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>상태</th><th>결과</th></tr>
+  <tr><td><strong>On</strong></td><td>해당 View의 전체 최대 치수 위주로 간단하게 표시합니다. 세부 분할 치수는 줄어듭니다.</td></tr>
+  <tr><td><strong>Off</strong></td><td>전체 최대 치수에 더해 상·하 방향의 세부 치수를 함께 작성합니다. 제작 확인용 정보가 많아집니다.</td></tr>
+</tbody></table>
+<h2>Side 옵션</h2>
+<table class="desc-table">
+  <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>상태</th><th>결과</th></tr>
+  <tr><td><strong>On</strong></td><td>좌측과 우측 Side 치수를 모두 작성합니다. 좌우 형상이 다르거나 가공 위치 확인이 필요한 경우 사용합니다.</td></tr>
+  <tr><td><strong>Off</strong></td><td>우측 기준 Side 치수만 작성합니다. 도면이 단순해지고 중복 치수가 줄어듭니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고 &mdash; [F]Angle 옵션은 없어졌습니다.</strong> 예전에는 View 마다 <code>[F]Angle</code> 체크박스로
+  각도를 <b>어떤 방식으로</b> 쓸지 골랐지만, 지금은 <b>변마다 저절로 정해집니다</b> — 그 변의 경사가 이 View 에서
+  기울어져 보이면 [F](3D 실각도), 제 모양으로 보이면 일반(2D) 각도를 씁니다. 그래서 <code>DdOpt</code> 에서
+  그 칸이 빠졌습니다.<br>
+  Group 3의 <strong>90° Angle Dim</strong>은 <b>90도 각도만</b> 켜고 끕니다. 45도 같은 나머지 각도는
+  90° Angle Dim과 무관하게 언제나 작성됩니다.
+</div>
+<h2>DdOpt Group 2 - 거리 / 홀 크기</h2>
+<table class="col-table">
+  
+  <tbody><tr><th>옵션</th><th>기본값</th><th>역할</th><th>값을 키우면</th><th>값을 줄이면</th></tr>
+  <tr><td>Fab Start Point X</td><td>500</td><td>원본 모델 기준 가공도 시작 위치의 X 오프셋입니다.</td><td>가공도 묶음이 원본에서 더 오른쪽으로 떨어집니다.</td><td>원본과 가공도가 가까워집니다. 너무 작으면 겹칠 수 있습니다.</td></tr>
+  <tr><td>Fab Start Point Z</td><td>1500</td><td>가공도 시작 위치의 Z 오프셋입니다.</td><td>가공도 묶음이 원본에서 더 아래쪽으로 떨어집니다.</td><td>원본과 가공도가 가까워집니다. 너무 작으면 겹칠 수 있습니다.</td></tr>
+  <tr><td>Dwg Distance X</td><td>150</td><td>정면 View와 단면 View 사이의 X 방향 간격입니다.</td><td>좌측 단면과 주 View 사이 간격이 넓어집니다.</td><td>단면/치수/본문 View가 겹칠 수 있습니다.</td></tr>
+  <tr><td>Dwg Distance Z</td><td>250</td><td>Top / Bottom 계열 View를 Front 기준 위·아래로 배치할 때 사용하는 Z 방향 간격입니다.</td><td>Top/Bottom View 사이 여백이 넓어집니다.</td><td>여러 View가 서로 겹칠 수 있습니다.</td></tr>
+  <tr><td>Fab No Distance X</td><td>100</td><td>Fab No 텍스트를 가공도 좌측 하단 기준에서 X 방향으로 이동시키는 거리입니다.</td><td>Fab No 텍스트가 오른쪽으로 이동합니다.</td><td>Fab No 텍스트가 도면 외곽이나 치수와 가까워집니다.</td></tr>
+  <tr><td>Fab No Distance Z</td><td>400</td><td>Fab No / Quantity 텍스트를 가공도 아래쪽으로 떨어뜨리는 거리입니다.</td><td>텍스트가 도면 아래로 더 내려갑니다.</td><td>텍스트가 도면과 가까워져 겹칠 수 있습니다.</td></tr>
+  <tr><td>Hole Dia Min</td><td>3</td><td>홀로 인식할 최소 지름입니다. 이 값보다 작은 원통형 면은 홀 표기에서 제외됩니다.</td><td>작은 홀/미세 원형 형상이 무시됩니다.</td><td>작은 홀까지 표기되지만 원하지 않는 작은 원형 면도 잡힐 수 있습니다.</td></tr>
+  <tr><td>Hole Dia Max</td><td>25</td><td>패널에는 있으나 현재 FDDS 가공도 생성 경로에서는 Min 값 중심으로 홀을 필터링합니다.</td><td>현재 주요 출력 영향은 제한적입니다.</td><td>현재 주요 출력 영향은 제한적입니다.</td></tr>
+</tbody></table>
+<h2>DdOpt Group 3 - Extra Dim OnOff</h2>
+<table class="desc-table">
+    <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>옵션</th><th>역할과 결과</th></tr>
+  <tr><td><strong>90° Angle Dim</strong></td><td><b>90도 각도만</b> 켜고 끕니다. 켜면 90도까지 전부 작성하고, 꺼도 <b>90도만 빠질 뿐</b> 45도 같은 나머지 각도는 그대로 작성됩니다. <code>[F]</code> 각도도 같은 규칙이라 <b>[F]90도만</b> 빠집니다. 90도 판정은 도면에 <code>90</code>으로 찍힐 값 기준입니다(90도에서 0.05도 이내). <code>FDwg</code>과 같은 규칙입니다.</td></tr>
+  <tr><td><strong>Center Dim</strong></td><td>Frame Center Curve가 있는 경우 중심선 치수를 작성합니다. 꺼져 있으면 중심선 객체를 삭제하고 중심 치수를 만들지 않습니다.</td></tr>
+  <tr><td><strong>Cutting Dim</strong></td><td>절단/가공 기준 치수 중심으로 점 목록을 필터링합니다. 켜면 절단 관련 치수 표현이 강화되고, Center Curve 계산에도 사용됩니다.</td></tr>
+  <tr><td><strong>Unit No</strong></td><td>Fab No와 Quantity 아래에 Unit No 텍스트를 추가합니다. 꺼져 있으면 Unit No는 출력하지 않습니다.</td></tr>
+  <tr><td><strong>Attach Dim</strong></td><td>부착/브라켓 모델의 포인트까지 치수 기준에 포함합니다. 켜면 부속물까지 포함한 치수가 나오고, 꺼지면 기본 Shape 표면 포인트 중심으로 치수를 냅니다.</td></tr>
+  <tr><td><strong>SectionLine</strong></td><td>정면 View와 좌측 단면 View 사이에 분리선을 추가합니다. 여러 도면 요소가 가까운 경우 시각적으로 구분하기 좋습니다.</td></tr>
+</tbody></table>
+<h2>DdOpt Group 4 - Model View</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 30%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <tbody><tr><th>옵션</th><th>On</th><th>Off</th></tr>
+  <tr><td><strong>Shape</strong></td><td>가공도 생성 후 Shape 3D/기준 모델을 남깁니다.</td><td>Shape 모델을 2D 선/치수 생성 후 삭제하여 도면을 가볍게 정리합니다.</td></tr>
+  <tr><td><strong>Dim Model</strong></td><td>DimBox / DimBox1 모델을 남깁니다. 치수 기준 확인에 유리합니다.</td><td>Dim 모델을 삭제합니다. 최종 도면을 깔끔하게 만들 때 사용합니다.</td></tr>
+  <tr><td><strong>Angle Model</strong></td><td>각도 계산용 모델을 남깁니다. 각도 치수 검증에 유리합니다.</td><td>각도 모델을 삭제합니다. 최종 출력용 도면에서 불필요한 보조 형상을 줄입니다.</td></tr>
+</tbody></table>
+<h2>DsOpt / DimStyle 치수 옵션과 FDDS의 관계</h2>
+<p>
+  FDDS의 View 선택과 출력 여부는 주로 <strong>DdOpt</strong>에서 결정하지만, 실제 치수선이 모델에서 얼마나 떨어져 배치되는지,
+  치수선끼리 얼마나 간격을 두는지, 각도 치수가 어느 위치에 그려지는지는 <strong>DsOpt</strong> 패널의 값도 함께 사용합니다.
+</p>
+<table class="col-table">
+  <tbody><tr><th>DsOpt / DimStyle 항목</th><th>기본값</th><th>FDDS에서의 역할</th><th>값 변경 시 결과</th></tr>
+  <tr><td><strong>First Dist</strong></td><td>50</td><td>첫 번째 치수선이 도면 외곽에서 떨어지는 기본 거리입니다. FDDS 내부에서는 <code>DSopt_Dim_First</code>로 사용됩니다.</td><td>값을 키우면 치수선이 모델에서 멀어져 여유가 생기고, 줄이면 도면이 조밀해지지만 치수와 형상이 겹칠 수 있습니다.</td></tr>
+  <tr><td><strong>Dim Gap</strong></td><td>20</td><td>여러 줄 치수 사이의 간격입니다. FDDS 내부에서는 <code>DSopt_Dim_Gap</code>로 사용됩니다.</td><td>값을 키우면 치수줄 간격이 넓어지고 가독성이 좋아집니다. 너무 작으면 치수 문자와 선이 겹칩니다.</td></tr>
+  <tr><td><strong>Angle Dist</strong></td><td>50</td><td>각도 치수를 형상에서 얼마나 떨어뜨려 배치할지 결정합니다. FDDS 각도 모델 처리에서 <code>DSopt_Angle_Dist</code>를 사용합니다.</td><td>값을 키우면 각도 치수가 외곽으로 밀려나고, 줄이면 각도 치수가 형상 가까이에 붙습니다.</td></tr>
+  <tr><td><strong>LnR Dist</strong></td><td>20</td><td>좌우 방향 치수 도구와 일부 2D 치수 명령에서 사용하는 좌우 여백 값입니다. FDDS 자체의 주요 치수 배치에는 First Dist / Dim Gap 영향이 더 큽니다.</td><td>좌우 전용 치수 명령이나 관련 도면에서 좌우 치수 간격이 달라질 수 있습니다.</td></tr>
+  <tr><td><strong>Top Max / Bottom Max / Left Max / Right Max</strong></td><td>Top, Left 기본 On</td><td>일부 2D/가공도 치수에서 방향별 최대 치수 표시 방식을 제어합니다. FDDS에서는 DdOpt의 View별 Max 옵션이 직접적으로 더 우선적인 역할을 합니다.</td><td>다른 제작도/2D 도면 명령과 함께 쓰는 경우 방향별 최대 치수 표시가 달라집니다.</td></tr>
+  <tr><td><strong>TextSize</strong></td><td>현재 설정값</td><td>DimStyle 패널에서 텍스트 기준 크기를 조정합니다. FDDS의 Fab No / Qnt 텍스트는 현재 DimStyle의 TextHeight와 DimensionScale도 함께 반영합니다.</td><td>값이 커지면 문자와 치수 가독성은 좋아지지만 도면 간격도 더 필요합니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>DdOpt와 DsOpt의 차이:</strong> DdOpt는 “무엇을 만들지”를 정합니다. 예를 들어 Top View를 만들지, Side 치수를 넣을지, Unit No를 표시할지 결정합니다.
+  DsOpt / DimStyle은 “치수를 어디에 얼마나 띄워 그릴지”를 정합니다. 즉, 같은 FDDS 옵션이라도 DsOpt 값이 다르면 치수선 위치와 가독성이 달라집니다.
+</div>
+<div class="warning">
+  <strong>실무 팁:</strong> 대형 프레임이나 View를 많이 켜는 작업에서는 DdOpt의 <strong>Dwg Distance</strong>만 키우는 것으로 부족할 수 있습니다.
+  치수끼리 겹치면 DsOpt의 <strong>First Dist</strong>와 <strong>Dim Gap</strong>도 함께 키워야 합니다.
+</div>
+<h2>생성되는 주요 객체와 레이어</h2>
+<table class="col-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>레이어</th><th>내용</th></tr>
+  <tr><td><code>DIMS</code></td><td>일반 치수, 외곽 치수, 세부 치수</td></tr>
+  <tr><td><code>DIMS_Center</code></td><td>중심선 치수</td></tr>
+  <tr><td><code>DIMS_Angle</code></td><td>각도 치수</td></tr>
+  <tr><td><code>Section_Curve</code></td><td>단면 2D 선</td></tr>
+  <tr><td><code>Separate_Curve</code></td><td>SectionLine 옵션이 켜진 경우 생성되는 분리선</td></tr>
+  <tr><td><code>Hole_Dia</code></td><td>홀 지름 표기</td></tr>
+  <tr><td><code>Hole_Points</code></td><td>홀 위치 확인용 포인트</td></tr>
+  <tr><td><code>Dim_Point</code>, <code>Dim_Points</code></td><td>치수 산출 기준 포인트</td></tr>
+  <tr><td><code>DimBox</code>, <code>DimBox1</code></td><td>치수 기준 모델</td></tr>
+  <tr><td><code>Profile_No_Qnt</code></td><td>Fab No, Quantity, Unit No 텍스트</td></tr>
+  <tr><td><code>NC_TopPoint</code>, <code>NC_BottomPoint</code></td><td>NC 데이터 산출용 상·하 기준 포인트</td></tr>
+</tbody></table>
+<h2>옵션 조합에 따른 결과 예시</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 30%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <tbody><tr><th>목적</th><th>추천 옵션</th><th>결과</th></tr>
+  <tr><td>가장 단순한 확인용 도면</td><td>Front View On, Max On, Side Off, 90° Angle Dim Off, Shape/Dim/Angle Model Off</td><td>정면 기준 최대 치수 중심의 간단한 도면을 생성합니다.</td></tr>
+  <tr><td>제작 검토용 상세 도면</td><td>Top / Front / Bottom On, Max Off, Side On, 90° Angle Dim On, Center Dim On</td><td>상·정면·하부 View와 세부 치수, 좌우 Side 치수, 중심선, 각도 치수가 함께 생성됩니다.</td></tr>
+  <tr><td>부속물까지 포함한 치수 확인</td><td>Attach Dim On, Dim Model View On</td><td>브라켓/부착 모델의 포인트까지 치수 기준에 포함하고, DimBox를 남겨 치수 기준을 확인할 수 있습니다.</td></tr>
+  <tr><td>최종 출력용 정리 도면</td><td>Shape / Dim Model / Angle Model Off, SectionLine On</td><td>보조 3D 모델은 삭제되고, 필요한 2D 선·치수·분리선 중심으로 정리됩니다.</td></tr>
+</tbody></table>
+<h2>주의할 점</h2>
+<div class="warning">
+  <strong>해치 패턴:</strong> <code>RCWFolder</code> 폴더의 <code>Hatch\acad.pat</code>와 필수 해치 패턴이 없으면 FDDS가 중단되고 안내 메시지가 표시됩니다.
+  Rhino의 Hatch 설정에서 acad.pat를 import해야 합니다.
+</div>
+<div class="warning">
+  <strong>그룹 데이터:</strong> FDDS는 선택 그룹에서 Profiles 레이어의 Shape 모델, ProfileData, Fab No, DimBox/DimBox1, 절단면 데이터를 찾습니다.
+  FabNo 처리 전이거나 그룹 구조가 깨져 있으면 <code>Group Model Error occurs</code>, <code>CutSurface Error</code> 같은 오류가 날 수 있습니다.
+</div>
+<div class="warning">
+  <strong>재생 모드 데이터:</strong> 재생 모드에서 해당 Profile 행이 있으면 패널 값보다 <code>FDDS_Data.dat</code>의 금형별 값이 우선합니다.
+  예상과 다른 View나 치수가 나온다면 먼저 <strong>FDstyle 모드(기록/재생)</strong>와 해당 금형 행을 확인하세요.
+</div>
+<div class="warning">
+  <strong>거리 값:</strong> Fab Start Point, Dwg Distance, Fab No Distance가 너무 작으면 원본 모델, 여러 View, 단면, 텍스트, 치수가 서로 겹칩니다.
+  큰 프레임은 기본값보다 넉넉한 간격을 주는 것이 좋습니다.
+</div>
+<div class="warning">
+  <strong>홀 인식:</strong> 홀은 원통형 Brep face를 기준으로 찾고, 지름이 Min Dia 이상인 것만 표기합니다.
+  너무 작은 Min Dia는 불필요한 원형 면까지 잡을 수 있고, 너무 큰 Min Dia는 실제 홀을 누락할 수 있습니다.
+</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+    <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>FDwg</strong></td><td>FDDS와 동일한 가공도를 생성하면서, Bar 입면도에도 홀 정보와 관통 깊이(Hidden Line)를 함께 표시하는 확장 버전입니다.</td></tr>
+  <tr><td><strong>DdOpt</strong></td><td>FDDS에서 사용하는 Drawing 옵션 패널을 엽니다.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>FDDS/FDwg 의 <strong>기록(ON)·재생(OFF)</strong> 모드를 전환하는 패널입니다. 재생 시 NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 자동 재현합니다.</td></tr>
+  <tr><td><strong>FabNo</strong></td><td>프레임 객체에 제작 번호와 ProfileData를 부여합니다. FDDS 실행 전 선행 작업으로 필요합니다.</td></tr>
+  <tr><td><strong>FabTable</strong></td><td>프레임 제작 번호/수량 테이블을 작성합니다. FDDS와 함께 제작 도면 세트를 구성합니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

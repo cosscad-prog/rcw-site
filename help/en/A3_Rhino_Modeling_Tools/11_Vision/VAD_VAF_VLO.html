@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VAD, VAF, VLO - Vision</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>VAD, VAF, VLO &nbsp;—&nbsp; Vision</h1>
+<p><span class="cmd-box">VAD</span> <span class="cmd-box">VAF</span> <span class="cmd-box">VLO</span></p>
+<p>Commands to directly toggle the Vision state of objects. Changes object display properties independently of Layer display state, hiding/showing objects without deletion.</p>
+<h2>Purpose</h2>
+<p>Used to control the display/hide state of selected objects, allowing you to keep only necessary objects during work or restore hidden objects to view.</p>
+<h2>Command Functions</h2>
+<table class="desc-table">
+  <colgroup><col style="width:18%"><col style="width:32%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>Command</th><th>Function</th><th>Operation</th></tr>
+  <tr><td><code>VAD</code></td><td>Selected Object Vision On</td><td>Shows only selected objects and hides all unselected objects.</td></tr>
+  <tr><td><code>VAF</code></td><td>Selected Object Vision Off</td><td>Hides only selected objects.</td></tr>
+  <tr><td><code>VLO</code></td><td>All Object Vision On</td><td>Restores the display properties of document objects, including hidden ones.</td></tr></tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Run <code>VAD</code> and the "Select objects to keep visible" prompt appears. Select one or more objects to keep, and unselected objects are hidden.</li>
+  <li>Run <code>VAF</code> and the "Select objects" prompt appears. Select one or more objects to hide, and their display properties are turned off.</li>
+  <li>Run <code>VLO</code> without additional selection. Hidden objects' display properties are restored and the screen is refreshed.</li>
+</ol>
+<h2>Code-Based Operation</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>VAD Selection Method</td><td>Selects one or more objects of all types (<code>ObjectType.AnyObject</code>) using <code>GetObject</code>. Saves selected object IDs, then iterates through all document objects and hides those not selected and not currently hidden using <code>doc.Objects.Hide</code>.</td></tr>
+  <tr><td>VAF Selection Method</td><td>Clears all previous selection and selects new objects. PreSelect is disabled, so only newly selected objects are processed. Sets selected objects' <code>Attributes.Visible</code> value to <code>false</code> and saves changes.</td></tr>
+  <tr><td>VLO Restoration Method</td><td>Gets the object list including Hidden, Locked, and Reference objects from <code>ObjectEnumeratorSettings</code>, then sets each object's <code>Attributes.Visible</code> value to <code>true</code>.</td></tr>
+  <tr><td>Relationship with Layer</td><td>Not a command to turn Layers on or off. Changes object display/hide properties independently of Layer state.</td></tr>
+  <tr><td>Screen Refresh</td><td>Each command redraws the Rhino View after processing.</td></tr></tbody></table>
+<h2>Cautions</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>No Deletion</td><td>Objects are not deleted. Only their hidden state is changed.</td></tr>
+  <tr><td>VAD Result</td><td>Hides all unselected objects, used to narrow the work scope and view specific objects only.</td></tr>
+  <tr><td>VAF Result</td><td>Hides only selected objects, used to temporarily remove obstructing objects for a clean view.</td></tr>
+  <tr><td>VLO Result</td><td>Restores objects in Vision Off state to visibility. Includes hidden, locked, and reference objects in the enumeration.</td></tr></tbody></table>
+
+<div class="note"><strong>Note:</strong> After running VAD, the number of hidden objects is output to the command line. Run <code>VLO</code> to view all objects again.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

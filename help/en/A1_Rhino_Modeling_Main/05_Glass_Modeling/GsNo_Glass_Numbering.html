@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GsNo - Glass Numbering</title>
+  <style>
+    body {
+      font-family: "맑은 고딕", "Malgun Gothic", sans-serif;
+      font-size: 13px;
+      color: #222;
+      margin: 20px 30px;
+      line-height: 1.7;
+    }
+    h1 {
+      font-size: 18px;
+      border-bottom: 2px solid #0066cc;
+      padding-bottom: 6px;
+      color: #0066cc;
+    }
+    h2 {
+      font-size: 14px;
+      border-left: 4px solid #0066cc;
+      padding-left: 8px;
+      margin-top: 24px;
+      color: #003d80;
+    }
+    .cmd-box {
+      display: inline-block;
+      background: #f0f4ff;
+      border: 1px solid #99bbee;
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+      font-weight: bold;
+      color: #003d80;
+      margin-bottom: 10px;
+    }
+    .desc-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .desc-table th {
+      background: #dce8f8;
+      border: 1px solid #aac4e8;
+      padding: 5px 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+    .desc-table td {
+      border: 1px solid #c8d8ec;
+      padding: 5px 10px;
+      vertical-align: top;
+    }
+    .desc-table tr:nth-child(even) td {
+      background: #f7faff;
+    }
+    .note {
+      background: #fffbe6;
+      border-left: 4px solid #f0c040;
+      padding: 8px 12px;
+      margin-top: 16px;
+      font-size: 12px;
+    }
+    .step-list {
+      padding-left: 20px;
+    }
+    .step-list li {
+      margin-bottom: 6px;
+    }
+    .gif-placeholder {
+      width: 100%;
+      max-width: 600px;
+      height: 340px;
+      background: #e8eef8;
+      border: 2px dashed #99bbee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #668;
+      margin: 12px 0;
+      border-radius: 4px;
+    }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>GsNo &nbsp;—&nbsp; Glass Numbering</h1>
+<p><span class="cmd-box">GsNo</span></p>
+<p>Automatically places number text on glass surfaces created by the <strong>Gmd</strong> command. A sequential number is assigned at the center point of each glass face and used for drawing annotations and quantity tallying.</p>
+<h2>Purpose</h2>
+<p>Used to assign sequential numbers automatically to the glass faces created by <code>Gmd</code>, giving drawing annotation and quantity tallying a common reference. A number is written at the center of each glass face so the lists and the fabrication drawings carry the same numbering.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>Glass surfaces must already be created with the <strong>Gmd</strong> command.</li>
+  <li>Type <strong>GsNo</strong> in the Rhino command line and press Enter.</li>
+  <li>Executes immediately without any selection.</li>
+  <li>Number text is automatically placed at the center of each glass surface.</li>
+
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 65%; min-width:220px; max-width:65%;">
+    <video src="../../../img/GsNo_demo.mp4" autoplay muted loop playsinline aria-label="GsNo operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr>
+    <th>Item</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Number Position</td>
+    <td>Text is placed at the center point of each glass surface.</td>
+  </tr>
+  <tr>
+    <td>Number Format</td>
+    <td>Auto-generated as glass type code + sequential number.</td>
+  </tr>
+  <tr>
+    <td>Layer</td>
+    <td>Number text is placed on a dedicated number layer.</td>
+  </tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr>
+    <th>Command</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>Gmd</strong></td>
+    <td>Glass surface modeling — run first before numbering.</td>
+  </tr>
+  <tr>
+    <td><strong>GMDC</strong></td>
+    <td>Clear glass surfaces — deletes all glass surfaces and numbers to restart.</td>
+  </tr>
+  <tr>
+    <td><strong>GRV</strong></td>
+    <td>Glass transparency toggle — makes glass transparent to easily verify number positions.</td>
+  </tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

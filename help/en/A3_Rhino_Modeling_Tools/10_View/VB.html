@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VB - View</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>VB &nbsp;—&nbsp; View</h1>
+<p><span class="cmd-box">VB</span></p>
+<p>A command to set the construction plane (CPlane) of the current active viewport based on the start and end point directions of the selected Curve or Line.</p>
+<h2>Purpose</h2>
+<p>Used to quickly align the view direction or working reference based on the BoundingBox or arrangement state of the selected object, making model review and subsequent work convenient.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <code>VB</code> in the Rhino command line and press Enter.</li>
+  <li>At the prompt "Select the line to use as the CPlane reference", select the reference Curve.</li>
+  <li>The start point of the selected Curve becomes the CPlane origin, and the direction from the start point to the end point becomes the CPlane X-axis.</li>
+</ol>
+<h2>Operation Standards</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Select a Curve object. Even if not a straight line, it can be selected, but the actual reference is the direction connecting the start and end points of the Curve.</td></tr>
+  <tr><td>CPlane Origin</td><td>Uses the start point (<code>PointAtStart</code>) of the selected Curve.</td></tr>
+  <tr><td>X-Axis Reference</td><td>Uses the unit vector from the start point to the end point (<code>PointAtEnd</code>) of the selected Curve.</td></tr>
+  <tr><td>Y-Axis Reference</td><td>Calculates the direction perpendicular to the X-axis in Top View using the cross product of World Z-axis and X-axis (<code>WorldZ x XAxis</code>).</td></tr>
+  <tr><td>Z-Axis Parallel Exception</td><td>If the selected line is parallel to the World Z-axis and Y-axis cannot be calculated, the World Y-axis is substituted as the Y-axis.</td></tr>
+  <tr><td>Application Scope</td><td>Changes only the Construction Plane of the current active viewport.</td></tr></tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Processing Result</td><td>CPlane is applied to the active viewport with the start point of the selected Curve as the origin and the direction from start point to end point as the X-axis.</td></tr>
+  <tr><td>View Change</td><td>Does not change the screen View direction. Changes only the working plane and redraws the screen.</td></tr>
+  <tr><td>Command Line Output</td><td>On success, CPlane origin, X-axis, and Y-axis information are output to the command line.</td></tr></tbody></table>
+
+<div class="warn"><strong>Caution:</strong> A Curve with identical start and end points cannot create a CPlane. Also, when a curve is selected, the direction connecting the start and end points is used as the X-axis, not the actual tangent of the curve.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GR1~GR5 - Grill Modeling</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:6px; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>GR1 ~ GR5 &nbsp;—&nbsp; Grill Modeling</h1>
+<p>
+  <span class="cmd-box">GR1</span><span class="cmd-box">GR2</span><span class="cmd-box">GR3</span>
+  <span class="cmd-box">GR4</span><span class="cmd-box">GR5</span>
+</p>
+<p>Automatically creates <strong>grill frame and blade 3D solids</strong> based on the selected Brep face. GR1 ~ GR5 each correspond to grill types 1–5 pre-configured in the <strong>GrOpt</strong> panel.</p>
+<h2>Purpose</h2>
+<p>Used to quickly create grill (louver) frame and blade 3D solids for any number of specifications via type shortcuts (GR1-GR5). Enables fast placement of varied grill types across multiple faces based on settings configured in GrOpt.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+ 
+  <li>Set the grill type and section data to apply in the <strong>GrOpt</strong> panel first.</li>
+  <li>Type <strong>GR1</strong> (or GR2–GR5) in the Rhino command line and press Enter.</li>
+  <li>At the <strong>Select Grill Surface Object</strong> prompt, select the Brep face on which to create the grill.</li>
+  <li>Press Enter to finish — frame and blade solids are created as a group based on the selected face.</li>
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 90%; min-width:220px; max-width:90%;">
+    <video src="../../../img/GR1_demo.mp4" autoplay muted loop playsinline aria-label="GR1 operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>GR Number and Type Relationship</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GR1</strong></td><td>Creates grills using type 1 settings in the GrOpt panel.</td></tr>
+  <tr><td><strong>GR2</strong></td><td>Creates grills using type 2 settings in the GrOpt panel.</td></tr>
+  <tr><td><strong>GR3</strong></td><td>Creates grills using type 3 settings in the GrOpt panel.</td></tr>
+  <tr><td><strong>GR4</strong></td><td>Creates grills using type 4 settings in the GrOpt panel.</td></tr>
+  <tr><td><strong>GR5</strong></td><td>Creates grills using type 5 settings in the GrOpt panel.</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Created Objects</td><td>Left / Right / Top / Bottom frame solids and internal Blade solids are created.</td></tr>
+  <tr><td>Group</td><td>The created solids and GR number text are bundled into a single Rhino group.</td></tr>
+  <tr><td>Data</td><td>Grill type data is stored in the group and used by <strong>GrNo</strong>, <strong>GrList</strong>, and <strong>GrTable</strong>.</td></tr>
+  <tr><td>Non-orthogonal Face</td><td>If the four sides are not at 90°, a separate logic is used and a guidance message is shown in the command line.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GrOpt</strong></td><td>Grill Type Option Panel — set the type before running.</td></tr>
+  <tr><td><strong>GrNo</strong></td><td>Grill numbering</td></tr>
+  <tr><td><strong>GrList</strong></td><td>Generate grill quantity list</td></tr>
+  <tr><td><strong>GrTable</strong></td><td>Generate grill fabrication drawing table</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

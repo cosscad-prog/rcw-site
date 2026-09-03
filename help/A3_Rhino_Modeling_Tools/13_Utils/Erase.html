@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Erase - AutoCAD 식 지우기</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>Erase &nbsp;—&nbsp; AutoCAD 식 지우기</h1>
+<p><span class="cmd-box">Erase</span></p>
+<p>
+  객체를 지웁니다. <b>AutoCAD 의 <code>ERASE</code> 와 같은 조작감</b>으로,
+  <b>명령을 먼저 실행하든 객체를 먼저 고르든</b> 둘 다 그대로 동작합니다.
+</p>
+
+<h2>사용 목적</h2>
+<p>
+  AutoCAD 를 오래 쓰신 분은 <code>E</code> → 선택 → <b>Enter</b> 순서가 손에 배어 있습니다.
+  Rhino 의 <code>Delete</code> 는 <b>고른 뒤 눌러야</b> 하므로 그 순서가 어긋납니다.
+  <code>Erase</code> 는 <b>두 순서를 다 받아</b> 손버릇을 바꾸지 않아도 되게 합니다.
+</p>
+
+<h2>사용 방법</h2>
+<table class="desc-table">
+  <colgroup><col style="width:34%"><col style="width:66%"></colgroup>
+  <tbody><tr><th>순서</th><th>동작</th></tr>
+  <tr><td><b>명령 먼저</b><br><code>Erase</code> → 선택 → Enter</td>
+      <td>명령창에 <em>삭제할 객체 선택</em> 이 나옵니다. 하나씩 찍어도 되고 <b>윈도우·크로싱</b>으로 한꺼번에 잡아도 됩니다.
+          <b>Enter</b> 로 확정하면 지워집니다.</td></tr>
+  <tr><td><b>선택 먼저</b><br>선택 → <code>Erase</code></td>
+      <td>이미 골라 둔 것이 <b>그대로 대상</b>이 됩니다. 다시 고를 필요가 없습니다.</td></tr>
+</tbody></table>
+
+<h2>알아 둘 것</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>지울 수 있는 것</td><td><b>모든 종류</b>의 객체입니다. 커브·서피스·솔리드·블록·치수·텍스트 가리지 않습니다.</td></tr>
+  <tr><td>group</td><td>group 에 묶인 것을 찍으면 <b>group 전체</b>가 잡힙니다.</td></tr>
+  <tr><td>모서리·면(서브오브젝트)</td><td><b>고를 수 없습니다.</b> 모서리나 면만 따로 지울 수는 없기 때문에 처음부터 막아 두었습니다.</td></tr>
+  <tr><td>되돌리기</td><td><b><code>Undo</code> 로 되돌아갑니다.</b> Rhino 의 보통 삭제와 같습니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <b>아무것도 고르지 않고 Enter</b> 를 누르면 아무 일도 하지 않고 끝납니다. 잘못 실행했을 때는 <b>Esc</b> 로 빠져나오십시오.
+</div>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>Acad_Join</code></td><td>AutoCAD 의 <code>JOIN</code> 처럼 고른 것을 <b>한 번에</b> 결합합니다.</td></tr>
+  <tr><td><code>SST</code></td><td>AutoCAD 의 <code>STRETCH</code> 처럼 드래그 방향으로 Window/Crossing 을 가릅니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

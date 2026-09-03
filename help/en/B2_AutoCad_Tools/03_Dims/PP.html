@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PP - 03_Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>PP &nbsp;—&nbsp; 03_Dims</h1>
+<p><span class="cmd-box">PP</span></p>
+<p>
+  A command that creates <strong>1 Point on the <code>Dim_Points</code> layer</strong>
+  at the <strong>clicked location</strong> on screen.<br>
+  Does not use object selection — places Points at desired locations through direct clicking (Pick Point).
+</p>
+
+<h2>Purpose</h2>
+<p>
+  Use to directly place <code>Dim_Points</code> layer Points at desired locations for use as reference in
+  <code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code> dimension commands.
+  Unlike <code>HPP</code> which automatically extracts from entities, PP directly specifies desired locations.
+</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Enter <code>PP</code> in the command line and press Enter.</li>
+  <li>Follow the <em>"Select Point location"</em> prompt and click on the screen where to place the Point.</li>
+  <li>A <code>Dim_Points</code> layer Point is created at the clicked location.</li>
+  <li>Subsequently select the created Point with dimension commands like <code>DST</code> / <code>DSB</code> to add dimensions.</li>
+</ol>
+
+<h2>Key Details</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Operation Mode</td><td>No object selection — specify location by <strong>clicking on screen (Pick Point)</strong>.</td></tr>
+  <tr><td>Created Point</td><td>1 Point on <code>Dim_Points</code> layer is created at the clicked location.</td></tr>
+  <tr><td>Layer</td><td>Placed on <code>Dim_Points</code> layer (color 2). Layer is auto-created if absent.</td></tr>
+  <tr><td>Next Step</td><td>Select created Point with <code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code> commands to add dimensions.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD (including Rhino)</td></tr>
+</tbody></table>
+
+<h2>HPP vs PP Difference</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+  <tr><th>Item</th><th>HPP</th><th>PP</th></tr>
+  <tr><td>Location Specification</td><td>Select entities → auto-extract characteristic points</td><td>Direct click on screen (Pick Point)</td></tr>
+  <tr><td>Quantity Created</td><td>Multiple based on number of selected entities</td><td>1 click = 1 Point</td></tr>
+  <tr><td>Usage Situation</td><td>When auto-extracting Points from shapes</td><td>When adding Points at specific desired locations</td></tr>
+</tbody></table>
+
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Created Point</td><td>1 Point is created at the clicked location.</td></tr>
+  <tr><td>Layer</td><td>Placed on <code>Dim_Points</code> layer (color 2).</td></tr>
+</tbody></table>
+
+<div class="note">
+  <strong>Note:</strong> Use <code>HPP</code> to automatically extract Points from endpoints or center points of shape entities (Line, Circle, etc.).
+  <code>PP</code> is used when adding Points at desired locations regardless of shapes.
+</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><title>U2D - Unit 2D</title><style>
+body{font-family:"맑은 고딕","Malgun Gothic",sans-serif;font-size:13px;color:#222;margin:20px 30px;line-height:1.7}h1{font-size:18px;border-bottom:2px solid #0066cc;padding-bottom:6px;color:#0066cc}h2{font-size:14px;border-left:4px solid #0066cc;padding-left:8px;margin-top:26px;color:#003d80}.cmd-box{display:inline-block;background:#f0f4ff;border:1px solid #99bbee;border-radius:4px;padding:2px 10px;font-family:Consolas,monospace;font-size:14px;font-weight:bold;color:#003d80}.step-list{padding-left:20px}.step-list li{margin-bottom:6px}.demo-images img{max-width:600px;border:1px solid #ccc;background:#fff}code{font-family:Consolas,monospace;background:#f4f7fb;padding:1px 4px;border-radius:3px}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>U2D &nbsp;—&nbsp; Unit 2D</h1>
+<p><span class="cmd-box">U2D</span></p>
+<p><strong>U2D</strong>는 선택한 Solid Unit의 Section 2D와 Fablist를 함께 생성하는 통합 2D 명령입니다.<br><span style="color: rgb(0, 0, 0);">단면을 형성할 위치에 Point 를 찍어서 Cross Line 을 만든다. 2개점까지 가능하다.&nbsp;</span></p>
+<h2>사용 목적</h2>
+<p>선택한 Unit Solid의 단면 2D와 제작 리스트(<code>Fablist</code>)를 한 번에 만들 때 사용합니다. 단면 위치에 점을 찍어 Cross Line 기준으로 Top/Right 단면과 치수를 생성하므로, Unit 도면화를 빠르게 처리하는 통합 명령입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li><code>U2D</code>를 입력합니다.</li><li><strong>Make2D를 적용할 객체 선택</strong> 프롬프트에서 Unit 객체를 선택합니다.</li><li>Enter를 누르면 Top/Right Section과 치수가 생성됩니다.</li><li>선택 Unit에 대한 <code>Fablist</code>가 함께 작성됩니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/U2D_demo.mp4" autoplay muted loop playsinline aria-label="U2D 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>관련 명령어</h2>
+<p><code>UF2D</code>는 U2D 결과에 Front 입면 2D까지 추가합니다.</p>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

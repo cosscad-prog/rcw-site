@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>VTOpt - Vent Type Option Panel</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; width:30%; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>VTOpt &nbsp;—&nbsp; Vent Type Option Panel</h1>
+<p><span class="cmd-box">VTOpt</span></p>
+<p>Opens or closes the Vent Type Option Panel. If the panel is already open, running the command again closes it.</p>
+
+<h2>Purpose</h2>
+<p>Used to define and modify vent types (frame section, code, description) before vent modeling. Types 1-9 configured here serve as the basis for vent generation by VT1-VT9 commands, so type setup should precede vent modeling.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>VTOpt</strong> in the Rhino command line and press Enter.</li>
+  <li>The shared option panel for managing Glass / BackPanel / Vent / Grill types opens.</li>
+  <li>Set the frame section, code, description, and additional information to use for the Vent type.</li>
+  <li>To close the panel, run <strong>VTOpt</strong> again or click the close button on the panel.</li>
+</ol>
+<h2>Example</h2>
+<img src="../../../img/VTOpt_panel.png" alt="VTOpt panel example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+
+<h2>Key Panel Settings</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Command Type</td><td>Specifies the Vent type number to use for modeling among <strong>VT1 ~ VT9</strong>.</td></tr>
+  <tr><td>Frame Section</td><td>Specifies the section group to use for the Left, Top, Right, and Bottom positions.</td></tr>
+  <tr><td>Code / Description</td><td>Enter Code, Description, and Add1~Add3 information to be output in quantity lists and tables.</td></tr>
+  <tr><td>Type Data</td><td>Linked to the selected VT number and used in modeling, numbering, and quantity list creation.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>VT1 ~ VT9</strong></td><td>Vent modeling — run after setting options.</td></tr>
+  <tr><td><strong>VtNo</strong></td><td>Vent numbering</td></tr>
+  <tr><td><strong>VtList</strong></td><td>Generate vent quantity list</td></tr>
+</tbody></table>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

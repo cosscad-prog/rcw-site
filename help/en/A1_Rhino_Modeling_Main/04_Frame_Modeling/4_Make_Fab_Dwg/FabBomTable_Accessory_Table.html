@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FabBomTable - Accessory Table</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn,.warning { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>FabBomTable &nbsp;—&nbsp; Accessory Table</h1>
+<p><span class="cmd-box">FabBomTable</span></p>
+<p>
+  <strong>FabBomTable</strong> (formerly <code>FBL</code>) is a command to place an <strong>accessory (BOM) table</strong> at any desired position on a fabrication drawing by clicking.
+  The table content is automatically collected from <strong>accessories</strong> (brackets, sleeves, attachments, etc.) when <code>FDwg</code> / <code>FDDS</code> generates the drawing.
+</p>
+<h2>Purpose</h2>
+<p>Used to organize and display a list of accessories used in the fabrication drawing (types, quantities, etc.). Accessories are automatically collected when the drawing is generated; this command only specifies where to place the collected table. The position is saved as relative coordinates to the drawing anchor, and is automatically regenerated at the same location when FDDS runs in Playback Mode.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  <li>Type <code>FabBomTable</code> in the Rhino command line.</li>
+  <li>At the <strong>Select fabrication drawing for accessory table</strong> prompt, select the target drawing. (Must be a drawing created by FDwg/FDDS to have ProfileName tags.)</li>
+  <li>As you move the mouse, a <strong>table size and row separator preview</strong> (orange) is displayed. Click the desired <strong>top-left position</strong>.</li>
+  <li>The accessory table is drawn at that position. (If an existing table is present, it is replaced.)</li>
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../../img/FabBomTable.mp4" autoplay muted loop playsinline aria-label="FabBomTable accessory table example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Execution Flow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Table Content</td><td>Filled with accessory data <strong>automatically collected</strong> during drawing generation (FDwg/FDDS) from brackets, sleeves, and attachments in the group.</td></tr>
+  <tr><td>Position Placement</td><td>Use the mouse preview (table border + row separators) to click and place the top-left corner. Table size is automatically determined by the number of accessory types and text size.</td></tr>
+  <tr><td>Replacement</td><td>If a table already exists for the same Profile, it is erased and redrawn.</td></tr>
+  <tr><td>Playback Reproduction</td><td>The placement position is saved as relative coordinates to the drawing origin and is automatically regenerated at the same location in FDDS during <strong>FDstyle Playback Mode</strong>.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> The table content is not created by this command but is <strong>automatically collected when the drawing is generated</strong>. If no accessories are collected, a message "No collected accessories" appears — first run FDwg/FDDS with a group containing accessories.</div>
+<div class="warning"><strong>Caution:</strong> If you select an object without ProfileName tags (not created by FDwg/FDDS), the table cannot be created.</div>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>FDwg</strong></td><td>Generates fabrication drawing. Automatically collects accessories and reproduces the table during Playback Mode.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>Record/Playback Mode panel. Table position is saved in Recording Mode.</td></tr>
+  <tr><td><strong>FabTable</strong></td><td>Creates frame fabrication number/quantity table (separate from the accessory table).</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>D7, T7, O7 - Common Layer Change</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+<h1>D7, T7, O7 &nbsp;—&nbsp; Common Layer Change</h1>
+<p><span class="cmd-box">D7</span><span class="cmd-box">T7</span><span class="cmd-box">O7</span></p>
+<p>A set of Layer change commands to quickly move selected objects to frequently-used base Layers.</p>
+<h2>Purpose</h2>
+<p>Quickly organise scattered objects during work by moving them to frequently-used Layers such as <code>Default</code>, <code>Text</code>, and <code>OutLines</code> to align the classification of modelling and drawing tasks.</p>
+<h2>Command Summary</h2>
+<table class="desc-table">
+  <colgroup><col style="width:18%"><col style="width:26%"><col style="width:18%"><col style="width:38%"></colgroup>
+  <tr><th>Command</th><th>Target Layer</th><th>Color</th><th>When to Use</th></tr>
+  <tr><td><code>D7</code></td><td><code>Default</code></td><td>White</td><td>Use when returning temporary or unclassified objects to the base Default Layer.</td></tr>
+  <tr><td><code>T7</code></td><td><code>Text</code></td><td>White</td><td>Use when collecting drawing text, annotations, and note objects to the Text Layer.</td></tr>
+  <tr><td><code>O7</code></td><td><code>OutLines</code></td><td>White</td><td>Use when organising outlines and print-ready outline objects to the OutLines Layer.</td></tr>
+</table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type the required command (<code>D7</code>, <code>T7</code>, or <code>O7</code>) in the Rhino command line.</li>
+  <li>Select the objects to move to the target Layer.</li>
+  <li>Press Enter to move the selected objects to the specified Layer.</li>
+</ol>
+<div class="note"><strong>Note:</strong> These three commands are designed to quickly move objects to predefined Layers. Understand them as commands that change the Layer of selected objects, not commands that change the current Layer.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

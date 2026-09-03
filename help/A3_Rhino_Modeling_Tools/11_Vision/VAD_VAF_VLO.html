@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>VAD, VAF, VLO - 11_Vision</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+<h1>VAD, VAF, VLO &nbsp;—&nbsp; 11_Vision</h1>
+<p><span class="cmd-box">VAD</span> <span class="cmd-box">VAF</span> <span class="cmd-box">VLO</span></p>
+<p>객체의 Vision 상태를 직접 켜고 끄는 명령입니다. Layer 표시 상태와 별개로 객체 자체의 표시 속성을 바꾸며, 객체를 삭제하지 않고 숨김/표시 상태만 변경합니다.</p>
+<h2>사용 목적</h2>
+<p>선택 객체 단위로 표시/숨김 상태를 제어해 작업 중 필요한 객체만 남기거나 숨긴 객체를 다시 표시할 때 사용합니다.</p>
+<h2>명령어별 기능</h2>
+<table class="desc-table">
+  <colgroup><col style="width:18%"><col style="width:32%"><col style="width:50%"></colgroup>
+  <tr><th>명령어</th><th>기능</th><th>동작</th></tr>
+  <tr><td><code>VAD</code></td><td>Selected Object Vision On</td><td>선택한 객체만 보이게 하고, 선택되지 않은 나머지 객체를 숨깁니다.</td></tr>
+  <tr><td><code>VAF</code></td><td>Selected Object Vision Off</td><td>선택한 객체만 숨깁니다.</td></tr>
+  <tr><td><code>VLO</code></td><td>All Object Vision On</td><td>숨겨진 객체를 포함해 문서의 객체 표시 속성을 다시 켭니다.</td></tr>
+</table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li><code>VAD</code>를 실행하면 <code>숨기지 않을 오브젝트를 선택하세요</code> 프롬프트가 표시됩니다. 남길 객체를 하나 이상 선택하면 선택되지 않은 객체들이 숨겨집니다.</li>
+  <li><code>VAF</code>를 실행하면 <code>Select Group objects</code> 프롬프트가 표시됩니다. 숨길 객체를 하나 이상 선택하면 선택 객체의 표시 속성이 꺼집니다.</li>
+  <li><code>VLO</code>를 실행하면 별도 선택 없이 숨겨진 객체들의 표시 속성을 다시 켜고 화면을 갱신합니다.</li>
+</ol>
+<h2>코드 기준 동작</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>VAD 선택 방식</td><td><code>GetObject</code>로 모든 타입의 객체(<code>ObjectType.AnyObject</code>)를 하나 이상 선택합니다. 선택 객체의 ID를 저장한 뒤, 문서 전체 객체를 순회하며 선택되지 않았고 현재 숨겨져 있지 않은 객체를 <code>doc.Objects.Hide</code>로 숨깁니다.</td></tr>
+  <tr><td>VAF 선택 방식</td><td>기존 선택을 모두 해제한 뒤 새로 객체를 선택합니다. PreSelect는 비활성화되어 있어 명령 실행 후 선택한 객체만 처리합니다. 선택된 객체의 <code>Attributes.Visible</code> 값을 <code>false</code>로 바꾸고 변경을 저장합니다.</td></tr>
+  <tr><td>VLO 복원 방식</td><td><code>ObjectEnumeratorSettings</code>에서 Hidden, Locked, Reference 객체까지 포함해 객체 목록을 가져온 뒤 각 객체의 <code>Attributes.Visible</code> 값을 <code>true</code>로 바꿉니다.</td></tr>
+  <tr><td>Layer와의 관계</td><td>Layer를 끄거나 켜는 명령이 아닙니다. 객체 자체의 표시/숨김 속성을 바꾸므로 Layer 상태와 별개로 작동합니다.</td></tr>
+  <tr><td>화면 갱신</td><td>각 명령은 처리 후 Rhino View를 다시 그립니다.</td></tr>
+</table>
+<h2>주의 사항</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>삭제 아님</td><td>객체는 삭제되지 않습니다. 숨김 상태만 변경됩니다.</td></tr>
+  <tr><td>VAD 결과</td><td>선택하지 않은 객체를 모두 숨기므로, 작업 범위를 좁혀 특정 객체만 확인할 때 사용합니다.</td></tr>
+  <tr><td>VAF 결과</td><td>선택 객체만 숨기므로, 임시로 방해되는 객체를 제거해 보이는 상태를 만들 때 사용합니다.</td></tr>
+  <tr><td>VLO 결과</td><td>Vision Off 상태의 객체를 다시 보이게 합니다. 코드상 숨김/잠김/참조 객체까지 열거 대상으로 포함합니다.</td></tr>
+  
+</table>
+
+<div class="note"><strong>참고:</strong> VAD 실행 후 명령창에는 숨긴 객체 수가 출력됩니다. 다시 전체 객체를 보려면 <code>VLO</code>를 실행하세요.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

@@ -76,7 +76,8 @@ GitHub 저장소 페이지를 새로고침해 `index.html`, `img/`, `docs/` 가 
 - [ ] 이미지 20장 표시 — 특히 GIF 데모
 - [ ] ENGLISH 버튼 → 영문 전환, 페이지를 옮겨도 유지되는지
 - [ ] 휴대폰 폭에서 레이아웃 깨짐 없는지
-- [ ] `vercel.json`의 cleanUrls 동작 — `/modeling` 로도 열리는지
+- [ ] `vercel.json`의 rewrite 동작 — `/modeling` 로도 열리는지
+- [ ] 도움말 — `/help` 가 열리고, 사이드바 항목을 눌렀을 때 그림까지 나오는지
 
 **아직 안 되는 것 (정상)**
 - 문의 폼 전송 → Supabase 연결 전이라 실패한다. 실패 시 메일 주소가 안내된다

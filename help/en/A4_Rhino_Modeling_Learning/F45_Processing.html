@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>F45, R45 - 45 Degree Machining</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0 0 16px; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>F45&nbsp; —&nbsp; Front View 45 Degree Machining<br></h1>
+<p><span class="cmd-box">Fab_ID = 4.F45</span></p>
+<p>Fab ID setting that applies 45-degree directional processing by finding the intermediate angle of two lines based on modeling Front View.</p>
+<h2>Purpose</h2>
+<p>Used when selective 45-degree processing is needed on members like Adapters due to glass thickness changes. Processing is performed by calculating the cutting angle based on where Mullion Line and Transom Line meet.</p>
+<h2>Application Criteria</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Specify the Fab ID of the member to be processed as <code>4.F45</code>.</li>
+  <li>Verify the surface where Mullion Line and Transom Line meet based on Model Front View reference.</li>
+  <li>Calculate the cutting angle based on the intermediate angle between the two lines.</li>
+  <li>Maintain the intermediate angle of the two lines even for non-right-angle conditions.</li>
+
+
+
+</ol>
+<h2>Execution Examples</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../img/6_3_F45.png" alt="F45 processing reference example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Example of F45 processing direction based on Model Front View</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../img/6_3_F45_2.mp4" autoplay muted loop playsinline aria-label="F45 processing operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Example of finding cutting angle based on where Mullion Line and Transom Line meet</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <img src="../../img/6_3_F45_3.png" alt="F45 processing result example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>F45 processing result applied by maintaining the intermediate angle of two lines</figcaption>
+  </figure>
+</div>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Processing Basis</td><td>Uses the intermediate angle of two lines based on Model Front View.</td></tr>
+  <tr><td>Application Target</td><td>Applied to Adapter-type members that require selective 45-degree processing due to glass thickness changes.</td></tr>
+  <tr><td>Non-Right-Angle Condition</td><td>Even in non-right-angle conditions, cuts based on the intermediate angle of the two lines.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> Although the filename includes R45, the document content is structured as Front View 45-degree processing based on <code>Fab_ID = 4.F45</code>.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

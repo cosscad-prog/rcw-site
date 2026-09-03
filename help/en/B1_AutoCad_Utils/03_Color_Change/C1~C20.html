@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>C1~C20 - 03_Color_Change</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>C1~C20 &nbsp;—&nbsp; Object Color Change</h1>
+<p><span class="cmd-box">C1 ~ C20</span></p>
+<p>A collection of commands to quickly change the Object Color of selected objects based on CAD Color Number.</p>
+<h2>Purpose</h2>
+<p>Use to change object display color while keeping the layer unchanged. Ideal for review marking, temporary emphasis, and color-based object categorization during drawing organization.</p>
+<h2>Command Summary</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:18%"><col style="width:82%"></colgroup>
+  <tr><th>Command</th><th>Action</th></tr>
+  <tr><td><code>C1</code></td><td>Changes selected object color to Color 1 [CAD Color Number].</td></tr>
+  <tr><td><code>C2</code></td><td>Changes selected object color to Color 2 [CAD Color Number].</td></tr>
+  <tr><td><code>C3</code></td><td>Changes selected object color to Color 3 [CAD Color Number].</td></tr>
+  <tr><td><code>C4</code> ~ <code>C17</code></td><td>Changes Object Color to the CAD Color Number matching the command number in the same manner.</td></tr>
+  <tr><td><code>C18</code></td><td>Changes selected object color to Color 18 [CAD Color Number].</td></tr>
+  <tr><td><code>C19</code></td><td>Changes selected object color to Color 19 [CAD Color Number].</td></tr>
+  <tr><td><code>C20</code></td><td>Changes selected object color to Color 20 [CAD Color Number].</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Enter the command for the desired color number from <code>C1</code> to <code>C20</code> in the AutoCAD or BricsCAD command line.</li>
+  <li>Select the objects to change color.</li>
+  <li>Press Enter to change the Object Color of selected objects to the specified number.</li>
+</ol>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Target Commands</td><td><code>C1</code> ~ <code>C20</code></td></tr>
+  <tr><td>Change Target</td><td>Selected object's Object Color</td></tr>
+  <tr><td>Unchanged Items</td><td>Object layer is not changed.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

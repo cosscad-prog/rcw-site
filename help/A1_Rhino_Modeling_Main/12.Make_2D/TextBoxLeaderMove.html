@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><title>TextBoxLeaderMove - 텍스트박스 지시선 이동</title><style>
+body{font-family:"맑은 고딕","Malgun Gothic",sans-serif;font-size:13px;color:#222;margin:20px 30px;line-height:1.7}h1{font-size:18px;border-bottom:2px solid #0066cc;padding-bottom:6px;color:#0066cc}h2{font-size:14px;border-left:4px solid #0066cc;padding-left:8px;margin-top:26px;color:#003d80}.cmd-box{display:inline-block;background:#f0f4ff;border:1px solid #99bbee;border-radius:4px;padding:2px 10px;font-family:Consolas,monospace;font-size:14px;font-weight:bold;color:#003d80}.desc-table{border-collapse:collapse;width:100%;margin-top:8px;table-layout:fixed}.desc-table th{background:#dce8f8;border:1px solid #aac4e8;padding:5px 10px;text-align:left}.desc-table td{border:1px solid #c8d8ec;padding:5px 10px;vertical-align:top}.desc-table tr:nth-child(even) td{background:#f7faff}.step-list{padding-left:20px}.step-list li{margin-bottom:6px}code{font-family:Consolas,monospace;background:#f4f7fb;padding:1px 4px;border-radius:3px}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>TextBoxLeaderMove &nbsp;—&nbsp; 텍스트박스 지시선 이동</h1>
+<p><span class="cmd-box">TextBoxLeaderMove</span></p>
+<p><code>Fablist</code> <strong>TypeB</strong> 라벨의 텍스트박스를 이동할 때 사용합니다.<br>
+박스(테두리·텍스트·구분선)가 새 위치로 이동하고, 지시선의 끝점(박스쪽)은 자동으로 갱신됩니다.<br>
+지시선의 시작점(멤버 중점)은 고정되어 움직이지 않습니다.</p>
+<h2>사용 목적</h2>
+<p><code>Fablist TypeB</code>로 생성한 라인별 미니 테이블 라벨이 겹치거나 위치를 조정해야 할 때 사용합니다.
+일반 Move 명령으로 텍스트박스만 이동하면 지시선이 따라오지 않지만,
+<code>TextBoxLeaderMove</code>를 사용하면 박스 이동에 맞춰 지시선 끝점이 자동으로 재계산됩니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li><code>TextBoxLeaderMove</code>를 입력합니다.</li>
+  <li><strong>FabList type_B 그룹 객체를 선택하세요</strong> 프롬프트에서 이동할 텍스트박스 그룹의 아무 객체(박스선, 텍스트, 구분선)를 클릭합니다.</li>
+  <li>박스 중심을 기준으로 오렌지색 미리보기(박스 외곽 + 지시선)가 표시됩니다. 새 위치를 클릭합니다.</li>
+  <li>박스와 텍스트가 이동하고 지시선 끝점이 자동 갱신됩니다.</li>
+  <li>계속해서 다른 박스를 선택하거나, Enter를 눌러 종료합니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/TextBoxleaderMove.mp4" autoplay muted loop playsinline aria-label="TextBoxleaderMove" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>동작 설명 그림 캡션 입력</figcaption>
+  </figure>
+</div>
+<div class="note">텍스트박스 그룹 내 어느 객체(테두리 Polyline, 행 텍스트, 구분선)를 클릭해도 동일하게 동작합니다. 지시선(Leader) 자체를 클릭해도 선택됩니다.</div>
+<h2>동작 원리</h2>
+<table class="desc-table"><colgroup><col style="width:28%"><col style="width:72%"></colgroup><tbody>
+<tr><th>항목</th><th>설명</th></tr>
+<tr><td>이동 기준점</td><td>현재 박스 bbox의 중심. 클릭한 새 위치로 박스 중심이 이동합니다.</td></tr>
+<tr><td>이동 대상</td><td>테두리 Polyline, 행 TextEntity, 행 구분선 — 모두 동일한 변위로 이동합니다.</td></tr>
+<tr><td>지시선 끝점 갱신</td><td>이동된 박스 가장자리에서 멤버 중점(고정)에 가장 가까운 점으로 자동 재계산됩니다.</td></tr>
+<tr><td>지시선 시작점</td><td>멤버 중점 — 절대 변경되지 않습니다.</td></tr>
+</tbody></table>
+<h2>주의사항</h2>
+<div class="warning"><strong>Fablist TypeB 생성 이전 객체에는 적용 안 됨.</strong><br>
+<code>TextBoxLeaderMove</code>는 <code>Fablist TypeB</code>로 생성된 객체에만 동작합니다(<code>FablistGroupKey</code> 태그 필요).
+이전 버전 또는 수동으로 만든 박스+지시선에는 사용할 수 없습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

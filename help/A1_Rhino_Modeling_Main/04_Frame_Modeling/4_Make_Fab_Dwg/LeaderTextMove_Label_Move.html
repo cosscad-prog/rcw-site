@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>LeaderTextMove - 라벨 텍스트 이동</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn,.warning { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>LeaderTextMove &nbsp;—&nbsp; 라벨 텍스트(꼬리) 이동</h1>
+<p><span class="cmd-box">LeaderTextMove</span></p>
+<p>
+  <strong>LeaderTextMove</strong>(구 <code>LM</code>)는 부속(브래킷) 라벨 지시선의 <strong>화살표는 고정한 채 텍스트(꼬리)만 옮기는</strong> 명령입니다.
+  라벨을 선택하고 새 텍스트 위치를 클릭하면, 지시선 시작점(화살표)은 부속에 그대로 붙어 있고
+  꼬리(텍스트)만 이동하며 지시선 라인이 그 위치로 따라옵니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  일반 <code>Move</code>는 화살표까지 함께 움직여 지시 대상이 흔들립니다.
+  <strong>화살표(지시점)는 부속에 고정</strong>한 채 텍스트만 보기 좋은 위치로 옮기고 싶을 때 사용합니다.
+  단면 라벨이 서로 겹치거나 도면 밖으로 나갈 때 정리하는 용도입니다.
+</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  <li>Rhino 명령창에 <code>LeaderTextMove</code>를 입력합니다.</li>
+  <li><strong>"이동할 라벨(지시선)을 선택하세요"</strong> 프롬프트에서 부속 라벨(Leader)을 선택합니다.</li>
+  <li>새 텍스트 위치를 클릭합니다. 커서를 따라 <strong>실제 라벨 모양 그대로 미리보기</strong>가 표시됩니다.</li>
+  <li>여러 라벨을 이어서 옮길 수 있습니다. <strong>Enter</strong>를 누르면 종료합니다.</li>
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <video src="../../../img/LeadertextMove.mp4" autoplay muted loop playsinline aria-label="LeadertextMove" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>동작 설명 그림 캡션 입력</figcaption>
+  </figure>
+</div>
+<h2>동작 방식</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>고정 / 이동</td><td>지시선의 <strong>시작점(화살표)은 고정</strong>, <strong>마지막 점(텍스트 꼬리)만 이동</strong>합니다. 지시선 라인이 새 꼬리 위치로 다시 그려집니다.</td></tr>
+  <tr><td>미리보기</td><td>실제 지시선과 같은 DimStyle로 미리보기가 그려져, 클릭 위치가 결과와 일치합니다.</td></tr>
+  <tr><td>대상</td><td>Annotation(지시선, Leader)만 선택됩니다. 지시선이 아니면 안내 메시지가 나옵니다.</td></tr>
+  <tr><td>재생 재현</td><td>FDstyle <strong>기록 모드</strong>에서 옮기면 그 위치가 저장되어, FDwg/FDDS <strong>재생</strong> 시 동일하게 재현됩니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 화살표까지 라벨 전체를 옮기려면 <code>LeaderMove</code>를 사용하세요. <code>LeaderTextMove</code>는 화살표를 고정하고 꼬리만 옮깁니다.</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>LeaderMove</strong></td><td>화살표를 포함한 라벨 전체를 새 위치로 옮깁니다.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>기록/재생 모드 패널. 기록 모드에서 옮긴 라벨 위치가 저장됩니다.</td></tr>
+  <tr><td><strong>FDwg</strong></td><td>제작 가공도 생성. 재생 시 라벨 이동이 재현됩니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

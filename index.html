@@ -200,6 +200,9 @@
         <a href="contact.html" data-en="Contact">문의</a>
         <a href="customer.html" data-en="Customers">고객 다운로드</a>
         <a href="cad.html" data-en="CAD utilities">CAD 유틸리티</a>
+        <a href="help/Help_index.html" target="_blank" rel="noopener"
+           data-help-ko="help/Help_index.html" data-help-en="help/en/index.html"
+           data-en="Help">Help문</a>
       </nav>
       <div class="nav-right">
         <button class="lang" type="button" data-lang-toggle aria-label="언어 전환">ENGLISH</button>
@@ -424,6 +427,8 @@
       for(var i=0;i<n.length;i++){var el=n[i];
         if(el.dataset.ko===undefined)el.dataset.ko=el.innerHTML;
         el.innerHTML=(l==='en')?el.dataset.en:el.dataset.ko;}
+      var hl=document.querySelectorAll('[data-help-ko]');
+      for(var k=0;k<hl.length;k++)hl[k].setAttribute('href',(l==='en')?hl[k].dataset.helpEn:hl[k].dataset.helpKo);
       document.documentElement.lang=(l==='en')?'en':'ko';
       var b=document.querySelectorAll('[data-lang-toggle]');
       for(var j=0;j<b.length;j++){b[j].textContent=(l==='en')?'한국어':'ENGLISH';}

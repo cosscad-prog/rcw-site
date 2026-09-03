@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FDstyle - Fabrication Drawing Record / Playback Panel</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    h3 { font-size:13px; margin-top:18px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn,.warning { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>FDstyle &nbsp;—&nbsp; Fabrication Drawing Record / Playback Panel</h1>
+<p><span class="cmd-box">FDstyle</span></p>
+<p>
+  <strong>FDstyle</strong> opens and closes the <strong>FDwg Pipeline panel</strong>. In this panel, you can switch between <strong>Recording (ON)</strong> and <strong>Playback (OFF, default)</strong> modes for fabrication drawing (FDDS / FDwg) work,
+  and manage drawing template registration/insertion and per-Profile progress tracking all in one place.
+</p>
+<div class="note"><strong>Note:</strong> Entering the same command again closes the panel (toggle). Recording/Playback mode switching is done via the <strong>banner button at the top of the panel</strong>, not via command. (Legacy commands <code>FDP</code> and <code>FDwgStyle</code> have been consolidated into <code>FDstyle</code>.)</div>
+<h2>Purpose</h2>
+<p>Frequently-used Profile drawing operations (options, NC table, compression, annotations, accessory table, detail views, templates) can be recorded once, then automatically reproduced when creating drawings for the same Profile in Playback mode. Use this to maintain consistent standard fabrication drawing templates across users and projects.</p>
+<h2>Panel Composition</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Component</th><th>Description</th></tr>
+  <tr><td>Top Banner (Toggle)</td><td>Displays the current mode and can be clicked to switch: <strong>● Recording Mode ON</strong> (red) ↔ <strong>■ Playback Mode</strong> (gray, default).</td></tr>
+  <tr><td>[Refresh]</td><td>Re-reads and updates the per-Profile work status table.</td></tr>
+  <tr><td>[Form Template]</td><td>Registers an external <strong>3dm template file</strong> as a drawing template. (Same role as <code>SFB</code>)</td></tr>
+  <tr><td>[Insert Form]</td><td>Inserts the registered template into the selected Profile's fabrication drawing (drawing unit). Scale is automatically calculated to fit the drawing size.</td></tr>
+  <tr><td>Status Table</td><td>Shows completion status for each step per Profile (see table below).</td></tr>
+  <tr><td>Work Log</td><td>Work details and timestamps accumulate and are displayed at the bottom.</td></tr>
+</tbody></table>
+<h2>Record / Playback Mode</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Mode</th><th>Behavior</th></tr>
+  <tr><td><strong>Record (ON)</strong></td><td>When <code>FDwg</code> / <code>FDDS</code> runs, the current options and additional work — NC table, FSC compression, annotations/leaders, accessory table, detail views (F3D), templates — are saved per Profile. Additional leaders, text, and label moves made during recording are also automatically recorded together.</td></tr>
+  <tr><td><strong>Playback (OFF, default)</strong></td><td>When creating a drawing for the same Profile, reads and <strong>automatically reproduces</strong> the recorded content. If no recorded data exists, uses the current <code>DdOpt</code> panel settings.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> File data application is handled by this <strong>Playback Mode</strong>. If no recorded data exists, the current DdOpt panel values are used. Default values can be saved in advance using the <strong>Save Current Selection as Default</strong> feature in DdOpt.</div>
+<h2>Basic Usage</h2>
+<h3>① Recording Standard Fabrication Drawings</h3>
+<ol class="step-list">
+  <li>Type <code>FDstyle</code> to open the panel.</li>
+  <li>Click the top banner to switch to <strong>Record Mode (ON)</strong>.</li>
+  <li>Adjust desired options in <code>DdOpt</code>, then create a drawing with <code>FDwg</code>.</li>
+  <li>If needed, add NC table, accessory table, detail views, template insertion, and annotations. (Recording mode saves them together.)</li>
+  <li>When done, click the banner again to end recording.</li>
+</ol>
+<h3>② Playback (Automatic Reproduction)</h3>
+<ol class="step-list">
+  <li>Verify the banner is in <strong>Playback Mode (OFF)</strong> (default).</li>
+  <li>Select a group for the same Profile and run <code>FDwg</code>.</li>
+  <li>Recorded NC, compression, annotations, accessories, detail views, and templates are automatically reproduced.</li>
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 80%; min-width:220px; max-width:80%;">
+    <video src="../../../../img/FDStyle_en.png" autoplay muted loop playsinline aria-label="FDstyle pipeline panel example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Template Registration / Insertion</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Button</th><th>Action</th></tr>
+  <tr><td>[Form Template]</td><td>Select an external 3dm template file to register. Imported templates are <strong>hidden from view</strong>, and block names are automatically made unique if they conflict with existing templates to prevent mixing different templates.</td></tr>
+  <tr><td>[Insert Form]</td><td>Inserts the registered template into the selected Profile's drawing (drawing unit). Scale is automatically calculated to fit the drawing size. (If inserted in Recording mode, template info is also recorded and reproduced in Playback.)</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> Registered template information is saved with the current document (.3dm) and automatically restored even after closing and reopening the file. No need to register again in the same file. (See <code>SFB</code> help for details.)</div>
+<h2>Profile Status Table</h2>
+<p>Each Profile row shows completion status for each work step.</p>
+<table class="desc-table">
+  <colgroup><col style="width:18%"><col style="width:82%"></colgroup>
+  <tbody><tr><th>Column</th><th>Meaning</th></tr>
+  <tr><td>Profile</td><td>Target Profile name. The Profile currently being worked on is highlighted.</td></tr>
+  <tr><td>① 2D</td><td>Whether 2D drawing has been generated.</td></tr>
+  <tr><td>② NC</td><td>Whether NC hole coordinate table has been created.</td></tr>
+  <tr><td>③ FSC</td><td>Whether mid-span compression (FSC) for long members has been applied.</td></tr>
+  <tr><td>④ Annotation</td><td>Whether annotations (leaders/text, etc.) have been recorded.</td></tr>
+  <tr><td>⑤ Accessory</td><td>Whether accessory table (BOM) has been created.</td></tr>
+  <tr><td>⑥ 3D</td><td>Whether detail views (F3D) have been created.</td></tr>
+  <tr><td>⑦ Template</td><td>Whether drawing template has been inserted.</td></tr>
+  <tr><td>Status</td><td>Overall progress summary for that Profile.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>FDDS</strong></td><td><b>Retired command.</b> Fabrication drawings are made with <code>FDwg</code>. Follows FDstyle Record/Playback mode.</td></tr>
+  <tr><td><strong>FDwg</strong></td><td>Creates the frame fabrication drawing, hole depth on the elevation (Hidden Line) included. Follows the FDstyle mode (record / playback).</td></tr>
+  <tr><td><strong>DdOpt</strong></td><td>Fabrication drawing Drawing Options panel. Used when Playback has no recorded data.</td></tr>
+  <tr><td><strong>SFB / FFB</strong></td><td>Template selection (SFB) / insertion (FFB). Same functions as the panel's [Form Template] and [Insert Form] buttons.</td></tr>
+</tbody></table>
+<div class="warning"><strong>Caution:</strong> If you create a drawing for the same Profile again while in Recording mode, the existing record for that Profile will be replaced with the new work contents. Confirm before recording if preservation is needed.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

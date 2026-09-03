@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TTS - 02_Text</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>TTS &nbsp;—&nbsp; 02_Text</h1>
+<p><span class="cmd-box">TTS</span></p>
+<p>
+  A command that changes the AutoCAD system variable <code>TEXTSIZE</code>.<br>
+  No object selection is required — it works by displaying the current value and accepting a new value.
+  Set this before executing commands like <code>CCText</code> that are affected by text size.
+</p>
+
+<h2>Purpose</h2>
+<p>
+  A shortcut command to quickly change the AutoCAD <code>TEXTSIZE</code> system variable.
+  Since text-related commands like <code>CCText</code> (circled text creation) reference this value,
+  setting it to the appropriate size beforehand ensures consistent text sizes throughout the work.
+</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Enter <code>TTS</code> in the command line and press Enter.</li>
+  <li>The current <code>TEXTSIZE</code> value is displayed in the command window.<br>
+      Example: <em>"Enter TEXTSIZE [Current: 5]"</em></li>
+  <li>Enter the desired new text size (positive integer) and press Enter.</li>
+  <li>Verify the changed value in the command window.</li>
+</ol>
+
+<h2>Key Details</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Operation</td><td>Displays the current <code>TEXTSIZE</code> value in the command window and accepts a new value to change it.</td></tr>
+  <tr><td>Object Selection</td><td>None — operates with numeric input only.</td></tr>
+  <tr><td>Input Restriction</td><td>Only positive integers can be entered (0 and negative values are not allowed).</td></tr>
+  <tr><td>Application Scope</td><td>Applies to the entire AutoCAD session. The default size of subsequently created text is changed.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Change Result</td><td>The AutoCAD system variable <code>TEXTSIZE</code> is changed to the entered value.</td></tr>
+  <tr><td>Command Window Output</td><td>The applied value after change is displayed in the command window.</td></tr>
+</tbody></table>
+
+<div class="note">
+  <strong>Note:</strong> <code>TTS</code> sets the size referenced when creating circled text with <code>CCText</code>.
+  After changing the size and executing <code>CCText</code>, the new size is immediately applied.
+</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

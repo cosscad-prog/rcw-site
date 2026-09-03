@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>XTAG - 02_Text</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+<h1>XTAG &nbsp;—&nbsp; 02_Text</h1>
+<p><span class="cmd-box">XTAG</span></p>
+<p>텍스트 생성, 정렬, 크기 변경, 텍스트 리스트 작성을 위한 도구 명령입니다.</p>
+<h2>사용 목적</h2>
+<p>Text 객체의 X 위치를 기준으로 표기를 정렬해, 수직 방향으로 나열된 도면 문자나 태그 위치를 깔끔하게 맞출 때 사용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <code>XTAG</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>명령 프롬프트에 따라 대상 객체를 선택합니다.</li>
+  <li>Enter를 눌러 명령을 완료하고 Rhino 화면 또는 명령창 결과를 확인합니다.</li>
+</ol>
+<div class="note"><strong>참고:</strong> <code>XTAG</code>는 Text의 X 위치를 기준으로 정렬하는 보조 명령입니다. 문자 내용은 바꾸지 않고 배치 좌표만 정리하므로, 정렬 전에 기준이 될 Text 위치를 먼저 확인하십시오.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

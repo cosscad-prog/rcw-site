@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Mullion Modeling - Mullion 만들기</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0 0 16px; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Mullion Modeling &nbsp;—&nbsp; Mullion 만들기</h1>
+<p><span class="cmd-box">MC1 ~ MC20</span> <span class="cmd-box">WVector</span> <span class="cmd-box">SSP</span> <span class="cmd-box">UMD</span></p>
+<p>Mullion WireFrame을 작성하고, Layer와 방향 데이터를 지정한 뒤 선택한 Section으로 Mullion을 모델링하는 절차입니다.</p>
+<h2>기본 조건</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>연결 조건</td><td>Mullion WireFrame은 Transom Line과 반드시 연결되어 있을 필요는 없습니다.</td></tr>
+  <tr><td>Layer</td><td>Mullion Line은 <code>M_Center</code> Layer여야 합니다.</td></tr>
+  <tr><td>방향점</td><td>Mullion Line은 방향점이 있어야 합니다. 생략된 경우 절대좌표 기준 Y 방향으로 처리됩니다.</td></tr>
+</tbody></table>
+<h2>따라하기</h2>
+<ol class="step-list">
+  
+  <li>라인을 아래에서 위 방향으로 그립니다.</li>
+  <li><code>dir</code> 명령 또는 기본 메뉴의 Direction 아이콘으로 라인 방향을 확인합니다.</li>
+  <li>방향이 맞지 않으면 선을 반복 클릭하여 방향을 바꿉니다.</li>
+  <li><code>MC1</code> ~ <code>MC9</code> 명령으로 라인의 Layer를 변경합니다.</li>
+  <li>방향점도 선과 같은 Layer로 지정합니다. 방향점은 라인 끝점에서 300 범위 안에 있어야 합니다.</li>
+  <li>라인과 방향점을 선택하여 Group을 만듭니다. 선이 하나만 있어도 Group을 만들 수 있습니다.</li>
+  <li><code>WVector</code>를 실행하고 만든 Group을 선택하여 모든 라인에 방향 데이터를 생성합니다.</li>
+  <li><code>SSP</code>로 사용할 Section을 선택합니다.</li>
+  <li><code>UMD</code>를 실행하고 Wire Group을 선택하여 모델링합니다.</li>
+
+</ol>
+<h2>세부 기준</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>단계</th><th>설명</th></tr>
+  <tr><td>방향점</td><td>라인 끝점에서 300 범위 안의 같은 Layer 점만 방향점으로 인식합니다.</td></tr>
+  <tr><td>기본 방향</td><td>범위 안에 같은 Layer의 방향점이 없으면 절대좌표 Y 방향으로 라인 방향을 자동 설정합니다.</td></tr>
+  <tr><td>Group</td><td>모델링은 Group을 하나의 창으로 인식하고, Group 내부의 요소를 찾아 수행합니다.</td></tr>
+  <tr><td>Line Data</td><td><code>WVector</code>는 반드시 실행해야 하며, Group 안에서 연결되는 정보를 라인 내부 데이터로 저장합니다.</td></tr>
+  <tr><td>Section</td><td>해당 Layer에 맞는 Section이 있어야 <code>UMD</code> 모델링이 실행됩니다.</td></tr>
+</tbody></table>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../img/001_mullion.mp4" autoplay muted loop playsinline aria-label="Mullion Modeling 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Mullion Line 작성, Layer 지정, 방향 데이터 생성 및 모델링 예시</figcaption>
+  </figure>
+</div>
+<div class="warning"><strong>주의:</strong> <code>WVector</code>를 실행하지 않으면 Line Data가 생성되지 않아 Group 내부 연결 정보를 사용할 수 없습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

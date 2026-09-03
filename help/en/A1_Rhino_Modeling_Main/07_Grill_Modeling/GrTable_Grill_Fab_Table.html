@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GrTable - Grill Fabrication Drawing Table</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>GrTable &nbsp;—&nbsp; Grill Fabrication Drawing Table</h1>
+<p><span class="cmd-box">GrTable</span></p>
+<p>Analyzes selected grill group objects and automatically generates a <strong>fabrication drawing table</strong> within the Rhino drawing. Copies and places grill shapes per type, and outputs fabrication numbers and quantity information.</p>
+<h2>Purpose</h2>
+<p>Used to organize grill type shapes, fabrication numbers, and quantities into an on-drawing fabrication reference table. Supports production and ordering review by consolidating grill schedule information alongside shape copies.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Type <strong>GrTable</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the grill group objects to include in the table and press Enter.</li>
+  <li>Once analysis is complete, click the <strong>table start position</strong> in the viewport.</li>
+  <li>A per-grill-type fabrication drawing table is generated from the selected position.</li>
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/GrTable_demo.mp4" autoplay muted loop playsinline aria-label="GrTable operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Table Cell Contents</h2>
+<p>Fabrication cells are created per grill type. The contents of each cell are as follows.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Cell Item</th><th>Description</th></tr>
+  <tr><td>Type Name</td><td>Grill type name. Displayed at the top of the cell alongside the fabrication number.</td></tr>
+  <tr><td>Fab_No</td><td>Fabrication number. Displayed as <code>[TypeName] [Prefix][Number]</code>.</td></tr>
+  <tr><td>Qnt</td><td>Quantity for that fabrication number.</td></tr>
+  <tr><td>Grill Shape</td><td>A copy of the original grill shape is placed at the cell center in the fabrication table.</td></tr>
+</tbody></table>
+<h2>Layer and Behavior Notes</h2>
+<table class="desc-table">
+    <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Mode</td><td>Operates in GroupSelect mode — clicking a grill group selects the entire group.</td></tr>
+  <tr><td>Text Layer</td><td>Generated text is placed on the <code>Text</code> and <code>Profile_No_Qnt</code> layers.</td></tr>
+  <tr><td>Data Reference</td><td>Tallies per-type quantities based on group data and Fab No information saved by <strong>GrNo</strong>.</td></tr>
+  <tr><td>Shared Table Logic</td><td>Uses the shared Vent/Grill table logic to lay out elevation and profile machining information.</td></tr>
+  <tr><td>Construction Plane</td><td>The active viewport's CPlane Y origin is automatically corrected to 0 on execution.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+    <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GR1 ~ GR5</strong></td><td>Grill modeling — run first before generating the table.</td></tr>
+  <tr><td><strong>GrNo</strong></td><td>Grill numbering — linked to the Fab_No in the table.</td></tr>
+  <tr><td><strong>GrList</strong></td><td>Grill quantity list — use together with the table.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

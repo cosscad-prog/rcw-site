@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Mullion Modeling</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0 0 16px; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Mullion Modeling</h1>
+<p><span class="cmd-box">MC1 ~ MC20</span> <span class="cmd-box">WVector</span> <span class="cmd-box">SSP</span> <span class="cmd-box">UMD</span></p>
+<p>Procedure to create Mullion WireFrame, designate Layer and direction data, then model Mullion using the selected Section.</p>
+<h2>Basic Conditions</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Connection Condition</td><td>Mullion WireFrame does not necessarily need to be connected to Transom Line.</td></tr>
+  <tr><td>Layer</td><td>Mullion Line must be on the <code>M_Center</code> Layer.</td></tr>
+  <tr><td>Direction Point</td><td>Mullion Line must have a direction point. If omitted, it is processed in the Y direction of absolute coordinates.</td></tr>
+</tbody></table>
+<h2>Step-by-Step Instructions</h2>
+<ol class="step-list">
+  
+  <li>Draw the line from bottom to top direction.</li>
+  <li>Verify the line direction using the <code>dir</code> command or Direction icon in the main menu.</li>
+  <li>If direction is incorrect, click the line repeatedly to change direction.</li>
+  <li>Change the line's Layer using the <code>MC1</code> ~ <code>MC9</code> commands.</li>
+  <li>Specify the direction point to the same Layer as the line. The direction point must be within 300 range from the line end point.</li>
+  <li>Select the line and direction point to create a Group. A Group can be created with just one line.</li>
+  <li>Run <code>WVector</code> and select the created Group to generate direction data for all lines.</li>
+  <li>Select the Section to use with <code>SSP</code>.</li>
+  <li>Run <code>UMD</code> and select the Wire Group to perform modeling.</li>
+
+</ol>
+<h2>Detailed Criteria</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Step</th><th>Description</th></tr>
+  <tr><td>Direction Point</td><td>Only points on the same Layer within 300 range from the line end point are recognized as direction points.</td></tr>
+  <tr><td>Default Direction</td><td>If there is no direction point on the same Layer within range, the line direction is automatically set to Y direction of absolute coordinates.</td></tr>
+  <tr><td>Group</td><td>Modeling recognizes a Group as one window and performs operations by finding elements inside the Group.</td></tr>
+  <tr><td>Line Data</td><td><code>WVector</code> must be executed and saves connection information within the Group as line internal data.</td></tr>
+  <tr><td>Section</td><td>A Section matching the Layer must exist for <code>UMD</code> modeling to be executed.</td></tr>
+</tbody></table>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../img/001_mullion.mp4" autoplay muted loop playsinline aria-label="Mullion Modeling example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Example of Mullion Line creation, Layer designation, direction data generation, and modeling</figcaption>
+  </figure>
+</div>
+<div class="warning"><strong>Caution:</strong> If <code>WVector</code> is not executed, Line Data is not generated and connection information within the Group cannot be used.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

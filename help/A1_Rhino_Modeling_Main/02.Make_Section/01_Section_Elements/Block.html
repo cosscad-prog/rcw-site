@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Block - Section Elements</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { display:block; max-width:600px; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Block &nbsp;—&nbsp; Section Elements</h1>
+<p><span class="cmd-box"><span style="font-weight: 400;"><span style="font-weight: 400;"><span style="font-weight: 700;">Block</span></span></span></span></p>
+<p>Block은 Anchor, Bolt, Screw처럼 정해진 형상이 있는 부품을 삽입하거나 Surface에 Hole을 만들 때 사용하는 Section 요소입니다.</p>
+<h2>사용 목적</h2>
+<p>규격이 정해진 부품을 단면에 반복 배치하거나, Surface에 Subtract(Hole)를 적용해야 할 때 사용합니다. <code>Pname</code>의 Block Data에서 삽입 방식과 위치 간격을 지정해 두면 모델링 시 부품이 자동으로 배치·관통되어, 동일 부품을 일관된 위치에 넣을 때 유용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>삽입 또는 Subtract에 사용할 Block을 준비합니다.</li>
+  <li>Section 위치에 Block을 배치합니다.</li>
+  <li><code>Pname</code>의 Block Data에서 삽입 방식과 위치 간격을 입력합니다.</li>
+
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../../img/Section_Block.png" alt="Section Block 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어</td><td>원하는 Layer 이름을 사용할 수 있습니다.</td></tr>
+  <tr><td>주요 용도</td><td>Block 삽입, Hole 생성, 정해진 형상의 부품 배치</td></tr>
+  <tr><td>배열 정보</td><td>규칙적인 배열은 <code>Pname</code>에서 위치, 간격, 수량을 입력합니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+          <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+          <tbody><tr><th>항목</th><th>설명</th></tr>
+          <tr><td>BlockOpt</td><td>저장된 Block 을 삽입하도록 도와준다.</td></tr>
+        </tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

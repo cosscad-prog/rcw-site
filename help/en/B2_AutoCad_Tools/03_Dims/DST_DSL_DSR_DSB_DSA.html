@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>DST, DSL, DSR, DSB, DSA - 03_Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>DST / DSB / DSL / DSR / DSA &nbsp;—&nbsp; 03_Dims</h1>
+<p>
+  <span class="cmd-box">DST</span>&nbsp;
+  <span class="cmd-box">DSB</span>&nbsp;
+  <span class="cmd-box">DSL</span>&nbsp;
+  <span class="cmd-box">DSR</span>&nbsp;
+  <span class="cmd-box">DSA</span>
+</p>
+<p>
+  A command that <strong>automatically adds dimensions in a specified direction</strong>
+  when you select <strong>Point objects on the <code>Dim_Points</code> layer</strong>,
+  using variables configured in <code>DsOpt</code>.
+</p>
+<h2>Purpose</h2>
+<p>
+  Based on <code>Dim_Points</code> layer Points pre-positioned with <code>PP</code> or <code>HPP</code> at key locations on the drawing shape,
+  automatically add consistent dimensions in desired directions (Top / Bottom / Left / Right / all 4 sides simultaneously).
+  Complete drawings much faster than manually creating dimensions one by one.
+</p>
+<h2>Command List</h2>
+<table class="desc-table">
+  <colgroup><col style="width:12%"><col style="width:88%"></colgroup>
+  <tbody><tr><th>Command</th><th>Action</th></tr>
+  <tr><td><code>DST</code></td><td>Add horizontal dimension at object <strong>Top</strong>.</td></tr>
+  <tr><td><code>DSB</code></td><td>Add horizontal dimension at object <strong>Bottom</strong>.</td></tr>
+  <tr><td><code>DSL</code></td><td>Add vertical dimension at object <strong>Left</strong>.</td></tr>
+  <tr><td><code>DSR</code></td><td>Add vertical dimension at object <strong>Right</strong>.</td></tr>
+  <tr><td><code>DSA</code></td><td>Add dimensions to <strong>all 4 sides</strong> (Top / Bottom / Left / Right) simultaneously.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Execute <code>DsOpt</code> to set dimension variables (First Dist, Dim Gap, etc.).</li>
+  <li>Use <code>PP</code> or <code>HPP</code> to place dimension reference Points (<code>Dim_Points</code> layer).</li>
+  <li>Enter the command for desired direction (<code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code>) in the command line.</li>
+  <li>Follow the prompt <em>"Select POINT"</em> to select <strong>Point object(s)</strong> to use as dimension reference.</li>
+  <li>Press Enter to complete — dimensions are automatically added in the specified direction.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/C2420_DST_DSA.mp4" autoplay muted loop playsinline aria-label="DST, DSA execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>DST / DSA — Example of automatic dimension addition based on Dim_Points</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Recognizes only <strong>Point objects on <code>Dim_Points</code> layer</strong>. Other objects are filtered.</td></tr>
+  <tr><td>Preparation</td><td>Must first place Points that will serve as dimension reference using <code>PP</code> or <code>HPP</code>.</td></tr>
+  <tr><td>Dimension Variables</td><td>References First Dist, Dim Gap, Top/Left/Right/Bottom Max settings in <code>DsOpt</code> panel.</td></tr>
+  <tr><td>Layer</td><td>Dimensions are created on the <code>Dims</code> layer.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+<h2>DSA Additional Requirements</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>NC_BottomPoint</td><td>Points on <code>NC_BottomPoint</code> layer are required when executing <code>DSA</code>.</td></tr>
+  <tr><td>NC_TopPoint</td><td>Points on <code>NC_TopPoint</code> layer are required when executing <code>DSA</code>.</td></tr>
+  <tr><td>If Not Met</td><td>If Points on these layers are absent, <code>DSA</code> dimensions may not be added correctly.</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Created Dimensions</td><td>Dimensions are automatically added in the specified direction based on selected Points' positions.</td></tr>
+  <tr><td>Dimension Line Distance</td><td>Uses First Dist (first dimension line) and Dim Gap (dimension line spacing) setting values.</td></tr>
+  <tr><td>Layer</td><td>Created dimensions are placed on the <code>Dims</code> layer.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> Points that serve as dimension reference must be on the <code>Dim_Points</code> layer.
+  Execute <code>PP</code> (create Point at click location) or <code>HPP</code> (automatically create Points based on entities) first.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> Variables configured in <code>DsOpt</code> directly affect dimension line position and size.
+  Verify First Dist and Dim Gap values before adding dimensions.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

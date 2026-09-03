@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Pds - 08_AutoCad_Utils</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Pds &nbsp;—&nbsp; 08_AutoCad_Utils</h1>
+<p><span class="cmd-box">Pds</span></p>
+<p>
+  도면 내 <strong>모든 Point 객체의 표시 방향을 현재 뷰 방향으로 일괄 정렬</strong>하는 명령입니다.<br>
+  사용자가 객체를 직접 선택할 필요 없이, 도면 전체의 Point를 자동으로 찾아 처리합니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  뷰 방향이 변경된 후 도면에 배치된 Point(예: <code>Dim_Points</code>, <code>NC_BottomPoint</code> 등)가
+  이전 뷰 방향 기준으로 그려져 화면에 올바르게 표시되지 않을 때 사용합니다.
+  명령 실행 시 Point의 <code>Normal</code> 벡터를 현재 뷰 방향(<code>ViewDirection</code>)으로 일괄 갱신합니다.
+</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>뷰 방향을 원하는 상태로 설정합니다.</li>
+  <li>명령창에 <code>Pds</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>별도의 선택 없이 도면 내 모든 Point가 자동으로 처리됩니다.</li>
+  <li>명령창에서 처리된 Point 수를 확인합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/C2730_PDS.mp4" autoplay muted loop playsinline aria-label="Pds 실행 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Pds — Point 표시 방향 일괄 정렬 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>객체 선택 방식</td><td>사용자 선택 없음. <code>SelectAll</code>로 도면 내 <strong>모든 Point(DBPoint) 객체</strong>를 자동으로 수집합니다.</td></tr>
+  <tr><td>처리 내용</td><td>각 Point의 <code>Normal</code> 벡터를 현재 뷰의 <code>ViewDirection</code>으로 변경합니다.</td></tr>
+  <tr><td>시스템 변수 변경</td><td><code>PDMODE = 35</code> (X 표식 + 원), <code>PDsize = 1</code>로 설정합니다.</td></tr>
+  <tr><td>반복 실행</td><td>내부적으로 동일 처리를 2회 반복하여 안정적으로 적용합니다.</td></tr>
+  <tr><td>출력 메시지</td><td>처리 완료 후 <code>"Point N개를 변경하였습니다."</code>와 <code>"Re_Draw_Point_and_Overkill 완료."</code>가 명령창에 출력됩니다.</td></tr>
+  <tr><td>적용 환경</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+<h2>PDMODE 35 표시 형식</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>시스템 변수</th><th>설명</th></tr>
+  <tr><td><code>PDMODE = 35</code></td><td>Point를 X 표식과 원이 겹친 형태로 표시합니다 (3 + 32 = 35).</td></tr>
+  <tr><td><code>PDsize = 1</code></td><td>Point 표시 크기를 화면 픽셀 단위 1로 설정합니다.</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Point Normal 갱신</td><td>도면 내 모든 DBPoint의 Normal 벡터가 현재 뷰 방향으로 변경됩니다.</td></tr>
+  <tr><td>PDMODE / PDsize 변경</td><td>Point 표시 형식이 X+원(PDMODE=35), 크기 1(PDsize=1)로 설정됩니다.</td></tr>
+  <tr><td>명령창 출력</td><td>처리된 Point 개수와 완료 메시지가 출력됩니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> <code>Pds</code>는 도면의 <strong>모든</strong> Point에 적용됩니다.
+  특정 레이어의 Point만 처리하고 싶은 경우에도 구분 없이 전체가 변경되므로 주의하세요.<br>
+  <code>PDMODE</code>와 <code>PDsize</code> 시스템 변수가 변경되므로,
+  기존에 다른 Point 표시 형식을 사용하고 있었다면 이후 Point 생성 시에도 동일 형식이 적용됩니다.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

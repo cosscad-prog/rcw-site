@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Cuttinglist - 07_UserBarList_Cuttinglist</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Cuttinglist &nbsp;—&nbsp; 07_UserBarList_Cuttinglist</h1>
+<p><span class="cmd-box">Cuttinglist</span></p>
+<p>
+  선택한 <strong>Line 객체의 레이어(프로파일명)와 길이(절단 치수)</strong>를 읽어
+  <strong>절단 리스트(Cutting List)</strong>와 <strong>장바 리스트(Long Bar List)</strong>를
+  도면과 Excel 파일로 자동 생성하는 명령입니다.<br>
+  Line 필터 선택 → 장바 모드 전환 → 절단 최적화 → 도면 출력·Excel 저장까지 한 번에 처리합니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  AutoCAD 도면에서 각 프로파일 부재를 <code>Line</code>으로 표현한 경우,
+  레이어 이름을 프로파일 명칭으로, 선 길이를 절단 치수로 사용하여
+  부재별 절단 리스트와 필요 장바 수량을 자동으로 산출합니다.
+</p>
+<h2>Line 데이터 읽기 규칙</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Line 속성</th><th>사용 방법</th></tr>
+  <tr><td>레이어 이름</td><td>프로파일(부재) 이름으로 사용됩니다. 장바 모드가 User일 때 이 이름으로 장바 파일을 검색합니다.</td></tr>
+  <tr><td>선 길이</td><td>절단 치수(mm, 정수 변환)로 사용됩니다. 소수점 이하는 버림합니다.</td></tr>
+</tbody></table>
+<h2>장바 모드 (Auto / User)</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:86%"></colgroup>
+  <tbody><tr><th>모드</th><th>설명</th></tr>
+  <tr><td>Auto (기본)</td><td>내장 장바 목록(3000~6500mm, 100mm 간격)을 모든 프로파일에 동일하게 적용합니다.</td></tr>
+  <tr><td>User</td><td>파일 열기 창에서 <code>UserBarlist</code>로 저장한 <code>.txt</code> 파일을 선택합니다. 프로파일 이름과 일치하는 장바 목록을 사용하고, 일치 항목이 없으면 기본값(<code>3000, 4000, 5000, 6000, 6500</code>)을 사용합니다.</td></tr>
+</tbody></table>
+<h2>동작 흐름</h2>
+<table class="desc-table">
+  <colgroup><col style="width:5%"><col style="width:28%"><col style="width:67%"></colgroup>
+  <tbody><tr><th>순서</th><th>단계</th><th>설명</th></tr>
+  <tr><td>1</td><td>모드 선택</td><td><em>"Current Barlist &lt;Auto/User&gt;: Enter Key [Auto / User]:"</em> 프롬프트에서 <code>A</code> 또는 <code>U</code>를 입력하여 장바 모드를 전환합니다. Enter만 누르면 이전 모드를 유지합니다.</td></tr>
+  <tr><td>2</td><td>Line 선택</td><td><em>"Select one or more lines:"</em> 프롬프트에서 절단 치수 Line을 선택합니다. <strong>Line 객체만 필터링</strong>되며 다른 엔티티는 무시됩니다.</td></tr>
+  <tr><td>3</td><td>User 파일 선택</td><td>(User 모드 시) 파일 열기 창에서 <code>UserBarlist</code>로 저장한 <code>.txt</code>를 선택합니다.</td></tr>
+  <tr><td>4</td><td>길이 검증</td><td>절단 치수가 장바 최댓값 - 35mm 이상인 Line이 있으면 경고를 표시하고 처리를 중단합니다.</td></tr>
+  <tr><td>5</td><td>절단 최적화</td><td>프로파일·길이별 정렬 및 수량 집계 후, 각 장바 규격에 절단 치수를 최적 배분하여 필요 장바 수량·손실 길이·잔여 길이를 계산합니다.</td></tr>
+  <tr><td>6</td><td>Excel 파일명 입력</td><td><em>"Enter Excel File Name:"</em> 프롬프트에서 저장할 Excel 파일 이름을 입력합니다.</td></tr>
+  <tr><td>7</td><td>도면 출력 위치 선택</td><td><em>"TList의 위치를 선택:"</em> 프롬프트에서 테이블을 배치할 도면 위치를 클릭합니다.</td></tr>
+  <tr><td>8</td><td>결과 출력</td><td>Cutting List와 Long Bar List를 도면에 텍스트로 출력하고, Excel 파일로도 저장합니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>프로파일 부재를 <code>Line</code>으로 그립니다. 이때 <strong>레이어 이름 = 프로파일 이름</strong>, <strong>선 길이 = 절단 치수(mm)</strong>가 되도록 합니다.</li>
+  <li>(User 모드를 사용할 경우) <code>UserBarlist</code>로 장바 데이터를 미리 저장합니다.</li>
+  <li>명령창에 <code>Cuttinglist</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><em>"[Auto / User]:"</em> 프롬프트에서 모드를 선택합니다. Enter만 누르면 이전 모드를 유지합니다.</li>
+  <li>절단 치수 Line을 선택하고 Enter를 누릅니다.</li>
+  <li>(User 모드 시) 파일 열기 창에서 장바 데이터 <code>.txt</code> 파일을 선택합니다.</li>
+  <li>절단 길이 검증을 통과하면, Excel 파일 이름을 입력합니다.</li>
+  <li>도면에서 테이블을 배치할 위치를 클릭합니다.</li>
+  <li>Cutting List와 Long Bar List가 도면에 출력되고 Excel 파일이 저장됩니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../img/C2820_Cuttinglist1.mp4" autoplay muted loop playsinline aria-label="Cuttinglist 실행 과정" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Cuttinglist — Line 선택 후 절단 리스트·장바 리스트 자동 생성</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 필터</td><td><strong>LINE 객체만</strong> 인식합니다. PolyLine, Circle 등은 선택해도 무시됩니다.</td></tr>
+  <tr><td>Auto 장바 범위</td><td>3000mm ~ 6500mm, 100mm 간격 (36개 규격)</td></tr>
+  <tr><td>절단 길이 한도</td><td>장바 최댓값 - 35mm 이상의 절단 치수가 있으면 경고 후 중단됩니다.</td></tr>
+  <tr><td>도면 출력 내용</td><td>① Cutting List (절단 치수·수량·장바 배정·손실·잔여) ② Long Bar List (장바 길이·수량) 순서로 출력됩니다.</td></tr>
+  <tr><td>Excel 출력</td><td>Cutting List와 Long Bar List가 Excel 파일로 저장됩니다.</td></tr>
+  <tr><td>텍스트 크기</td><td>현재 AutoCAD <code>TEXTSIZE</code> 시스템 변수를 사용합니다.</td></tr>
+  <tr><td>적용 환경</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Cutting List (도면)</td><td>프로파일별 절단 치수·수량·사용 장바 배정·손실·잔여가 도면 텍스트로 출력됩니다.</td></tr>
+  <tr><td>Long Bar List (도면)</td><td>Cutting List 아래에 프로파일별 필요 장바 길이·수량이 출력됩니다.</td></tr>
+  <tr><td>Excel 파일</td><td>입력한 이름의 Excel 파일에 Cutting List와 Long Bar List가 저장됩니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> 부분 선택도 가능합니다. 도면 전체가 아닌 일부 Line만 선택하면 선택된 범위에 대한 절단 리스트만 산출됩니다.<br>
+  User 모드에서 프로파일 이름과 일치하는 항목이 없으면 기본 장바(<code>3000, 4000, 5000, 6000, 6500</code>)가 적용됩니다.
+</div>
+<div class="warning">
+  <strong>주의:</strong> 절단 치수가 장바 최댓값 - 35mm 이상인 Line이 하나라도 있으면 처리가 중단됩니다.
+  해당 Line의 레이어 이름과 길이가 명령창에 표시되므로 확인 후 수정하세요.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

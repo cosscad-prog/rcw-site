@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>FLOpt - 15_BimData</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FLOpt &nbsp;—&nbsp; 15_BimData</h1>
+<p><span class="cmd-box">FLOpt</span></p>
+<p>FLdata로 입력된 층 Data와 일정 Data를 층/Block 단위로 정리해 보여주는 Floor Data 패널을 여는 명령입니다. 패널에서 표시 상태를 제어하고, Block 행을 더블클릭해 BIM 데이터를 수정할 수 있습니다.</p>
+<h2>사용 목적</h2>
+<p>BIM/Floor 데이터 입력과 관리에 필요한 기본 옵션을 설정해, FLData 작업 전에 데이터 입력 기준을 정리할 때 사용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>FLOpt</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><code>Floor Data</code> 패널이 열리며, 현재 문서의 <code>RCW_Floor</code> UserString을 가진 객체를 스캔합니다.</li>
+  <li>상단의 <code>새로고침</code> 버튼으로 데이터를 다시 읽습니다.</li>
+  <li>상단 역할 버튼(<code>관리자</code>, <code>설계</code>, <code>생산</code>, <code>설치</code>)을 눌러 표시할 일정 역할을 전환합니다.</li>
+  <li>Block 행을 더블클릭하면 해당 층+Block 이름의 객체들을 대상으로 BIM 데이터 입력 창이 열립니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 90%; min-width:220px; max-width:90%;">
+    <video src="../../img/FLOpt.mp4" autoplay muted loop playsinline aria-label="FLOpt example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>패널 구성</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>On</td><td>층 또는 Block의 표시/잠금 상태를 토글하는 아이콘 열입니다.</td></tr>
+  <tr><td>Floor / 기준고</td><td>층 행에는 층 번호와 기준고가 표시됩니다. Block 행에는 Block/객체 표시 이름이 표시됩니다.</td></tr>
+  <tr><td>Qty</td><td>층 행은 해당 층 전체 객체 수, Block 행은 해당 층+Block 이름에 속한 객체 수를 표시합니다.</td></tr>
+  <tr><td>Progress</td><td>현재 선택된 역할 기준의 진행 상태를 색상 박스로 표시합니다.</td></tr>
+  <tr><td>계획완료일</td><td>현재 선택된 역할의 계획 완료일을 표시합니다. 층 행은 자식 Block 중 가장 늦은 날짜를 대표값으로 표시합니다.</td></tr>
+  <tr><td>실제완료일</td><td>현재 선택된 역할의 실제 완료일을 표시합니다. 층 행은 자식 Block 중 가장 늦은 날짜를 대표값으로 표시합니다.</td></tr>
+</tbody></table>
+<h2>진행 상태 색상</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>상태</th><th>기준</th></tr>
+  <tr><td>Grey</td><td>선택 역할의 계획 시작일이 없으면 Not Started로 표시됩니다.</td></tr>
+  <tr><td>Yellow</td><td>계획 시작일이 있으면 In Progress로 표시됩니다.</td></tr>
+  <tr><td>Green</td><td>실제 완료일이 있고 그 날짜가 오늘 이하이면 Done으로 표시됩니다.</td></tr>
+</tbody></table>
+<h2>코드 기준 동작</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>패널 실행</td><td><code>FLOpt</code> 명령은 <code>FLPanelControl.PanelId</code> 패널을 엽니다.</td></tr>
+  <tr><td>데이터 스캔</td><td>문서 객체 중 삭제/숨김 객체를 제외하고 <code>RCW_Floor</code> UserString이 있는 객체를 층별로 분류합니다.</td></tr>
+  <tr><td>Block 이름</td><td>Block Instance는 Instance Definition 이름을 표시 이름으로 사용하고, 일반 객체는 객체 이름을 사용합니다.</td></tr>
+  <tr><td>일정 복원</td><td>객체 UserString 값을 우선 사용하고, 값이 없으면 <code>doc.Strings</code>에 저장된 층+Block 이름 백업 데이터에서 복원합니다.</td></tr>
+  <tr><td>더블클릭 편집</td><td>Block 행을 더블클릭하면 같은 층 번호와 같은 표시 이름을 가진 객체들을 모아 <code>Dlg_BimData</code>로 편집합니다.</td></tr>
+  <tr><td>On/Off 토글</td><td>On 열을 클릭하면 해당 층 또는 Block의 객체를 Lock/Unlock합니다. 객체를 숨기거나 삭제하지 않고 잠금 상태로 제어합니다.</td></tr>
+  <tr><td>패널 닫기</td><td>패널이 닫힐 때 FLOpt에서 잠금 처리한 객체를 다시 Unlock하고 내부 Off 상태를 초기화합니다.</td></tr>
+  
+</tbody></table>
+<div class="note"><strong>참고:</strong> FLOpt는 입력된 데이터를 조회/정리/수정하는 패널입니다. 새 객체에 BIM 데이터를 처음 입력하려면 <code>FLdata</code>를 먼저 사용하세요.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

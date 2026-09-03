@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>UserBarlist - 07_UserBarList_Cuttinglist</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>UserBarlist &nbsp;—&nbsp; 07_UserBarList_Cuttinglist</h1>
+<p>
+  <span class="cmd-box">UserBarlist</span>&nbsp;
+  <span class="cmd-box">UBarlist</span>
+</p>
+<p>
+  A command that executes external options window (<code>Barlist_Option.exe</code>) to input and save bar length used by profile.<br>
+  Saved bar data file is loaded in <strong>User mode</strong> of <code>Cuttinglist</code> command and used in cutting list calculation.
+</p>
+<h2>Purpose</h2>
+<p>
+  When bar specification actually owned or ordered by factory differs from AutoCAD default (3000~6500mm),
+  can optimize cutting by directly specifying bar length to use for each profile.
+  When bar data is saved with <code>UserBarlist</code>, can load that file by selecting
+  <code>User</code> mode when executing <code>Cuttinglist</code>.
+</p>
+<h2>UserBarlist → Cuttinglist Workflow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:16%"><col style="width:84%"></colgroup>
+  <tbody><tr><th>Step</th><th>Description</th></tr>
+  <tr><td><code>UserBarlist</code></td><td>Opens Barlist_Option.exe to input bar length for each profile and saves as <code>.txt</code> file.</td></tr>
+  <tr><td><code>Cuttinglist</code></td><td>When <code>[User]</code> is selected on execution, file open dialog is displayed. Selecting saved <code>.txt</code> generates cutting list with corresponding bar.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Enter <code>UserBarlist</code> (or <code>UBarlist</code>) in command line and press Enter.</li>
+  <li><code>Barlist_Option.exe</code> window opens.</li>
+  <li>Input bar length (mm) to use for each profile name.</li>
+  <li>Click save button to save as <code>.txt</code> file.</li>
+  <li>When executing <code>Cuttinglist</code> later, select <code>[User]</code> and load the saved file.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../img/3121_Barlist_Option_Window.png" alt="Barlist_Option.exe options window" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>UserBarlist — Barlist_Option.exe options window</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Execution Method</td><td>Without using AutoCAD API, launches external standalone program <code>Barlist_Option.exe</code>.</td></tr>
+  <tr><td>Input Content</td><td>Input one or more available bar lengths (mm) for each profile name.</td></tr>
+  <tr><td>Save Format</td><td>Input data is saved as text file (<code>.txt</code>). File format is <code>ProfileName,Length1,Length2,...</code> (comma-separated).</td></tr>
+  <tr><td>Linked Command</td><td>When <code>[User]</code> mode is selected in <code>Cuttinglist</code> execution, loads saved file and generates cutting list with bar matching that profile.</td></tr>
+  <tr><td>Command Alias</td><td><code>UBarlist</code> performs identical operation.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD / Rhino (platform-independent as external EXE execution)</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> Profile name must exactly match <code>Line</code> layer name for
+  corresponding bar to be applied in <code>Cuttinglist</code>.
+  If profile name is not in file, default bar list (<code>3000, 4000, 5000, 6000, 6500</code>) is used.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> <code>Barlist_Option.exe</code> is installed with RCW. If it has been removed, reinstall RCW.
+  If file does not exist, command exits without error but window does not open.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>BC11~BC44 - Block Data 복사</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:13px; font-weight:bold; color:#003d80; margin:0 4px 6px 0; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .matrix-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; text-align:center; }
+    .matrix-table th { background:#dce8f8; border:1px solid #aac4e8; padding:6px 8px; font-weight:bold; }
+    .matrix-table td { border:1px solid #c8d8ec; padding:7px 8px; vertical-align:middle; }
+    .matrix-table td:first-child { background:#f0f4ff; font-weight:bold; color:#003d80; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>BC11 ~ BC44 &nbsp;—&nbsp; Block Data 복사</h1>
+<p>
+  <span class="cmd-box">BC11</span>
+  <span class="cmd-box">BC12</span>
+  <span class="cmd-box">BC13</span>
+  <span class="cmd-box">BC14</span>
+  <span class="cmd-box">BC21</span>
+  <span class="cmd-box">BC22</span>
+  <span class="cmd-box">BC23</span>
+  <span class="cmd-box">BC24</span>
+  <span class="cmd-box">BC31</span>
+  <span class="cmd-box">BC32</span>
+  <span class="cmd-box">BC33</span>
+  <span class="cmd-box">BC34</span>
+  <span class="cmd-box">BC41</span>
+  <span class="cmd-box">BC42</span>
+  <span class="cmd-box">BC43</span>
+  <span class="cmd-box">BC44</span>
+</p>
+<p>
+  Section의 첫 번째 Block Data를 두 번째 Block Data 위치로 복사하는 4x4 명령어 묶음입니다.
+  명령어의 첫 번째 숫자는 복사할 원본 Block 번호, 두 번째 숫자는 복사될 대상 Block 번호를 의미합니다.
+</p>
+<h2>사용 목적</h2>
+<p>한 Section에 입력된 여러 Block Data 중 한 Block의 설정을 다른 Block 위치로 빠르게 복사할 때 사용합니다. 명령어 두 자리 숫자(원본→대상)로 복사 방향이 정해져 있어, 반복되는 Block 구성을 일일이 입력하지 않고 신속히 맞출 때 유용합니다.</p>
+<h2>명령어 번호 규칙</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>구분</th><th>설명</th></tr>
+  <tr><td>첫 번째 숫자</td><td>복사 원본 Block 번호입니다. 예: <strong>BC31</strong>은 <strong>Block-3</strong> 데이터를 원본으로 사용합니다.</td></tr>
+  <tr><td>두 번째 숫자</td><td>복사 대상 Block 번호입니다. 예: <strong>BC31</strong>은 데이터를 <strong>Block-1</strong> 위치로 복사합니다.</td></tr>
+  <tr><td>명령어 형식</td><td><code>BC + 원본번호 + 대상번호</code> 형식입니다. 원본/대상 번호는 1~4를 사용합니다.</td></tr>
+</tbody></table>
+<h2>복사 조합표</h2>
+<table class="matrix-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 20%;">
+    <col style="width: 20%;">
+    <col style="width: 20%;">
+    <col style="width: 20%;">
+  </colgroup>
+  <tbody><tr>
+    <th>원본 \ 대상</th>
+    <th>Block-1로 복사</th>
+    <th>Block-2로 복사</th>
+    <th>Block-3로 복사</th>
+    <th>Block-4로 복사</th>
+  </tr>
+  <tr>
+    <td>Block-1 원본</td>
+    <td><strong>BC11</strong><br>Block-1 → Block-1</td>
+    <td><strong>BC12</strong><br>Block-1 → Block-2</td>
+    <td><strong>BC13</strong><br>Block-1 → Block-3</td>
+    <td><strong>BC14</strong><br>Block-1 → Block-4</td>
+  </tr>
+  <tr>
+    <td>Block-2 원본</td>
+    <td><strong>BC21</strong><br>Block-2 → Block-1</td>
+    <td><strong>BC22</strong><br>Block-2 → Block-2</td>
+    <td><strong>BC23</strong><br>Block-2 → Block-3</td>
+    <td><strong>BC24</strong><br>Block-2 → Block-4</td>
+  </tr>
+  <tr>
+    <td>Block-3 원본</td>
+    <td><strong>BC31</strong><br>Block-3 → Block-1</td>
+    <td><strong>BC32</strong><br>Block-3 → Block-2</td>
+    <td><strong>BC33</strong><br>Block-3 → Block-3</td>
+    <td><strong>BC34</strong><br>Block-3 → Block-4</td>
+  </tr>
+  <tr>
+    <td>Block-4 원본</td>
+    <td><strong>BC41</strong><br>Block-4 → Block-1</td>
+    <td><strong>BC42</strong><br>Block-4 → Block-2</td>
+    <td><strong>BC43</strong><br>Block-4 → Block-3</td>
+    <td><strong>BC44</strong><br>Block-4 → Block-4</td>
+  </tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  <li>복사할 원본 Block 번호와 대상 Block 번호를 확인합니다.</li>
+  <li>Rhino 명령창에 해당 조합의 명령어를 입력합니다. 예: Block-2 데이터를 Block-4로 복사하려면 <strong>BC24</strong>를 입력합니다.</li>
+  <li>명령 안내에 따라 기준 객체 또는 Section 객체를 선택합니다.</li>
+  <li>대상 Block 위치의 데이터가 복사 또는 갱신되었는지 확인합니다.</li>
+
+
+</ol>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>BCXX</strong></td><td>사용자가 원본/대상 번호 조합을 직접 입력해 Block Data를 복사합니다.</td></tr>
+  <tr><td><strong>BBC4</strong></td><td>Block Data 4x4 조합을 일괄 복사합니다.</td></tr>
+  <tr><td><strong>RBB</strong></td><td>Block Data 이름 또는 연결 정보를 재정리합니다.</td></tr>
+  <tr><td><strong>DBB / SDBB</strong></td><td>Block Data를 전체 또는 선택 기준으로 삭제합니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

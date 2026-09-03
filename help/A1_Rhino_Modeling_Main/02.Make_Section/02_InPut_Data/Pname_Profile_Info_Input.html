@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Pname - InPut Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { display:block; max-width:720px; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Pname / PPI &nbsp;—&nbsp; InPut Data</h1>
+<p><span class="cmd-box">Pname</span> <span class="cmd-box">PPI</span></p>
+<p><code>Pname</code>은 Section Profile에 Surface, Polyline, Block 정보를 입력하는 명령입니다. <br>프로파일 이름, 단중, 추가 길이, 용도, Block Data를 한 창에서 관리합니다.</p>
+<h2>사용 목적</h2>
+<p>Section 요소(Surface·Polyline·Block)에 프로파일 이름·단중·추가 길이·용도·Block Data 등 모델링에 필요한 속성을 한 창에서 입력·수정할 때 사용합니다. 여기서 입력한 값이 Unit 모델링(<code>UMD</code>)과 리스트·도면 작성의 기준 데이터가 되므로, 단면을 만든 직후 반드시 정리해 두는 핵심 단계입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>정보를 입력할 Section 요소를 선택합니다.</li>
+  <li><code>Pname</code> 또는 <code>PPI</code> 명령을 실행합니다.</li>
+  <li>요소 종류에 맞춰 Surface, Polyline, Block 관련 값을 입력합니다.</li>
+  <li>입력한 값이 리스트와 모델링 결과에 반영되는지 확인합니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../img/Pname_milling.png" alt="Pname 창 — Milling 탭과 Additional Length 의 Start 칸" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>화살표 두 개가 이번에 바뀐 곳입니다 — 오른쪽 <b>Milling</b> 탭(신규)과 Additional Length 의 <b>Start</b> 칸(두 칸 → 한 칸).</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/Pname_demo.mp4" autoplay muted loop playsinline aria-label="Pname_demo" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Surface Data</td><td>Material_ID, Profile_ID, Fab_ID, Additional Length 등을 입력합니다.</td></tr>
+  <tr><td>Polyline Data</td><td>Subtracter 종류와 가공 방식을 입력합니다.</td></tr>
+  <tr><td>Block Data</td><td>Block 삽입 방식, 기준, 위치, 간격, 수량을 입력합니다.</td></tr>
+  <tr><td>Milling</td><td>프로파일 바를 단면 폴리라인 모양으로 깎습니다. 오른쪽 <b>Milling</b> 탭에서 입력합니다.</td></tr>
+</tbody></table>
+
+<h2>Additional Length &nbsp;&mdash;&nbsp; 바 길이와 조각</h2>
+<p>창 아래쪽 <b>Additional Length</b> 상자는 프로파일 바를 중심선보다 얼마나 더 길게 뽑을지, 그리고 그 끝에 조각을 몇 개 놓을지를 정합니다. 줄은 두 개이고 각각 바의 한쪽 끝을 뜻합니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>줄</th><th>어느 끝인가</th></tr>
+  <tr><td>Top/Left</td><td>Mullion 이면 <b>위쪽</b> 끝, Transom 이면 <b>왼쪽</b> 끝.</td></tr>
+  <tr><td>Bot/Right</td><td>Mullion 이면 <b>아래쪽</b> 끝, Transom 이면 <b>오른쪽</b> 끝.</td></tr>
+</tbody></table>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>칸</th><th>설명</th></tr>
+  <tr><td>Start</td><td>그 끝에서 <b>바깥으로 더 뽑는 길이</b>(mm)입니다. 중심선 끝이 그대로 바 끝이 되지 않고 이 값만큼 밀려납니다. 수식(<code>100+5</code>)도 쓸 수 있습니다.</td></tr>
+  <tr><td>Length</td><td><b>0 이면 바 하나</b>가 끝에서 끝까지 만들어집니다. 값을 적으면 그 끝에서 <b>Length 길이의 조각만</b> 만듭니다(가운데는 비웁니다). 브래킷·슬리브처럼 끝에만 들어가는 부재에 씁니다.</td></tr>
+  <tr><td>간격</td><td>그 조각을 여러 개 놓을 때의 간격(mm)입니다. <code>D100,D200</code> 처럼 콤마로 여러 값을 적으면 더미 기준으로 읽습니다.</td></tr>
+  <tr><td>수량</td><td>놓을 개수입니다. 간격과 수량 중 채운 쪽이 나머지를 정합니다.</td></tr>
+  <tr><td>대칭</td><td>켜면 반대쪽 끝에서도 같은 간격으로 대칭 배치합니다.</td></tr>
+</tbody></table>
+<div class="note"><b>5.1.3 에서 바뀐 것 &mdash; <code>Mullion</code>·<code>Transom</code> 두 칸이 <code>Start</code> 한 칸이 되었습니다.</b><br>
+한 단면은 Mullion 이거나 Transom 이지 둘 다일 수 없어, 두 칸 중 늘 한쪽만 쓰였습니다. 이제 한 칸에 적으면 그 단면이 어느 쪽으로 쓰이든 같은 값이 적용됩니다. <b>기존 도면은 그대로 열리고</b>, 그 단면을 한 번 저장하면 옛 두 값이 하나로 정리됩니다.</div>
+<div class="note">Profile ID 가 <code>0. Not Select</code> 이고 Start 가 위아래 모두 <code>0</code> 인 폴리라인 단면에는 <b>기본 추가 길이 50mm</b> 가 적용됩니다.</div>
+
+<h2>Curve 를 고르면 Block Insert · Milling 탭이 잠깁니다</h2>
+<p><b>Polyline · PolyCurve · Line</b> 을 선택하면 오른쪽 <b>Block Insert</b> 와 <b>Milling</b> 탭이 회색으로 잠겨 입력할 수 없습니다. 두 탭은 단면 <b>Surface</b> 를 위한 것이라, Curve 에 값을 넣어도 모델링은 아무것도 하지 않습니다.</p>
+<div class="warn"><b>왜 막았나 &mdash; 잘못 들어간 값이 나중에 <code>SSP</code> 를 막습니다.</b><br>Curve 에 Block 정보가 들어가면 그 Curve 를 복사·이동했을 때 기록된 Block ID 가 제 그룹 밖을 가리키게 되고, <code>SSP</code> 가 &quot;블록을 못 찾는다&quot;며 진행을 막습니다. 폴리라인은 대개 이름이 서로 같아서, 그 경고만 보고 어느 것이 문제인지 찾기가 매우 어렵습니다.</div>
+<div class="note"><b>이미 값이 들어간 폴리라인을 고치는 법:</b> 그 Curve 를 <code>Pname</code> 으로 고른 뒤 창 아래 <b>Save</b> 를 누르면 됩니다. Curve 를 저장할 때 Block 4칸과 Milling 4칸이 자동으로 비워지고, 무엇을 비웠는지 명령창에 표시됩니다. (<code>DBB</code>·<code>SDBB</code> 는 Surface 만 처리하므로 Curve 에는 쓸 수 없습니다.)</div>
+<div class="note">Curve 의 나머지 값 &mdash; Profile 이름·단중·비고·ID·추가 길이 &mdash; 는 그대로 쓰고 저장됩니다. 잠기는 것은 두 탭뿐입니다.</div>
+
+<h2>Milling 탭 &nbsp;—&nbsp; 바 절삭</h2>
+<p>프로파일 바에 슬롯·홈 같은 절삭을 넣는 기능입니다. 오른쪽 열의 <b>Block Insert</b> 탭 옆 <b>Milling</b> 탭에서 입력하며, 한 프로파일에 <code>Mill 1</code>~<code>Mill 4</code> 네 칸을 쓸 수 있습니다.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/PName_Milling.mp4" autoplay muted loop playsinline aria-label="Milling 탭에서 닫힌 폴리라인으로 프로파일을 깎는 과정" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>닫힌 폴리라인 하나를 고르면 <code>UMD</code> 가 바를 그 모양으로 깎습니다.</figcaption>
+  </figure>
+</div>
+<div class="note"><b>전에는</b> 슬롯·홈을 넣으려면 깎을 형상을 따로 만들어 빼야 했습니다. 이제 <b>단면에 그린 폴리라인 하나</b>면 <code>UMD</code> 가 알아서 깎습니다.</div>
+<div class="note"><b>두 탭의 배치가 같습니다.</b> <b>Block Insert</b> 와 <b>Milling</b> 은 칸 자리를 맞춰 두어 <b>탭을 바꿔도 항목이 움직이지 않습니다.</b> 간격·수량을 읽는 규칙도 두 탭이 같습니다.</div>
+<div class="note"><b>어느 폴리라인인지 확인하려면</b> <code>Mill 1</code>~<code>Mill 4</code> <b>이름 칸을 누르십시오.</b> 그 폴리라인 가운데에 <b>번호 점</b>이 하나 찍힙니다(한 번에 하나만). <b>Save</b> 하거나 창을 닫으면 저절로 사라집니다.</div>
+<ol class="step-list">
+  <li>프로파일과 <b>같은 단면 평면</b>에 절삭 모양을 <b>닫힌 폴리라인</b>으로 그립니다.</li>
+  <li><code>Pname</code> 창의 <b>Milling</b> 탭에서 <code>Mill 1</code> 버튼을 누르고 그 폴리라인을 선택합니다.</li>
+  <li>아래 값을 입력하고 <b>Save</b> 합니다.</li>
+  <li><code>UMD</code>로 모델링하면 바가 그 모양으로 깎입니다.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Cut Type</td><td><b>2. Subtract Only</b> — 깎기만 합니다. <b>3. Subtract &amp; Show</b> — 깎은 뒤 절삭체 사본을 <code>Subtract_Block</code> 레이어에 남겨 위치를 눈으로 확인할 수 있게 합니다.</td></tr>
+  <tr><td>Location</td><td>배열 기준입니다. <b>1. By Brep</b> — 바 형상의 실제 양 끝. <b>2. By Line</b> — 중심선의 양 끝. 두 값은 바 끝이 사선으로 잘린 경우 서로 다릅니다.</td></tr>
+  <tr><td>Length</td><td>절삭체 하나의 <b>바 축 방향 길이</b>(mm)입니다. 폴리라인은 단면이라 그 자체로는 길이가 없으므로 이 값만큼 압출합니다. 배열 지점이 이 길이의 <b>가운데</b>가 됩니다.</td></tr>
+  <tr><td>Top/Left</td><td>한쪽 끝의 절삭체를 바 끝에서 <b>바깥으로</b> 얼마나 내밀지(mm). 그 끝은 <b>mullion은 위쪽, transom은 왼쪽</b>입니다. 0이면 바 끝에 딱 맞추고, <b>음수를 적으면 안쪽으로 당깁니다</b>(-50이면 끝에서 50mm 안쪽).</td></tr>
+  <tr><td>등 간 격</td><td><b>절삭 간격의 상한(mm)</b>입니다. <b>양 끝에 하나씩 먼저 놓고</b>, 그 사이를 이 값을 넘지 않는 가장 적은 개수로 나눕니다. 그래서 실제 간격은 늘 <b>이 값 이하</b>이고, 딱 나누어떨어지면 이 값 그대로입니다. <b>자투리는 남지 않습니다.</b> 이 칸을 적으면 아래 <b>수량</b>은 스스로 정해지므로 적지 않아도 됩니다.<br>0.5 · 1/4 · 1/6 · 1/8 을 적으면 블록과 같이 <b>중앙·대칭 배치</b>라는 뜻으로 읽습니다(0.5는 중앙 1개, 나머지는 대칭 2개).</td></tr>
+  <tr><td>Bot/Right</td><td>반대쪽 끝의 절삭체를 바 끝에서 바깥으로 얼마나 내밀지(mm). 쓰임은 Top/Left와 같고 음수도 같은 뜻입니다.</td></tr>
+  <tr><td>수량</td><td><b>등 간 격을 비우고 이 칸만 적으면</b> 구간을 그 개수로 나눠 <b>간격을 스스로 산출</b>합니다(양 끝 포함). 등 간 격에 값이 있으면 개수는 거기서 정해지므로 이 칸은 보지 않습니다. 즉 <b>둘 중 하나만 적으면 나머지가 따라옵니다.</b></td></tr>
+  <tr><td>Top/Left 줄의<br>간격·수량</td><td>시작 끝에서 따로 세는 그룹입니다. <b>등 간 격 칸이 비어 있을 때만</b> 씁니다.</td></tr>
+  <tr><td>Bot/Right 줄의<br>간격·수량</td><td>반대 끝에서 따로 세는 그룹입니다. 쓰임은 위와 같습니다.</td></tr>
+</tbody></table>
+<div class="note"><b>등 간 격이 우선입니다.</b> 등 간 격 칸에 값이 있으면 Top/Left · Bot/Right 줄의 <b>간격·수량</b> 칸에 숫자가 들어 있어도 보지 않습니다. 다만 두 줄의 <b>첫 칸</b>(Top/Left · Bot/Right 여유)은 그대로 살아서 시작점과 한계를 밀어냅니다.</div>
+<div class="note"><b>Block Insert 탭의 "등간격"과 같은 방식입니다.</b> 예를 들어 구간이 1250mm이고 100을 넣으면, 1250을 100 이하로 나누려면 13번 나눠야 하므로 <b>실제 간격 96.15mm에 절삭체 14개</b>가 나옵니다. 구간이 1200mm이고 200을 넣으면 딱 6번에 나뉘어 <b>간격 200mm 그대로 7개</b>가 나옵니다. 어느 쪽이든 <b>양 끝에는 반드시 하나씩</b> 놓입니다.</div>
+<div class="warning">절삭 폴리라인은 <b>반드시 닫혀 있어야</b> 하고 <b>평면</b>이어야 합니다. 열려 있거나 평면이 아니면 절삭체를 만들지 못하고 경고만 남긴 채 지나갑니다. <code>Length</code>가 0이어도 마찬가지입니다.</div>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>Pname</code></td><td>Profile 정보 입력 창을 엽니다.</td></tr>
+  <tr><td><code>PPI</code></td><td>Profile 정보 입력과 같은 용도의 명령입니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

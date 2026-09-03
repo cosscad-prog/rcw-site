@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>TAG - Text</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>TAG &nbsp;—&nbsp; Text</h1>
+<p><span class="cmd-box">TAG</span></p>
+<p>A command to align selected Text with single-line spacing. In Front View, it organizes by Z direction; in Top View, it organizes by Y direction.</p>
+<h2>Purpose</h2>
+<p>Used to neatly organize scattered Text objects according to a standard and arrange drawing annotations visually. Text content is maintained while only the placement is organized.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Run <code>TAG</code> in a View where you can select the Text Annotations to align.</li>
+  <li>Select the Text objects to align.</li>
+  <li>The selected Text objects are repositioned at regular intervals based on the lowest Text among them.</li>
+
+</ol>
+<h2>Usage Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 55%; min-width:220px; max-width:55%;">
+    <video src="../../../img/3220_Tag.mp4" autoplay muted loop playsinline aria-label="TAG command example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Example of aligning selected Text at regular intervals</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  
+  <tr><td>Function</td><td>Aligns selected Text Annotations based on position.</td></tr>
+  <tr><td>Alignment Spacing</td><td>Applies approximately <code>1.6</code> times spacing based on the height of the first reference Text.</td></tr>
+  <tr><td>View Reference</td><td>In Front View, alignment is by Z direction; in Top View, alignment is by Y direction.</td></tr>
+  
+</tbody></table>
+<div class="note"><strong>Note:</strong> Text alignment commands reposition objects without modifying their content. If annotation order is important, organize the reference Text and selection range before aligning.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

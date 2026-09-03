@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>BP1~BP5 - BackPanel Modeling</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:6px; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>BP1 ~ BP5 &nbsp;—&nbsp; BackPanel Modeling</h1>
+<p>
+  <span class="cmd-box">BP1</span><span class="cmd-box">BP2</span><span class="cmd-box">BP3</span>
+  <span class="cmd-box">BP4</span><span class="cmd-box">BP5</span>
+</p>
+<p>Automatically creates <strong>BackPanel 3D solids</strong> based on the glass surface (Glass Surface). BP1 ~ BP5 each correspond to BackPanel types 1–5 pre-configured in the <strong>BpOpt</strong> panel.</p>
+<h2>Purpose</h2>
+<p>Used to quickly create spandrel (back panel) 3D solids across multiple faces via type shortcuts (BP1-BP5). Supports Distance or Section split methods, enabling fast placement of varied BackPanel specifications by type, with optional control over distance basis or section division.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Set the BackPanel type (thickness, offset distance, bend type, etc.) in the <strong>BpOpt</strong> panel first.</li>
+  <li>Type <strong>BP1</strong> (or BP2–BP5) in the Rhino command line and press Enter.</li>
+  <li>Click on the glass surface to select the area where the BackPanel will be created.</li>
+  <li>Optionally choose <strong>Distance</strong> or <strong>Section</strong> as the split method.</li>
+  <li>Press Enter to finish — solids are created on the BackPanel layer.</li>
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <video src="../../../img/BP1_demo.mp4" autoplay muted loop playsinline aria-label="BP1 operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>BP Number and Type Relationship</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>BP1</strong></td><td>Creates BackPanels using type 1 settings in the BpOpt panel.</td></tr>
+  <tr><td><strong>BP2</strong></td><td>Creates BackPanels using type 2 settings in the BpOpt panel.</td></tr>
+  <tr><td><strong>BP3</strong></td><td>Creates BackPanels using type 3 settings in the BpOpt panel.</td></tr>
+  <tr><td><strong>BP4</strong></td><td>Creates BackPanels using type 4 settings in the BpOpt panel.</td></tr>
+  <tr><td><strong>BP5</strong></td><td>Creates BackPanels using type 5 settings in the BpOpt panel.</td></tr>
+</tbody></table>
+<h2>Options</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Option</th><th>Description</th></tr>
+  <tr><td><strong>Distance</strong></td><td>Splits BackPanel faces based on the distance between Mullions.</td></tr>
+  <tr><td><strong>Section</strong></td><td>Splits BackPanel faces based on Section data.</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer</td><td>Solid objects are created on the <code>BackPanel_XX</code> layer.</td></tr>
+  <tr><td>Shape</td><td>A 3D solid composed of Sheet, Panel, and Insulation layers is created at the offset distance from the glass surface.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>BpOpt</strong></td><td>BackPanel Type Option Panel — set the type before running.</td></tr>
+  <tr><td><strong>BpNo</strong></td><td>BackPanel numbering</td></tr>
+  <tr><td><strong>BpList</strong></td><td>Generate BackPanel quantity list</td></tr>
+  <tr><td><strong>BpTable</strong></td><td>Generate BackPanel fabrication drawing table</td></tr>
+  <tr><td><strong>BpFd</strong></td><td>Generate BackPanel fabrication drawing</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

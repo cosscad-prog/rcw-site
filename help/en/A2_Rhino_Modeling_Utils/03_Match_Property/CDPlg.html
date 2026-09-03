@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>CDPlg - Match Property</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>CDPlg &nbsp;—&nbsp; Match Property</h1>
+<p><span class="cmd-box">CDPlg</span></p>
+<p>Copies <strong>only the Additional Length box</strong> of a reference section to other sections. All five of its fields (<code>Start · Length · Interval · Quantity · Symmetry</code>) travel together, and the target keeps its own profile name, unit weight, IDs and block data.</p>
+
+<h2>Purpose</h2>
+<p>Use it to set the same additional length across several sections. <code>CDP</code> copies the whole section record, so the profile name and unit weight are replaced by the reference object's as well; <code>CDPlg</code> touches the Additional Length box only. It replaces the work of opening the Pname dialog for each section in turn.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <code>CDPlg</code> in the Rhino command line and press Enter.</li>
+  <li>Select <strong>one reference section</strong> (a Surface or a PolyCurve).</li>
+  <li>Select the <strong>target sections</strong>. Several can be picked at once.</li>
+  <li>Press Enter. The command line reports the values copied and how many objects were changed.</li>
+</ol>
+<div class="note"><strong>Note:</strong> Targets must be the <strong>same kind</strong> as the reference. A Surface reference takes Surface targets, a PolyCurve reference takes PolyCurve targets — the same rule as <code>CDP</code>.</div>
+
+<h2>What is copied and what is not</h2>
+<table class="desc-table">
+  <colgroup><col style="width:34%"><col style="width:66%"></colgroup>
+  <tr><th>Item</th><th>Detail</th></tr>
+  <tr><td><strong>Copied</strong></td><td>The <strong>whole Additional Length box</strong> of the Pname dialog — <code>Start</code>, <code>Length</code>, <code>Interval</code>, <code>Quantity</code> and <code>Symmetry</code>, on both <code>Top/Left</code> and <code>Bot/Right</code></td></tr>
+  <tr><td>Not copied</td><td>Profile name (P_name), unit weight, description, Profile / Material / Mullion·Transom ID, Group ID, Fab information, block data, length and milling data</td></tr>
+  <tr><td>Not copied</td><td>Layer, colour and other Rhino object properties — unlike <code>CDP</code>, they are <strong>left untouched</strong></td></tr>
+  <tr><td>Not copied</td><td>Object name — the target keeps the name it had, including when a new section record is created</td></tr>
+</table>
+
+<h2>The value carries across mullions and transoms</h2>
+<p>Additional length is stored in four slots, and <strong>mullions and transoms read different slots.</strong> <code>CDPlg</code> does not copy the raw slots; it carries the two values you see on screen (<code>Top/Left</code>, <code>Bot/Right</code>). So the value arrives correctly even when the reference is a mullion and the target a transom, or the other way round.</p>
+<table class="desc-table">
+  <colgroup><col style="width:34%"><col style="width:33%"><col style="width:33%"></colgroup>
+  <tr><th>Screen value</th><th>Slot a mullion reads</th><th>Slot a transom reads</th></tr>
+  <tr><td>Top / Left</td><td>Additional_Length_Data_0</td><td>Additional_Length_Data_2</td></tr>
+  <tr><td>Bot / Right</td><td>Additional_Length_Data_1</td><td>Additional_Length_Data_3</td></tr>
+</table>
+<p>For example, if the reference mullion carries <code>Top/Left 100</code> and <code>Bot/Right 50</code>, a transom target receives <code>100</code> and <code>50</code> as well.</p>
+<div class="note"><strong>Note:</strong> A value entered as a formula, such as <code>100-5</code>, is copied verbatim rather than evaluated.</div>
+
+<h2>Difference from CDP</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:39%"><col style="width:39%"></colgroup>
+  <tr><th>Item</th><th>CDP</th><th>CDPlg</th></tr>
+  <tr><td>What moves</td><td>The <strong>whole</strong> section record</td><td><strong>Only</strong> the additional length</td></tr>
+  <tr><td>Layer and colour</td><td>Copied as well</td><td>Left untouched</td></tr>
+  <tr><td>Object name</td><td>Changed to the reference profile name</td><td>Kept as it was</td></tr>
+  <tr><td>When to use</td><td>Making several copies of the same section</td><td>Aligning the additional length of different sections</td></tr>
+</table>
+
+<h2>Result</h2>
+<p>The command line reports what was copied and to how many objects.</p>
+<ul class="step-list">
+  <li><code>CDPlg: the whole additional length box (start, length, interval, quantity, symmetry) copied to 8 object(s). Start = Top/Left 100, Bot/Right 50.</code></li>
+  <li>If any target had no section data, their count is reported too.</li>
+</ul>
+<div class="note"><strong>Note:</strong> Because the values are shown, a result of <code>0, 0</code> tells you the reference object was the wrong one — you notice it on the spot.</div>
+
+<h2>Points to note</h2>
+<div class="warn"><strong>The command stops if the reference carries no section data.</strong> There is nothing to copy, so it stops before asking for targets and leaves the targets untouched.</div>
+<div class="warn"><strong>A target with no section data gets a new record filled with the defaults.</strong> Profile name <code>D_000</code>, unit weight <code>1.0</code>, description <code>No_Data</code> and <code>0</code> in the remaining numeric fields — the same values <code>Pname</code> shows for a new section. <strong>That name is only a placeholder.</strong> If you intend to use the object as a section, enter its real profile name, unit weight and IDs with <code>Pname</code>. Because the record now exists, the <code>SSP</code> pre-check and <code>UMD</code> treat the object as sound and let it through — both only ask whether section data is <em>present</em>, not whether the name is still a placeholder.</div>
+<div class="warn"><strong>On older drawings whose slots disagree, the member role decides.</strong> If the mullion slots and the transom slots hold different values, the value copied depends on whether the reference is a mullion or a transom. Check the values in the result message.</div>
+
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>CDP</code></td><td>Copies the whole section record of a reference object.</td></tr>
+  <tr><td><code>Pname</code></td><td>Enters the profile information and additional length of one section directly.</td></tr>
+  <tr><td><code>Dtable</code></td><td>Shows the data of several sections in a table for review and editing.</td></tr>
+</table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

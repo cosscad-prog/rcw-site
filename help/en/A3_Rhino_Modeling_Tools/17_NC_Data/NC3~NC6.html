@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>NC3~NC6 - 17_NC_Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>NC3 / NC4 / NC5 / NC6 &nbsp;—&nbsp; 17_NC_Data</h1>
+<p>
+  <span class="cmd-box">NC3</span>&nbsp;
+  <span class="cmd-box">NC4</span>&nbsp;
+  <span class="cmd-box">NC5</span>&nbsp;
+  <span class="cmd-box">NC6</span>
+</p>
+<p>
+  A command that reads hole information from selected Rhino geometry and automatically generates an NC machining <strong>hole data table</strong>.<br>
+  NC3~NC6 differ only in the origin reference corner (top-left / bottom-left / top-right / bottom-right); the rest of the behavior is identical.
+</p>
+<h2>Purpose</h2>
+<p>
+  Collects the hole dimensions and circular/slot shapes placed in the drawing and converts each hole's X/Y coordinates (relative distance from the origin) and diameter information
+  into an NC data table. By choosing the origin reference corner among NC3~NC6, you can generate a table that matches the machine's origin setting.
+</p>
+<h2>Origin Position by Command</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:30%"><col style="width:56%"></colgroup>
+  <tbody><tr><th>Command</th><th>Origin reference</th><th>Description</th></tr>
+  <tr><td><code>NC3</code></td><td>Left-Top</td><td>Uses the minimum U, maximum V coordinate of the selected group area as the origin.</td></tr>
+  <tr><td><code>NC4</code></td><td>Left-Bottom</td><td>Uses the minimum U, minimum V coordinate of the selected group area as the origin.</td></tr>
+  <tr><td><code>NC5</code></td><td>Right-Top</td><td>Uses the maximum U, maximum V coordinate of the selected group area as the origin.</td></tr>
+  <tr><td><code>NC6</code></td><td>Right-Bottom</td><td>Uses the maximum U, minimum V coordinate of the selected group area as the origin.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Confirm that hole dimensions or hole shapes are prepared in the drawing.</li>
+  <li>Type the command matching the origin reference (<code>NC3</code> / <code>NC4</code> / <code>NC5</code> / <code>NC6</code>) in the Rhino command line.</li>
+  <li>At the <em>"NCn: Select objects (Gap = whether to include the X_Gap column)"</em> prompt, select the needed objects.</li>
+  <li>To include the X_Gap column, switch the command option to <code>Gap=Yes</code> before selecting. The default is <code>No</code>.</li>
+  <li>Press Enter to complete the selection.</li>
+  <li>A marker is created at the origin position, and the NC hole data table is output to the right of the selection area.</li>
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <img src="../../../img/C2110_NC3_NC6.png" alt="NC3~NC6 example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>NC3~NC6 - hole data table generation example</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection target</td><td>Annotation, Curve, Point, Brep, and Hatch can be selected. SubObject selection is not used.</td></tr>
+  <tr><td>Coordinate basis</td><td>Computes U/V coordinates against the current active view's CPlane.</td></tr>
+  <tr><td>Group separation</td><td>If there are Points on the <code>NC_BottomPoint</code> or <code>NC_TopPoint</code> layer, groups are split per reference point. Otherwise groups are built from the curve extents of <code>Cut_Curve</code>, then <code>Shape_Curve</code>/<code>Shape_Hidden</code>/<code>Dim_Curve</code>/<code>Dim_Sub</code> layers.</td></tr>
+  <tr><td>Hole data source</td><td>Recognizes RadialDimensions or circular Curves on the <code>Hole_Dia</code> layer, and slot Curves/dimension text on the <code>Slot_Hole_Dia</code> layer.</td></tr>
+  <tr><td>Minimum hole size</td><td>Holes smaller than diameter <code>3.0</code> are excluded.</td></tr>
+  <tr><td>Countersink holes</td><td>If two ordinary holes of different diameters share the same center, they are classified as countersink holes in <code>CS1</code>, <code>CS2</code> format.</td></tr>
+  <tr><td>Slots</td><td>If on the <code>Slot_Hole_Dia</code> layer or the dimension text is in <code>Ø10-20LG</code> format, it is classified as a slot in <code>SL1</code>, <code>SL2</code> format.</td></tr>
+  <tr><td>X_Gap option</td><td>When <code>Gap=Yes</code>, adds a column for the X distance between adjacent holes. The first hole's X_Gap is the X distance from the origin to the first hole.</td></tr>
+  <tr><td>Table position</td><td>Creates the table <code>100</code> to the right of each group's maximum U coordinate.</td></tr>
+  <tr><td>Text size</td><td>Uses the TextHeight and DimensionScale of the current Rhino DimensionStyle. If the value is too small, <code>3.5</code> is used.</td></tr>
+  <tr><td>Layer</td><td>The generated origin marker and table are placed on the <code>NC_Data</code> layer. If the layer is missing, it is auto-created in orange.</td></tr>
+  <tr><td>Environment</td><td>Rhino</td></tr>
+</tbody></table>
+<h2>Table Output Order</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Category</th><th>Description</th></tr>
+  <tr><td>CS holes</td><td>Countersink holes are output first. Numbered <code>CS1</code>, <code>CS2</code> in order.</td></tr>
+  <tr><td>Slot holes</td><td>Slots are output second. Numbered <code>SL1</code>, <code>SL2</code> in order.</td></tr>
+  <tr><td>Normal holes</td><td>Ordinary circular holes are output last. Numbered <code>1</code>, <code>2</code> in order.</td></tr>
+  <tr><td>X sort</td><td><code>NC3</code>/<code>NC4</code> sort by ascending X; <code>NC5</code>/<code>NC6</code> sort by descending X.</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Origin marker</td><td>A Point and 3 concentric circles are created at the specified corner of the selected group extent.</td></tr>
+  <tr><td>Hole numbers</td><td>Hole number text is created next to each hole position.</td></tr>
+  <tr><td>Hole data table</td><td>Each hole's position number, Dia, X, Y, and (if selected) X_Gap values are output as drawing text and a rectangular table.</td></tr>
+  <tr><td>Layer</td><td>All generated elements are placed on the <code>NC_Data</code> layer.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> The Rhino version uses, based on the current code, fixed defaults of <code>Hole Min=3.0</code> and
+  <code>NC data Dist=100.0</code>. This behaves differently from the <code>DsOpt</code> setting items in the AutoCAD help.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> If hole objects are not on the <code>Hole_Dia</code> or <code>Slot_Hole_Dia</code> layer, they are not recognized as hole data.
+  If the needed objects are not included in the selection range, the table may not be generated.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

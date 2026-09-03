@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>NC3~NC6 - 04_NC_Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>NC3 / NC4 / NC5 / NC6 &nbsp;—&nbsp; 04_NC_Data</h1>
+<p>
+  <span class="cmd-box">NC3</span>&nbsp;
+  <span class="cmd-box">NC4</span>&nbsp;
+  <span class="cmd-box">NC5</span>&nbsp;
+  <span class="cmd-box">NC6</span>
+</p>
+<p>
+  A command that reads <code>DiametricDimension</code> (diameter dimension) objects from selected shapes and
+  automatically creates an <strong>NC machining hole data table</strong> on the drawing.<br>
+  NC3~NC6 differ only in origin-based corner (top-left/bottom-left/top-right/bottom-right), with identical operations otherwise.<br>
+  AutoCAD / BricsCAD only — not available in Rhino.
+</p>
+<h2>Purpose</h2>
+<p>
+  Automatically collect diameter dimensions (<code>DiametricDimension</code>) from drawing and convert
+  each hole's X/Y coordinates (relative distance from origin) and diameter information into NC data table.
+  Choose origin-based corner from NC3~NC6 to create table matching the machining machine's origin settings.
+</p>
+<h2>Command-Specific Origin Location</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:30%"><col style="width:56%"></colgroup>
+  <tbody><tr><th>Command</th><th>Origin Reference</th><th>Description</th></tr>
+  <tr><td><code>NC3</code></td><td>Top-Left</td><td>Uses minimum X and maximum Z(Y) coordinates of selected shape area as origin.</td></tr>
+  <tr><td><code>NC4</code></td><td>Bottom-Left</td><td>Uses minimum X and minimum Z(Y) coordinates of selected shape area as origin.</td></tr>
+  <tr><td><code>NC5</code></td><td>Top-Right</td><td>Uses maximum X and maximum Z(Y) coordinates of selected shape area as origin.</td></tr>
+  <tr><td><code>NC6</code></td><td>Bottom-Right</td><td>Uses maximum X and minimum Z(Y) coordinates of selected shape area as origin.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  <li>Execute <code>DsOpt</code> to check and adjust <strong>Hole Min / Hole Max</strong>, <strong>Slot Hole Dist</strong>, <strong>NC data Dist</strong> values if needed.</li>
+  <li>Verify that <code>DiametricDimension</code> (diameter dimension) is present on drawing. Table will not be created without it.</li>
+  <li>Enter the command matching origin reference (<code>NC3</code> / <code>NC4</code> / <code>NC5</code> / <code>NC6</code>) in the command line.</li>
+  <li>At the <em>"Select objects Include X_Gap Data ? [Yes/No] &lt;...&gt;:"</em> prompt, select necessary objects.<br>
+      To change X_Gap Data inclusion, enter <code>Yes</code> or <code>No</code> from keyboard before selection.</li>
+  <li>Press Enter to complete the selection.</li>
+  <li>Marker (3 concentric circles) is created at origin location, and NC hole data table is output on drawing to the right of selected area.</li>
+
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <img src="../../../img/C2110_NC3_NC6.png" alt="NC3~NC6 execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>NC3~NC6 — Example of creating hole data table</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 35%; min-width:220px; max-width:35%;">
+    <img src="../../../img/C2110_Dsopt.png" alt="DsOpt NC data settings" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>DsOpt — NC Data-related settings</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Select any objects without filter. Internally extracts shape range from Line/PolyLine on <code>Shape_Curve</code> / <code>Shape_Hidden</code> / <code>Dim_Curve</code> / <code>Dim_Sub</code> layers, and reads hole data from <code>DiametricDimension</code>.</td></tr>
+  <tr><td>Hole Data Source</td><td>Recognizes only <code>DiametricDimension</code> (diameter dimension) objects. Does not read regular Circle or Arc.</td></tr>
+  <tr><td>Hole Filter</td><td>Only diameters within <code>DsOpt</code>'s <strong>Hole Min / Hole Max</strong> value range are included in table.</td></tr>
+  <tr><td>Slot Hole</td><td>Classifies hole pairs with spacing matching <code>DsOpt</code>'s <strong>Slot Hole Dist</strong> (4 values) as slot holes.</td></tr>
+  <tr><td>X_Gap Option</td><td>When selected, toggle <strong>X_Gap Data</strong> (X distance between adjacent holes) inclusion with <code>[Yes/No]</code> keyword. Previous selection value is maintained as default.</td></tr>
+  <tr><td>Origin Marker</td><td>Point on <code>NC_Data</code> layer and concentric circles (diameters 5 / 12 / 13) are automatically created at calculated origin location.</td></tr>
+  <tr><td>Table Location</td><td>Table is created to the right by <code>NC_data_Dist</code> (default 100) from maximum X of selected area.</td></tr>
+  <tr><td>Text Size</td><td>Uses current AutoCAD <code>TEXTSIZE</code> system variable (minimum 3, maximum 50).</td></tr>
+  <tr><td>Layer</td><td>Origin marker and table text are created on <code>NC_Data</code> layer (color 40).</td></tr>
+  <tr><td>Multiple Area Support</td><td>If selected entities include multiple Z-separated areas (maximum 4), tables are created separately for each area.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD (Rhino not supported)</td></tr>
+</tbody></table>
+<h2>DsOpt-Related Settings</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:20%"><col style="width:54%"></colgroup>
+  <tbody><tr><th>Item</th><th>Default Value</th><th>Description</th></tr>
+  <tr><td>Slot Hole Dist (×4)</td><td>0 × 4</td><td>Hole spacing distance to classify as slot holes (up to 4 values)</td></tr>
+  <tr><td>Hole Min</td><td>3</td><td>Minimum hole diameter to include in table</td></tr>
+  <tr><td>Hole Max</td><td>25</td><td>Maximum hole diameter to include in table</td></tr>
+  <tr><td>NC data Dist</td><td>100</td><td>Distance from right end of selected area to table</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Origin Marker</td><td>Point + concentric circles (diameters 5 / 12 / 13) are created at specified corner of selected shape area.</td></tr>
+  <tr><td>Hole Data Table</td><td>Each hole's X/Y coordinates (from origin), diameter, and slot hole status are output as drawing text.</td></tr>
+  <tr><td>Layer</td><td>All created elements are placed on <code>NC_Data</code> layer (color 40).</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> Hole data source must be <code>DiametricDimension</code> (diameter dimension) objects.
+  Circle or Arc selection directly will not be recognized as holes.
+  Origin location is automatically calculated from Line/PolyLine range on <code>Shape_Curve</code> / <code>Shape_Hidden</code> / <code>Dim_Curve</code> / <code>Dim_Sub</code> layers.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> NC3~NC6 are not available in Rhino (AutoCAD / BricsCAD only).
+  Holes outside <code>DsOpt</code>'s Hole Min/Max range will not be included in table,
+  so verify range before executing command.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

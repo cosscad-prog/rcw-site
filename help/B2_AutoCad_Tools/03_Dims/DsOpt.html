@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>DsOpt - 03_Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>DsOpt &nbsp;—&nbsp; 03_Dims</h1>
+<p><span class="cmd-box">DsOpt</span></p>
+<p>
+  <code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code> / <code>DAA</code> 등
+  치수 명령에서 사용하는 <strong>변수를 설정하는 옵션 패널</strong>을 표시하는 명령입니다.<br>
+  객체를 선택하지 않으며, AutoCAD에 도킹 가능한 패널(PaletteSet)이 화면에 나타납니다.
+</p>
+<h2>사용 목적</h2>
+<p>
+  치수 명령 실행 전에 치수선 거리, 간격, 각도 거리, NC 데이터 관련 변수 등을
+  패널에서 미리 설정합니다. 설정한 값은 이후 모든 치수 명령에 즉시 반영됩니다.
+</p>
+<h2>패널 설정 항목</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:20%"><col style="width:58%"></colgroup>
+  <tbody><tr><th>항목</th><th>기본값</th><th>설명</th></tr>
+  <tr><td><strong>Dimension 그룹</strong></td><td></td><td></td></tr>
+  <tr><td>1. First Dist</td><td>50</td><td>객체에서 첫 번째 치수선까지의 거리</td></tr>
+  <tr><td>2. Dim Gap</td><td>20</td><td>치수선과 치수선 사이의 간격</td></tr>
+  <tr><td>3. Angle Dist</td><td>50</td><td>각도 치수(<code>DAA</code>) 사용 거리</td></tr>
+  <tr><td>4. LnR Dist</td><td>20</td><td>좌우(Left/Right) 치수 거리</td></tr>
+  <tr><td>Top_Max</td><td>✔ 체크</td><td>Top 방향 최대 치수 표시 여부</td></tr>
+  <tr><td>Left_Max</td><td>✔ 체크</td><td>Left 방향 최대 치수 표시 여부</td></tr>
+  <tr><td>Right_Max</td><td>미체크</td><td>Right 방향 최대 치수 표시 여부</td></tr>
+  <tr><td>Bottom_Max</td><td>미체크</td><td>Bottom 방향 최대 치수 표시 여부</td></tr>
+  <tr><td>TTS (Textsize)</td><td>현재값</td><td>치수 텍스트 크기 (<code>TTS</code> 명령과 동일)</td></tr>
+  <tr><td><strong>NC Data 그룹</strong></td><td></td><td></td></tr>
+  <tr><td>Slot Hole Dist</td><td>0 × 4</td><td>슬롯 홀 간격 값 (4개)</td></tr>
+  <tr><td>Hole Min, Max</td><td>3 / 25</td><td>홀 크기 필터 범위</td></tr>
+  <tr><td>NC data Dist</td><td>100</td><td>NC 데이터 출력 거리</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>명령창에 <code>DsOpt</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>AutoCAD 화면에 <strong>Dim Panel</strong> 패널이 표시됩니다.</li>
+  <li>각 항목의 값을 수정하면 즉시 치수 명령 변수에 반영됩니다.</li>
+  <li>패널을 닫으려면 패널 우상단 ×를 클릭하거나 <code>HIDEDimPanel</code> 명령을 사용합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../img/C2410_DsOpt.mp4" autoplay muted loop playsinline aria-label="DsOpt 실행 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>DsOpt — Dim Panel 옵션 패널 표시 예시</figcaption>
+  </figure>
+</div>
+<div class="note">
+  <strong>참고:</strong> 패널 값을 변경하면 이후 실행하는 <code>DST</code>, <code>DSB</code>, <code>DSL</code>, <code>DSR</code>, <code>DSA</code>, <code>DAA</code> 명령에 바로 적용됩니다.
+  치수 명령 실행 전에 반드시 값을 확인하세요.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

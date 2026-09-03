@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>HPP - Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>HPP &nbsp;—&nbsp; Dims</h1>
+<p><span class="cmd-box">HPP</span></p>
+<p>A command to automatically create <code>Dim_Points</code> Layer Points at key positions of selected Lines, Polylines, Circles, and Arcs.</p>
+<h2>Purpose</h2>
+<p>Used to automatically create Dim_Points layer Points at endpoints, nodes, and center points of selected objects—positions necessary for dimensions. It prepares reference points before executing directional automatic dimension commands.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Type <code>HPP</code> in the Rhino command line.</li>
+  <li>Select objects to create dimension reference points.</li>
+  <li><code>Dim_Points</code> are created at endpoints, nodes, and center points depending on object type.</li>
+
+</ol>
+<h2>Usage Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 65%; min-width:220px; max-width:65%;">
+    <video src="../../../img/399137_HPP.mp4" autoplay muted loop playsinline aria-label="HPP command example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Example of creating Dim_Points Layer Points at key positions of objects</figcaption>
+  </figure>
+</div>
+<h2>Creation Criteria</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Object</th><th>Creation Position</th></tr>
+  <tr><td>Line</td><td>Creates <code>Dim_Points</code> at start and end points.</td></tr>
+  <tr><td>PolyLine</td><td>Creates <code>Dim_Points</code> at each Node position.</td></tr>
+  <tr><td>Circle</td><td>Creates <code>Dim_Points</code> at the center of the circle.</td></tr>
+  <tr><td>Arc</td><td>Creates <code>Dim_Points</code> at the center of the Arc.</td></tr>
+</tbody></table>
+<h2>Key Details</h2>
+<table class="desc-table"><colgroup><col style="width:20%"><col style="width:80%"></colgroup><tbody><tr><th>Item</th><th>Description</th></tr><tr><td>Usage Purpose</td><td>Quickly prepares dimension reference points to be used in <code>DST</code>, <code>DSR</code>, <code>DSL</code>, <code>DSB</code>.</td></tr><tr><td>Fabrication Drawing Usage</td><td>Useful for adding dimension points in advance needed for fabrication drawing creation such as <code>FDwg</code>.</td></tr></tbody></table>
+<div class="note"><strong>Note:</strong> Use <code>PP</code> when adding a single Point at a desired arbitrary location.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

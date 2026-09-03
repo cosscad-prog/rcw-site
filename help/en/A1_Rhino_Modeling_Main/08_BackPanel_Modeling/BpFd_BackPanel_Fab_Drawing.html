@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>BpFd - Generate BackPanel Fabrication Drawing</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .warning { background:#fff2f2; border-left:4px solid #e05050; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+    .output-table { table-layout:fixed; }
+    .output-table td { word-break:keep-all; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>BpFd &nbsp;—&nbsp; Generate BackPanel Fabrication Drawing</h1>
+<p><span class="cmd-box">BpFd</span></p>
+<p>Automatically generates a <strong>fabrication drawing</strong> from selected BackPanel Solid objects. Automatically creates 2D lines and dimensions for front, back, side, and top views. The original 3D BackPanel objects are automatically deleted after the drawing is generated.</p>
+<h2>Purpose</h2>
+<p>Used to convert 3D BackPanel solids into 2D fabrication drawings with multi-view layout (front, back, side, top). Supports optional features (side views, section marks, ISO/unroll views) for comprehensive fabrication documentation. Automatically deletes source 3D objects after drawing generation to avoid duplication.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>Type <strong>BpFd</strong> in the Rhino command line and press Enter.</li>
+  <li>Set the output options <strong>Side_FabDwg_On</strong>, <strong>SectionLine_Mark_On</strong>, <strong>ISO_Dwg_On</strong>, etc. from the command options.</li>
+  <li>Select the BackPanel group objects to generate drawings for and press Enter.</li>
+  <li>Drawings are generated automatically in sequence for the number of selected objects. The command line shows progress as <code>N / Total  Working on [TypeName Fab_No]</code>.</li>
+  <li>The original 3D objects for which drawings are completed are automatically deleted.</li>
+
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 80%; min-width:220px; max-width:80%;">
+    <video src="../../../img/BpFd_demo.mp4" autoplay muted loop playsinline aria-label="BpFd operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Options</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Option</th><th>Result when On</th></tr>
+  <tr>
+    <td><strong>Side_FabDwg_On</strong></td>
+    <td>Creates additional fabrication drawing Views in the left and right side directions.</td>
+  </tr>
+  <tr>
+    <td><strong>SectionLine_Mark_On</strong></td>
+    <td>Displays section position marks and A/B section labels on the front view, and adds corresponding marks on the section view.</td>
+  </tr>
+  <tr>
+    <td><strong>ISO_Dwg_On</strong></td>
+    <td>Creates an additional auxiliary 2D drawing of the BackPanel in the ISO direction and displays <code>ISO Dwg</code> text.</td>
+  </tr>
+  <tr>
+    <td><strong>UnRoll_Dwg_On</strong></td>
+    <td>Creates an additional unrolled flat pattern (UnRoll Dwg) of the BackPanel and annotates the overall dimensions.</td>
+  </tr>
+</tbody></table>
+<h2>Generated Drawing Content</h2>
+<table class="desc-table output-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 30%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <tbody><tr><th>Drawing Element</th><th>Generation Condition</th><th>Description</th></tr>
+  <tr>
+    <td>Front / Back 2D</td>
+    <td>Always generated</td>
+    <td>Writes width and height dimensions based on the BackPanel front shape, and also shows the back-direction Hidden lines.</td>
+  </tr>
+  <tr>
+    <td>Top / Right Section</td>
+    <td>Always generated</td>
+    <td>Creates top and right sections and writes section dimensions. Section marks are shown according to the <strong>SectionLine_Mark_On</strong> option.</td>
+  </tr>
+  <tr>
+    <td>Side FabDwg</td>
+    <td><strong>Side_FabDwg_On</strong> = On</td>
+    <td>Creates additional Views in the left and right side directions.</td>
+  </tr>
+  <tr>
+    <td>Section Mark</td>
+    <td><strong>SectionLine_Mark_On</strong> = On</td>
+    <td>Displays section position marks and A/B labels on the front view, and adds corresponding marks on the section view.</td>
+  </tr>
+  <tr>
+    <td>ISO Dwg</td>
+    <td><strong>ISO_Dwg_On</strong> = On</td>
+    <td>Creates an additional ISO-direction auxiliary 2D drawing and displays <code>ISO Dwg</code> text.</td>
+  </tr>
+  <tr>
+    <td>UnRoll Dwg</td>
+    <td><strong>UnRoll_Dwg_On</strong> = On</td>
+    <td>Creates the BackPanel flat pattern and overall dimensions.</td>
+  </tr>
+</tbody></table>
+<h2>Generated Layers</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Layer</th><th>Content</th></tr>
+  <tr><td><code>BPanel_Fab</code></td><td>Main BackPanel fabrication drawing 2D lines (white, Continuous line type)</td></tr>
+  <tr><td><code>BPanel_Fab_Hidden</code></td><td>Back-face and hidden line 2D lines (Hidden line type)</td></tr>
+  <tr><td><code>BPanel_Fab_Insulation</code></td><td>Lines for displaying insulation/internal composition</td></tr>
+  <tr><td><code>DIMS</code></td><td>Dimension lines</td></tr>
+  <tr><td><code>Section_Mark</code></td><td>Section position marks and A/B labels when SectionLine_Mark_On is On</td></tr>
+  <tr><td><code>Text</code></td><td>Auxiliary drawing title text such as ISO Dwg, Unroll Dwg, etc.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>BP1 ~ BP5</strong></td><td>BackPanel modeling — run first before generating drawings.</td></tr>
+  <tr><td><strong>BpNo</strong></td><td>BackPanel numbering — linked to the Fab_No in the drawing.</td></tr>
+  <tr><td><strong>BpTable</strong></td><td>BackPanel fabrication drawing table — use together.</td></tr>
+  <tr><td><strong>BpList</strong></td><td>BackPanel quantity list — verify quantities before generating drawings.</td></tr>
+</tbody></table>
+<div class="warning"><strong>Caution:</strong> The original 3D BackPanel objects are <strong>automatically deleted</strong> after drawing generation. Save or back up the file before running.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

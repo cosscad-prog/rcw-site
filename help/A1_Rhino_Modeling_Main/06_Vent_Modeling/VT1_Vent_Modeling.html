@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>VT1~VT9 - 벤트 모델링</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:6px; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>VT1 ~ VT9 &nbsp;—&nbsp; 벤트 모델링</h1>
+<p>
+  <span class="cmd-box">VT1</span>
+  <span class="cmd-box">VT2</span>
+  <span class="cmd-box">VT3</span>
+  <span class="cmd-box">VT4</span>
+  <span class="cmd-box">VT5</span>
+  <span class="cmd-box">VT6</span>
+  <span class="cmd-box">VT7</span>
+  <span class="cmd-box">VT8</span>
+  <span class="cmd-box">VT9</span>
+</p>
+<p>
+  선택한 Brep 면을 기준으로 <strong>벤트 프레임 3D 솔리드</strong>를 자동 생성합니다.<br>
+  VT1 ~ VT9 는 각각 <strong>VTOpt</strong> 패널에서 미리 설정해 둔 벤트 타입 1~9 번에 대응합니다.
+</p>
+<h2>사용 목적</h2>
+<p><code>VTOpt</code>에 설정해 둔 벤트 타입 1~9를 골라 커튼월 면에 벤트(개폐창) 프레임 3D 솔리드를 즉시 생성할 때 사용합니다. 타입별 단축 명령이라 여러 사양의 벤트를 면마다 빠르게 배치할 수 있습니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li><strong>VTOpt</strong> 패널에서 적용할 벤트 타입과 섹션 데이터를 먼저 설정합니다.</li>
+  <li>Rhino 명령창에 <strong>VT1</strong> (또는 VT2~VT9) 을 입력하고 Enter 를 누릅니다.</li>
+  <li>명령 프롬프트 <strong>Select Vent Surface Object</strong> 에서 벤트를 생성할 Brep 면을 선택합니다.</li>
+  <li>Enter 를 눌러 완료하면 선택 면 기준으로 벤트 프레임 솔리드가 그룹으로 생성됩니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <video src="../../img/VT1_demo.mp4" autoplay muted loop playsinline aria-label="VT1 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>VT 번호와 타입의 관계</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>VT1</strong></td><td>VTOpt 패널의 1번 타입 설정으로 벤트를 생성합니다.</td></tr>
+  <tr><td><strong>VT2</strong></td><td>VTOpt 패널의 2번 타입 설정으로 벤트를 생성합니다.</td></tr>
+  <tr><td><strong>VT3 ~ VT9</strong></td><td>VTOpt 패널의 3~9번 타입 설정으로 벤트를 생성합니다.</td></tr>
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>생성 객체</td><td>Left / Right / Top / Bottom 프레임 솔리드가 생성됩니다.</td></tr>
+  <tr><td>그룹</td><td>생성된 솔리드가 하나의 Rhino 그룹으로 묶입니다.</td></tr>
+  <tr><td>데이터</td><td>그룹에 Vent 타입 데이터가 저장되어 <strong>VtNo</strong>, <strong>VtList</strong>, <strong>VtTable</strong>에서 사용됩니다.</td></tr>
+  <tr><td>비직각 면</td><td>4면이 90도가 아닌 경우 별도 로직으로 생성하며 Rhino 명령창에 안내 메시지를 출력합니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>  
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>VTOpt</strong></td><td>벤트 타입 옵션 패널 — 실행 전 타입을 설정합니다.</td></tr>
+  <tr><td><strong>VtNo</strong></td><td>벤트 번호 부여</td></tr>
+  <tr><td><strong>VtList</strong></td><td>벤트 수량 리스트 생성</td></tr>
+  <tr><td><strong>VtTable</strong></td><td>벤트 제작 도면 테이블 생성</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

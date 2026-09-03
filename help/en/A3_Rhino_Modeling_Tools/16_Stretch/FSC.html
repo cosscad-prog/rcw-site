@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FSC - 16_Stretch</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FSC &nbsp;—&nbsp; 16_Stretch</h1>
+<p><span class="cmd-box">FSC</span></p>
+<p>
+  A Drawing Shortening command that automatically compresses a selected Rhino drawing area <strong>only along the CPlane X (U) direction</strong>.<br>
+  It analyzes the dimension-point layout, shrinks only the long spans by ratio, and keeps the dimension values at their original measurements after shortening.
+</p>
+<h2>Purpose</h2>
+<p>
+  When the actual geometry length exceeds the length that fits the form, only the spans longer than a reference value are selectively
+  compressed to display the drawing shorter. Geometry, dimensions, text, points, etc. are moved/transformed together to reduce the X-direction length of the drawing.
+</p>
+<h2>Workflow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:5%"><col style="width:28%"><col style="width:67%"></colgroup>
+  <tbody><tr><th>Order</th><th>Step</th><th>Description</th></tr>
+  <tr><td>1</td><td>Drag-select area</td><td>After running the command, drag the drawing area to compress with the mouse. The drag rectangle is computed against the current view's CPlane.</td></tr>
+  <tr><td>2</td><td>Auto-collect objects</td><td>Collects objects that overlap or sit inside the selection window. Locked/hidden/deleted objects are excluded.</td></tr>
+  <tr><td>3</td><td>Profile recognition</td><td>Reads the drawing number from the Text on layers starting with <code>Profile</code>, and looks up the <code>min_ds</code> value in <code>AutoScale.dat</code> by the first word.</td></tr>
+  <tr><td>4</td><td>Collect dimension points</td><td>Uses the smallest U coordinate of <code>NC_BottomPoint</code> as the left reference, and collects the U coordinates of LinearDimension endpoints and Point objects.</td></tr>
+  <tr><td>5</td><td>Analyze spans</td><td>Classifies only spans where the distance between consecutive dimension points is larger than <code>min_ds</code> as compression targets.</td></tr>
+  <tr><td>6</td><td>Enter target distance</td><td>Shows the current total width and the minimum achievable width, then prompts for the target compression distance. Pressing Enter alone uses the minimum achievable width.</td></tr>
+  <tr><td>7</td><td>Lock dimensions</td><td>LinearDimensions larger than <code>min_ds</code> have their current measured value converted to fixed text, so the original dimension is shown even after compression.</td></tr>
+  <tr><td>8</td><td>Per-span stretch</td><td>Starting from the rightmost span, pulls the control points/objects to the right of each compression span's center along the CPlane X direction.</td></tr>
+</tbody></table>
+<h2>Prerequisites</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td><code>NC_BottomPoint</code> layer Point</td><td>The left reference U coordinate of the drawing. If absent, the left U coordinate of the drag selection window is used as the reference.</td></tr>
+  <tr><td>LinearDimension</td><td>The basis for collecting the dimension endpoints of the spans to compress. At least 2 dimension points are required.</td></tr>
+  <tr><td><code>Profile*</code> layer Text</td><td>Reads the drawing number to find the per-profile <code>min_ds</code> in <code>AutoScale.dat</code>.</td></tr>
+  <tr><td><code>AutoScale.dat</code> in the <code>RCWFolder</code> folder</td><td>The file of per-profile compression reference values. If it is missing or the profile is not found, the default <code>min_ds=100</code> is used.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  <li>Confirm that LinearDimensions and the needed reference Points are placed in the drawing.</li>
+  <li>Type <code>FSC</code> in the Rhino command line and press Enter.</li>
+  <li>When the <em>"FSC: Drag to select the drawing area to compress."</em> message appears, drag the drawing area to compress with the mouse.</li>
+  <li>The selected objects are highlighted, and the dimension-point and compression-target span information is printed in the command line.</li>
+  <li>At the <em>"Target compression distance"</em> prompt, enter the desired final width. Pressing Enter alone applies the minimum achievable width.</li>
+  <li>The drawing is automatically compressed along the CPlane X direction, and the number of compressed spans and the total shortened distance are printed in the command line.</li>
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../../img/C2210_FSC1.png" alt="FSC before/after comparison" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>FSC - X-axis Drawing Shortening before/after comparison</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/C2210_FSC3.mp4" autoplay muted loop playsinline aria-label="FSC running process" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>FSC - per-span stretch running process</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection method</td><td>Objects are auto-collected by a mouse drag window, not the standard Rhino selection prompt. Right-click or Esc cancels.</td></tr>
+  <tr><td>Compression direction</td><td>Compresses along the XAxis direction of the current view's CPlane. This may differ from the model world X axis.</td></tr>
+  <tr><td>Compression basis</td><td>Only spans longer than the <code>min_ds</code> read from <code>AutoScale.dat</code> are compressed. The default is <code>100</code>.</td></tr>
+  <tr><td>Minimum span size</td><td>A compression-target span keeps a minimum length of <code>30</code>.</td></tr>
+  <tr><td>Target distance correction</td><td>If the entered target distance is smaller than the minimum achievable width, it is corrected to the minimum. If it is greater than or equal to the current width, no compression is performed.</td></tr>
+  <tr><td>Dimension lock</td><td>LinearDimensions larger than <code>min_ds</code> are converted to backtick (<code>`</code>) fixed text and keep their original measured value.</td></tr>
+  <tr><td>Curve handling</td><td>Among NURBS control points, only those to the right of the compression reference line are moved.</td></tr>
+  <tr><td>Brep handling</td><td>The object is moved when the entire Brep is to the right of the compression reference line.</td></tr>
+  <tr><td>Annotation handling</td><td>For a LinearDimension, if only one endpoint is to the right of the reference line, only that endpoint moves; if both are, the whole dimension moves.</td></tr>
+  <tr><td>Environment</td><td>Rhino</td></tr>
+</tbody></table>
+<h2>AutoScale.dat Reference</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>File location</td><td><code>AutoScale.dat</code> in the <code>RCWFolder</code> folder</td></tr>
+  <tr><td>Profile name</td><td>Uses the first word of the <code>Profile*</code> layer Text. The first word is up to the <code>-</code> or a space.</td></tr>
+  <tr><td>Columns used</td><td>In a tab-separated row, [0] is the profile name and [1] is used as <code>min_ds</code>.</td></tr>
+  <tr><td>Default</td><td>If the file is missing or the profile is not found, <code>min_ds=100</code> is used.</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Drawing compression</td><td>The target spans are shrunk by ratio along the CPlane X direction.</td></tr>
+  <tr><td>Dimension preservation</td><td>The dimensions of long spans are locked to their original measured values, so the actual dimension is shown even after shortening.</td></tr>
+  <tr><td>Command-line output</td><td>The dimension-point count, total width, minimum achievable width, per-span compression distance, and total shortened distance are printed.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> The Rhino version behaves differently from the AutoCAD help's excluded-span selection, <code>MinFabdist</code> auto value,
+  and NC data table move features. Based on the current code, processing centers on the drag selection area, <code>min_ds</code>,
+  and the target compression distance input.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> If there are not enough LinearDimensions or Point references inside the selection range, it does not run and shows a
+  <code>Not enough dimension points</code> message. Since the compression direction depends on the current CPlane, check the CPlane direction before running.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

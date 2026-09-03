@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>BpNo - 백패널 번호 부여</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>BpNo &nbsp;—&nbsp; 백패널 번호 부여</h1>
+<p><span class="cmd-box">BpNo</span></p>
+<p>BP1 ~ BP5 명령으로 생성된 백패널 솔리드에 <strong>번호 텍스트</strong>를 자동으로 배치합니다.<br>
+각 백패널의 중심점에 일련번호가 부여되며 도면 주기 및 수량 집계에 활용됩니다.</p>
+<h2>사용 목적</h2>
+<p>백패널 솔리드에 일련번호를 자동 부여해 도면 주기와 수량 집계의 기준을 만들 때 사용합니다. 각 백패널 중심에 번호가 표기되어 리스트·제작 테이블·가공도와 번호를 일치시킬 수 있습니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>BP1 ~ BP5 명령으로 백패널 솔리드가 미리 생성되어 있어야 합니다.</li>
+  <li>Rhino 명령창에 <strong>BpNo</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>별도의 선택 없이 즉시 실행되며, 각 백패널 중심에 번호 텍스트가 자동 배치됩니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 45%; min-width:220px; max-width:45%;">
+    <video src="../../img/BpNo_demo.mp4" autoplay muted loop playsinline aria-label="BpNo 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>번호 위치</td><td>각 백패널 솔리드의 중심점에 텍스트가 배치됩니다.</td></tr>
+  <tr><td>번호 형식</td><td>백패널 타입 코드 + 일련번호 형식으로 자동 생성됩니다.</td></tr>
+  <tr><td>레이어</td><td>번호 텍스트는 별도의 번호 레이어에 배치됩니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>BP1 ~ BP5</strong></td><td>백패널 모델링 — 번호 부여 전 먼저 실행합니다.</td></tr>
+  <tr><td><strong>BpList</strong></td><td>백패널 수량 리스트 — 번호와 연동됩니다.</td></tr>
+  <tr><td><strong>BpTable</strong></td><td>백패널 제작 도면 테이블 — 번호 확인 후 작성합니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

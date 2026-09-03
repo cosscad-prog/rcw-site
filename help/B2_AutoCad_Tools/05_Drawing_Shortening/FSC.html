@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>FSC - 05_Drawing_Shortening</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FSC &nbsp;—&nbsp; 05_Drawing_Shortening</h1>
+<p><span class="cmd-box">FSC</span></p>
+<p>
+  2D 도면을 <strong>X축 방향으로만</strong> 자동으로 줄여(Drawing Shortening) 폼(Form)에 맞는 크기로 압축하는 명령입니다.<br>
+  <code>AutoScale.dat</code>에 저장된 프로파일별 설정을 자동으로 읽어, 줄임 기준 치수·목표 치수·제외 구간 등을 적용합니다.<br></p>
+<h2>사용 목적</h2>
+<p>
+  실제 형상 치수가 폼(Form)에 들어가는 최대 길이를 초과하는 경우,
+  지정 기준 이상의 구간만 선택적으로 압축하여 도면을 폼 크기에 맞게 줄입니다.
+  치수 텍스트는 실측값 고정 치수로 변환하여 줄인 후에도 원래 치수를 표시합니다.
+</p>
+<h2>동작 흐름</h2>
+<table class="desc-table">
+  <colgroup><col style="width:5%"><col style="width:28%"><col style="width:67%"></colgroup>
+  <tbody><tr><th>순서</th><th>단계</th><th>설명</th></tr>
+  <tr><td>1</td><td>객체 선택</td><td>도면 전체(형상, 치수, 텍스트, NC Point 등)를 선택합니다. 필터 없이 모든 객체를 선택할 수 있습니다.</td></tr>
+  <tr><td>2</td><td>프로파일 인식</td><td>선택된 <code>MText</code> 중 도면 번호 텍스트를 읽어 <code>-</code>·공백 앞 첫 단어를 프로파일 이름으로 사용합니다. <code>AutoScale.dat</code>에서 해당 프로파일의 설정 데이터를 로드합니다.</td></tr>
+  <tr><td>3</td><td>범위 측정</td><td><code>NC_BottomPoint</code> 레이어 Point(좌측 기준)와 <code>NC_TopPoint</code> 레이어 Point(우측 기준)의 X 좌표로 도면 전체 폭(<code>Max_distance</code>)을 계산합니다.</td></tr>
+  <tr><td>4</td><td>실행 조건 확인</td><td>현재 폭(<code>Max_distance</code>)이 목표 치수(<code>MinFabdist</code>)보다 작으면 줄이기를 실행하지 않습니다.</td></tr>
+  <tr><td>5</td><td>치수 고정 변환</td><td>줄임 기준(<code>min_ds</code>) 이상의 구간에 있는 <code>RotatedDimension</code>을 실측값 고정 텍스트 치수로 변환합니다.</td></tr>
+  <tr><td>6</td><td>제외 구간 선택</td><td><code>AutoScale.dat</code>의 <code>excute=1</code>인 경우: <em>"제외 구간 Entity 을 선택하세요."</em> 프롬프트에서 줄이지 않을 구간의 치수 객체를 선택합니다.</td></tr>
+  <tr><td>7</td><td>최소값 입력</td><td><code>AutoScale.dat</code>의 <code>Min_excute=1</code>인 경우: 목표 최소 폭을 직접 입력합니다 (이전 입력값이 기본값으로 표시됨).</td></tr>
+  <tr><td>8</td><td>구간별 스트레치</td><td>줄임 기준 이상인 각 치수 구간 중심점에서 오른쪽을 X축으로 당겨 비율에 맞게 압축합니다.</td></tr>
+  <tr><td>9</td><td>NC 데이터 테이블 이동</td><td><code>NC4_data</code> / <code>NC3_data</code> 레이어에서 도면 최대 X 오른쪽에 있는 객체(NC 데이터 테이블)를 총 줄인 거리만큼 왼쪽으로 이동합니다.</td></tr>
+</tbody></table>
+<h2>AutoScale.dat 설정 항목</h2>
+<table class="desc-table">
+  <colgroup><col style="width:8%"><col style="width:24%"><col style="width:18%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>열</th><th>항목</th><th>기본값(코드)</th><th>설명</th></tr>
+  <tr><td>[0]</td><td>Name</td><td>—</td><td>프로파일 이름. 도면 번호 첫 단어와 일치해야 자동 적용됩니다.</td></tr>
+  <tr><td>[1]</td><td>줄임 기준 치수 (min_ds)</td><td>250</td><td>이 값 이상의 구간만 줄임 대상이 됩니다. (예: 250이면 구간 길이 ≥ 250인 경우만 압축)</td></tr>
+  <tr><td>[2]</td><td>전체 줄임 치수 (MinFabdist)</td><td>300</td><td>줄인 후 도면의 목표 전체 폭입니다.</td></tr>
+  <tr><td>[3]</td><td>제외구간 선택 (excute)</td><td>1</td><td>1이면 제외 구간 선택 프롬프트를 표시합니다. 0이면 생략합니다.</td></tr>
+  <tr><td>[4]</td><td>최소값 입력 (Min_excute)</td><td>1</td><td>1이면 최소 폭 직접 입력 프롬프트를 표시합니다. 0이면 <code>MinFabdist</code>를 그대로 사용합니다.</td></tr>
+</tbody></table>
+<h2>사전 준비</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td><code>NC_BottomPoint</code> 레이어 Point</td><td>도면 좌측(X 최솟값) 기준점입니다. 없으면 형상 전체 범위로 대체됩니다.</td></tr>
+  <tr><td><code>NC_TopPoint</code> 레이어 Point</td><td>도면 우측(X 최댓값) 기준점입니다. 없으면 형상 전체 범위로 대체됩니다.</td></tr>
+  <tr><td><code>AutoScale.dat</code></td><td>프로파일별 줄임 파라미터 파일입니다. 없거나 프로파일 이름이 없으면 기본값(min_ds=250, MinFabdist=300)이 사용됩니다.</td></tr>
+  <tr><td>도면 번호 MText</td><td>선택 범위 안에 도면 번호 MText가 포함되어야 프로파일이 자동으로 인식됩니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  <li><code>AutoScale.dat</code>에 해당 프로파일의 파라미터가 올바르게 입력되어 있는지 확인합니다.</li>
+  <li>도면에 <code>NC_BottomPoint</code> / <code>NC_TopPoint</code> 레이어 Point가 배치되어 있는지 확인합니다.</li>
+  <li>명령창에 <code>FSC</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><em>"Entity 을 선택하세요."</em> 프롬프트에서 형상, 치수, 도면 번호 텍스트, NC Point를 포함한 도면 전체를 선택하고 Enter를 누릅니다.</li>
+  <li>(<code>excute=1</code>인 경우) <em>"제외 구간 Entity 을 선택하세요."</em> 프롬프트에서 줄이면 안 되는 구간의 치수 객체를 선택하고 Enter를 누릅니다. 없으면 Enter만 누릅니다.</li>
+  <li>(<code>Min_excute=1</code>인 경우) 목표 최소 폭을 입력합니다. Enter만 누르면 이전 입력값 또는 <code>AutoScale.dat</code>의 <code>MinFabdist</code>가 사용됩니다.</li>
+  <li>도면이 X축 방향으로 자동 압축되고, 명령창에 <code>Maximum_distance</code> / <code>Minimum_distance</code> / 비율 / 실제 이동 거리가 출력됩니다.</li>
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../img/C2210_FSC1.png" alt="FSC 실행 전후 비교" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>FSC — X축 Drawing Shortening 전후 비교</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../img/C2210_FSC3.mp4" autoplay muted loop playsinline aria-label="FSC 실행 과정" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>FSC — 구간별 스트레치 실행 과정</figcaption>
+  </figure>
+</div>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>도면 압축</td><td>줄임 기준 이상인 각 구간이 비율에 맞게 X축으로 당겨집니다.</td></tr>
+  <tr><td>치수 고정</td><td>압축된 구간의 치수는 실측값 고정 텍스트로 변환되어, 줄인 후에도 원래 치수를 표시합니다.</td></tr>
+  <tr><td>NC 테이블 이동</td><td><code>NC4_data</code> / <code>NC3_data</code> 레이어의 NC 데이터 테이블이 총 줄인 거리만큼 자동으로 왼쪽으로 이동합니다.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>참고:</strong> 현재 도면 폭(<code>Max_distance</code>)이 <code>AutoScale.dat</code>의 <code>MinFabdist</code>보다 이미 작거나 같으면
+  줄이기가 실행되지 않고 <em>"Not Working"</em> 메시지가 표시됩니다.<br>
+  줄임 기준(<code>min_ds</code>) 미만인 구간은 압축하지 않으며 최소 압축 후 크기(<code>Min_s</code>=30)가 보장됩니다.
+</div>
+<div class="warning">
+  <strong>주의:</strong>&nbsp;선택 범위에 <strong>도면 번호 MText</strong>가 포함되지 않으면 <code>AutoScale.dat</code> 프로파일을 인식하지 못하여 기본값으로 실행됩니다.<br>
+  <code>NC_BottomPoint</code> / <code>NC_TopPoint</code> 레이어 Point가 없으면 도면 범위 계산이 부정확해질 수 있습니다.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

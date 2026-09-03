@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Block Data Input - InPut Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { display:block; max-width:720px; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Block Data Input &nbsp;—&nbsp; InPut Data</h1>
+<p><span class="cmd-box">Block Data Input</span></p>
+<p>Block Data는 Surface에 Block을 삽입하거나 Block 형상만큼 Subtract해야 할 때 사용합니다. Pname 창의 Block 선택란에서 사용할 Block과 배치 방식을 지정합니다.</p>
+<h2>사용 목적</h2>
+<p>단면에 들어갈 Block을 어떤 방식으로, 몇 개, 어디에 배치(또는 Subtract)할지 미리 정의할 때 사용합니다. <code>Pname</code> 창에서 Block-1 ~ Block-4를 설정해 두면 모델링 시 같은 규칙으로 부품이 반복 삽입되거나 Hole이 생성되어, 부품 배치를 일관되게 자동화할 수 있습니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>삽입 또는 Subtract에 사용할 Block을 준비합니다.</li>
+  <li>Block을 적용할 Section 위치에 배치합니다.</li>
+  <li><code>Pname</code>에서 Block-1 ~ Block-4 항목 중 사용할 Block을 선택합니다.</li>
+  <li>Insert Type, 기준, 위치, 간격, 수량을 입력합니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../../img/Block_Data_Input.png" alt="Block_Data_Input.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>옵션</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Insert Block</td><td>선택한 Block을 지정 위치에 삽입합니다.</td></tr>
+  <tr><td>Subtract</td><td>Block 형상만큼 Surface를 자르고 Block은 제거합니다.</td></tr>
+  <tr><td>Subtract &amp; Insert</td><td>Surface를 자른 뒤 Block도 함께 배치합니다.</td></tr>
+  <tr><td>Subtract &amp; Block Insert</td><td>Subtract와 삽입을 수행하고 Block 속성 정보도 함께 사용합니다.</td></tr>
+  <tr><td>Insert Block With Main</td><td>가공도 출력 시 Main 그룹에 표현되도록 삽입합니다.</td></tr>
+</tbody></table>
+<h2>배치 기준</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>By Brep</td><td>선택한 Surface를 기준으로 Block 위치를 계산합니다.</td></tr>
+  <tr><td>By Line</td><td>Wire Frame을 기준으로 Block 위치를 계산합니다.</td></tr>
+  <tr><td>Top/Left</td><td>상부 또는 좌측 기준으로 위치, 간격, 수량을 입력합니다.</td></tr>
+  <tr><td>Bottom/Right</td><td>하부 또는 우측 기준으로 위치, 간격, 수량을 입력합니다.</td></tr>
+  <tr><td>Interval / Quantity</td><td>전체 길이를 기준으로 반복 간격과 개수를 지정합니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

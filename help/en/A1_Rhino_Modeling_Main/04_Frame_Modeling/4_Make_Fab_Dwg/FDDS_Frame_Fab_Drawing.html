@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FDDS - Generate Frame Fabrication Drawing</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    h3 { font-size:13px; margin-top:18px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .col-table { border-collapse:collapse; width:100%; margin-top:8px; font-size:12px; }
+    .col-table th { background:#dce8f8; border:1px solid #aac4e8; padding:4px 8px; text-align:center; font-weight:bold; word-break:keep-all;}
+    .col-table td { border:1px solid #c8d8ec; padding:4px 8px; vertical-align:top; word-break:keep-all;}
+    .col-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+    .mini { font-size:12px; color:#555; }
+    .image-panel { display:flex; gap:18px; align-items:flex-start; margin:14px 0 8px; }
+    .image-panel img { width:52%; max-width:720px; min-width:360px; border:1px solid #c8d8ec; background:#fff; }
+    .callout-list { flex:1; min-width:240px; background:#f7faff; border:1px solid #c8d8ec; padding:10px 14px; }
+    .callout-list p { margin:0 0 8px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    @media (max-width:900px) { .image-panel { display:block; } .image-panel img { width:100%; min-width:0; } .callout-list { margin-top:10px; } }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FDDS &nbsp;—&nbsp; Generate Frame Fabrication Drawing</h1>
+<p><span class="cmd-box">FDDS</span></p>
+<div class="warn"><strong>Retired command &nbsp;&mdash;&nbsp; use <code>FDwg</code> instead.</strong><br>
+  <code>FDDS</code> no longer produces a drawing. Running it prints only
+  <em>"This command is no longer used. Please use FDwg."</em><br>
+  Fabrication drawings are made with <code>FDwg</code> alone. What follows is kept
+  <strong>for reading older drawings</strong>.</div>
+<p><strong>FDDS</strong> analyzes selected frame group objects and automatically generates fabrication drawings (Fab Drawings). It copies and aligns the model to the drawing position, then writes 2D lines, cross-sections, hole diameters, overall dimensions, centerline dimensions, angle dimensions, and Fab No / Quantity / Unit No text for each selected View.</p>
+<h2>Purpose</h2>
+<p>Used to generate the fabrication drawing of the selected frame members automatically. It writes the 2D outline, cross-section, hole diameters, dimensions and fabrication number of each member in one pass instead of drawing them by hand, and the drawing follows the per-Profile settings in <code>Fdds.dat</code> together with the DsOpt / DdOpt options.</p>
+<div class="note"><strong>Note:</strong> The DimStyle applied in [DsOpt] is used. Fdds.dat is required for per-Profile automation; it must contain the Profile Name and required information. If the information is not in Fdds.dat, the Drawing options from the DdOpt panel are used.</div>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  
+  
+  <li>Open the Drawing Options panel with <strong>DdOpt</strong> and set the required View, dimension, and distance options.</li>
+  <li>Ensure ProfileData / Fab No have been entered on the frame model using <strong>FabNo</strong> first.</li>
+  <li>Type <strong>FDDS</strong> in the Rhino command line and press Enter.</li>
+  <li>At the <strong>Select Group objects</strong> prompt, select the frame groups for which to create fabrication drawings.</li>
+  <li>Press Enter — drawing models and dimensions are generated per group.</li>
+
+
+
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 65%; min-width:220px; max-width:65%;">
+    <video src="../../../../img/FDDS_demo.mp4" autoplay muted loop playsinline aria-label="FDDS operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<div class="note">
+  <strong>About FDwg:</strong> If you want hole information shown not only in the section View but also on the <strong>Bar elevation</strong>, with the hole <strong>penetration depth drawn as Hidden Lines</strong>, use the <strong>FDwg</strong> command. Its base behavior is identical to FDDS.
+</div>
+<h2>Execution Flow</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Step</th><th>Description</th></tr>
+  <tr><td>1. Group Selection</td><td>Selects frame groups in GroupSelect mode. Processes group units rather than individual sub-objects.</td></tr>
+  <tr><td>2. Hatch Pattern Check</td><td>Reads hatch patterns from <code>Hatch\acad.pat</code>, in the folder <code>RCWFolder</code> opens, and checks for ANGLE, ANSI31–ANSI38 patterns.</td></tr>
+  <tr><td>3. Layer Preparation</td><td>Uses layers: <code>DIMS</code>, <code>Section_Curve</code>, <code>Dim_Point</code>, <code>Hole_Dia</code>, <code>Hole_Points</code>, <code>DimBox</code>, <code>Dim_Points</code>, <code>DIMS_Center</code>, <code>DIMS_Angle</code>.</td></tr>
+  <tr><td>4. Model Alignment</td><td>Finds Shape models, DimBox models, and cut face information from the selected group; copies and aligns them to the drawing position.</td></tr>
+  <tr><td>5. View Generation</td><td>Creates only the Views turned on in DdOpt. Top Back, Top, Front, Bottom, and Bottom Back can each be generated individually.</td></tr>
+  <tr><td>6. Dimensions / Annotations</td><td>Writes overall dimensions, detailed dimensions, hole diameters, angle dimensions, cross-sections, Fab No, quantity, and Unit No per View according to options.</td></tr>
+</tbody></table>
+<h2>DdOpt Panel Sample</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../../img/DdOpt_panel_guide_en.png" alt="DdOpt_panel_guide_en.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<p>The DdOpt panel controls View generation, distance values, additional dimensions, and auxiliary 3D display in one location. The panel layout may vary depending on OS theme or screen scaling, but the meaning and application order of items remain the same.</p>
+<h2>FDstyle Record / Playback Mode</h2>
+<p>
+  FDDS follows the mode of the <strong>FDstyle panel</strong>. Click the banner at the top of the panel
+  to switch between <strong>Record (ON)</strong> and <strong>Playback (OFF, default)</strong>.
+</p>
+<table class="desc-table">
+  <colgroup><col style="width: 20%;"><col style="width: 80%;"></colgroup>
+  <tbody><tr><th>Mode</th><th>What it does</th></tr>
+  <tr><td><strong>Record (ON)</strong></td><td><strong>Records</strong> the options and follow-up work of a fabrication drawing made with FDDS — NC table, FSC compression, annotations/leaders, accessory table, detail view (F3D), drawing template and so on — per Profile into <code>FDDS_Data.dat</code> and its companion files.</td></tr>
+  <tr><td><strong>Playback (OFF, default)</strong></td><td>Reads the recorded data and <strong>reproduces automatically</strong> the NC table, FSC compression, annotations, accessory table, detail view and template on the fabrication drawing of the same Profile. When nothing has been recorded, the current DdOpt panel settings are used.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> File data is applied automatically in <strong>Playback mode</strong> (when a row for that Profile exists). If no row has been recorded, the current DdOpt panel settings are used. For the file format, see the <code>FDDS_Data.dat</code> help.</div>
+<h2>Option Priority</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 24%;">
+    <col style="width: 76%;">
+  </colgroup>
+  <tbody><tr><th>Condition</th><th>Behavior</th></tr>
+  <tr><td><strong>Playback + matching row found</strong></td><td>Reads <code>FDDS_Data.dat</code>; if a row matching the selected group's die name (ProfileName or the leading part of the object name) is found, file values take priority.</td></tr>
+  <tr><td>No matching row / no recorded data</td><td>Uses the current checkbox and text box values in the DdOpt panel.</td></tr>
+  <tr><td>File not found</td><td>May output a message such as <code>FDDS_Data.dat file does not exist.</code> in the command line. If playback is required, verify the file location and name.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Summary:</strong> Even for the same model, if <strong>Playback mode</strong> has a matching die row, the result may differ from the values shown in the panel.
+  Use recorded data (Playback) for repeat production items; adjust panel values directly for one-off checks.
+</div>
+<h2>DdOpt Group 1 — View / Max / Side / Angle</h2>
+<p>
+  Group 1 decides which direction the fabrication drawing is made in, and which dimensions are shown inside that View.
+  Each row means one View, and <strong>Max Only</strong> and <strong>Side Dim</strong> on the same row affect that View only.
+</p>
+<table class="col-table">
+  
+  <tbody><tr><th>View Row</th><th>Code</th><th>Position / Direction</th><th>On Result</th><th>Off Result</th></tr>
+  <tr><td>Top Back</td><td>TB</td><td>Upper Back direction. Rotated 90° around X-axis then corrected to Back direction.</td><td>Generates Top Back View.</td><td>No Top Back View.</td></tr>
+  <tr><td>Top</td><td>TO</td><td>Upper direction. Placed above the reference.</td><td>Generates Top View.</td><td>No Top View.</td></tr>
+  <tr><td>Front</td><td>FR</td><td>Front direction. Used as the reference View without rotation.</td><td>Generates Front View.</td><td>No Front View.</td></tr>
+  <tr><td>Bottom</td><td>BO</td><td>Lower direction. Rotated −90° around X-axis, placed below.</td><td>Generates Bottom View.</td><td>No Bottom View.</td></tr>
+  <tr><td>Bottom Back</td><td>BB</td><td>Lower Back direction. Rotated like Bottom then corrected to Back direction.</td><td>Generates Bottom Back View.</td><td>No Bottom Back View.</td></tr>
+</tbody></table>
+<h2>Max Option</h2>
+<table class="desc-table">
+  <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>State</th><th>Result</th></tr>
+  <tr><td><strong>On</strong></td><td>Displays mainly the overall maximum dimensions for the View with minimal detail subdivisions.</td></tr>
+  <tr><td><strong>Off</strong></td><td>Writes both overall maximum dimensions and detailed upper/lower dimensions. More information for production verification.</td></tr>
+</tbody></table>
+<h2>Side Option</h2>
+<table class="desc-table">
+  <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>State</th><th>Result</th></tr>
+  <tr><td><strong>On</strong></td><td>Writes both left and right Side dimensions. Use when left/right shapes differ or machining position verification is needed.</td></tr>
+  <tr><td><strong>Off</strong></td><td>Writes only right-side dimensions. Simplifies drawing and reduces duplicate dimensions.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note - the [F]Angle option is gone.</strong> A per-View <code>[F]Angle</code> box used to choose <b>how</b>
+  an angle was written. It is now decided <b>edge by edge, on its own</b>: where a bevel looks tilted in this View
+  the [F] (true 3D) angle is written, and where it shows its real shape the ordinary 2D angle is. That is why the
+  column has gone from <code>DdOpt</code>.<br>
+  <strong>90° Angle Dim</strong> in Group 3 switches <b>the 90 degree angles only</b> on and off. Every other angle,
+  45 degrees for instance, is written regardless of it.
+</div>
+<h2>DdOpt Group 2 — Distance / Hole Size</h2>
+<table class="col-table">
+  
+  <tbody><tr><th>Option</th><th>Default</th><th>Role</th><th>Increase</th><th>Decrease</th></tr>
+  <tr><td>Fab Start Point X</td><td>500</td><td>X offset for drawing start position from the reference model.</td><td>Drawing bundle moves further right from original.</td><td>Drawing and original get closer; may overlap if too small.</td></tr>
+  <tr><td>Fab Start Point Z</td><td>1500</td><td>Z offset for drawing start position.</td><td>Drawing bundle moves further below from original.</td><td>Drawing and original get closer; may overlap if too small.</td></tr>
+  <tr><td>Dwg Distance X</td><td>150</td><td>X-direction gap between Front and Section Views.</td><td>Gap between left section and main View widens.</td><td>Section/dimension/body Views may overlap.</td></tr>
+  <tr><td>Dwg Distance Z</td><td>250</td><td>Z-direction gap when placing Top/Bottom Views above/below the Front reference.</td><td>More space between Top/Bottom Views.</td><td>Multiple Views may overlap.</td></tr>
+  <tr><td>Fab No Distance X</td><td>100</td><td>X distance to shift the Fab No text from the lower-left corner of the drawing.</td><td>Fab No text moves right.</td><td>Fab No text moves closer to drawing edge or dimensions.</td></tr>
+  <tr><td>Fab No Distance Z</td><td>400</td><td>Distance to drop Fab No / Quantity text below the drawing.</td><td>Text moves further down.</td><td>Text may overlap with drawing.</td></tr>
+  <tr><td>Hole Dia Min</td><td>3</td><td>Minimum diameter to recognize as a hole. Cylindrical faces below this value are excluded from hole marking.</td><td>Small holes/fine circular shapes are ignored.</td><td>Small holes are marked, but unintended small circular faces may also be captured.</td></tr>
+  <tr><td>Hole Dia Max</td><td>25</td><td>Present in the panel but current FDDS filtering is primarily based on Min value.</td><td>Limited impact on current output.</td><td>Limited impact on current output.</td></tr>
+</tbody></table>
+<h2>DdOpt Group 3 — Extra Dim OnOff</h2>
+<table class="desc-table">
+    <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>Option</th><th>Role and Result</th></tr>
+  <tr><td><strong>90° Angle Dim</strong></td><td>Switches <b>the 90 degree angles only</b> on and off. On writes every angle, right angles included; off leaves out <b>only the 90s</b> while 45 degrees and the rest are still written. <code>[F]</code> angles follow the same rule, so <b>only [F]90</b> is left out. A value counts as 90 when it would read <code>90</code> on the drawing (within 0.05 degrees of 90). Same rule as <code>FDwg</code>.</td></tr>
+  <tr><td><strong>Center Dim</strong></td><td>Writes centerline dimensions if a Frame Center Curve is present. If off, deletes centerline objects and does not create center dimensions.</td></tr>
+  <tr><td><strong>Cutting Dim</strong></td><td>Filters the point list to focus on cutting/machining reference dimensions. Strengthens cutting-related dimension expression and is used in Center Curve calculation.</td></tr>
+  <tr><td><strong>Unit No</strong></td><td>Adds Unit No text below the Fab No and Quantity. If off, Unit No is not output.</td></tr>
+  <tr><td><strong>Attach Dim</strong></td><td>Includes points of attached/bracket models in the dimension reference. On includes accessory-extent dimensions; off bases dimensions on main Shape surface points.</td></tr>
+  <tr><td><strong>SectionLine</strong></td><td>Adds a separator line between the Front View and left Section View. Useful for visually distinguishing drawing elements when they are close together.</td></tr>
+</tbody></table>
+<h2>DdOpt Group 4 — Model View</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 30%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <tbody><tr><th>Option</th><th>On</th><th>Off</th></tr>
+  <tr><td><strong>Shape</strong></td><td>Retains the Shape 3D/reference model after drawing generation.</td><td>Deletes the Shape model after 2D line/dimension generation to keep the drawing lightweight.</td></tr>
+  <tr><td><strong>Dim Model</strong></td><td>Retains DimBox / DimBox1 models. Useful for verifying dimension references.</td><td>Deletes Dim models. Use when finalising a clean drawing.</td></tr>
+  <tr><td><strong>Angle Model</strong></td><td>Retains the angle calculation model. Useful for verifying angle dimensions.</td><td>Deletes the angle model. Reduces auxiliary shapes in final output drawings.</td></tr>
+</tbody></table>
+<h2>DsOpt / DimStyle Dimension Options and Their Relation to FDDS</h2>
+<p>
+  FDDS's View selection and output are mainly decided in <strong>DdOpt</strong>, but how far the actual dimension lines are placed from the model,
+  how much spacing is left between dimension lines, and where angle dimensions are drawn also use the values of the <strong>DsOpt</strong> panel.
+</p>
+<table class="col-table">
+  <tbody><tr><th>DsOpt / DimStyle item</th><th>Default</th><th>Role in FDDS</th><th>Effect of changing the value</th></tr>
+  <tr><td><strong>First Dist</strong></td><td>50</td><td>The default distance the first dimension line sits from the drawing edge. Used internally in FDDS as <code>DSopt_Dim_First</code>.</td><td>Increasing it moves the dimension lines away from the model for more room; decreasing it makes the drawing denser but dimensions and geometry may overlap.</td></tr>
+  <tr><td><strong>Dim Gap</strong></td><td>20</td><td>The gap between multiple dimension lines. Used internally in FDDS as <code>DSopt_Dim_Gap</code>.</td><td>Increasing it widens the spacing between dimension rows for better readability. Too small and the dimension text and lines overlap.</td></tr>
+  <tr><td><strong>Angle Dist</strong></td><td>50</td><td>Decides how far angle dimensions are placed from the geometry. FDDS angle-model processing uses <code>DSopt_Angle_Dist</code>.</td><td>Increasing it pushes angle dimensions outward; decreasing it sticks angle dimensions close to the geometry.</td></tr>
+  <tr><td><strong>LnR Dist</strong></td><td>20</td><td>The left/right margin used by left-right dimension tools and some 2D dimension commands. For FDDS's own main dimension placement, First Dist / Dim Gap have more influence.</td><td>The left/right dimension spacing may change in left-right dedicated dimension commands or related drawings.</td></tr>
+  <tr><td><strong>Top Max / Bottom Max / Left Max / Right Max</strong></td><td>Top, Left On by default</td><td>Controls how the per-direction maximum dimensions are shown in some 2D/fab dimensions. In FDDS, the per-View Max option in DdOpt plays a more directly prioritized role.</td><td>When used with other fab/2D drawing commands, the per-direction maximum dimension display changes.</td></tr>
+  <tr><td><strong>TextSize</strong></td><td>Current setting</td><td>Adjusts the base text size in the DimStyle panel. FDDS's Fab No / Qnt text also reflects the current DimStyle's TextHeight and DimensionScale.</td><td>A larger value improves text and dimension readability but also requires more drawing spacing.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>DdOpt vs DsOpt difference:</strong> DdOpt decides "what to create" — for example, whether to make a Top View, whether to add Side dimensions, whether to show Unit No.
+  DsOpt / DimStyle decides "where and how far apart to draw the dimensions." That is, even with the same FDDS options, different DsOpt values change dimension-line position and readability.
+</div>
+<div class="warning">
+  <strong>Practical tip:</strong> For large frames or work with many Views on, increasing only DdOpt's <strong>Dwg Distance</strong> may not be enough.
+  If dimensions overlap each other, also increase DsOpt's <strong>First Dist</strong> and <strong>Dim Gap</strong>.
+</div>
+<h2>Created Objects and Layers</h2>
+<table class="col-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Layer</th><th>Content</th></tr>
+  <tr><td><code>DIMS</code></td><td>General, overall, and detailed dimensions</td></tr>
+  <tr><td><code>DIMS_Center</code></td><td>Centerline dimensions</td></tr>
+  <tr><td><code>DIMS_Angle</code></td><td>Angle dimensions</td></tr>
+  <tr><td><code>Section_Curve</code></td><td>Cross-section 2D lines</td></tr>
+  <tr><td><code>Separate_Curve</code></td><td>Separator line when SectionLine option is On</td></tr>
+  <tr><td><code>Hole_Dia</code></td><td>Hole diameter markings</td></tr>
+  <tr><td><code>Hole_Points</code></td><td>Points for hole position verification</td></tr>
+  <tr><td><code>Dim_Point</code>, <code>Dim_Points</code></td><td>Reference points for dimension calculation</td></tr>
+  <tr><td><code>DimBox</code>, <code>DimBox1</code></td><td>Dimension reference models</td></tr>
+  <tr><td><code>Profile_No_Qnt</code></td><td>Fab No, Quantity, Unit No text</td></tr>
+  <tr><td><code>NC_TopPoint</code>, <code>NC_BottomPoint</code></td><td>Upper/lower reference points for NC data calculation</td></tr>
+</tbody></table>
+<h2>Example Results by Option Combination</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 30%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <tbody><tr><th>Goal</th><th>Recommended options</th><th>Result</th></tr>
+  <tr><td>Simplest verification drawing</td><td>Front View On, Max On, Side Off, 90° Angle Dim Off, Shape/Dim/Angle Model Off</td><td>Generates a simple drawing centered on Front-based maximum dimensions.</td></tr>
+  <tr><td>Detailed drawing for production review</td><td>Top / Front / Bottom On, Max Off, Side On, 90° Angle Dim On, Center Dim On</td><td>Generates Top/Front/Bottom Views together with detailed dimensions, left/right Side dimensions, center lines, and angle dimensions.</td></tr>
+  <tr><td>Dimension check including accessories</td><td>Attach Dim On, Dim Model View On</td><td>Includes points of bracket/attached models in the dimension reference and keeps DimBox so dimension references can be verified.</td></tr>
+  <tr><td>Cleaned-up drawing for final output</td><td>Shape / Dim Model / Angle Model Off, SectionLine On</td><td>Auxiliary 3D models are deleted, leaving the needed 2D lines, dimensions, and separator lines.</td></tr>
+</tbody></table>
+<h2>Cautions</h2>
+<div class="warning"><strong>Hatch Pattern:</strong> FDDS stops and displays a message if <code>Hatch\acad.pat</code>, in the folder <code>RCWFolder</code> opens, or required hatch patterns are missing. Import acad.pat in Rhino's Hatch settings.</div>
+<div class="warning"><strong>Group Data:</strong> FDDS finds the Shape model on the Profiles layer, ProfileData, Fab No, DimBox/DimBox1, and cut face data from the selected group. Errors such as <code>Group Model Error occurs</code> or <code>CutSurface Error</code> may occur if FabNo has not been run or the group structure is broken.</div>
+<div class="warning"><strong>Playback mode data:</strong> In Playback mode, if a matching Profile row exists, die-specific values in <code>FDDS_Data.dat</code> take priority over panel values. If unexpected Views or dimensions appear, check the FDstyle mode (Record/Playback) and the relevant die row first.</div>
+<div class="warning"><strong>Distance Values:</strong> If Fab Start Point, Dwg Distance, or Fab No Distance values are too small, the original model, multiple Views, sections, text, and dimensions may overlap. For large frames, use more generous spacing than the defaults.</div>
+<div class="warning"><strong>Hole Detection:</strong> Holes are identified from cylindrical Brep faces; only those with diameter ≥ Min Dia are marked. A Min Dia that is too small may capture unintended circular faces; too large may miss actual holes.</div>
+<h2>Related Commands</h2>
+<table class="desc-table">
+    <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>FDwg</strong></td><td>Generates the same fab drawing as FDDS, and additionally shows hole information and penetration depth (Hidden Line) on the Bar elevation.</td></tr>
+  <tr><td><strong>DdOpt</strong></td><td>Opens the Drawing Options panel used by FDDS.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>The panel that switches FDDS/FDwg between <strong>Record (ON)</strong> and <strong>Playback (OFF)</strong> mode. On playback it reproduces the NC table, FSC compression, annotations, accessory table, detail view (F3D) and drawing template automatically.</td></tr>
+  <tr><td><strong>FabNo</strong></td><td>Assigns fabrication numbers and ProfileData to frame objects. Required before running FDDS.</td></tr>
+  <tr><td><strong>FabTable</strong></td><td>Creates a frame fabrication number/quantity table. Combined with FDDS to form a fabrication drawing set.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

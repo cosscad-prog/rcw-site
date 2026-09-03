@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RCW Section - Properties Page</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { display:block; max-width:720px; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>RCW Section &nbsp;&mdash;&nbsp; section data in the Properties panel</h1>
+<p>A page inside Rhino's <b>Properties</b> panel. It is a <b>tab</b>, not a command, so there is nothing to run.</p>
+
+<h2>Purpose</h2>
+<p>Selecting an object is enough to see <b>which member it is</b>. It works for a section surface and for a <b>polyline inside a section group</b> alike - pick a single line and it tells you which profile it belongs to. The values can also be <b>edited</b> here.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Open Rhino's <b>Properties</b> panel (<code>Properties</code> command if it is not open).</li>
+  <li>Select a section surface, a solid, or a curve.<br>
+      <b>If it sits in a group, <span style="color:#003d80">Alt + click</span></b> to take just <b>one</b> object out of it -
+      an ordinary click grabs the whole group, and <b>editing is then locked</b>. (See the <b>Alt + click</b> section below.)</li>
+  <li>The <b>RCW Section</b> tab <b>comes up on its own</b> - there is nothing to click, even if you were
+      looking at another tab. (It does not open the Properties panel for you. If the panel is closed,
+      nothing appears until you open it.)</li>
+  <li>To change a value, type it and press <b>Enter</b>, or move to another field.</li>
+</ol>
+
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 80%; min-width:220px; max-width:80%;">
+    <video src="../../../../img/Properties_windows.mp4" autoplay muted loop playsinline aria-label="Properties_windows" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>What is on the page</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Group</th><th>Contents</th></tr>
+  <tr><td>Object</td><td>The same rows Rhino's own Object page shows - <code>Type</code> (read only), <code>Name</code>, <code>Description</code>, <code>Layer</code>, <code>Display Color</code>.</td></tr>
+  <tr><td>Section Data</td><td><code>Material_ID</code>, <code>Profile_ID</code>, <code>Fab_ID</code>, <code>Group_ID</code>, <code>Alloy_ID</code>, read as <b>what they mean rather than the stored number</b> (<code>1. Mullion</code>). The lists are the ones <code>Pname</code> uses.</td></tr>
+  <tr><td>Add Length</td><td>Two groups, <code>Top / Left</code> and <code>Bot / Right</code>, each with <code>Start</code>, <code>Length</code>, <code>Interval</code>, <code>Quantity</code> and <code>Symmetric</code> - the same values as one Additional Length row in <code>Pname</code>.</td></tr>
+  <tr><td>More details...</td><td>Opens the <code>Pname</code> panel (Profile Manager) on that object, for the values this page does not carry: unit weight, Block, Milling.</td></tr>
+</tbody></table>
+
+<h2>Worth knowing</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selecting a polyline</td><td>The values are read from the <b>section in its group</b>. The grey line at the bottom says where they came from, and <b>edits are written there</b>.</td></tr>
+  <tr><td>Changing Name</td><td>The object name and the <b>profile name (P_name) change together</b>, after a confirmation. Drawings and BOM already produced keep the old name.</td></tr>
+  <tr><td>When no tab appears</td><td>If what you picked carries <b>no section data, the tab does not appear at all.</b> This is what stopped an empty tab from showing on any curve or surface. If it is a section and the tab is still missing, check that a section sits in the same group.</td></tr>
+  <tr><td>Several objects selected</td><td>The first one is shown and <b>editing is off</b>, so nothing is changed while it is unclear where it would land.<br><b>Clicking a group puts you straight into this state</b> - take one object out of it with <b>Alt + click</b>, below, and editing comes back.</td></tr>
+  <tr><td>Changing an ID</td><td><b>Models and drawings already made do not change.</b> They need <code>SSP</code> to register again and <code>UMD</code> to run again - the same as editing in <code>Pname</code>.</td></tr>
+  <tr><td>Undo</td><td>Object attributes (Layer, Display Color, Name) undo normally, but <b>section data does not</b>.</td></tr>
+</tbody></table>
+<div class="note">The page reads in English whatever the UI language is: the values it shows (<code>1. Alum. Profile</code> and the rest) are English lists, and a half translated screen reads worse than either.</div>
+<div class="note">The page itself works in Rhino 7 as well. The <b>icon on the Profile Manager panel tab</b>, however, only appears in Rhino 8.</div>
+
+<h2>Alt + click &nbsp;&mdash;&nbsp; reach one object inside a group</h2>
+<p><b>Hold Alt and click</b> an object in a viewport: that <b>single object</b> is selected and the Properties panel opens. <b>A group stays intact.</b></p>
+<div class="note"><b>Why it is needed:</b> clicking a group picks up every object in it, and with several objects selected there is no telling which section an edit would land on, so editing is locked. Alt+click picks exactly one, so you can edit straight away.</div>
+<div class="note"><b>Rhino's own gestures are untouched.</b> Shift+click (add), Ctrl+click (remove) and Ctrl+Shift+click (sub-object) all behave as before. This acts only on a left click with <b>Alt alone</b>. Alt+clicking empty space clears the selection, as Rhino always did.</div>
+<div class="note"><b>The tab switches by itself.</b> Pick anything that carries section data - by Alt+click or by an ordinary click - and the panel moves to the <code>RCW Section</code> tab, much as picking a text object brings up the Text page.<br>If you choose the <b>Object</b> tab by hand, that choice holds <b>until you next select something</b>, so reading a dimension and then changing a layer is not interrupted.</div>
+<div class="note"><b>How it differs from Ctrl+Shift+click:</b> Rhino's sub-object selection makes you choose between an edge and a face when you click a surface. Alt+click works on <b>whole objects only</b>, so that extra step is gone.</div>
+
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>Pname</code></td><td>Shows the same values in a full panel. This is what <b>More details...</b> opens.</td></tr>
+  <tr><td><code>Dtable</code></td><td>Edits the values of many sections at once in a table.</td></tr>
+</tbody></table>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

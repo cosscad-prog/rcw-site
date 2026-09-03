@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>CheckPfData - ProfileData 검사</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>CheckPfData &nbsp;—&nbsp; ProfileData 검사</h1>
+<p><span class="cmd-box">CheckPfData</span></p>
+<p><strong>CheckPfData</strong>는 선택한 Brep 객체에 ProfileData가 있는지 검사하는 명령입니다. 데이터가 없는 객체는 빨간 원과 No<font face="monospace"> </font>ProfileData&nbsp;텍스트로 표시합니다.&nbsp;<br>때때로 Solid 에 결함이 생겨 정상적으로 해석하지 못하는 Solid가 있는지를 확인한다.</p>
+<h2>사용 목적</h2>
+<p>프레임 Solid에 ProfileData가 정상적으로 들어 있는지 검사할 때 사용합니다. 데이터가 없거나 형상 결함으로 해석되지 않는 Solid를 빨간 원·<code>No ProfileData</code> 표시로 찾아내어, 자재 리스트·도면 작성 전에 문제 객체를 미리 점검하는 용도입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Rhino 명령창에&nbsp;<strong style="font-family: &quot;맑은 고딕&quot;, &quot;Malgun Gothic&quot;, sans-serif;">CheckPfData</strong>를 입력하고 Enter를 누릅니다.</li>
+  <li><strong>Select Objects</strong> 프롬프트에서 검사할 프레임 객체를 선택합니다.</li>
+  <li>Enter를 누르면 Brep 객체별로 ProfileData 존재 여부를 확인합니다.</li>
+  <li>명령창에 정상 객체의 이름/Fab No/Length가 출력되고, 마지막에 누락 개수가 표시됩니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/1461_PFData.mp4" autoplay muted loop playsinline aria-label="1461_PFData" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption><br></figcaption>
+  </figure>
+</div>
+<h2>검사 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>상태</th><th>표시</th></tr>
+  <tr><td>ProfileData 있음</td><td>명령창에 <code>Name: ProfileName-FabNo Length</code> 형식으로 정보를 출력합니다.</td></tr>
+  <tr><td>ProfileData 없음</td><td>객체 중심에 빨간 원과 <code>No ProfileData</code> 텍스트를 <code>Check</code> 레이어에 작성합니다.</td></tr>
+  <tr><td>최종 요약</td><td><code>[ Error_Count / Total_Count ] 개의 No ProfileData</code> 형식으로 누락 수를 출력합니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>UMD</code></td><td>프레임 모델을 생성합니다.</td></tr>
+  <tr><td><code>FabNo</code></td><td>ProfileData와 Fab No를 작성합니다.</td></tr>
+  <tr><td><code>FDwg</code></td><td>ProfileData를 사용해 제작 가공도를 생성합니다.</td></tr>
+</tbody></table>
+<div class="warning"><strong>주의:</strong> 이 명령은 Brep 기준으로 검사합니다. Block 내부 객체를 검사하려면 필요한 객체를 분해하거나 내부 Brep를 선택할 수 있는 상태에서 확인해야 합니다.</div>
+<div class="note"><strong>참고:</strong> 표시 원과 텍스트 크기는 현재 DimStyle의 TextSize를 기준으로 합니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

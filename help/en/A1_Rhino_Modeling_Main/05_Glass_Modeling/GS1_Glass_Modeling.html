@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GS1~GS9 - Glass Modeling</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:6px; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+    .mark-red {color: #d00000; font-weight: bold;}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>GS1 ~ GS9 &nbsp;—&nbsp; Glass Modeling</h1>
+<p>
+  <span class="cmd-box">GS1</span><span class="cmd-box">GS2</span><span class="cmd-box">GS3</span>
+  <span class="cmd-box">GS4</span><span class="cmd-box">GS5</span><span class="cmd-box">GS6</span>
+  <span class="cmd-box">GS7</span><span class="cmd-box">GS8</span><span class="cmd-box">GS9</span>
+</p>
+<p>
+  Select a curtainwall Brep face to automatically create a <strong>glass 3D solid</strong>.<br>
+  GS1 ~ GS9 each correspond to glass types 1–9 pre-configured in the <strong>GsOpt</strong> panel.<br>
+  <span class="mark-red">▶</span> A Section must also be selected via SSP, and a <strong>[ G_Center1 ] layer line</strong> must exist within that Section. Command: <strong>[GC1]</strong>
+</p>
+<div class="note"><strong>Note:</strong>&nbsp;A Section must be selected by SSP, and that Section must contain a [ G_Center1 ] layer line.</div>
+<h2>Purpose</h2>
+<p>Used to quickly create 3D glass solids for the chosen glass type (1-9) configured in GsOpt on curtainwall faces. Type-specific shortcuts allow fast placement of multiple glass specifications. Requires Section selection via SSP and a G_Center1 reference line within that Section.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  <li>Set the glass type (thickness, specification, code, etc.) in the <strong>GsOpt</strong> panel first.</li>
+  <li>Select the Section with SSP and confirm that a <code>G_Center1</code> layer reference line exists inside the Section.</li>
+  <li>Type <strong>GS1</strong> (or GS2–GS9) in the Rhino command line and press Enter.</li>
+  <li>Select the curtainwall Brep face (surface) on which to create glass.</li>
+  <li>Optionally choose <strong>Distance</strong> or <strong>Section</strong> as the split method.</li>
+  <li>Press Enter to finish — glass solids are created on the Glass layer.</li>
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 45%; min-width:220px; max-width:45%;">
+    <img src="../../../img/GS1_modeling_step.png" alt="GS1 glass face selection" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Selecting glass face created by Gmd</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 25%; min-width:220px; max-width:25%;">
+    <img src="../../../img/GS1_modeling_result.png" alt="GS1 glass solid result" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Glass Solid created with GsOpt type settings applied</figcaption>
+  </figure>
+</div>
+<h2>GS Number and Type Relationship</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GS1</strong></td><td>Creates glass solids using type 1 settings in the GsOpt panel.</td></tr>
+  <tr><td><strong>GS2</strong></td><td>Creates glass solids using type 2 settings in the GsOpt panel.</td></tr>
+  <tr><td><strong>GS3 ~ GS9</strong></td><td>Creates glass solids using types 3–9 settings in the GsOpt panel.</td></tr>
+</tbody></table>
+<h2>Prerequisites</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Input Object</td><td>Select the Glass Face created by the <strong>Gmd</strong> command.</td></tr>
+  <tr><td>Section Selection</td><td>The relevant Section must be selected using <strong>SSP</strong>.</td></tr>
+  <tr><td>Reference Line</td><td>A reference line on the <code>G_Center1</code> layer must exist inside the selected Section.</td></tr>
+</tbody></table>
+<h2>Options</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Option</th><th>Description</th></tr>
+  <tr><td><strong>Distance</strong></td><td>Splits glass faces based on the distance between Mullions.</td></tr>
+  <tr><td><strong>Section</strong></td><td>Splits glass faces based on Section data.</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer</td><td>Glass solid objects are created on the <code>Glass_XX</code> layer.</td></tr>
+  <tr><td>Shape</td><td>A 3D solid extruded to the thickness set in GsOpt is created based on the selected Brep face.</td></tr>
+</tbody></table>
+<h2>Gmd vs GS1~GS9</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GS1~GS9</strong></td><td>Creates a glass <strong>solid (3D)</strong>. A volumetric model with thickness.</td></tr>
+  <tr><td><strong>Gmd</strong></td><td>Creates a glass <strong>surface (2D)</strong>. A lightweight face-based model.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GsOpt</strong></td><td>Glass Type Option Panel — set the glass type before running.</td></tr>
+  <tr><td><strong>GsNo</strong></td><td>Glass numbering — places numbers on the created solids.</td></tr>
+  <tr><td><strong>GsList</strong></td><td>Glass quantity list — tallies quantities based on solids.</td></tr>
+  <tr><td><strong>GsTable</strong></td><td>Glass fabrication drawing table — creates a per-type table.</td></tr>
+  <tr><td><strong>GsFd</strong></td><td>Glass fabrication drawing — generates 2D drawings from solids.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GrOpt - Grill Type Option Panel</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; width:30%; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>GrOpt &nbsp;—&nbsp; Grill Type Option Panel</h1>
+<p><span class="cmd-box">GrOpt</span></p>
+<p>Opens or closes the Grill Type Option Panel. If the panel is already open, running the command again closes it.</p>
+<h2>Purpose</h2>
+<p>Used to define and modify grill types (frame section, blade configuration, code, description) before grill modeling. Types 1-5 configured here serve as the basis for grill generation by GR1-GR5 commands, so type setup should precede grill modeling.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Type <strong>GrOpt</strong> in the Rhino command line and press Enter.</li>
+  <li>The shared option panel for managing Glass / BackPanel / Vent / Grill types opens.</li>
+  <li>Set the member section, blade conditions, code, and description for the Grill type.</li>
+  <li>To close the panel, run <strong>GrOpt</strong> again or click the close button on the panel.</li>
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 45%; min-width:220px; max-width:45%;">
+    <img src="../../../img/GrOpt_panel.png" alt="GrOpt panel example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Key Panel Settings</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Command Type</td><td>Specifies the Grill type number to use for modeling among <strong>GR1 ~ GR5</strong>.</td></tr>
+  <tr><td>Frame Section</td><td>Specifies the section group to use for the Left, Top, Right, and Bottom positions.</td></tr>
+  <tr><td>Blade Section</td><td>Specifies the blade section group to be placed repeatedly inside the Grill.</td></tr>
+  <tr><td>Code / Description</td><td>Enter Code, Description, and Add1~Add3 information to be output in quantity lists and tables.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GR1 ~ GR5</strong></td><td>Grill modeling — run after setting options.</td></tr>
+  <tr><td><strong>GrNo</strong></td><td>Grill numbering</td></tr>
+  <tr><td><strong>GrList</strong></td><td>Generate grill quantity list</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

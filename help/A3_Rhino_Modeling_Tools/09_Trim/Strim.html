@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Strim - 09_Trim</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Strim &nbsp;—&nbsp; 09_Trim</h1>
+<p><span class="cmd-box">Strim</span></p>
+<p>선택한 Solid 또는 Brep 객체를 Surface/Brep 기준으로 Trim하고, 열린 절단면을 Cap 처리하여 Closed PolySurface 형태로 정리하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<p>커튼월 부재, 패널, 브래킷 등 솔리드 모델을 기준 Surface 방향으로 잘라 필요한 쪽의 형상만 남길 때 사용합니다. 절단 후 가능한 경우 Fill Cap을 수행하여 Open PolySurface가 Solid 상태로 유지되도록 보정합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>Strim</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><code>Select Cutted Brep Objects</code> 프롬프트에서 절단할 대상 Brep 또는 Solid 객체를 하나 이상 선택합니다.</li>
+  <li><code>Select Cutting Surface Brep Object</code> 프롬프트에서 절단 기준이 되는 Surface 또는 Brep를 선택합니다.</li>
+  <li>Surface 기준으로 절단할 때 표시되는 빨간 방향 화살표를 확인합니다. 기본 방향을 사용할 경우 Enter를 누르고, 반대 방향으로 처리하려면 <code>R</code> 옵션을 선택합니다.</li>
+  <li>절단 결과와 명령창의 <code>Brep_Count</code>, <code>Sucess_Count</code> 메시지를 확인합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/3810_STrim.mp4" autoplay muted loop playsinline aria-label="Strim 실행 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Surface 기준으로 Solid 객체를 Trim하고 Cap을 적용한 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  
+  
+  <tr><td>절단 대상</td><td>Trim할 Brep 또는 Solid 객체를 다중 선택할 수 있습니다.</td></tr>
+  <tr><td>절단 기준</td><td>Surface 객체를 기준 Plane으로 사용하거나, Brep Surface 자체를 기준으로 Trim합니다.</td></tr>
+  <tr><td>방향 옵션</td><td><code>R</code> 옵션으로 <code>Org_Directon</code>과 <code>Reverse_Directon</code>을 전환하여 남길 방향을 조정합니다.</td></tr>
+  <tr><td>Arrow_Length</td><td>절단 Surface의 방향 화살표 표시 길이를 조정하는 옵션입니다.</td></tr>
+  <tr><td>데이터 유지</td><td>Section, Vector, Profile, Bracket ID 사용자 데이터와 객체 속성을 새 Brep에 복사합니다.</td></tr>
+  
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>처리 결과</td><td>선택 객체가 기준 Surface/Brep에 의해 Trim되며, 열린 절단면은 가능한 경우 <code>CapPlanarHoles</code>로 닫힌 Solid로 변환됩니다.</td></tr>
+  <tr><td>객체 처리</td><td>새 Trim 결과 객체가 생성되고 원본 대상 Brep는 삭제됩니다. 새 객체는 원본 레이어와 속성을 이어받습니다.</td></tr>
+  <tr><td>확인 위치</td><td>Rhino 화면의 절단 결과 형상과 명령창의 <code>Trim By Surface</code>, <code>CapPlanarHoles Success</code>, 처리 개수 메시지에서 확인합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 절단 기준 Surface의 노멀 방향에 따라 남는 형상이 달라질 수 있으므로, 실행 중 표시되는 방향 화살표를 확인한 뒤 필요하면 <code>R</code> 옵션으로 방향을 바꾸십시오.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

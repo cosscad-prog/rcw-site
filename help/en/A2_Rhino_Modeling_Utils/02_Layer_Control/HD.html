@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HD - Layer Control</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+<h1>HD &nbsp;—&nbsp; Layer Control</h1>
+<p><span class="cmd-box">HD</span></p>
+<p>A drawing utility command to change the Linetype of selected Line objects to <code>Hidden</code>.</p>
+<h2>Purpose</h2>
+<p>In 2D drawing setup, change selected lines to hidden line representation to quickly distinguish hidden lines from visible lines.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <code>HD</code> in the Rhino command line and press Enter.</li>
+  <li>Select the Line objects whose Linetype you want to change to Hidden.</li>
+  <li>Press Enter to complete. The selected Lines will have their Linetype changed to <code>Hidden</code>.</li>
+</ol>
+<div class="note"><strong>Note:</strong> HD does not change the Layer — it only changes the Linetype of selected objects to Hidden. This applies the same way regardless of which Layer the object is on. If the Hidden Linetype does not exist in the document, verify the Linetype list first.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

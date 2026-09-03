@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>4.MC_Layer - 01_Layer_Making_Change</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>4.MC_Layer &nbsp;—&nbsp; 01_Layer_Making_Change</h1>
+<p><span class="cmd-box">MC1 ~ MC20 / MCL</span></p>
+<p><code>M_Center</code> 계열 Layer를 만드는 명령 모음입니다.</p>
+<h2>사용 목적</h2>
+<p><code>M_Center</code> 계열 레이어를 생성해 Mullion 중심선을 번호별로 구분하고 Wire Frame 및 Section 작업의 기준선을 정리할 때 사용합니다.</p>
+<h2>포함 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>명령어</th><th>생성 Layer</th><th>Color / 속성</th></tr>
+  <tr><td><code>MCL</code></td><td><code>M_CenterXX</code> Layer를 만듭니다. 숫자, 문자 입력이 가능합니다.</td><td>숫자 입력 시 해당 CAD Color Number, 문자 입력 가능</td></tr>
+  <tr><td><code>MC1</code> ~ <code>MC20</code></td><td><code>M_Center1</code> ~ <code>M_Center20</code> Layer를 만듭니다.</td><td>명령 번호와 같은 CAD Color Number (예: <code>MC13</code> → 13번 Color)</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  <li>Rhino 명령창에 필요한 명령어를 입력하고 Enter를 누릅니다.</li>
+  <li><code>*L</code> 형식의 명령은 입력한 숫자 또는 문자를 기준 Layer 이름 뒤에 바로 붙여 Layer를 만듭니다.</li>
+  <li>숫자를 입력하는 경우 해당 숫자를 CAD Color Number로 사용합니다. 256보다 큰 숫자는 코드에서 256으로 나눈 나머지 값을 Color Number로 사용합니다.</li>
+  <li>Rhino 레이어 패널에서 Layer 이름, Color, Linetype 상태를 확인합니다.</li>
+
+
+</ol>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어 계열</td><td><code>M_Center</code></td></tr>
+  <tr><td>대상 명령</td><td><code>MC1</code> ~ <code>MC20</code>, <code>MCL</code></td></tr>
+</tbody></table>
+<h2>실행 결과 확인</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Layer 이름</td><td>생성된 Layer 이름이 표의 생성 Layer와 일치하는지 확인합니다.</td></tr>
+  <tr><td>Layer Color</td><td>Color / 속성 열의 CAD Color Number 또는 RGB 값이 적용되었는지 확인합니다.</td></tr>
+  <tr><td>명령창</td><td>명령 실행 후 표시되는 안내 또는 완료 메시지를 확인합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> MCL은 입력값을 <code>M_Center</code> 뒤에 바로 붙여 새 레이어를 만듭니다. 숫자 입력 시 해당 CAD Color Number가 적용되므로, Mullion 기준선 번호와 색상을 함께 맞추기 좋습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Cuttinglist - 07_UserBarList_Cuttinglist</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Cuttinglist &nbsp;—&nbsp; 07_UserBarList_Cuttinglist</h1>
+<p><span class="cmd-box">Cuttinglist</span></p>
+<p>
+  A command that reads <strong>layer (profile name) and length (cutting dimension) of selected Line objects</strong> and
+  automatically generates <strong>Cutting List</strong> and <strong>Long Bar List</strong>
+  both as drawing and Excel file.<br>
+  Processes in one workflow: Line filtering → bar mode switching → cutting optimization → drawing output and Excel save.
+</p>
+<h2>Purpose</h2>
+<p>
+  When each profile member in AutoCAD drawing is represented as <code>Line</code>,
+  uses layer name as profile name and line length as cutting dimension to
+  automatically calculate cutting list by member and required bar quantity.
+</p>
+<h2>Line Data Reading Rules</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Line Property</th><th>Usage</th></tr>
+  <tr><td>Layer Name</td><td>Used as profile (member) name. When bar mode is User, searches bar file by this name.</td></tr>
+  <tr><td>Line Length</td><td>Used as cutting dimension (mm, converted to integer). Decimal places are truncated.</td></tr>
+</tbody></table>
+<h2>Bar Mode (Auto / User)</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:86%"></colgroup>
+  <tbody><tr><th>Mode</th><th>Description</th></tr>
+  <tr><td>Auto (default)</td><td>Applies built-in bar list (3000~6500mm, 100mm intervals) identically to all profiles.</td></tr>
+  <tr><td>User</td><td>Selects <code>.txt</code> file saved with <code>UserBarlist</code> from file open dialog. Uses bar list matching profile name, or uses defaults (<code>3000, 4000, 5000, 6000, 6500</code>) if no match.</td></tr>
+</tbody></table>
+<h2>Operation Flow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:5%"><col style="width:28%"><col style="width:67%"></colgroup>
+  <tbody><tr><th>Step</th><th>Stage</th><th>Description</th></tr>
+  <tr><td>1</td><td>Mode Selection</td><td>At <em>"Current Barlist &lt;Auto/User&gt;: Enter Key [Auto / User]:"</em> prompt, enter <code>A</code> or <code>U</code> to switch bar mode. Pressing Enter only keeps previous mode.</td></tr>
+  <tr><td>2</td><td>Line Selection</td><td>At <em>"Select one or more lines:"</em> prompt, select cutting dimension Lines. <strong>Only Line objects are filtered</strong>, other entities are ignored.</td></tr>
+  <tr><td>3</td><td>User File Selection</td><td>(User mode) Select <code>.txt</code> saved with <code>UserBarlist</code> from file open dialog.</td></tr>
+  <tr><td>4</td><td>Length Validation</td><td>If any Line has cutting dimension of max bar value - 35mm or greater, displays warning and stops processing.</td></tr>
+  <tr><td>5</td><td>Cutting Optimization</td><td>Sorts and aggregates by profile/length, then optimally distributes cutting dimensions to each bar specification, calculating required bar quantity, loss length, and remaining length.</td></tr>
+  <tr><td>6</td><td>Excel File Name Input</td><td>At <em>"Enter Excel File Name:"</em> prompt, input Excel file name to save.</td></tr>
+  <tr><td>7</td><td>Drawing Output Location Selection</td><td>At <em>"Select TList position:"</em> prompt, click drawing location to place table.</td></tr>
+  <tr><td>8</td><td>Result Output</td><td>Outputs Cutting List and Long Bar List as text in drawing and also saves as Excel file.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Draw profile members as <code>Line</code>. Ensure <strong>layer name = profile name</strong>, <strong>line length = cutting dimension (mm)</strong>.</li>
+  <li>(If using User mode) Save bar data in advance with <code>UserBarlist</code>.</li>
+  <li>Enter <code>Cuttinglist</code> in command line and press Enter.</li>
+  <li>At <em>"[Auto / User]:"</em> prompt, select mode. Pressing Enter only keeps previous mode.</li>
+  <li>Select cutting dimension Lines and press Enter.</li>
+  <li>(User mode) Select bar data <code>.txt</code> file from file open dialog.</li>
+  <li>After cutting length validation passes, input Excel file name.</li>
+  <li>Click drawing location to place table.</li>
+  <li>Cutting List and Long Bar List are output to drawing and Excel file is saved.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/C2820_Cuttinglist1.mp4" autoplay muted loop playsinline aria-label="Cuttinglist execution process" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Cuttinglist — Automatic cutting list and bar list generation after line selection</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Filter</td><td>Recognizes <strong>LINE objects only</strong>. PolyLine, Circle, etc. are ignored even if selected.</td></tr>
+  <tr><td>Auto Bar Range</td><td>3000mm ~ 6500mm, 100mm intervals (36 specifications)</td></tr>
+  <tr><td>Cutting Length Limit</td><td>If cutting dimension is max bar value - 35mm or greater, displays warning and stops.</td></tr>
+  <tr><td>Drawing Output Content</td><td>① Cutting List (cutting dimension, quantity, bar assignment, loss, remaining) ② Long Bar List (bar length, quantity) output in order.</td></tr>
+  <tr><td>Excel Output</td><td>Cutting List and Long Bar List are saved as Excel file.</td></tr>
+  <tr><td>Text Size</td><td>Uses current AutoCAD <code>TEXTSIZE</code> system variable.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Cutting List (Drawing)</td><td>Cutting dimension, quantity, used bar assignment, loss, and remaining for each profile are output as drawing text.</td></tr>
+  <tr><td>Long Bar List (Drawing)</td><td>Required bar length and quantity for each profile are output below Cutting List.</td></tr>
+  <tr><td>Excel File</td><td>Cutting List and Long Bar List are saved in Excel file with input name.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> Partial selection is also possible. If only some Lines are selected instead of entire drawing, cutting list is calculated only for selected range.<br>
+  In User mode, if no item matches profile name, default bar (<code>3000, 4000, 5000, 6000, 6500</code>) is applied.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> If any Line has cutting dimension of max bar value - 35mm or greater, processing stops.
+  The layer name and length of that Line is displayed in command window, so verify and correct.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

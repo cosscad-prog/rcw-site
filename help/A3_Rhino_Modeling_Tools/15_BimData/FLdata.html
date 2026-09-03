@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>FLdata - 15_BimData</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FLdata &nbsp;—&nbsp; 15_BimData</h1>
+<p><span class="cmd-box">FLdata</span></p>
+<p>선택한 Group 또는 Block 객체에 층 정보와 역할별 일정 데이터를 입력하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<p>선택 객체에 저장된 BIM/Floor 관련 데이터를 확인하거나 편집해, 모델 객체와 층/구역/속성 정보를 함께 관리할 때 사용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>FLdata</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><code>BIM 데이터를 설정할 객체 선택 (Group/Block)</code> 프롬프트에서 데이터를 적용할 객체를 하나 이상 선택합니다.</li>
+  <li><code>BIM 데이터 입력</code> 창에서 층 정보와 일정 정보를 입력합니다.</li>
+  <li><code>확인</code>을 누르면 선택 객체의 UserString에 BIM 데이터가 저장됩니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 90%; min-width:220px; max-width:90%;">
+    <video src="../../img/FLdata.mp4" autoplay muted loop playsinline aria-label="FLdata example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>입력 데이터</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>층 번호</td><td><code>RCW_Floor</code>로 저장됩니다. 양수는 <code>nF</code>, 0은 <code>Ground</code>, 음수는 <code>BnF</code>로 표시됩니다.</td></tr>
+  <tr><td>기준고</td><td><code>RCW_Elevation</code>으로 저장됩니다. 층의 기준 높이(mm)를 입력합니다.</td></tr>
+  <tr><td>관리자</td><td>관리자 역할의 계획 시작/완료, 실적 시작/완료, 진행률을 입력합니다.</td></tr>
+  <tr><td>설계</td><td>설계 역할의 계획 시작/완료, 실적 시작/완료, 진행률을 입력합니다.</td></tr>
+  <tr><td>생산</td><td>생산 역할의 계획 시작/완료, 실적 시작/완료, 진행률을 입력합니다.</td></tr>
+  <tr><td>설치</td><td>설치 역할의 계획 시작/완료, 실적 시작/완료, 진행률을 입력합니다.</td></tr>
+</tbody></table>
+<h2>코드 기준 동작</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 대상</td><td><code>ObjectType.AnyObject</code>를 선택하며 <code>GroupSelect = true</code>로 Group 선택도 허용합니다. SubObject 선택은 사용하지 않습니다.</td></tr>
+  <tr><td>기존값 로드</td><td>첫 번째 선택 객체의 기존 UserString을 읽어 입력 창의 초기값으로 사용합니다.</td></tr>
+  <tr><td>객체 저장</td><td>입력된 값은 선택된 모든 객체의 Attributes UserString에 저장됩니다. 빈 값은 해당 UserString을 삭제합니다.</td></tr>
+  <tr><td>문서 백업 저장</td><td>층 번호와 Block/객체 표시 이름이 있으면 <code>doc.Strings</code>에도 일정 데이터를 이중 저장합니다. 블록 재생성 후에도 같은 층+이름이면 FLOpt에서 복원할 수 있습니다.</td></tr>
+  <tr><td>저장 Key</td><td>층은 <code>RCW_Floor</code>, 기준고는 <code>RCW_Elevation</code>, 일정은 <code>RCW_Sched_{역할}_{필드}</code> 형식으로 저장됩니다.</td></tr>
+  
+</tbody></table>
+<div class="note"><strong>참고:</strong> FLdata는 데이터를 입력/저장하는 명령입니다. 입력된 데이터를 층별, 블록별로 확인하고 수정하려면 <code>FLOpt</code> 패널을 사용합니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

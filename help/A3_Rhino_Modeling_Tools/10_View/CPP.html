@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>CPP - 10_View</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+<h1>CPP &nbsp;—&nbsp; 10_View</h1>
+<p><span class="cmd-box">CPP</span></p>
+<p>선택한 Surface의 법선 방향과 선택한 Edge Line의 방향을 함께 사용해 현재 활성 뷰포트의 작업 평면(CPlane)을 설정하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<p>두 Surface 또는 기준 객체 관계를 이용해 CPlane을 더 명확하게 잡아야 할 때 사용하는 보조 작업평면 설정 명령입니다. 단일 면 기준 CP로 방향이 부족할 때 활용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <code>CPP</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><code>Select Surface Brep Objects</code> 프롬프트에서 CPlane의 면 방향 기준이 될 Surface를 선택합니다.</li>
+  <li><code>Select Edge Line</code> 프롬프트에서 CPlane의 원점과 X축 기준이 될 Edge를 선택합니다.</li>
+  <li>선택 Surface와 Edge 기준으로 활성 뷰포트의 CPlane이 변경됩니다.</li>
+</ol>
+<h2>동작 기준</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Surface 선택</td><td>선택한 Surface의 면적 중심점을 구하고, 중심점에서 가장 가까운 UV 위치의 Normal을 CPlane의 Z 방향 기준으로 사용합니다.</td></tr>
+  <tr><td>Edge 선택</td><td>선택한 Edge Curve의 시작점을 CPlane 원점으로 사용합니다.</td></tr>
+  <tr><td>X축 기준</td><td>선택한 Edge Curve의 시작점 Tangent 방향을 CPlane X축으로 사용합니다.</td></tr>
+  <tr><td>Y축 기준</td><td>Surface Normal 방향과 Edge X축 방향의 외적(<code>Z_Vec x X_Vec</code>)으로 Y축을 계산합니다.</td></tr>
+  <tr><td>적용 범위</td><td>현재 활성 뷰포트의 Construction Plane만 변경합니다.</td></tr>
+  <tr><td>View 변경</td><td>화면 View 방향은 변경하지 않습니다. 작업 평면만 변경합니다.</td></tr>
+</table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>처리 결과</td><td>선택 Edge의 시작점을 원점으로 하고, Edge 방향을 X축으로 하는 CPlane이 활성 뷰포트에 적용됩니다.</td></tr>
+  <tr><td>Grid 설정</td><td>명령 내부에서 CPlane Grid Line Count는 10, Grid Spacing은 10으로 설정합니다.</td></tr>
+  
+</table>
+
+<div class="note"><strong>참고:</strong> Surface와 Edge를 모두 올바르게 선택해야 의도한 CPlane이 만들어집니다. Edge의 시작점 방향이 원점과 X축을 결정하므로, 반대 방향이 필요하면 반대 방향의 Edge를 선택하세요.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>GMDC - 유리 면 초기화</title>
+  <style>
+    body {
+      font-family: "맑은 고딕", "Malgun Gothic", sans-serif;
+      font-size: 13px;
+      color: #222;
+      margin: 20px 30px;
+      line-height: 1.7;
+    }
+    h1 {
+      font-size: 18px;
+      border-bottom: 2px solid #0066cc;
+      padding-bottom: 6px;
+      color: #0066cc;
+    }
+    h2 {
+      font-size: 14px;
+      border-left: 4px solid #0066cc;
+      padding-left: 8px;
+      margin-top: 24px;
+      color: #003d80;
+    }
+    .cmd-box {
+      display: inline-block;
+      background: #f0f4ff;
+      border: 1px solid #99bbee;
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+      font-weight: bold;
+      color: #003d80;
+      margin-bottom: 10px;
+    }
+    .desc-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .desc-table th {
+      background: #dce8f8;
+      border: 1px solid #aac4e8;
+      padding: 5px 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+    .desc-table td {
+      border: 1px solid #c8d8ec;
+      padding: 5px 10px;
+      vertical-align: top;
+    }
+    .desc-table tr:nth-child(even) td {
+      background: #f7faff;
+    }
+    .warning {
+      background: #fff2f2;
+      border-left: 4px solid #e05050;
+      padding: 8px 12px;
+      margin-top: 16px;
+      font-size: 12px;
+    }
+    .note {
+      background: #fffbe6;
+      border-left: 4px solid #f0c040;
+      padding: 8px 12px;
+      margin-top: 16px;
+      font-size: 12px;
+    }
+    .step-list {
+      padding-left: 20px;
+    }
+    .step-list li {
+      margin-bottom: 6px;
+    }
+    .gif-placeholder {
+      width: 100%;
+      max-width: 600px;
+      height: 340px;
+      background: #e8eef8;
+      border: 2px dashed #99bbee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #668;
+      margin: 12px 0;
+      border-radius: 4px;
+    }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>GMDC &nbsp;—&nbsp; 유리 면 초기화</h1>
+<p><span class="cmd-box">GMDC</span></p>
+<p>
+  현재 문서에서 <strong>Glass_XX</strong> 레이어에 있는 모든 서피스를 삭제합니다.<br>
+  유리 모델링을 처음부터 다시 시작할 때 사용합니다.
+</p>
+<h2>사용 목적</h2>
+<p><code>Glass_XX</code> 레이어의 유리 서피스를 모두 지워 유리 모델링을 처음부터 다시 시작할 때 사용합니다. 유리 타입이나 분할을 바꿔 재모델링하기 전, 기존 결과를 깨끗이 정리하는 용도입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  <li>Rhino 명령창에 <strong>GMDC</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>별도의 선택 없이 즉시 실행됩니다.</li>
+  <li><code>Glass_XX</code> 레이어의 모든 서피스가 삭제되고 화면이 새로고침됩니다.</li>
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/GmdC.mp4" autoplay muted loop playsinline aria-label="GmdC" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption><br></figcaption>
+  </figure>
+</div>
+<h2>삭제 대상</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr>
+    <th>항목</th>
+    <th>설명</th>
+  </tr>
+  <tr>
+    <td>삭제 레이어</td>
+    <td><code>Glass_XX</code> 패턴의 모든 레이어에 포함된 서피스 객체</td>
+  </tr>
+  <tr>
+    <td>삭제 범위</td>
+    <td>현재 열려 있는 문서(doc) 전체 — 선택 여부와 무관하게 일괄 삭제됩니다.</td>
+  </tr>
+  <tr>
+    <td>삭제 제외</td>
+    <td>Glass_XX 레이어 이외의 객체는 영향을 받지 않습니다.</td>
+  </tr>
+</tbody></table>
+<div class="warning">
+  <strong>주의:</strong> 실행 즉시 모든 유리 서피스가 삭제됩니다. 되돌리려면 Rhino의 <strong>Undo</strong>(Ctrl+Z)를 사용하세요.
+</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr>
+    <th>명령어</th>
+    <th>설명</th>
+  </tr>
+  <tr>
+    <td><strong>GsOpt</strong></td>
+    <td>유리 타입 옵션 패널 열기 — 재모델링 전 타입을 재설정합니다.</td>
+  </tr>
+  <tr>
+    <td><strong>Gmd</strong></td>
+    <td>유리 면 모델링 — 삭제 후 다시 유리 서피스를 생성합니다.</td>
+  </tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>F3D - 3D 부분 확대 뷰</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn,.warning { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>F3D &nbsp;—&nbsp; 3D 부분 확대 뷰</h1>
+<p><span class="cmd-box">F3D</span></p>
+<p>
+  <strong>F3D</strong>는 선택한 부재(Brep)를 별도 3D 창에서 원하는 방향으로 돌려본 뒤,
+  <strong>화면에 보이는 그대로(원근) 숨은선 제거 2D</strong>로 변환하여 가공도에 <strong>부분 확대(상세) 뷰</strong>로 삽입하는 명령입니다.
+  복잡한 가공 부위나 브래킷 결합부를 입체적으로 보여줄 때 사용합니다.
+</p>
+<h2>사용 목적</h2>
+<p>2D 가공도만으로 이해하기 어려운 부위를, 원하는 각도의 3D 모습으로 도면에 함께 넣어 제작 이해를 돕습니다. 한 번 잡은 방향·배율은 저장되어 <strong>FDDS/FDwg 재생 시 동일하게 재현</strong>됩니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>Rhino 명령창에 <code>F3D</code>를 입력합니다.</li>
+  <li><strong>"3D 확대뷰로 넣을 부재를 선택하세요"</strong> 프롬프트에서 대상 부재(Brep)를 선택합니다.</li>
+  <li>별도 <strong>3D 미리보기 창</strong>이 열립니다. 이 창에서 방향을 잡습니다:
+    <ul>
+      <li><strong>&nbsp; 우버튼 드래그</strong> — 회전(Orbit)</li>
+      <li><strong>&nbsp; 휠</strong> — 확대/축소(Zoom)</li>
+      <li><strong>&nbsp; 좌버튼 드래그</strong> — 이동(Pan)</li>
+    </ul>
+  </li>
+  <li>원하는 구도가 되면 <strong>[확정]</strong>을 누릅니다. 화면에 보이는 그대로(원근)가 숨은선 제거 2D로 변환됩니다.</li>
+  <li>도면에서 <strong>삽입 위치를 클릭</strong>합니다.</li>
+  <li>마우스를 움직여 <strong>배율을 드래그</strong>(시작 0.3 배, "x N.NN" 표시)로 정한 뒤 클릭해 확정합니다.</li>
+
+
+
+
+
+</ol>
+<h2>실행예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <video src="../../../img/F3d.mp4" autoplay muted loop playsinline aria-label="F3d" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>동작 설명 그림 캡션 입력</figcaption>
+  </figure>
+</div>
+<h2>동작 방식</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>방향 잡기</td><td>실제 Rhino 3D 뷰포트를 임베드한 별도 창에서 잡습니다. 선택한 부재만 격리되어 표시됩니다.</td></tr>
+  <tr><td>2D 변환</td><td>잡은 카메라 그대로 숨은선 제거(원근 투영)로 2D 선을 만듭니다. 평면(직교) 변환이 아니라 화면에서 본 입체 모습 그대로입니다.</td></tr>
+  <tr><td>삽입</td><td>위치 클릭 후 배율을 드래그로 정합니다. 결과에는 테두리 박스가 함께 그려집니다.</td></tr>
+  <tr><td>재생 재현</td><td>카메라·배율 정보가 저장되어, FDstyle <strong>재생 모드</strong>의 FDDS/FDwg에서 같은 부재를 동일한 방향·배율로 자동 재현합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 기록 모드에서 F3D로 삽입하면 그 부재의 부분확대 정보가 함께 기록되어, 이후 재생 시 자동으로 다시 그려집니다. (<code>FDstyle</code> 도움말 참고)</div>
+<div class="warning"><strong>주의:</strong> 부재(Brep)와 <code>ProfileName</code> 정보가 있어야 합니다. ProfileName 을 찾지 못하면 명령이 중단됩니다. 출력은 항상 모델 실측 기준(scale 1)이며, 3D 창에서의 확대/축소는 보기·구도용입니다.</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>FDwg</strong></td><td>제작 가공도 생성. 재생 모드에서 F3D 부분확대 뷰를 자동 재현합니다.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>기록/재생 모드 패널. 기록 모드에서 F3D 결과가 저장됩니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

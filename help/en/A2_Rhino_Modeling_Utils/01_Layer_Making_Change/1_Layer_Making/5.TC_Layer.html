@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>5.TC_Layer - Layer Making</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>5.TC_Layer &nbsp;—&nbsp; Layer Making</h1>
+<p><span class="cmd-box">TC1 ~ TC20 / TCL</span></p>
+<h2>Purpose</h2>
+<p>A set of commands for creating <code>T_Center</code> series Layers.</p>
+<h2>Included Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>Command</th><th>Created Layer</th><th>Color / Attributes</th></tr>
+  <tr><td><code>TCL</code></td><td>Creates a <code>T_CenterXX</code> layer. Accepts numbers or characters.</td><td>When a number is entered, applies the CAD Color Number; characters also accepted.</td></tr>
+  <tr><td><code>TC1</code></td><td>Creates the <code>T_Center1</code> layer.</td><td>Color 20 [CAD Color Number]</td></tr>
+  <tr><td><code>TC2</code></td><td>Creates the <code>T_Center2</code> layer.</td><td>Color 60 [CAD Color Number]</td></tr>
+  <tr><td><code>TC3</code></td><td>Creates the <code>T_Center3</code> layer.</td><td>Color 110 [CAD Color Number]</td></tr>
+  <tr><td><code>TC4</code></td><td>Creates the <code>T_Center4</code> layer.</td><td>Color 150 [CAD Color Number]</td></tr>
+  <tr><td><code>TC5</code></td><td>Creates the <code>T_Center5</code> layer.</td><td>Color 190 [CAD Color Number]</td></tr>
+  <tr><td><code>TC6</code></td><td>Creates the <code>T_Center6</code> layer.</td><td>Color 240 [CAD Color Number]</td></tr>
+  <tr><td><code>TC7</code></td><td>Creates the <code>T_Center7</code> layer.</td><td>Color 21 [CAD Color Number]</td></tr>
+  <tr><td><code>TC8</code></td><td>Creates the <code>T_Center8</code> layer.</td><td>Color 61 [CAD Color Number]</td></tr>
+  <tr><td><code>TC9</code></td><td>Creates the <code>T_Center9</code> layer.</td><td>Color 111 [CAD Color Number]</td></tr>
+  <tr><td><code>TC10</code> ~ <code>TC20</code></td><td>Creates the <code>T_Center10</code> ~ <code>T_Center20</code> layers.</td><td>Same CAD Color Number as the command number (e.g. <code>TC13</code> &rarr; Color 13)</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type the required command in the Rhino command line and press Enter.</li>
+  <li>The <code>*L</code> command appends the entered number or character directly after the base layer name to create the layer.</li>
+  <li>When a number is entered, it is used as the CAD Color Number. Numbers greater than 256 use the remainder when divided by 256 as the Color Number.</li>
+  <li>Check the Layer name, Color, and Linetype state in the Rhino Layer panel.</li>
+</ol>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer Series</td><td><code>T_Center</code></td></tr>
+  <tr><td>Commands</td><td><code>TC1</code> ~ <code>TC20</code>, <code>TCL</code></td></tr>
+</tbody></table>
+<h2>Verifying Results</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer Name</td><td>Confirm the created layer name matches the Created Layer column.</td></tr>
+  <tr><td>Layer Color</td><td>Confirm the CAD Color Number or RGB value was applied.</td></tr>
+  <tr><td>Command Line</td><td>Check the guidance or completion message.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> TCL appends the entered value directly after <code>T_Center</code> to create a new layer. When a number is entered, the corresponding CAD Color Number is applied — it is easy to align Transom centreline numbers with colours.</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

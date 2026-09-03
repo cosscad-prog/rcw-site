@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>PP - 03_Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>PP &nbsp;—&nbsp; 03_Dims</h1>
+<p><span class="cmd-box">PP</span></p>
+<p>
+  화면에서 <strong>클릭한 위치</strong>에 <code>Dim_Points</code> 레이어 Point를 <strong>1개 생성</strong>하는 명령입니다.<br>
+  객체를 선택하는 방식이 아니며, 직접 클릭(Pick Point)으로 원하는 위치에 Point를 배치합니다.
+</p>
+
+<h2>사용 목적</h2>
+<p>
+  <code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code> 치수 명령에서
+  기준으로 사용할 <code>Dim_Points</code> 레이어 Point를 원하는 위치에 직접 배치할 때 사용합니다.
+  <code>HPP</code>가 엔티티에서 자동 추출하는 것과 달리, PP는 원하는 위치를 직접 지정합니다.
+</p>
+
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>명령창에 <code>PP</code>를 입력하고 Enter를 누릅니다.</li>
+  <li><em>"Point 위치 선택"</em> 프롬프트에 따라 화면에서 Point를 배치할 위치를 클릭합니다.</li>
+  <li>클릭한 위치에 <code>Dim_Points</code> 레이어 Point가 생성됩니다.</li>
+  <li>이후 <code>DST</code> / <code>DSB</code> 등의 치수 명령으로 생성된 Point를 선택하여 치수를 기입합니다.</li>
+</ol>
+
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>동작 방식</td><td>객체 선택 없음 — 화면을 <strong>클릭(Pick Point)</strong>하여 위치를 지정합니다.</td></tr>
+  <tr><td>생성 Point</td><td>클릭한 위치에 <code>Dim_Points</code> 레이어 Point 1개가 생성됩니다.</td></tr>
+  <tr><td>레이어</td><td><code>Dim_Points</code> 레이어(색상 2)에 배치됩니다. 레이어가 없으면 자동 생성됩니다.</td></tr>
+  <tr><td>다음 단계</td><td>생성된 Point를 <code>DST</code> / <code>DSB</code> / <code>DSL</code> / <code>DSR</code> / <code>DSA</code> 명령에서 선택하여 치수를 기입합니다.</td></tr>
+  <tr><td>적용 환경</td><td>AutoCAD / BricsCAD (Rhino 포함)</td></tr>
+</table>
+
+<h2>HPP vs PP 차이</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+  <tr><th>항목</th><th>HPP</th><th>PP</th></tr>
+  <tr><td>위치 지정</td><td>엔티티 선택 → 특징점 자동 추출</td><td>화면 직접 클릭(Pick Point)</td></tr>
+  <tr><td>생성 수량</td><td>선택 엔티티 수에 따라 다수 생성</td><td>클릭 1회 = Point 1개</td></tr>
+  <tr><td>사용 상황</td><td>형상에서 자동으로 Point 추출할 때</td><td>원하는 특정 위치에 Point를 추가할 때</td></tr>
+</table>
+
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>생성 Point</td><td>클릭한 위치에 Point 1개가 생성됩니다.</td></tr>
+  <tr><td>레이어</td><td><code>Dim_Points</code> 레이어(색상 2)에 배치됩니다.</td></tr>
+</table>
+
+<div class="note">
+  <strong>참고:</strong> 형상 엔티티(Line, Circle 등)의 끝점이나 중심점에서 Point를 자동 추출하려면
+  <code>HPP</code>를 사용하세요. <code>PP</code>는 형상과 무관하게 원하는 위치에 Point를 추가할 때 사용합니다.
+</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

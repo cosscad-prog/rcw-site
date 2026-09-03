@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>RcwHelp - 도움말 열기</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>RcwHelp &nbsp;—&nbsp; 도움말 열기</h1>
+<p><span class="cmd-box">RcwHelp</span></p>
+<p>설치된 RCW 도움말을 기본 웹 브라우저로 엽니다. 지금 보고 있는 이 문서가 그 도움말입니다.</p>
+
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <strong>RcwHelp</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>기본 웹 브라우저가 열리면서 도움말 첫 화면이 표시됩니다.</li>
+  <li>왼쪽 목차에서 기능군을 펼쳐 원하는 명령 문서를 선택합니다.</li>
+</ol>
+
+<h2>언어별로 열리는 문서</h2>
+<p>RCW 의 표시 언어 설정에 따라 열리는 파일이 달라집니다.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>표시 언어</th><th>열리는 파일</th></tr>
+  <tr><td>한국어</td><td>플러그인 설치 폴더의 <code>help\Help_index.html</code></td></tr>
+  <tr><td>그 외 언어</td><td>플러그인 설치 폴더의 <code>help\en\index.html</code> (영문 도움말)</td></tr>
+</tbody></table>
+
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>도움말 창</td><td>Rhino 창이 아니라 기본 웹 브라우저에서 열립니다. Rhino 작업을 계속하면서 옆에 두고 볼 수 있습니다.</td></tr>
+  <tr><td>모델 변경</td><td>없습니다. 도면이나 모델을 바꾸지 않습니다.</td></tr>
+</tbody></table>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>RCWLicense</strong></td><td>발급받은 라이선스 파일을 사용자 프로필로 가져옵니다.</td></tr>
+  <tr><td><strong>RCWMachineCode</strong></td><td>라이선스 발급에 필요한 이 컴퓨터의 machine code 를 확인합니다.</td></tr>
+  <tr><td><strong>RCWCustomerCode</strong></td><td>고객 페이지 로그인에 쓰는 고객 코드를 이 컴퓨터에 적어 둡니다.</td></tr>
+  <tr><td><strong>RCWVersion</strong></td><td>지금 돌고 있는 빌드의 버전·에디션·빌드 날짜와 로드된 파일 경로를 명령창에 표시합니다.</td></tr>
+  <tr><td><strong>RCWUpdate</strong></td><td>새 버전이 나왔는지 확인합니다. 시작할 때의 자동 확인을 켜고 끕니다.</td></tr>
+</tbody></table>
+<p style="margin-top:8px">위 다섯 명령의 자세한 설명은 목차의 <b>A3 Rhino Modeling Tools &gt; 19 License &gt; License / Version</b> 문서에 있습니다.</p>
+
+<div class="warn">주의: 도움말 파일을 찾지 못하면 명령창에 찾으려던 경로가 표시되고 명령이 중단됩니다. 이 경우 설치 폴더의 <code>help</code> 폴더가 함께 설치되었는지 확인하십시오.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

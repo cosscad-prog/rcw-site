@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>BB1~BB8 - 01_Block</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>BB1 ~ BB8 &nbsp;—&nbsp; 01_Block</h1>
+<p>
+  <span class="cmd-box">BB1</span>&nbsp;
+  <span class="cmd-box">BB2</span>&nbsp;
+  <span class="cmd-box">BB3</span>&nbsp;
+  <span class="cmd-box">BB4</span>&nbsp;
+  <span class="cmd-box">BB5</span>&nbsp;
+  <span class="cmd-box">BB6</span>&nbsp;
+  <span class="cmd-box">BB7</span>&nbsp;
+  <span class="cmd-box">BB8</span>
+</p>
+<p>
+  A command that inserts the Block corresponding to a number from the Block list saved by <code>SSBlock</code>
+  at the <strong>location of a Point or Line entity selected on the screen</strong>.<br>
+  If no object is selected, it is replaced with a direct click (Pick Point),
+  and the inserted Block <strong>does not explode and maintains Block Reference status</strong>.
+</p>
+<h2>Purpose</h2>
+<p>
+  Use to repeatedly place Blocks at precise locations based on Point objects (<code>DBPoint</code>) or Line endpoints already placed in the drawing.
+  Since the insertion point is automatically extracted from existing shapes without manually entering coordinates,
+  it is suitable for quickly placing the same Block at multiple locations.
+</p>
+<h2>Command List</h2>
+<table class="desc-table">
+  <colgroup><col style="width:15%"><col style="width:85%"></colgroup>
+  <tbody><tr><th>Command</th><th>Action</th></tr>
+  <tr><td><code>BB1</code></td><td>Insert Block number 1 from SSBlock list at selected Point/Line location (maintains Block Reference)</td></tr>
+  <tr><td><code>BB2</code></td><td>Insert Block number 2 from SSBlock list at selected Point/Line location (maintains Block Reference)</td></tr>
+  <tr><td><code>BB3</code></td><td>Insert Block number 3 from SSBlock list at selected Point/Line location (maintains Block Reference)</td></tr>
+  <tr><td><code>BB4</code></td><td>Insert Block number 4 from SSBlock list at selected Point/Line location (maintains Block Reference)</td></tr>
+  <tr><td><code>BB5</code></td><td>Insert Block number 5 from SSBlock list at selected Point/Line location (maintains Block Reference)</td></tr>
+  <tr><td><code>BB6</code></td><td>Insert Block number 6 from SSBlock list at selected Point/Line location (maintains Block Reference)</td></tr>
+  <tr><td><code>BB7</code></td><td>Insert Block number 7 from SSBlock list at selected Point/Line location (maintains Block Reference)</td></tr>
+  <tr><td><code>BB8</code></td><td>Insert Block number 8 from SSBlock list at selected Point/Line location (maintains Block Reference)</td></tr>
+</tbody></table>
+<h2>Insertion Location Determination Method</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Selected Object</th><th>Insertion Location Determination Method</th></tr>
+  <tr><td>DBPoint (Point object)</td><td>Uses the Point's Position directly as the insertion point.</td></tr>
+  <tr><td>Line (Line object)</td><td>Collects StartPoints / EndPoints of all selected Lines and uses the point with the smallest Z value (lowest) and among those, the smallest X value (leftmost) as the insertion point.</td></tr>
+  <tr><td>No object selected / Other</td><td>Replaced with direct click (Pick Point).</td></tr>
+</tbody></table>
+<h2>B1~B8 vs BB1~BB8 Difference</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+  <tbody><tr><th>Item</th><th>B1~B8</th><th>BB1~BB8</th></tr>
+  <tr><td>Insertion Location</td><td>Click screen directly (Pick Point)</td><td>Select existing Point / Line entities → automatically extract location. If none, substitute with Pick Point</td></tr>
+  <tr><td>Explode</td><td>Explode immediately after insertion ✔</td><td>No explode — maintains Block Reference ✔</td></tr>
+  <tr><td>Result Objects</td><td>Individual entities (lines, circles, etc.)</td><td>Block Reference</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>First, use <code>SSBlock</code> command to select Block objects in order and save them to memory.<br>
+      The selection order becomes the number (number 1, number 2, …).</li>
+  <li>Enter the command corresponding to the number to insert (<code>BB1</code> ~ <code>BB8</code>) in the AutoCAD or BricsCAD command line and press Enter.</li>
+  <li>Select <strong>Point or Line objects</strong> to use as the insertion location reference and press Enter.<br>
+      — If you select a DBPoint, it will be inserted at that point location.<br>
+      — If you select a Line, the lowest-leftmost endpoint is used as the insertion point.<br>
+      — If you do not select an object, it switches to direct click (Pick Point).</li>
+  <li>The Block is inserted at the specified location as a Block Reference.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <video src="../../../img/C2530_BB1_BB8.mp4" autoplay muted loop playsinline aria-label="BB1~BB8 execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>BB1~BB8 — Example of Block insertion based on Point/Line entity locations</figcaption>
+  </figure>
+</div>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Insertion Location</td><td>Location extracted from selected Point/Line entity (if none, Pick Point)</td></tr>
+  <tr><td>Inserted Block</td><td>The n-th Block from the list saved by SSBlock (if BB<em>n</em> then n-th)</td></tr>
+  <tr><td>Explode</td><td>None — maintains Block Reference status even after insertion</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> The command does not work if no Block is saved by <code>SSBlock</code> or if there is no Block corresponding to the specified number.
+  First run <code>SSBlock</code> to register Blocks before using this command.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> Use <code>B1~B8</code> if you need exploding after insertion.
+  Since <code>BB1~BB8</code> maintains Block Reference status, subsequent content modifications must be done through Block editing (<code>REFEDIT</code> or <code>BEDIT</code>).
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

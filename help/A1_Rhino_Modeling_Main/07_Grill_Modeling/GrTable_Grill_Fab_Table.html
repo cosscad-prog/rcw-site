@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>GrTable - 그릴 제작 도면 테이블</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .gif-placeholder { width:100%; max-width:600px; height:340px; background:#e8eef8; border:2px dashed #99bbee; display:flex; align-items:center; justify-content:center; font-size:13px; color:#668; margin:12px 0; border-radius:4px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>GrTable &nbsp;—&nbsp; 그릴 제작 도면 테이블</h1>
+<p><span class="cmd-box">GrTable</span></p>
+<p>선택한 그릴 그룹 객체들을 분석하여 Rhino 도면 안에 <strong>제작 도면 테이블</strong>을 자동 생성합니다.<br>
+그릴 타입별로 형상을 복사·배치하고, 제작 번호와 수량 정보를 함께 출력합니다.</p>
+<h2>사용 목적</h2>
+<p>그릴 타입별 형상과 제작 번호·수량을 도면 위 제작 테이블로 정리할 때 사용합니다. 제작도에 그릴 일람표를 함께 배치해 생산·발주 검토에 활용하는 용도입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Rhino 명령창에 <strong>GrTable</strong> 을 입력하고 Enter 를 누릅니다.</li>
+  <li>테이블에 포함할 그릴 그룹 객체를 선택하고 Enter 를 누릅니다.</li>
+  <li>분석이 완료되면 <strong>테이블 시작 위치</strong>를 화면에서 클릭합니다.</li>
+  <li>선택한 위치를 기준으로 그릴 타입별 제작 도면 테이블이 생성됩니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../img/GrTable_demo.mp4" autoplay muted loop playsinline aria-label="GrTable 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>테이블 셀 구성</h2>
+<p>그릴 타입별 제작 셀이 생성되며, 각 셀의 내용은 다음과 같습니다.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>셀 항목</th><th>설명</th></tr>
+  <tr><td>타입명</td><td>그릴 타입 이름. 제작 번호와 함께 셀 상단에 표시됩니다.</td></tr>
+  <tr><td>Fab_No</td><td>제작 번호. <code>[타입명] [접두사][번호]</code> 형식으로 표시됩니다.</td></tr>
+  <tr><td>Qnt</td><td>해당 제작 번호의 수량.</td></tr>
+  <tr><td>그릴 형상</td><td>원본 그릴 형상을 제작 테이블 셀 중심에 복사하여 배치합니다.</td></tr>
+</tbody></table>
+<h2>레이어 및 동작 특이사항</h2>
+<table class="desc-table">
+    <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>선택 방식</td><td>그룹 선택(GroupSelect) 모드로 동작하므로 그릴 그룹을 클릭하면 전체 그룹이 선택됩니다.</td></tr>
+  <tr><td>텍스트 레이어</td><td>생성된 텍스트는 <code>Text</code> 및 <code>Profile_No_Qnt</code> 레이어에 배치됩니다.</td></tr>
+  <tr><td>데이터 기준</td><td><strong>GrNo</strong>에서 저장한 그룹 데이터와 Fab No 정보를 기준으로 타입별 수량을 정리합니다.</td></tr>
+  <tr><td>공용 테이블 로직</td><td>Vent/Grill 계열의 공용 테이블 작성 로직을 사용해 입면과 프로파일 가공 정보를 배치합니다.</td></tr>
+  <tr><td>Construction Plane</td><td>실행 시 활성 뷰포트의 CPlane Y 원점을 0으로 자동 보정합니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+    <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>GR1 ~ GR5</strong></td><td>그릴 모델링 — 테이블 생성 전 먼저 실행합니다.</td></tr>
+  <tr><td><strong>GrNo</strong></td><td>그릴 번호 부여 — 테이블의 Fab_No와 연동됩니다.</td></tr>
+  <tr><td><strong>GrList</strong></td><td>그릴 수량 리스트 — 테이블과 함께 사용합니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>SST - 16_Stretch</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>SST &nbsp;—&nbsp; 16_Stretch</h1>
+<p><span class="cmd-box">SST</span></p>
+<p>
+  A stretch command built to behave like AutoCAD <code>STRETCH</code> inside Rhino.<br>
+  It moves the control points or objects inside the dragged window by the vector from the base point to the to-point, stretching or shrinking the geometry.
+</p>
+<h2>Purpose</h2>
+<p>
+  Used to select part of a drawing and move endpoints, dimension endpoints, block insertion points, points, etc., while
+  keeping the unselected parts in place and deforming curves and dimensions.
+  In particular, it is for performing AutoCAD's Crossing-Window-based Stretch within Rhino on 2D drawings.
+</p>
+<h2>Selection Method</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Drag direction</th><th>Behavior</th></tr>
+  <tr><td>Drag to the right</td><td>Window selection. Only objects whose BoundingBox fits entirely inside the selection window are selected. Shown on screen as a blue window.</td></tr>
+  <tr><td>Drag to the left</td><td>Crossing selection. Objects whose BoundingBox overlaps the selection window are selected. Shown on screen as a green window.</td></tr>
+  <tr><td>Right-click or Esc</td><td>Cancels the command.</td></tr>
+</tbody></table>
+<h2>Workflow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:5%"><col style="width:28%"><col style="width:67%"></colgroup>
+  <tbody><tr><th>Order</th><th>Step</th><th>Description</th></tr>
+  <tr><td>1</td><td>Define drag window</td><td>Drag the Stretch target area with the mouse. The selection window is computed in U/V coordinates against the current view's CPlane.</td></tr>
+  <tr><td>2</td><td>Collect objects</td><td>Excludes locked, hidden, and deleted objects and collects objects matching the Window or Crossing condition.</td></tr>
+  <tr><td>3</td><td>Extract control points</td><td>Finds Curve control points, Brep Vertices, Points, Block insertion points, LinearDimension endpoints, etc. inside the selection window.</td></tr>
+  <tr><td>4</td><td>Highlight selection</td><td>Pre-highlights the selected objects in yellow.</td></tr>
+  <tr><td>5</td><td>Enter base point</td><td>Specify the move base point at the <em>"Base point"</em> prompt.</td></tr>
+  <tr><td>6</td><td>Enter to-point</td><td>Specify the point to move to at the <em>"To point"</em> prompt. A yellow DynamicDraw preview is shown while moving.</td></tr>
+  <tr><td>7</td><td>Modify objects</td><td>Moves the inside-window control points or the whole object according to per-object-type rules.</td></tr>
+  <tr><td>8</td><td>Clean up</td><td>Clears the selection and runs <code>_PointsOff</code> to turn off any remaining control-point display.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  <li>Type <code>SST</code> in the Rhino command line and press Enter.</li>
+  <li>When the <em>"Drag to define the Crossing Window. (Esc: cancel)"</em> message appears, drag the area to Stretch.</li>
+  <li>Dragging to the right selects only fully-enclosed objects; dragging to the left also selects crossing objects.</li>
+  <li>Pick the base point at the <em>"Base point"</em> prompt.</li>
+  <li>Pick the destination at the <em>"To point"</em> prompt.</li>
+  <li>The control points or objects inside the selection window are moved by the base-to-target vector, and the number of modified objects is printed in the command line.</li>
+
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/SST.mp4" autoplay muted loop playsinline aria-label="SST execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>SST example</figcaption>
+  </figure>
+</div>
+<h2>Per-Object-Type Handling</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Object type</th><th>Handling</th></tr>
+  <tr><td>Curve</td><td>Converted to a NURBS Curve, then only the control points inside the selection window are moved. Control points outside the window are kept as-is.</td></tr>
+  <tr><td>Brep</td><td>Moves the entire Brep only when its BoundingBox fits entirely inside the selection window. It does not move only some Vertices.</td></tr>
+  <tr><td>Block</td><td>If the Block Instance's insertion point is inside the selection window, the whole block is moved.</td></tr>
+  <tr><td>Point</td><td>Moved entirely when its BoundingBox fits entirely inside the selection window.</td></tr>
+  <tr><td>Hatch</td><td>Moved entirely when its BoundingBox fits entirely inside the selection window.</td></tr>
+  <tr><td>LinearDimension</td><td>Evaluates the two ExtensionLine endpoints individually. If only one endpoint is inside the window, only that endpoint moves; if both are inside, the whole dimension moves.</td></tr>
+  <tr><td>Other Annotation</td><td>Moved entirely when its BoundingBox fits entirely inside the selection window.</td></tr>
+</tbody></table>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Coordinate basis</td><td>The selection window and inside-test are computed against the current viewport's CPlane.</td></tr>
+  <tr><td>Move amount</td><td>Uses the 3D vector from the base point to the to-point directly.</td></tr>
+  <tr><td>Preview</td><td>While entering the to-point, the Curve deformation result and the fully-enclosed object move result are shown in yellow.</td></tr>
+  <tr><td>Zero move</td><td>If the base point and to-point are the same so the move amount is 0, no object is modified.</td></tr>
+  <tr><td>Result</td><td>On completion, the message <code>SST done: n objects modified.</code> is printed.</td></tr>
+  <tr><td>Environment</td><td>Rhino</td></tr>
+</tbody></table>
+<h2>Differences from AutoCAD Stretch</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection input</td><td>Uses the command's own mouse drag window, not the standard Rhino selection prompt.</td></tr>
+  <tr><td>Curve handling</td><td>A selected Curve is deformed based on NURBS control points. Depending on the curve type, the control-point deformation result may look different from the original shape.</td></tr>
+  <tr><td>Brep handling</td><td>A Brep is not partially Stretched; it is only moved entirely when fully enclosed.</td></tr>
+  <tr><td>Block handling</td><td>Moved entirely based on the insertion point. The geometry inside the block is not partially Stretched.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> SST runs only if there is at least one control point inside the selection window.
+  Even if objects are selected, it does not run when there is no movable control point or base point inside the window.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> The selection-window test is CPlane-based. If the drawing orientation and CPlane direction do not match, unexpected objects may be selected or deformed.
+  Check the working view and CPlane before running.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

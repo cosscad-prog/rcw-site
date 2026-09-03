@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Block Data Input - InPut Data</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { display:block; max-width:720px; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Block Data Input &nbsp;—&nbsp; InPut Data</h1>
+<p><span class="cmd-box">Block Data Input</span></p>
+<p>Block Data is used when inserting a Block into a Surface or subtracting the Block's shape from it. The Block to use and its placement method are specified in the Block selection field of the Pname panel.</p>
+<h2>Purpose</h2>
+<p>Used to define in advance how Blocks will be placed or subtracted in the section (how, how many, and where). Once you set Block-1 through Block-4 in the <code>Pname</code> panel, components are automatically placed or holes are generated with consistent rules during modeling, automating component placement.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Prepare the Block to be inserted or subtracted.</li>
+  <li>Place it at the Section position where it will be applied.</li>
+  <li>In <code>Pname</code>, select the Block to use from Block-1 through Block-4.</li>
+  <li>Enter the Insert Type, reference, position, spacing, and quantity.</li>
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../../../img/Block_Data_Input.png" alt="Block_Data_Input.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Options</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Insert Block</td><td>Inserts the selected Block at the specified position.</td></tr>
+  <tr><td>Subtract</td><td>Cuts the Surface by the Block shape and removes the Block.</td></tr>
+  <tr><td>Subtract &amp; Insert</td><td>Cuts the Surface and also places the Block.</td></tr>
+  <tr><td>Subtract &amp; Block Insert</td><td>Performs subtract and insert, and also uses the Block's property data.</td></tr>
+  <tr><td>Insert Block With Main</td><td>Inserts so the Block is represented in the Main group when printing fabrication drawings.</td></tr>
+</tbody></table>
+<h2>Placement Reference</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>By Brep</td><td>Calculates Block position based on the selected Surface.</td></tr>
+  <tr><td>By Line</td><td>Calculates Block position based on the Wire Frame.</td></tr>
+  <tr><td>Top/Left</td><td>Enter position, spacing, and quantity from the top or left reference.</td></tr>
+  <tr><td>Bottom/Right</td><td>Enter position, spacing, and quantity from the bottom or right reference.</td></tr>
+  <tr><td>Interval / Quantity</td><td>Specifies the repeat interval and count based on the total length.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

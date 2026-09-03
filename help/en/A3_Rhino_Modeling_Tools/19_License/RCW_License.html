@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>License / Version</title>
+  <style>
+    body { font-family:"Segoe UI",Arial,sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:6px; margin-bottom:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .out { font-family:Consolas,monospace; font-size:12px; background:#f6f8fb; border:1px solid #dde5ef; border-radius:4px; padding:8px 10px; margin-top:8px; white-space:pre-wrap; color:#123b63; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"Segoe UI",Arial,sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>License / Version</h1>
+<p>
+  <span class="cmd-box">RCWMachineCode</span>
+  <span class="cmd-box">RCWLicense</span>
+  <span class="cmd-box">RCWCustomerCode</span>
+  <span class="cmd-box">RCWVersion</span>
+  <span class="cmd-box">RCWUpdate</span>
+</p>
+<p>
+  These are not drawing commands. They handle <b>installation, activation and version</b>, and
+  <b>never change your model or drawing</b>. They are grouped in one document because they belong together.
+</p>
+
+<h2>What this page covers</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Name</th><th>What it does</th></tr>
+  <tr><td><code>RCWMachineCode</code></td><td>Shows this workstation's <b>machine code</b> and copies it to the clipboard. You need it to request a license.</td></tr>
+  <tr><td><code>RCWLicense</code></td><td>Imports the <b>license file (.lic)</b> you received, and reports the current license status.</td></tr>
+  <tr><td><code>RCWCustomerCode</code></td><td>Saves the <b>customer code</b> from your e-mail on this computer, once. From then on <code>RCWVersion</code> keeps showing it back to you.</td></tr>
+  <tr><td><code>RCWVersion</code></td><td>Shows the version, edition, build date and file path of the <b>build that is actually running</b> - and the <b>saved customer code</b>.</td></tr>
+  <tr><td><code>RCWUpdate</code></td><td>Checks whether a <b>newer version</b> exists, and turns the startup check on or off.</td></tr>
+  <tr><td><b>Customer code</b></td><td>The code you use to <b>sign in</b> to the customer page; it arrives by e-mail.
+      See <b>Two different codes</b> below.</td></tr>
+</tbody></table>
+
+<h2>Activating for the first time (Core / Standard)</h2>
+<ol class="step-list">
+  <li>Start Rhino. With no license file present, the <b>machine code is printed in the command line and copied to the clipboard</b> automatically.
+      If you missed it, run <code>RCWMachineCode</code>.</li>
+  <li>Open the customer page <code>rcw-site.vercel.app/customer</code> and sign in with your <b>customer code</b>.</li>
+  <li>Paste the machine code from step 1 into the <b>machine code field</b> in the license box, then press <b>[Request license]</b>.</li>
+  <li>Within about a minute a <b>[Download license]</b> button appears in the same place. The page updates itself — no refresh needed.</li>
+  <li>Save the downloaded <code>.lic</code> file somewhere safe.</li>
+  <li>Run <code>RCWLicense</code> in Rhino and select that <code>.lic</code> file.</li>
+  <li>Confirm the success message and <b>restart Rhino</b>.</li>
+  <li>After the import, Rhino <b>asks whether to save your customer code</b>. Paste in the code you signed in
+      with at step 2 — you can then find it again even if the e-mail is lost. To do it later: <code>RCWCustomerCode</code>.</li>
+</ol>
+<div class="warn">
+  <b>Do not copy the license file into the Program Files folder by hand.</b>
+  It must be imported with the <code>RCWLicense</code> command.
+</div>
+
+<h2>Two different codes — do not mix them up</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:26%"><col style="width:54%"></colgroup>
+  <tbody><tr><th>Name</th><th>Looks like</th><th>Where it comes from, what it is for</th></tr>
+  <tr><td><b>Customer code</b><br>(license code)</td><td><code>RCW-XXXX-XXXX-XXXX</code></td>
+      <td>Arrives <b>by e-mail</b>. Used to <b>sign in to the customer page</b>.
+          One per person; it does not change when you change computers.</td></tr>
+  <tr><td><b>Machine code</b></td><td><code>RCW5-CO-…</code> (Core)<br><code>RCW5-ST-…</code> (Standard)</td>
+      <td>Produced <b>by Rhino</b>. Used to <b>request a license</b> after signing in.
+          <b>Different on every computer.</b></td></tr>
+</tbody></table>
+<div class="note">
+  A failed sign-in is almost always the two codes <b>swapped</b>. The sign-in box takes the
+  <b>customer code</b> starting with <code>RCW-</code>; the machine code starting with <code>RCW5-</code>
+  goes into the license box <b>after</b> you are signed in.<br>
+  <b>If you cannot remember the customer code</b>, run <code>RCWVersion</code> - it is there once you have saved it.
+</div>
+
+<h2>RCWMachineCode — read the machine code</h2>
+<p>Prints the machine code in the command line and <b>copies it to the clipboard</b>, ready to paste into the customer page.</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>When you need it</td><td>When requesting your <b>first license</b>, and again when you <b>change computers</b> or the machine code changes.</td></tr>
+  <tr><td>How the value is formed</td><td>Derived from a value Windows assigns to that computer. <b>The same computer always gives the same code.</b></td></tr>
+  <tr><td>Edition marker</td><td><code>CO</code> and <code>ST</code> stand for Core and Standard. A different edition produces a <b>different code</b>.</td></tr>
+  <tr><td>Where to send it</td><td>Only to the customer page or to the person who issues licenses.</td></tr>
+</tbody></table>
+<div class="note">
+  If the code cannot be produced, the command reports that the <b>Windows MachineGuid is unavailable</b> and fails.
+  Send us a screenshot if that happens.
+</div>
+
+<h2>RCWLicense — import the license file</h2>
+<ol class="step-list">
+  <li>The command first prints <b>the current license status</b> on one line.</li>
+  <li>A file dialog opens. Select the <code>.lic</code> file you downloaded.</li>
+  <li>The status is printed <b>again</b> after the import. On success: "RCW license file imported."</li>
+  <li>If no customer code is saved yet, you are <b>asked for it once here.</b> Paste it, or press <b>Enter</b> to skip.</li>
+  <li><b>Restart Rhino</b> to apply it.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>File type</td><td>One <code>*.lic</code> file. Multiple selection is not allowed.</td></tr>
+  <tr><td>Cancelling</td><td>You may cancel the file dialog. An existing license is left untouched.</td></tr>
+  <tr><td>If it fails</td><td>"was not imported" usually means the file belongs to <b>another computer</b> or has <b>expired</b>.
+      Send us the status line printed just above it.</td></tr>
+  <tr><td>Internet</td><td><b>Not required.</b> The license is verified <b>offline</b> from the file's signature.</td></tr>
+  <tr><td>The customer code question</td><td>Asked only when the import <b>succeeded</b> and <b>no code is saved yet</b>.
+      Whatever you do there — skip it, mistype it — <b>the result of the import is unchanged.</b></td></tr>
+</tbody></table>
+
+<h2>RCWCustomerCode — save the customer code</h2>
+<p>
+  The customer code exists <b>only in the e-mail you were sent</b>. It is not inside the license file and
+  it appears nowhere on screen. Months later, when you change computers or want the installer again,
+  that e-mail is often gone. <b>Save the code once</b>, the way you import the license file once.
+</p>
+<p>
+  <b>The first place to save it is <code>RCWLicense</code></b>, which asks for it right after importing the licence.
+  This command is for saving it <b>later</b>, or changing or removing it.
+</p>
+<ol class="step-list">
+  <li>Run <code>RCWCustomerCode</code>. If a code is already saved it is <b>shown first and copied to the clipboard</b>.</li>
+  <li>The command line asks for the code. <b>Paste it and press Enter.</b></li>
+  <li>A confirmation appears. From then on it is part of what <code>RCWVersion</code> prints.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Action</th><th>Result</th></tr>
+  <tr><td>Press <b>Enter</b> alone</td><td>Changes nothing. Use this when you only wanted to <b>look</b>.</td></tr>
+  <tr><td>Paste a new code</td><td><b>Replaces</b> the saved one.</td></tr>
+  <tr><td><b>Remove</b> option</td><td><b>Deletes</b> the saved code. The code itself is not cancelled - only this computer's note of it.</td></tr>
+</tbody></table>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>What it accepts</td><td>With or without hyphens, upper or lower case. It is stored in upper case.</td></tr>
+  <tr><td>What it accepts</td><td>Codes starting with <code>RCW-</code>. Codes starting with <code>V5KO-</code> are <b>still accepted</b> too, as they are on the customer page.</td></tr>
+  <tr><td>What it rejects</td><td>Any other prefix, and fewer than <b>8</b> or more than <b>40</b> letters and digits.
+      A rejected entry <b>leaves the saved code untouched.</b></td></tr>
+  <tr><td>If you paste the machine code</td><td>It is <b>refused, with the reason.</b> <code>RCW5-CO-…</code> and <code>RCW5-ST-…</code> are machine codes, not customer codes -
+      one character apart, and the most common mix-up.</td></tr>
+  <tr><td>Where it is kept</td><td><b>Next to the license file.</b> It survives a reinstall, and it is not in the folder you open and edit, so it is unlikely to be deleted by accident.</td></tr>
+  <tr><td>Internet</td><td><b>Not used.</b> Nothing is asked of any server to check the code - only its shape is checked.</td></tr>
+</tbody></table>
+<div class="warn">
+  This code is the <b>key that signs you in</b> to the customer page. Once saved it sits in a file on this
+  computer, so on a <b>Windows account shared with other people</b> you may prefer not to save it.
+  <b>Remove</b> in <code>RCWCustomerCode</code> deletes it at any time.
+</div>
+
+<h2>RCWVersion — which build is running</h2>
+<p>The <b>first thing we need</b> for any support request. It prints two lines.</p>
+<div class="out">RCW V5  5.1.2  Standard  net48  build 2026-08-14
+C:\Program Files\...\RCW_V5.rhp
+Customer code: RCW-1A2B-3C4D-5E6F</div>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Value</th><th>Meaning</th></tr>
+  <tr><td><code>5.1.2</code></td><td>Version number. A suffix such as <code>-trial</code> identifies the kind of build.</td></tr>
+  <tr><td><code>Standard</code></td><td>Edition — <code>Core</code>, <code>Standard</code> or <code>Internal</code>; evaluation builds also show <code>Trial</code>.</td></tr>
+  <tr><td><code>net48</code></td><td>The .NET flavour in use. Rhino 8 may show a different value depending on its setting.</td></tr>
+  <tr><td><code>build …</code></td><td>The date that build was made.</td></tr>
+  <tr><td>Second line</td><td>The <b>file that was actually loaded</b>. This line answers the question when an older build is still lying around.</td></tr>
+  <tr><td>Third line</td><td>The <b>customer code saved</b> with <code>RCWCustomerCode</code>. If none is saved, a note telling you to save one appears instead.</td></tr>
+</tbody></table>
+<div class="note">The same line is printed <b>once when Rhino starts</b>, so you can scroll up to it without running the command.</div>
+
+<h2>RCWUpdate — check for a new version</h2>
+<p>It <b>only tells you</b>. It never downloads or installs anything.</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Action</th><th>Result</th></tr>
+  <tr><td><b>Enter</b></td><td>Checks now. If you are current it says so; if a newer version exists it names both versions and asks
+      whether to <b>open the download page</b>.</td></tr>
+  <tr><td><b>AutoCheck</b></td><td>Turns the <b>startup check</b> on or off. With it off, nothing is checked at all.</td></tr>
+</tbody></table>
+<p>The automatic check behaves like this:</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>How often</td><td><b>Once a day</b>, quietly, after Rhino has finished starting. It never holds up startup.</td></tr>
+  <tr><td>What is sent</td><td><b>Nothing.</b> It reads one version list file from the web site. Machine code, license and drawings
+      are <b>never sent anywhere</b>.</td></tr>
+  <tr><td>On failure</td><td><b>It says nothing</b> — no warnings behind a firewall or on an isolated network.
+      Run <code>RCWUpdate</code> yourself if you want the reason; asked directly, it always answers.</td></tr>
+  <tr><td>Repeat prompts</td><td>The dialog is <b>not shown twice for the same version</b>. The command-line note stays.</td></tr>
+</tbody></table>
+<div class="note">Installing requires <b>closing Rhino</b> — the plug-in file is locked while Rhino runs.</div>
+
+<h2>Changing computers or reinstalling</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>Situation</th><th>What to do</th></tr>
+  <tr><td>Reinstalling on the same computer</td><td>The machine code is unchanged, so <b>import your existing <code>.lic</code> again with <code>RCWLicense</code></b>.</td></tr>
+  <tr><td>Reinstalling to change the help language</td><td>Install again from the same file with the other language, then <b>import the same <code>.lic</code> again</b>.</td></tr>
+  <tr><td>New computer / changed machine code</td><td>A <b>new license is required</b>. Request it on the customer page; it is issued after a check.</td></tr>
+  <tr><td>A colleague at the same company</td><td>A license covers <b>one computer</b>. Each person needs their own.</td></tr>
+</tbody></table>
+
+<h2>Trial builds need no license file</h2>
+<p>
+  Core Trial runs the Core command set for <b>90 days</b>, Standard Trial the full set for <b>30 days</b>.
+  The period starts at the <b>first successful run</b>, and reinstalling under the same Windows account does not
+  reset that date. The two periods are independent of each other.
+</p>
+<div class="note">
+  Trial builds <b>do not contain <code>RCWMachineCode</code>, <code>RCWLicense</code> or <code>RCWCustomerCode</code></b>,
+  because they use neither a license file nor a customer code.
+  <code>RCWVersion</code> and <code>RCWUpdate</code> are present in trial builds as well.
+</div>
+
+<h2>If something goes wrong</h2>
+<table class="desc-table">
+  <colgroup><col style="width:36%"><col style="width:64%"></colgroup>
+  <tbody><tr><th>Symptom</th><th>What to check</th></tr>
+  <tr><td>Cannot remember the customer code</td><td>Run <code>RCWVersion</code>. It is on the last line once you have saved it; if you never did, look for the e-mail.</td></tr>
+  <tr><td>Cannot sign in to the customer page</td><td>Whether you entered the <b>customer code</b> starting with <code>RCW-</code>. <code>RCW5-</code> is not a sign-in code.</td></tr>
+  <tr><td>License imported but nothing changed</td><td>Whether you <b>restarted Rhino</b>.</td></tr>
+  <tr><td>A command is reported as unknown</td><td>Check the <b>edition</b> with <code>RCWVersion</code>. Trial builds have no license commands,
+      and Core does not include Standard-only commands.</td></tr>
+  <tr><td>A fix seems to have no effect</td><td>Look at the <b>second line</b> of <code>RCWVersion</code> — an older build in another folder may be the one loaded.</td></tr>
+</tbody></table>
+<p>When contacting support, include <b>both lines of <code>RCWVersion</code></b>, your Rhino version, your Windows user name and the error message or a screenshot.</p>
+
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>RcwHelp</code></td><td>Opens the installed RCW help in the default web browser.</td></tr>
+  <tr><td><code>RCWFolder</code></td><td>Opens the folder holding the RCW files you edit — blocks, drawing forms, hatches and data.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

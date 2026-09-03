@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Molist - Frame Material List</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { max-width:600px; border:1px solid #ccc; background:#fff; margin:4px 8px 8px 0; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>Molist &nbsp;—&nbsp; Frame Material List</h1>
+<p><span class="cmd-box">Molist</span></p>
+<p><strong>Molist</strong> reads the ProfileData and Block information of selected frame models to generate a material quantity list. It automatically identifies Group, NBlock, and Mixed selections and tallies the results into a single list.</p>
+
+<h2>Purpose</h2>
+<p>Used to generate a comprehensive material quantity list from modeled frame members before cutting, checking total quantities and weights. Provides visibility into material requirements at the unit level, integrating both ProfileData and Block information for accurate material planning and cost estimation.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Use <code>FabNo</code> to write ProfileData and Fab No first.</li>
+  <li>Type <code>Molist</code> in the Rhino command line and press Enter.</li>
+  <li>If needed, switch <code>Excel_File_On</code> to On.</li>
+  <li>At the <strong>Select Brep, Block objects for Molist</strong> prompt, select target Breps, standard Blocks, and NBlocks.</li>
+  <li>Press Enter — the list is written to screen, and if the option is On, an Excel file is saved.</li>
+</ol>
+<h2>Example</h2>
+<video src="../../../../img/Molist_demo.mp4" autoplay muted loop playsinline aria-label="Molist operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+<div class="demo-images">
+  
+</div>
+<h2>Selection Modes</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Mode</th><th>Description</th></tr>
+  <tr><td>Group Mode</td><td>Extracts ProfileData / InstanceInfo from Breps and standard Blocks.</td></tr>
+  <tr><td>Block Mode</td><td>Extracts Breps and nested Block information from inside NBlocks.</td></tr>
+  <tr><td>Mixed Mode</td><td>Merges Group Mode and Block Mode results for combined tallying.</td></tr></tbody>
+</table>
+<h2>Output Items</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Unit No</td><td>Unit number from ProfileData.</td></tr>
+  <tr><td>SHAPE Name</td><td>Profile name or Block name.</td></tr>
+  <tr><td>FAB NO</td><td>Fabrication number assigned by <code>FabNo</code>.</td></tr>
+  <tr><td>Cut Length / Quantity</td><td>Cutting length and quantity of the member.</td></tr>
+  <tr><td>Unit_Weight / Weight</td><td>Unit weight and total weight incorporating quantity.</td></tr>
+  <tr><td>Description</td><td>Description read from SectionCustomData or Block Description.</td></tr></tbody>
+</table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>FabNo</code></td><td>Generates Fab No and ProfileData needed for Molist tallying.</td></tr>
+  <tr><td><code>PMolist</code></td><td>Creates a simple Profile-centered material list.</td></tr>
+  <tr><td><code>Cuttinglist</code></td><td>Generates a cutting plan and bar list.</td></tr></tbody>
+</table>
+<div class="note"><strong>Note:</strong> If only a subset of objects is selected, a partial Molist is generated based only on the selected objects.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>RCWFolder - 내가 고치는 RCW 파일</title>
+  <style>
+    body { font-family:"Malgun Gothic","Segoe UI",Arial,sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<h1>RCWFolder &nbsp;—&nbsp; 내가 고치는 RCW 파일</h1>
+<p><span class="cmd-box">RCWFolder</span></p>
+<p>고쳐서 쓰는 RCW 파일이 전부 모여 있는 폴더를 엽니다. 데이터 표, 블록, 도면 양식, 해치 패턴이
+한 곳에 있습니다. 경로를 외우거나 입력할 필요가 없습니다.</p>
+
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <strong>RCWFolder</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>탐색기로 폴더가 열립니다.</li>
+  <li>고칠 파일을 편집합니다. 블록은 <code>Blocks</code>, 도면 양식은 <code>Forms</code>,
+      나머지는 그 자리에 있습니다.</li>
+</ol>
+
+<h2>폴더 안에 있는 것</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>내용</th></tr>
+  <tr><td><code>Blocks\*.3dm</code></td><td>BlockOpt 패널에 나오는 블록. 직접 만든 3dm 을 넣으면 목록에 함께 나옵니다.</td></tr>
+  <tr><td><code>Forms\*.3dm</code></td><td>SFB 또는 FDstyle 패널의 [도면양식] 버튼으로 고르는 Frame Form 템플릿.</td></tr>
+  <tr><td><code>Forms\*.dwg</code></td><td>FDwgStyle 이 쓰는 도면 양식 시트.</td></tr>
+  <tr><td><code>RCW_Hatch.pat</code></td><td>가공도에 쓰는 해치 패턴.</td></tr>
+  <tr><td><code>*.dat</code>, <code>*.txt</code></td><td>데이터 표: 유리·창호·그릴·백패널 타입, 금형 데이터, 시스템 기본값, 바 목록.</td></tr>
+</tbody></table>
+
+<h2>AutoCAD · BricsCAD 와 같이 쓰는 폴더입니다</h2>
+<p><strong>RCWFolder</strong> 는 Rhino 뿐 아니라 AutoCAD·BricsCAD 용 RCW_V5 플러그인에도
+같은 이름으로 있습니다. 어느 쪽에서 치든 <strong>같은 폴더</strong>가 열립니다.
+그래서 한 번만 고치면 세 제품이 같은 값을 씁니다. 나중에 CAD 플러그인을 함께 쓰시게 되어도
+설정이 갈라지지 않습니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:28%"><col style="width:48%"></colgroup>
+  <tbody><tr><th>파일</th><th>CAD 에서 쓰는 명령</th><th>Rhino 와의 관계</th></tr>
+  <tr><td><code>System_Default.dat</code></td><td>DsOpt 패널의 [D]</td>
+      <td><strong>같이 씁니다.</strong> 한 파일 안에서 키를 나눠 쓰며, CAD 가 저장하는 값은
+      <code>CAD_</code> 로 시작합니다. 저장할 때 Rhino 가 쓰던 값을 지우지 않습니다.</td></tr>
+  <tr><td><code>AutoScale.dat</code></td><td>FSC · NC4 · SFB</td>
+      <td><strong>같이 씁니다.</strong> Rhino 의 FSC 가 읽는 파일과 같은 파일입니다.</td></tr>
+  <tr><td><code>LongBarList.dat</code></td><td>Cuttinglist</td>
+      <td>CAD 전용입니다. Rhino 는 읽지 않습니다.</td></tr>
+  <tr><td><code>barlist.txt</code></td><td>UBarlist · Cuttinglist</td>
+      <td>형식이 같습니다. 이름이 정해져 있지 않고 양쪽 다 파일 선택창에서 고르므로,
+      한 파일을 같이 쓰실 수 있습니다.</td></tr>
+</tbody></table>
+<p>CAD 플러그인이 읽는 것은 위 네 개뿐입니다. <code>Blocks</code>, <code>Forms</code>,
+<code>RCW_Hatch.pat</code> 을 비롯한 나머지는 Rhino 전용이므로 CAD 쪽에서는 신경 쓰지
+않으셔도 됩니다.</p>
+
+<h2>업데이트해도 고친 내용은 그대로입니다</h2>
+<p>새 버전을 설치해도 고객이 고친 파일은 덮어쓰지 않습니다. 새 버전이 추가한 파일(예: 새 블록)은
+저절로 생기고, 고친 파일은 고친 그대로 남습니다.</p>
+<div class="note"><code>Program Files</code> 아래 프로그램 설치 폴더의 파일은 고치지 마십시오.
+설치 폴더 이름에는 버전이 들어가므로, 거기서 고친 내용은 업데이트하는 순간 사라집니다.
+작업은 이 명령이 여는 폴더에서만 하십시오.</div>
+
+<h2>설치 기본값으로 되돌리기</h2>
+<p>고객 파일이 항상 우선하므로, 잘못 고친 파일은 그대로 남습니다. 되돌리기 옵션으로 설치 당시의
+파일을 다시 가져올 수 있습니다.</p>
+<ol class="step-list">
+  <li><strong>RCWFolder</strong> 를 실행하고 <strong>Restore</strong> 를 고릅니다.</li>
+  <li>되돌릴 범위를 고릅니다: <strong>All</strong>, 또는 <strong>Data</strong>,
+      <strong>Blocks</strong>, <strong>Forms</strong>, <strong>Hatch</strong>.</li>
+  <li>바뀔 파일 목록이 표시됩니다. <strong>Yes</strong> 로 확인합니다.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>백업</td><td>바꾸기 전에 현재 파일을 시각별 백업 폴더로 복사합니다. 위치는 명령창에 표시됩니다.</td></tr>
+  <tr><td>직접 넣은 파일</td><td>직접 추가한 블록·양식은 건드리지 않습니다. 되돌리기는 설치 파일을 복구하는 것이지 폴더를 비우는 것이 아닙니다.</td></tr>
+  <tr><td>모델 변경</td><td>없습니다. 이 명령은 도면을 바꾸지 않습니다.</td></tr>
+</tbody></table>
+
+<div class="note">되돌리기는 Rhino 에만 있습니다. AutoCAD·BricsCAD 플러그인의
+<strong>RCWFolder</strong> 는 폴더를 열고 각 파일이 어디서 읽히는지 알려 주기만 합니다.</div>
+
+<h2>관련 명령</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령</th><th>설명</th></tr>
+  <tr><td><strong>BlockOpt</strong></td><td><code>Blocks</code> 폴더의 블록을 삽입합니다.</td></tr>
+  <tr><td><strong>SFB</strong></td><td>Frame Form 을 화면에서 고르거나 <code>Forms</code> 폴더의 파일에서 가져옵니다.</td></tr>
+  <tr><td><strong>FDwgStyle</strong></td><td><code>Forms</code> 폴더의 도면 양식 DWG 로 배치 시트를 만듭니다.</td></tr>
+</tbody></table>
+
+<div class="warn">주의: 이미 모델에 삽입한 블록·양식은 그 정의가 모델 파일 안에 저장됩니다.
+원본 파일을 고쳐도 새로 삽입할 때부터 반영되며, 이미 만든 모델까지 갱신하려면 Rhino 의
+BlockManager 에서 정의를 다시 읽어야 합니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

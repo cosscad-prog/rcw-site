@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>WebV</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { margin-top:10px; max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>WebV</h1>
+<p><span class="cmd-box">WebV</span></p>
+<p>Command to convert the selected Rhino model to GLB for viewing in a Web Browser and automatically open the local WebViewer.</p>
+<h2>Purpose</h2>
+<p>Used to open the current model or exported web viewer results on a local web server and verify the 3D state in a browser.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Type <code>WebV</code> in the Rhino command line and press Enter.</li>
+  <li>At the <code>Select objects to view in WebViewer (custom GLB)</code> prompt, select objects to view in the web viewer.</li>
+  <li>At the <code>Polygon reduce ratio (0.5~1.0, Enter=original)</code> prompt, enter the reduce ratio. Pressing only Enter uses the original ratio <code>1.0</code>.</li>
+  <li>The selected model is converted to GLB data, and the browser opens at <code>http://localhost:8765/glb</code>.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 95%; min-width:220px; max-width:95%;">
+    <video src="../../../img/WebV.mp4" autoplay muted loop playsinline aria-label="WebV example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Code-Based Operation</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Can select <code>ObjectType.AnyObject</code>, and also allows group selection with <code>GroupSelect = true</code>. SubObject selection is not used.</td></tr>
+  <tr><td>Reduce Ratio</td><td>Can input from <code>0.5</code> to <code>1.0</code>. Default is <code>1.0</code>. Smaller values reduce polygons to make web display data lighter.</td></tr>
+  <tr><td>GLB Conversion</td><td><code>RhinoMeshExporterGLB</code> converts selected objects to Progressive GLB chunks by layer. Uses render mesh cache, smooth normal, color/layer/block color inheritance, and mesh quantization.</td></tr>
+  <tr><td>Transmission Method</td><td>Converted GLB chunks are registered on the local HTTP server and transmitted with gzip compression on browser request.</td></tr>
+  <tr><td>Local Server</td><td><code>WebViewerServer</code> runs on <code>localhost:8765</code>. <code>/glb</code> provides Viewer HTML, and <code>/model/count</code> and <code>/model/{index}</code> provide GLB chunks.</td></tr>
+  <tr><td>Browser Launch</td><td>After conversion, opens the default browser and navigates to <code>http://localhost:8765/glb</code>.</td></tr>
+  
+</tbody></table>
+<h2>Web Viewer Basic Operations</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Operation</th><th>Description</th></tr>
+  <tr><td>Orbit</td><td>With the <code>Orbit</code> button selected in the top toolbar, drag the right mouse button to rotate the model.</td></tr>
+  <tr><td>Pan</td><td>With the <code>Pan</code> button selected in the top toolbar, drag the right mouse button to pan the view.</td></tr>
+  <tr><td>Zoom</td><td>Roll the mouse wheel to zoom in/out. Camera moves based on mouse position.</td></tr>
+  <tr><td>Reset</td><td>The <code>Reset</code> button in the top toolbar resets the camera direction to initial Isometric state and fits the entire model to the screen.</td></tr>
+  <tr><td>Fit</td><td>The <code>Fit</code> button in the top toolbar executes Zoom Extents to fit the entire current model in view.</td></tr>
+  <tr><td>Help</td><td>Clicking the <code>Help</code> button in the top toolbar opens an operation shortcut guide panel within the WebViewer.</td></tr>
+</tbody></table>
+<h2>Zoom Window Usage</h2>
+<ol class="step-list">
+  
+  <li>Press keyboard <code>W</code> on the browser screen.</li>
+  <li>Then press <code>Space</code> or <code>Enter</code> to activate Zoom Window mode and the cursor changes to a crosshair.</li>
+  <li>Drag the left mouse button to define a rectangle over the area you want to zoom in.</li>
+  <li>Release the mouse button to zoom to the center of the defined area.</li>
+  <li>Press <code>Esc</code> to cancel during the process.</li>
+
+</ol>
+<h2>Keyboard Shortcuts</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Shortcut</th><th>Action</th></tr>
+  <tr><td><code>ZX</code> + <code>Space/Enter</code></td><td>Executes Zoom Extents (fit all). Same as toolbar <code>Fit</code>.</td></tr>
+  <tr><td><code>W</code> + <code>Space/Enter</code></td><td>Activates Zoom Window mode.</td></tr>
+  <tr><td><code>TV</code> + <code>Space/Enter</code></td><td>Switches to Top View and fits the entire model to the screen.</td></tr>
+  <tr><td><code>FV</code> + <code>Space/Enter</code></td><td>Switches to Front View and fits the entire model to the screen.</td></tr>
+  <tr><td><code>RV</code> + <code>Space/Enter</code></td><td>Switches to Right View and fits the entire model to the screen.</td></tr>
+  <tr><td><code>LV</code> + <code>Space/Enter</code></td><td>Switches to Left View and fits the entire model to the screen.</td></tr>
+  <tr><td><code>SE</code> + <code>Space/Enter</code></td><td>Switches to South-East Isometric View.</td></tr>
+  <tr><td><code>SW</code> + <code>Space/Enter</code></td><td>Switches to South-West Isometric View.</td></tr>
+  <tr><td><code>Esc</code></td><td>Cancels/closes input shortcut, Zoom Window mode, or help panel.</td></tr>
+</tbody></table>
+<h2>Display Options</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Option</th><th>Description</th></tr>
+  <tr><td>Shaded</td><td>Toggles shaded display of the model on/off.</td></tr>
+  <tr><td>Ghost</td><td>Converts the model to semi-transparent display to easily check internal or rear objects.</td></tr>
+  <tr><td>Grid</td><td>Toggles reference grid display on/off.</td></tr>
+  <tr><td>Section</td><td>Toggles Section Cut on/off. Can adjust X/Y/Z cutting axis and cutting position in <code>Panel</code>.</td></tr>
+  <tr><td>Save</td><td>Saves the current WebViewer model as a standalone executable web file.</td></tr>
+  <tr><td>Panel</td><td>Opens and closes the right <code>Display Control</code> panel. Drag the panel top to move its position.</td></tr>
+</tbody></table>
+<h2>Display Control Panel</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Background</td><td>Changes the web viewer background color.</td></tr>
+  <tr><td>Ambient</td><td>Adjusts the Ambient Light intensity of the scene.</td></tr>
+  <tr><td>Projection</td><td>Switches between <code>Persp</code> and <code>Ortho</code> projection modes. Default is Ortho.</td></tr>
+  <tr><td>Explode</td><td>Uses slider to separate model elements and check assembly relationships.</td></tr>
+  <tr><td>Section Cut</td><td>Selects X/Y/Z axis and adjusts cutting position with slider. Cutting results are visible when toolbar <code>Section</code> is enabled.</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Command Line Output</td><td>Outputs number of selected objects, conversion time, number of GLB chunks, total size, and browser URL.</td></tr>
+  <tr><td>Web Viewer</td><td>A WebViewer opens in the browser where you can rotate, zoom in/out, and verify the selected model.</td></tr>
+  <tr><td>File Saving</td><td><code>WebV</code> is a command to view immediately in a web browser. For exporting as a web file, use the <code>ToWebFile</code> command.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> WebV converts selected objects to temporary GLB data and displays it on a local server. It does not upload to an external internet server and uses the <code>localhost</code> address on the current PC.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>DsOpt - Dims</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:flex; flex-wrap:wrap; gap:6px; align-items:flex-start; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>DsOpt &nbsp;—&nbsp; Dims</h1>
+<p><span class="cmd-box">DsOpt</span></p>
+<p>A command to open a panel for setting Dimension Style and RCW dimension options. Manages the current Rhino DimStyle selection and spacing for <code>DST</code>, <code>DSR</code>, <code>DSB</code>, <code>DSL</code> dimension generation.</p>
+<h2>Purpose</h2>
+<p>Used to preset the first dimension distance, dimension spacing, and whether to display maximum dimensions by direction for automatic dimension commands. It is an option panel that determines the quality of dimension placement for DST/DSR/DSL/DSB.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  
+  
+  <li>Type <code>DsOpt</code> in the Rhino command line.</li>
+  <li>Double-click the DimStyle to use in the panel list to select it as the current DimStyle.</li>
+  <li>Adjust the <code>First Dist</code>, <code>Dim Gap</code>, <code>Angle Dist</code>, <code>LnR Dist</code>, and Max options to match your working conditions.</li>
+  <li>The set values are used in <code>DST</code>, <code>DSR</code>, <code>DSB</code>, <code>DSL</code> and fabrication drawing dimension creation.</li>
+
+
+
+
+
+
+
+</ol>
+<h2>Usage Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../../img/3131_Dimstyle1_en.png" alt="3131_Dimstyle1_en.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>DimStyle selection area example</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../../img/3131_DimStyle2.png" alt="DimStyle option example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Dimension spacing and Max option setting example</figcaption>
+  </figure>
+</div>
+<h2>Key Options</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>DimStyle Selection</td><td>Double-click in the list to select the Dimension Style of the current document.</td></tr>
+  <tr><td>First Dist</td><td>Distance of the first dimension line created by <code>DST/DSR/DSB/DSL</code>.</td></tr>
+  <tr><td>Dim Gap</td><td>Spacing between additional dimension lines such as Max dimensions and the first dimension line.</td></tr>
+  <tr><td>Angle Dist</td><td>Distance option used when creating Angle dimensions.</td></tr>
+  <tr><td>LnR Dist</td><td>Distance option used for Left/Right direction dimensions or related dimension layout.</td></tr>
+  <tr><td>Top/Left/Right/Bottom Max</td><td>Determines whether to additionally create overall Max Dimension for each direction.</td></tr>
+</tbody></table>
+<h2>Where It's Used</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>DST, DSR, DSB, DSL</code></td><td>Uses distance and Max options when creating automatic Linear Dimensions based on <code>Dim_Points</code>.</td></tr>
+  <tr><td><code>FDwg</code></td><td>Used for Frame fabrication drawing dimension creation.</td></tr>
+  <tr><td><code>Gsfd</code></td><td>Used for Glass fabrication drawing dimension creation.</td></tr>
+  <tr><td><code>Bpfd</code></td><td>Used for BackPanel fabrication drawing dimension creation.</td></tr>
+</tbody></table>
+<div class="warning"><strong>Important:</strong> In Rhino, Text Size is typically connected to <code>Font Height × DimensionScale</code>. Dimension Text is affected by the current DimStyle.</div>
+<div class="note"><strong>Note:</strong> The <code>First Dist</code>, <code>Dim Gap</code>, and directional Max options set here are directly reflected in the automatic dimension generation positions for <code>DST/DSR/DSL/DSB</code>.</div>
+<div class="note"><strong>Renamed:</strong> This panel could previously also be opened with <code>DimStyle</code>. Because that name collided with Rhino's own <code>DimStyle</code> command (Document Properties &gt; Annotation Styles), it has been consolidated into <code>DsOpt</code>. Typing <code>DimStyle</code> now runs Rhino's built-in command.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

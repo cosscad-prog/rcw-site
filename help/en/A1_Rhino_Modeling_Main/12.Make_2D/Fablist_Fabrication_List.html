@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><title>Flist, Fablist - Fabrication List</title><style>
+body{font-family:"맑은 고딕","Malgun Gothic",sans-serif;font-size:13px;color:#222;margin:20px 30px;line-height:1.7}h1{font-size:18px;border-bottom:2px solid #0066cc;padding-bottom:6px;color:#0066cc}h2{font-size:14px;border-left:4px solid #0066cc;padding-left:8px;margin-top:26px;color:#003d80}.cmd-box{display:inline-block;background:#f0f4ff;border:1px solid #99bbee;border-radius:4px;padding:2px 10px;font-family:Consolas,monospace;font-size:14px;font-weight:bold;color:#003d80}.desc-table{border-collapse:collapse;width:100%;margin-top:8px;table-layout:fixed}.desc-table th{background:#dce8f8;border:1px solid #aac4e8;padding:5px 10px;text-align:left}.desc-table td{border:1px solid #c8d8ec;padding:5px 10px;vertical-align:top}.desc-table tr:nth-child(even) td{background:#f7faff}.step-list{padding-left:20px}.step-list li{margin-bottom:6px}.demo-images img{max-width:600px;border:1px solid #ccc;background:#fff}code{font-family:Consolas,monospace;background:#f4f7fb;padding:1px 4px;border-radius:3px}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Flist, Fablist &nbsp;—&nbsp; Fabrication List</h1>
+<p><span class="cmd-box">Flist</span> <span class="cmd-box">Fablist</span></p>
+<p><strong>Flist</strong> and <strong>Fablist</strong> are identical commands that run the same function. They analyze selected Breps, standard Blocks, and NBlocks to create a per-Unit fabrication list with number annotations.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Profile numbers are placed on the elevation.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. FabList is sorted in order: Aluminium Profile, Steel Profile, Accessory Profile, Block.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Text size follows the current DimStyle.</p>
+<h2>Purpose</h2>
+<p>Used to write the fabrication list of the selected Unit together with the numbers shown on the elevation. Use it when you need a fabrication list sorted in the order aluminum Profile, steel Profile, accessory Profile, Block. It is the same command as <code>Flist</code>.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  <li>Type <code>Flist</code> or <code>Fablist</code> in the Rhino command line.</li><li>Toggle the <code>SubMaterial_No</code> option On/Off if needed.</li><li>Use the <code>LabelType</code> option to select the elevation number display method — <strong>TypeA</strong> (circle + number) or <strong>TypeB</strong> (mini table per line).</li><li>Use <code>LabelFontScale</code> to adjust the label font size scale if needed (default 2.5).</li><li>Set <code>SaveAsDefault</code> to On to save the current <code>LabelType</code> and <code>LabelFontScale</code> as defaults for future use.</li><li>At the <strong>Select Brep, Block, NBlock objects for Fablist</strong> prompt, select the target objects.</li><li>Press Enter — the selected objects are analyzed and the fabrication list is created.</li>
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/fabList_demo2.mp4" autoplay muted loop playsinline aria-label="Fablist operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Options</h2>
+<table class="desc-table"><colgroup><col style="width:24%"><col style="width:76%"></colgroup><tbody><tr><th>Option</th><th>Description</th></tr><tr><td><code>SubMaterial_No</code></td><td>When On, also generates accessory (Profile_ID 3) number annotations.</td></tr><tr><td><code>LabelType</code></td><td>Elevation number display method. <strong>TypeA</strong> = circle + number (default), <strong>TypeB</strong> = mini table per line.</td></tr><tr><td><code>LabelFontScale</code></td><td>Label font size scale. Display size = FontHeight × this value × DimensionScale (default 2.5).</td></tr><tr><td><code>SaveAsDefault</code></td><td>When set to On, saves the current <code>LabelType</code> and <code>LabelFontScale</code> as defaults (<code>System_Default.dat</code>).</td></tr></tbody></table>
+<h2>Label Display Method (TypeA / TypeB)</h2>
+<p>The overall fabrication list table is generated identically for both methods; only the labels displayed on the elevation differ.</p>
+<table class="desc-table"><colgroup><col style="width:18%"><col style="width:82%"></colgroup><tbody>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><strong>TypeA</strong></td><td>Each solid is marked with a <strong>circle + number</strong> connected by a leader. Corresponds 1:1 with the table NO.</td></tr>
+<tr><td><strong>TypeB</strong></td><td>Solids belonging to the same <strong>centerline (member)</strong> are grouped into a <strong>mini table</strong> showing <code>ProfileName Fab# - Quantity</code> per line, connected to the member's mid-point with a leader.</td></tr>
+</tbody></table>
+<div class="note">Users may prefer different methods. Run once with <code>SaveAsDefault</code>=On to have the saved method and font size automatically applied on subsequent FabList runs (saved per PC).</div>
+<h2>Command Aliases</h2>
+<table class="desc-table"><colgroup><col style="width:20%"><col style="width:80%"></colgroup><tbody><tr><th>Command</th><th>Description</th></tr><tr><td><code>Flist</code></td><td>Runs the same function as <code>Fablist</code>.</td></tr><tr><td><code>Fablist</code></td><td>Runs the same function as <code>Flist</code>.</td></tr></tbody></table>
+<h2>Output Content</h2>
+<table class="desc-table"><colgroup><col style="width:20%"><col style="width:80%"></colgroup><tbody><tr><th>Item</th><th>Description</th></tr><tr><td>Unit No</td><td>Unit number read from the selected group. A warning is output if missing or multiple exist.</td></tr><tr><td>Fab Numbers</td><td>Reads data per object type (Frame, Glass, BackPanel, etc.) and places number annotations.</td></tr><tr><td>List</td><td>Builds the fabrication list based on ProfileName, FabStr, Spec, Code, Add data, etc.</td></tr></tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

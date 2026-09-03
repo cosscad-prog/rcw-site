@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><title>F2d - Front 2D</title><style>
+body{font-family:"맑은 고딕","Malgun Gothic",sans-serif;font-size:13px;color:#222;margin:20px 30px;line-height:1.7}h1{font-size:18px;border-bottom:2px solid #0066cc;padding-bottom:6px;color:#0066cc}h2{font-size:14px;border-left:4px solid #0066cc;padding-left:8px;margin-top:26px;color:#003d80}.cmd-box{display:inline-block;background:#f0f4ff;border:1px solid #99bbee;border-radius:4px;padding:2px 10px;font-family:Consolas,monospace;font-size:14px;font-weight:bold;color:#003d80}.desc-table{border-collapse:collapse;width:100%;margin-top:8px;table-layout:fixed}.desc-table th{background:#dce8f8;border:1px solid #aac4e8;padding:5px 10px;text-align:left}.desc-table td{border:1px solid #c8d8ec;padding:5px 10px;vertical-align:top}.step-list{padding-left:20px}.step-list li{margin-bottom:6px}.demo-images img{max-width:600px;border:1px solid #ccc;background:#fff}code{font-family:Consolas,monospace;background:#f4f7fb;padding:1px 4px;border-radius:3px}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>F2d &nbsp;—&nbsp; Front 2D</h1>
+<p><span class="cmd-box">F2d</span></p>
+<p><strong>F2d</strong>는 선택한 3D 객체를 Front View 기준으로 Make2D 처리해 입면 2D 곡선과 치수를 생성하는 명령입니다.<br><font size="2" designtimesp="14497">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1. Profile Visual Line 과 Block Line이 생성된다.&nbsp;<br designtimesp="14499">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+2. Profile 라인이 잘 보이도록 Glass Line은 생략된다. <br designtimesp="14500"></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size="2" designtimesp="14501">&nbsp;&nbsp; 3. 
+Center Line 을 따라 치수가 기입된다. (Current Dim style 을 따른다.)</font></p>
+<h2>사용 목적</h2>
+<p>선택한 3D 객체를 Front View 기준 입면 2D(곡선과 치수)로 만들 때 사용합니다. 입면 도면이 필요할 때 사용하며, Profile 라인이 잘 보이도록 Glass Line은 생략되고 Center Line을 따라 현재 DimStyle 기준으로 치수가 기입됩니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino에서 Front View가 존재하는지 확인합니다.</li><li><code>F2d</code>를 입력합니다.</li><li><strong>Make2D를 적용할 객체 선택</strong> 프롬프트에서 대상 객체를 선택합니다.</li><li>Enter를 누르면 Front 기준 2D 결과가 생성됩니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/F2d_demo.mp4" autoplay muted loop playsinline aria-label="F2d 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>실행 결과</h2>
+<table class="desc-table"><colgroup><col style="width:20%"><col style="width:80%"></colgroup><tbody><tr><th>항목</th><th>설명</th></tr><tr><td>2D 곡선</td><td>선택 객체의 Front 입면 곡선을 생성합니다.</td></tr><tr><td>치수</td><td>명령 내부의 2D 처리 루틴에 따라 입면 치수를 작성합니다.</td></tr></tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

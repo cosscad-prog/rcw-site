@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>TC1 ~ TC13, TC20 ~ TC23, TCL - 01_Layer_Making</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>TC1 ~ TC13, TC20 ~ TC23, TCL &nbsp;—&nbsp; 01_Layer_Making</h1>
+<p><span class="cmd-box">TC1 ~ TC13</span><span class="cmd-box">TC20 ~ TC23</span><span class="cmd-box">TCL</span></p>
+<p><code>T_Center</code> 계열 Layer를 AutoCAD / BricsCAD 도면에 빠르게 생성하는 명령 모음입니다.</p>
+<h2>사용 목적</h2>
+<p>Transom 중심선 작업용 <code>T_Center</code> Layer를 번호와 색상 기준에 맞춰 빠르게 준비할 때 사용합니다.</p>
+<h2>포함 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:14%"><col style="width:46%"><col style="width:40%"></colgroup>
+  <tbody><tr><th>명령어</th><th>생성 Layer</th><th>Color / 속성</th></tr>
+  <tr><td><code>TCL</code></td><td><code>T_CenterXX</code> Layer를 만듭니다. 숫자, 문자 입력이 가능합니다.</td><td>숫자 입력 시 해당 CAD Color Number</td></tr>
+  <tr><td><code>TC1</code></td><td><code>T_Center1</code> Layer를 만듭니다.</td><td>20번 Color [CAD Color Number]</td></tr>
+  <tr><td><code>TC2</code></td><td><code>T_Center2</code> Layer를 만듭니다.</td><td>21번 Color [CAD Color Number]</td></tr>
+  <tr><td><code>TC3 ~ TC13</code></td><td>같은 방식으로 <code>T_Center3</code> ~ <code>T_Center13</code> Layer를 만듭니다.</td><td>각 명령 코드에 지정된 CAD Color Number</td></tr>
+  <tr><td><code>TC20 ~ TC23</code></td><td><code>T_Center20</code> ~ <code>T_Center23</code> Layer를 만듭니다.</td><td>각 명령 코드에 지정된 CAD Color Number</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>AutoCAD 또는 BricsCAD 명령창에 필요한 명령어를 입력하고 Enter를 누릅니다.</li>
+  <li><code>*L</code> 형식의 명령은 입력한 숫자 또는 문자를 기준 Layer 이름 뒤에 바로 붙여 Layer를 만듭니다.</li>
+  <li>숫자를 입력하는 경우 해당 숫자를 CAD Color Number로 사용합니다. 256보다 큰 숫자는 256으로 나눈 나머지 값을 Color Number로 사용합니다.</li>
+  
+  <li>Layer 목록에서 생성된 Layer 이름과 색상, Linetype을 확인합니다.</li>
+
+</ol>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어 계열</td><td><code>T_Center</code></td></tr>
+  <tr><td>대상 명령</td><td><code>TC1 ~ TC13</code>, <code>TC20 ~ TC23</code>, <code>TCL</code></td></tr>
+</tbody></table>
+<h2>실행 결과 확인</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Layer 이름</td><td>생성된 Layer 이름이 표의 생성 Layer와 일치하는지 확인합니다.</td></tr>
+  <tr><td>Layer Color</td><td>Color / 속성 열의 CAD Color Number 또는 RGB 값이 적용되었는지 확인합니다.</td></tr>
+  <tr><td>Linetype</td><td>Center 계열처럼 Linetype이 지정된 Layer는 Linetype 적용 상태도 함께 확인합니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

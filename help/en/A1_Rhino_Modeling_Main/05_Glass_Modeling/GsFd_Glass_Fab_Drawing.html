@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GsFd - Generate Glass Fabrication Drawing</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .warning { background:#fff2f2; border-left:4px solid #e05050; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .output-table { table-layout:fixed; }
+    .output-table td { word-break:keep-all; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>GsFd &nbsp;—&nbsp; Generate Glass Fabrication Drawing</h1>
+<p><span class="cmd-box">GsFd</span></p>
+<p>Automatically generates a <strong>fabrication drawing</strong> from selected glass Solid objects. Automatically creates 2D lines and dimensions for the front, back, side, and top views. The original 3D glass objects are automatically deleted after the drawing is generated.</p>
+
+<h2>Purpose</h2>
+<p>Used to automatically generate 2D fabrication drawings (front, back, side, top views with dimensions) from glass components. Automates the drawing process for glass manufacturing, with the 3D objects automatically deleted after drawing generation.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>GsFd</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the glass objects (Breps on the Glass layer) to generate drawings for, then press Enter. Group selection is supported.</li>
+  <li>Drawings are generated automatically in sequence for the number of selected objects. The command line shows progress as <code>N / Total  Working on [TypeName Fab_No]</code>.</li>
+  <li>The original 3D objects for which drawings are completed are automatically deleted.</li>
+</ol>
+<h2>Example</h2>
+<video src="../../../img/GsFd_demo.mp4" autoplay muted loop playsinline aria-label="GsFd operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+
+<h2>Generated Drawing Content</h2>
+<table class="desc-table output-table">
+  <colgroup><col style="width:20%"><col style="width:30%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>Drawing Element</th><th>Generation Condition</th><th>Description</th></tr>
+  <tr><td>Front View</td><td>Always generated</td><td>Projects the glass front surface to 2D and automatically writes width and height dimensions.</td></tr>
+  <tr><td>Back View</td><td>Always generated</td><td>Projects the glass back surface to 2D. Displayed with Hidden line type.</td></tr>
+  <tr><td>Side View (Right)</td><td>Always generated</td><td>Projects the glass right side to 2D and writes thickness-direction dimensions.</td></tr>
+  <tr><td>Top View</td><td>Always generated</td><td>Projects the glass top face to 2D. Glass specification (thickness string) is also displayed.</td></tr>
+  <tr><td>Dimensions</td><td>Based on current DimStyle</td><td>Automatically places width, height, and inclination dimensions on the front view based on current DimStyle settings.</td></tr>
+</tbody></table>
+<h2>Generated Layers</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Layer</th><th>Content</th></tr>
+  <tr><td><code>Glass_Fab</code></td><td>Fabrication drawing 2D lines (white, Continuous line type)</td></tr>
+  <tr><td><code>Dims</code></td><td>Dimension lines (yellow)</td></tr>
+</tbody></table>
+<h2>Prerequisites</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Condition</th><th>Description</th></tr>
+  <tr><td>Target Layer</td><td>Only objects on layers whose names start with <code>Glass</code> are processed.</td></tr>
+  <tr><td>Object Type</td><td>Must be a Brep (solid) containing <strong>Glass data (UserData)</strong>. If Glass data is missing, a <code>***** No Glass Data.</code> message appears and that object is skipped.</td></tr>
+  <tr><td>Original Deletion</td><td>Objects for which fabrication drawings are successfully generated are automatically deleted. Use <strong>Undo</strong> (Ctrl+Z) to revert.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>Gmd</strong></td><td>Glass surface modeling — create glass surfaces before generating drawings.</td></tr>
+  <tr><td><strong>GsNo</strong></td><td>Glass numbering — linked to the Fab_No in the drawing.</td></tr>
+  <tr><td><strong>GsTable</strong></td><td>Glass fabrication drawing table — create per-type tables alongside the drawings.</td></tr>
+  <tr><td><strong>GsList</strong></td><td>Glass quantity list — check quantities before generating drawings.</td></tr>
+</tbody></table>
+<div class="warning"><strong>Caution:</strong> The original 3D glass objects are <strong>automatically deleted</strong> after drawing generation. Save or back up the file before running.</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

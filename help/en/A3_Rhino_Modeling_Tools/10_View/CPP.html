@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CPP - View</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>CPP &nbsp;—&nbsp; View</h1>
+<p><span class="cmd-box">CPP</span></p>
+<p>A command to set the construction plane (CPlane) of the current active viewport using both the normal direction of the selected Surface and the direction of the selected Edge Line.</p>
+<h2>Purpose</h2>
+<p>Used as an auxiliary construction plane setting command when you need to establish a CPlane more clearly using the relationship between two Surfaces or reference objects. Used when a single Surface-based CP provides insufficient direction information.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <code>CPP</code> in the Rhino command line and press Enter.</li>
+  <li>At the <code>Select Surface Brep Objects</code> prompt, select the Surface to be used as the reference for the CPlane's surface direction.</li>
+  <li>At the <code>Select Edge Line</code> prompt, select the Edge to be used as the reference for the CPlane's origin and X-axis.</li>
+  <li>The CPlane of the active viewport is changed based on the selected Surface and Edge.</li>
+</ol>
+<h2>Operation Standards</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Surface Selection</td><td>Calculates the area centroid of the selected Surface, and uses the Normal at the closest UV position to the centroid as the reference for the CPlane's Z direction.</td></tr>
+  <tr><td>Edge Selection</td><td>Uses the start point of the selected Edge Curve as the CPlane origin.</td></tr>
+  <tr><td>X-Axis Reference</td><td>Uses the tangent direction at the start point of the selected Edge Curve as the CPlane X-axis.</td></tr>
+  <tr><td>Y-Axis Reference</td><td>Calculates the Y-axis using the cross product of the Surface Normal direction and Edge X-axis direction (<code>Z_Vec x X_Vec</code>).</td></tr>
+  <tr><td>Application Scope</td><td>Changes only the Construction Plane of the current active viewport.</td></tr>
+  <tr><td>View Change</td><td>Does not change the screen View direction. Changes only the working plane.</td></tr></tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Processing Result</td><td>CPlane is applied to the active viewport with the start point of the selected Edge as the origin and the Edge direction as the X-axis.</td></tr>
+  <tr><td>Grid Settings</td><td>Within the command, CPlane Grid Line Count is set to 10 and Grid Spacing is set to 10.</td></tr></tbody></table>
+
+<div class="note"><strong>Note:</strong> Both Surface and Edge must be selected correctly to create the intended CPlane. Since the start point direction of the Edge determines the origin and X-axis, select the Edge in the opposite direction if an opposite direction is needed.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

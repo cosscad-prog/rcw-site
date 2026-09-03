@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>SFB - 06_Insert_Form</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>SFB &nbsp;—&nbsp; 06_Insert_Form</h1>
+<p><span class="cmd-box">SFB</span></p>
+<p>
+  A command that <strong>selects drawing template (Form) block and saves it in memory</strong>.<br>
+  When <code>FFB</code> command is executed later, Form is automatically inserted at scale and position matching drawing based on this reference.<br>
+  AutoCAD / BricsCAD only — not available in Rhino.
+</p>
+<h2>Purpose</h2>
+<p>
+  By pre-selecting company-specific drawing template (Form) block, <code>FFB</code> automatically calculates
+  scale matching drawing size and inserts Form. <code>SFB</code> only handles Form selection and
+  saves ObjectID of selected block, text placeholders, and polyline in static variables.
+</p>
+<h2>Required Form Components</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>Component</th><th>Role</th></tr>
+  <tr><td>BlockReference (Form Block)</td><td>Drawing template block body. Must be included in SFB selection range.</td></tr>
+  <tr><td>MText/DBText — <code>Scale</code> Layer<br>or text with content "Scale"</td><td>Scale notation placeholder. FFB replaces with automatically calculated scale string (<code>1 / N</code>).</td></tr>
+  <tr><td>MText/DBText — <code>Qnt</code> Layer<br>or text with content "Qnt"</td><td>Quantity notation placeholder. FFB replaces with quantity text read from drawing.</td></tr>
+  <tr><td>Other MText/DBText</td><td>Drawing number notation placeholder. FFB replaces with drawing name text.</td></tr>
+  <tr><td>Polyline</td><td>Boundary polyline for AutoPlot. FFB copies and places with Form.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Verify that drawing file has company Form block, text placeholders (Scale, Qnt, drawing number), and Polyline placed.</li>
+  <li>Enter <code>SFB</code> in command line and press Enter.</li>
+  <li>At <em>"Select Frame-form!"</em> prompt, select all Form block, text, and Polyline together and press Enter.</li>
+  <li>Selected Form information is saved in memory. Subsequently, insert Form into drawing with <code>FFB</code>.</li>
+
+
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../img/C2310_SFB_Form.png" alt="SFB — Form component example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>SFB — Form block and component selection example</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Selection Target</td><td>Select Form block, text placeholders (drawing number, Scale, Qnt), and Polyline <strong>together</strong>.</td></tr>
+  <tr><td>Saved Content</td><td>Saves block name, block position, Scale/Qnt/drawing number text ObjectID, and Polyline ObjectID in static variables.</td></tr>
+  <tr><td>AutoScale.dat</td><td>After selection is complete, reads <code>AutoScale.dat</code> and loads profile data into memory.</td></tr>
+  <tr><td>Layer Auto-Creation</td><td>If <code>WS-PLOT-1</code> (color 1) and <code>Qnt</code> (color 0) layers do not exist, they are automatically created.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD (Rhino not supported)</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> <code>SFB</code> saves Form information only in memory and does not insert anything in drawing.
+  Actual Form insertion is performed with <code>FFB</code>. When session ends, saved information is reset, so
+  after starting new session, must execute <code>SFB</code> first before executing <code>FFB</code>.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> SFB is not available in Rhino (AutoCAD / BricsCAD only).<br>
+  If Form block does not have <code>Scale</code> / <code>Qnt</code> / drawing number text, those items will not be filled when FFB is executed.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

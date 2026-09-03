@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Y0, Z0 - 06_Move_Zero</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; max-width:820px; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>Y0, Z0 &nbsp;—&nbsp; 06_Move_Zero</h1>
+<p><span class="cmd-box">Y0</span><span class="cmd-box">Z0</span></p>
+<p>A collection of simple origin alignment commands that aligns selected objects to the 0 reference plane of a specified axis.</p>
+<h2>Purpose</h2>
+<p>Use to quickly align objects on different planes to a reference plane by setting specific coordinate values of selected objects (Lines, Points, etc.) to 0.</p>
+<h2>Command Summary</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:16%"><col style="width:24%"><col style="width:30%"><col style="width:30%"></colgroup>
+  <tr><th>Command</th><th>Coordinate Set to 0</th><th>Curve/Line Processing</th><th>Point/Text Processing</th></tr>
+  <tr><td><code>Y0</code></td><td>Y = 0</td><td>Project to XZ plane</td><td>Move Y coordinate to 0 only</td></tr>
+  <tr><td><code>Z0</code></td><td>Z = 0</td><td>Project to XY plane</td><td>Move Z coordinate to 0 only</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Enter the required command (Y0 or Z0) in the AutoCAD or BricsCAD command line.</li>
+  <li>Select the objects to align to the 0 reference plane.</li>
+  <li>Press Enter and the selected objects will be aligned to the 0 reference of the corresponding axis.</li>
+</ol>
+<div class="note"><strong>Note:</strong> This document is organized using the same standards as Rhino's X0, Y0, Z0 documentation. Currently, only Y0 and Z0 commands are included in the AutoCAD / BricsCAD section.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

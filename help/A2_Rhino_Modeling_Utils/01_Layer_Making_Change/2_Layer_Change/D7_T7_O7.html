@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>D7, T7, O7 - 자주 쓰는 Layer 변경</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+<h1>D7, T7, O7 &nbsp;—&nbsp; 자주 쓰는 Layer 변경</h1>
+<p><span class="cmd-box">D7</span><span class="cmd-box">T7</span><span class="cmd-box">O7</span></p>
+<p>선택 객체를 자주 사용하는 기본 Layer로 빠르게 보내는 레이어 변경 명령 모음입니다.</p>
+<h2>사용 목적</h2>
+<p>작업 중 흩어진 객체를 <code>Default</code>, <code>Text</code>, <code>OutLines</code> 같은 자주 쓰는 Layer로 즉시 정리해 모델링과 도면 작업의 분류를 빠르게 맞출 때 사용합니다.</p>
+<h2>명령어 정리</h2>
+<table class="desc-table">
+  <colgroup><col style="width:18%"><col style="width:26%"><col style="width:18%"><col style="width:38%"></colgroup>
+  <tr><th>명령어</th><th>이동 Layer</th><th>Color</th><th>사용 상황</th></tr>
+  <tr><td><code>D7</code></td><td><code>Default</code></td><td>White</td><td>임시 객체나 분류 전 객체를 기본 Layer로 되돌릴 때 사용합니다.</td></tr>
+  <tr><td><code>T7</code></td><td><code>Text</code></td><td>White</td><td>도면 문자, 표기, 주석 객체를 Text Layer로 모을 때 사용합니다.</td></tr>
+  <tr><td><code>O7</code></td><td><code>OutLines</code></td><td>White</td><td>외곽선이나 출력용 윤곽선을 OutLines Layer로 정리할 때 사용합니다.</td></tr>
+</table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <code>D7</code>, <code>T7</code>, <code>O7</code> 중 필요한 명령을 입력합니다.</li>
+  <li>해당 Layer로 보낼 객체를 선택합니다.</li>
+  <li>Enter를 누르면 선택 객체가 지정 Layer로 이동합니다.</li>
+</ol>
+<div class="note"><strong>참고:</strong> 세 명령은 객체를 빠르게 정해진 Layer로 보내는 용도입니다. 현재 Layer를 바꾸는 명령이 아니라 선택 객체의 Layer를 변경하는 명령으로 이해하면 됩니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

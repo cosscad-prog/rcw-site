@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FabTable - Frame Fabrication Number Table</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { max-width:600px; border:1px solid #ccc; background:#fff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>FabTable &nbsp;—&nbsp; Frame Fabrication Number Table</h1>
+<p><span class="cmd-box">FabTable</span></p>
+<p><strong>FabTable</strong> tallies selected frame ProfileData by Profile name and Fab No, then lays out a copy of each member's shape along with quantity information in table form.</p>
+
+<h2>Purpose</h2>
+<p>Used to create a fabrication reference table showing member shapes, quantities, and Fab No information. Provides a visual overview of all members to be fabricated, with shape copies and dimensions for quick reference during fabrication planning and verification.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Use <code>FabNo</code> to write fabrication numbers first.</li>
+  <li>Type <code>FabTable</code> in the Rhino command line and press Enter.</li>
+  <li>If needed, switch <code>Unit_No_On</code> to On.</li>
+  <li>To build a table without accessories, switch <code>Accessory</code> to Off. (Default is On.)</li>
+  <li>At the <strong>Select Group and/or NBlock Objects for FabTable</strong> prompt, select target Breps or NBlocks.</li>
+  <li>Pick the table start position — a table is generated per Profile.</li>
+</ol>
+<h2>Example</h2>
+<video src="../../../../img/FabTable_demo.mp4" autoplay muted loop playsinline aria-label="FabTable operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+<div class="demo-images"></div>
+<h2>Selection Modes</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Mode</th><th>Description</th></tr>
+  <tr><td>Group Mode</td><td>Extracts ProfileData directly from selected Breps. Standard Blocks are excluded from Group Mode in this command.</td></tr>
+  <tr><td>Block Mode</td><td>Reads Breps and nested Block information inside NBlocks to reflect quantities.</td></tr>
+  <tr><td>Mixed Mode</td><td>Merges Brep results and NBlock internal results to build the table.</td></tr></tbody>
+</table>
+<h2>Options</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Option</th><th>Result when On</th></tr>
+  <tr><td><code>Unit_No_On</code></td><td>Displays the Unit No alongside the member name in the table. Example: <code>Profile-UnitNo F1</code></td></tr>
+  <tr><td><code>Accessory</code></td><td>Includes accessories (members whose Material ID in Pname is <code>3. Accessory</code>) in the table. On by default; when Off, accessory tables are not generated at all. Applies to Group, Block, and Mixed modes alike. Shapes attached to a main member as brackets and copied along with it are not affected by this option.</td></tr></tbody>
+</table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Table Frame</td><td>Creates a cell per Profile showing Profile name, Fab No, quantity, and Length.</td></tr>
+  <tr><td>Shape Copies</td><td>Profile Brep and related centerlines/brackets are copied and placed at the table position.</td></tr>
+  <tr><td>Layers</td><td>Text mainly uses <code>Text</code>; member name/quantity uses <code>Profile_No_Qnt</code>; shapes use the <code>Profiles</code> layer.</td></tr></tbody>
+</table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>FabNo</code></td><td>Writes Fab No and ProfileData required for table generation.</td></tr>
+  <tr><td><code>FDwg</code></td><td>Generates individual member fabrication drawings.</td></tr>
+  <tr><td><code>Molist</code></td><td>Creates a quantity/weight list.</td></tr></tbody>
+</table>
+<div class="note"><strong>Note:</strong> If the CPlane origin Y value is not 0 when FabTable runs, the command corrects it to Y=0.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

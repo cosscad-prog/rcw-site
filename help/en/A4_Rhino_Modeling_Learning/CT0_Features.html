@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>CT0 - The Center0 Feature</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0 0 16px; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    .image-row { display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; margin:14px 0 8px; }
+    .image-row figure { margin:0; flex:1 1 220px; }
+    .image-row img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .image-row figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>CT0 &nbsp;—&nbsp; The Center0 Feature</h1>
+<p><span class="cmd-box">CT0</span></p>
+<p>Feature to use <code>Center0</code> instead of <code>Center1</code> to maintain Transom direction vertically regardless of Mullion angle.</p>
+<h2>Mullion Reference</h2>
+<p>Mullion has a separate direction point, so the <code>Center1</code> points in Mullion Section are aligned to the start point, end point, and direction point of the Mullion Line.</p>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Section Reference Point</th><th>Mullion Line Alignment Basis</th></tr>
+  <tr><td>P1</td><td>Aligns to the start point M1 of the Mullion Line.</td></tr>
+  <tr><td>P2</td><td>Vertical direction point of Center1 start point and aligns to the end point M2 of the Mullion Line.</td></tr>
+  <tr><td>P3</td><td>Center1 end point and aligns to the direction point M3 of the Mullion Line.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../img/Mullion_02.png" alt="Mullion Center1 direction point alignment example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Example of Center1 being aligned based on Mullion Line direction point</figcaption>
+  </figure>
+</div>
+<h2>Transom Reference</h2>
+<p>Transom does not have a separate direction point; it creates direction points based on two Mullions on either side. When both Mullions have the same direction, the midpoint between the two Mullion end points becomes the direction point for Transom <code>Center1</code>.</p>
+<p>When the two Mullions have different directions, a midpoint that leans toward neither side is used. In this case, the glass plane of the Mullion and the glass plane of the Transom may not align exactly, and the Transom may be modeled at a slight backward angle.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../img/Transom_Direction_01.png" alt="Transom direction point example 1" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Figure 1: Transom direction point based on two Mullions</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../img/Transom_Direction_02.png" alt="Transom direction point example 2" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Figure 2: Transom shape with Mullions of different directions</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../img/Transom_Direction_03.png" alt="Transom direction point example 3" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Figure 3: Maintaining vertical direction when using Center0</figcaption>
+  </figure>
+</div>
+<h2>CT0 Application</h2>
+<p>Like Unit Head and Sill, when you need to maintain a horizontal or vertical reference regardless of Mullion angle, write the direction line as <code>Center0</code> instead of <code>Center1</code>. Using the command <code>CT0</code> ensures that the Transom direction always appears vertical.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 35%; min-width:220px; max-width:35%;">
+    <img src="../../img/Transom_Direction_04.png" alt="Center0 CT0 application example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Example of maintaining Transom direction vertically by using Center0 instead of Center1</figcaption>
+  </figure>
+</div>
+<div class="note"><strong>Note:</strong> Use <code>Center1</code> for regular Transoms that must follow Mullion direction, and use <code>Center0</code> for conditions like Head/Sill that must maintain a constant direction.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

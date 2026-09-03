@@ -39,7 +39,31 @@ python -m http.server 8000
 ## 배포
 
 Vercel + GitHub 연동. 프레임워크 프리셋 `Other`, 빌드 명령 없음, 출력 디렉터리 루트.
-`vercel.json`의 `cleanUrls`로 `/modeling.html` 대신 `/modeling` 주소를 쓴다.
+`vercel.json`의 rewrite(`/(.*)` → `/$1.html`)로 `/modeling.html` 대신 `/modeling` 주소도 열린다.
+
+> ⚠ 예전에는 `cleanUrls: true` 였다. 그것은 `/a/b.html` 을 `/a/b` 로 **리다이렉트**하기 때문에
+> 도움말의 폴더 index 페이지(`.../1.Elements/index.html`)가 `/.../1.Elements` 로 열리고,
+> 그 안의 상대링크·이미지가 한 단계 위로 풀려 전부 깨진다. 그래서 리다이렉트가 없는
+> rewrite 로 바꿨다 — 주소는 그대로 두고 파일만 찾아준다(정적 파일이 먼저, 없을 때만 `.html` 을 붙인다).
+
+## 도움말 (/help)
+
+플러그인에 들어가는 도움말(`C:\std\RCW_V4_13.3\help`)을 **그대로 복사해** 웹에 올린다.
+주소는 <https://rcw-site.vercel.app/help> 이고 로그인 없이 누구나 볼 수 있다.
+
+```powershell
+pwsh -File .\publish-help.ps1            # 복사만
+pwsh -File .\publish-help.ps1 -Commit    # 복사 + 커밋 + 푸시(배포)
+```
+
+- **`help\` 안을 손으로 고치지 말 것.** 원본은 플러그인 저장소 한 곳뿐이고,
+  이 스크립트가 `robocopy /MIR` 로 미러링하므로 손으로 고친 것은 다음 실행 때 사라진다.
+  도움말을 고칠 때는 도움말 편집기로 원본을 고치고 스크립트를 다시 돌린다.
+- 편집기·임베디드 파이썬·집필 지침(`*.md`)·편집기 백업(`*.bak`)은 복사에서 빠진다.
+- `help\index.html` 은 `/help` 로 들어온 사람을 프레임으로 보내는 스크립트 생성물이다
+  (원본에는 없다). 매 실행마다 다시 만들어진다.
+- 도움말 문서를 고친 뒤에는 검색 인덱스도 다시 만들어야 한다:
+  `python help/build_search_index.py` (편집기로 저장하면 자동).
 
 ## 남은 작업
 

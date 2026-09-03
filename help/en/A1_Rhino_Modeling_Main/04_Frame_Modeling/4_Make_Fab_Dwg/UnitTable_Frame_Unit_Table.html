@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>UnitTable - Unit Elevation Table</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { max-width:600px; border:1px solid #ccc; background:#fff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>UnitTable &nbsp;—&nbsp; Unit Elevation Table</h1>
+<p><span class="cmd-box">UnitTable</span></p>
+<p><strong>UnitTable</strong> aggregates the selected <code>NBlock</code> units by block name, then lays out one representative elevation per unit side by side with the name and quantity below each.</p>
+<h2>Purpose</h2>
+<p>Use it to place an elevation overview of the curtain-wall units (NBlocks) on the drawing. The elevations are spaced generously so you can follow up with <code>UF2D</code> to add the member fablist and dimensions beside each elevation.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Create the unit blocks first with <code>NBlock</code>.</li>
+  <li>Type <code>UnitTable</code> in the Rhino command line and press Enter.</li>
+  <li>At the <strong>Select NBlock unit objects</strong> prompt, select the target NBlocks.</li>
+  <li>Pick the table start position — one elevation is placed per unit type.</li>
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 85%; min-width:220px; max-width:85%;">
+    <video src="../../../../img/UnitTable.mp4" autoplay muted loop playsinline aria-label="UnitTable example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Elevation layout</td><td>Duplicates one representative unit per block name and places them side by side. The spacing between units is four times that unit's width (BoundingBox X length), leaving room for <code>UF2D</code> to lay out the fablist and dimensions.</td></tr>
+  <tr><td>Name &amp; quantity</td><td>Writes the block name and <code>Qnt-N</code> below each elevation. The quantity is the count of same-named units within the selection.</td></tr>
+  <tr><td>Profile table</td><td>Not created. (Unlike VtTable, there is no lower profile table.)</td></tr>
+  <tr><td>Layer</td><td>Name/quantity text uses the <code>Profile_No_Qnt</code> layer.</td></tr>
+</tbody></table>
+<h2>Notes</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Unit name</td><td>The unit name is the <code>NBlock</code> block definition name as-is (e.g. <code>PL0</code>, <code>LT2</code>). NBlock has no separate Fab number like Vent, so only the name is shown.</td></tr>
+  <tr><td>Selection</td><td>Only InstanceReferences whose Description starts with <code>NBlock:</code> (NBlocks) are aggregated. Regular blocks are ignored.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>NBlock</code></td><td>Creates a named unit block from the selection.</td></tr>
+  <tr><td><code>UF2D</code></td><td>Auto-generates sections, dimensions, and a fablist for the placed unit elevation.</td></tr>
+  <tr><td><code>UnitList</code></td><td>Outputs unit names and quantities as a list table.</td></tr>
+  <tr><td><code>FabTable</code></td><td>Lays out per-profile shapes and quantities as a table.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> If the CPlane origin Y is not 0 while UnitTable runs, the command corrects it to Y=0.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>License / Version - 라이선스와 버전</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:6px; margin-bottom:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .out { font-family:Consolas,monospace; font-size:12px; background:#f6f8fb; border:1px solid #dde5ef; border-radius:4px; padding:8px 10px; margin-top:8px; white-space:pre-wrap; color:#123b63; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>License / Version &nbsp;—&nbsp; 라이선스와 버전</h1>
+<p>
+  <span class="cmd-box">RCWMachineCode</span>
+  <span class="cmd-box">RCWLicense</span>
+  <span class="cmd-box">RCWCustomerCode</span>
+  <span class="cmd-box">RCWVersion</span>
+  <span class="cmd-box">RCWUpdate</span>
+</p>
+<p>
+  도면을 그리는 명령이 아니라 <b>설치·인증·버전</b>을 다루는 관리 명령들입니다.
+  <b>모델과 도면을 전혀 바꾸지 않습니다.</b> 성격이 같아 한 문서에 모았습니다.
+</p>
+
+<h2>이 문서가 다루는 것</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>이름</th><th>하는 일</th></tr>
+  <tr><td><code>RCWMachineCode</code></td><td>이 PC 의 <b>머신코드</b>를 보여 주고 클립보드에 복사합니다. 라이선스를 요청할 때 씁니다.</td></tr>
+  <tr><td><code>RCWLicense</code></td><td>받은 <b>라이선스 파일(.lic)</b> 을 가져옵니다. 현재 라이선스 상태도 함께 보여 줍니다.</td></tr>
+  <tr><td><code>RCWCustomerCode</code></td><td>안내 메일로 받은 <b>고객 코드</b>를 이 컴퓨터에 <b>한 번 적어 둡니다.</b> 그 뒤로는 <code>RCWVersion</code> 이 계속 알려 줍니다.</td></tr>
+  <tr><td><code>RCWVersion</code></td><td>지금 돌고 있는 <b>빌드</b>의 버전·에디션·빌드 날짜와 파일 경로를 보여 줍니다. <b>적어 둔 고객 코드</b>도 함께 나옵니다.</td></tr>
+  <tr><td><code>RCWUpdate</code></td><td><b>새 버전</b>이 나왔는지 확인합니다. 시작할 때의 자동 확인을 켜고 끕니다.</td></tr>
+  <tr><td><b>고객 코드</b></td><td>고객 페이지에 <b>로그인</b>할 때 쓰는 코드로, 안내 메일로 받으십니다. 아래 <b>코드가 두 가지입니다</b> 절을 보십시오.</td></tr>
+</tbody></table>
+
+<h2>처음 활성화하는 순서 (Core · Standard)</h2>
+<ol class="step-list">
+  <li>Rhino 를 실행합니다. 라이선스 파일이 없으면 <b>머신코드가 명령창에 저절로 표시되고 클립보드에 복사</b>됩니다.
+      놓쳤다면 <code>RCWMachineCode</code> 를 직접 실행하십시오.</li>
+  <li>고객 페이지 <code>rcw-site.vercel.app/customer</code> 에 접속해 <b>고객 코드</b>로 로그인합니다.</li>
+  <li>화면 아래 라이선스 칸의 <b>머신코드 입력란</b>에 1번의 코드를 붙여넣고 <b>[라이선스 요청]</b> 을 누릅니다.</li>
+  <li>보통 <b>1분 안에</b> 같은 자리에 <b>[라이선스 내려받기]</b> 버튼이 나타납니다. 화면이 저절로 바뀌므로 새로고침하지 않으셔도 됩니다.</li>
+  <li>내려받은 <code>.lic</code> 파일을 안전한 위치에 저장합니다.</li>
+  <li>Rhino 명령창에 <code>RCWLicense</code> 를 입력하고 그 <code>.lic</code> 파일을 고릅니다.</li>
+  <li>가져오기 성공 메시지를 확인한 뒤 <b>Rhino 를 다시 시작</b>합니다.</li>
+  <li>가져오기가 끝나면 <b>고객 코드를 적어 둘지 그 자리에서 물어봅니다.</b> 2번에서 로그인에 쓰신 코드를
+      붙여넣으십시오 — 메일을 잃어버려도 다시 찾을 수 있습니다. 나중에 하려면 <code>RCWCustomerCode</code>.</li>
+</ol>
+<div class="warn">
+  <b>라이선스 파일을 Program Files 폴더에 직접 복사하지 마십시오.</b>
+  반드시 <code>RCWLicense</code> 명령으로 가져와야 합니다.
+</div>
+
+<h2>코드가 두 가지입니다 — 헷갈리지 마십시오</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:26%"><col style="width:54%"></colgroup>
+  <tbody><tr><th>이름</th><th>생김새</th><th>어디서 나오고 어디에 쓰나</th></tr>
+  <tr><td><b>고객 코드</b><br>(라이선스 코드)</td><td><code>RCW-XXXX-XXXX-XXXX</code></td>
+      <td><b>안내 메일</b>로 받으십니다. <b>고객 페이지에 로그인</b>할 때 씁니다.
+          사람마다 하나이고 PC 를 바꿔도 그대로입니다.</td></tr>
+  <tr><td><b>머신코드</b></td><td><code>RCW5-CO-…</code> (Core)<br><code>RCW5-ST-…</code> (Standard)</td>
+      <td><b>Rhino 가 알려주는</b> 값입니다. 로그인한 뒤 <b>라이선스를 요청</b>할 때 씁니다.
+          <b>PC 마다 다릅니다.</b></td></tr>
+</tbody></table>
+<div class="note">
+  로그인이 안 될 때는 대개 두 코드를 <b>바꿔 넣은</b> 경우입니다.
+  로그인 칸에 들어가는 것은 <code>RCW-</code> 로 시작하는 <b>고객 코드</b>이고,
+  <code>RCW5-</code> 로 시작하는 머신코드는 <b>로그인한 다음</b> 화면 아래에 넣습니다.<br>
+  <b>고객 코드가 기억나지 않으면</b> <code>RCWVersion</code> 을 실행하십시오 — 한 번 적어 두었다면 거기 나옵니다.
+</div>
+
+<h2>RCWMachineCode — 머신코드 확인</h2>
+<p>실행하면 머신코드를 명령창에 한 줄 찍고 <b>클립보드에 복사</b>합니다. 그대로 고객 페이지에 붙여넣으면 됩니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>언제 쓰나</td><td>라이선스를 <b>처음 받을 때</b>, 그리고 <b>PC 를 바꾸거나</b> 머신코드가 달라져 재발급이 필요할 때.</td></tr>
+  <tr><td>값이 정해지는 방식</td><td>Windows 가 그 PC 에 부여한 값에서 만들어집니다. <b>같은 PC 면 늘 같은 코드</b>가 나옵니다.</td></tr>
+  <tr><td>에디션 표시</td><td>앞의 <code>CO</code>·<code>ST</code> 가 Core·Standard 를 뜻합니다. 에디션이 다르면 <b>코드도 다릅니다.</b></td></tr>
+  <tr><td>보낼 곳</td><td>고객 페이지 또는 발급 담당자에게만 보내십시오.</td></tr>
+</tbody></table>
+<div class="note">
+  머신코드를 못 만들면 <b>Windows 의 MachineGuid 를 읽지 못했다</b>는 메시지가 나오고 명령이 실패합니다.
+  이때는 화면을 캡처해 함께 보내 주십시오.
+</div>
+
+<h2>RCWLicense — 라이선스 파일 가져오기</h2>
+<ol class="step-list">
+  <li>명령을 실행하면 <b>현재 라이선스 상태가 먼저 한 줄</b> 나옵니다.</li>
+  <li>이어서 파일 열기 창이 뜹니다. 내려받은 <code>.lic</code> 파일을 고릅니다.</li>
+  <li>가져온 뒤 <b>상태를 다시 한 줄</b> 찍습니다. 성공이면 "RCW 라이선스 파일을 가져왔습니다".</li>
+  <li>적어 둔 고객 코드가 없으면 <b>여기서 한 번 물어봅니다.</b> 붙여넣거나 <b>Enter</b> 로 건너뛰십시오.</li>
+  <li><b>Rhino 를 다시 시작</b>하면 적용됩니다.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>파일 형식</td><td><code>*.lic</code> 한 개. 여러 개를 한꺼번에 고를 수 없습니다.</td></tr>
+  <tr><td>취소</td><td>파일 창에서 <b>취소</b>를 눌러도 됩니다. 이미 있던 라이선스는 그대로입니다.</td></tr>
+  <tr><td>실패했을 때</td><td>"가져오지 못했습니다" 가 나오면 <b>다른 PC 의 파일</b>이거나 <b>기간이 지난 파일</b>일 수 있습니다.
+      바로 위에 찍힌 상태 줄을 함께 보내 주십시오.</td></tr>
+  <tr><td>인터넷</td><td><b>필요 없습니다.</b> 라이선스 확인은 파일의 서명으로 <b>오프라인</b>에서 끝납니다.</td></tr>
+  <tr><td>고객 코드 물음</td><td>가져오기가 <b>성공했을 때</b>, 그리고 <b>적어 둔 코드가 없을 때만</b> 묻습니다.
+      무엇을 하시든(건너뛰든, 형식이 틀리든) <b>라이선스 가져오기 결과는 바뀌지 않습니다.</b></td></tr>
+</tbody></table>
+
+<h2>RCWCustomerCode — 고객 코드 적어 두기</h2>
+<p>
+  고객 코드는 <b>안내 메일에만</b> 있습니다. 라이선스 파일 안에도 없고 화면 어디에도 나오지 않습니다.
+  몇 달 뒤 PC 를 바꾸거나 설치 파일을 다시 받으려 할 때 그 메일을 못 찾는 일이 잦습니다.
+  <b>라이선스 파일을 한 번 등록해 두듯이</b> 코드도 한 번 적어 두십시오.
+</p>
+<p>
+  <b>처음 등록하는 자리는 <code>RCWLicense</code> 입니다</b> — 라이선스를 가져오고 나면 그 자리에서 물어봅니다.
+  이 명령은 <b>나중에 등록하거나, 바꾸거나, 지울 때</b> 씁니다.
+</p>
+<ol class="step-list">
+  <li><code>RCWCustomerCode</code> 를 실행합니다. 적어 둔 것이 있으면 <b>먼저 보여 주고 클립보드에 복사</b>합니다.</li>
+  <li>명령창이 코드를 묻습니다. 안내 메일의 코드를 <b>붙여넣고 Enter</b> 를 누릅니다.</li>
+  <li>저장했다는 메시지가 나오면 끝입니다. 그 뒤로는 <code>RCWVersion</code> 에 늘 함께 나옵니다.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>조작</th><th>결과</th></tr>
+  <tr><td><b>Enter</b> 만 누르기</td><td>아무것도 바꾸지 않습니다. <b>보기만</b> 하고 나올 때 이렇게 하십시오.</td></tr>
+  <tr><td>새 코드 붙여넣기</td><td>적어 둔 것을 <b>바꿉니다.</b></td></tr>
+  <tr><td><b>Remove</b> 옵션</td><td>적어 둔 코드를 <b>지웁니다.</b> 코드 자체가 없어지는 것은 아닙니다 — 이 컴퓨터의 기록만 지웁니다.</td></tr>
+</tbody></table>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>입력 형태</td><td>하이픈이 있어도 없어도, 대소문자가 섞여도 <b>받습니다.</b> 저장은 대문자로 맞춰 둡니다.</td></tr>
+  <tr><td>받는 것</td><td><code>RCW-</code> 로 시작하는 코드. <code>V5KO-</code> 로 시작하는 <b>옛 코드도 그대로 받습니다</b> — 고객 페이지도 아직 받습니다.</td></tr>
+  <tr><td>거절되는 경우</td><td>접두사가 <code>RCW-</code>·<code>V5KO-</code> 가 아니거나, 영숫자가 <b>8자 미만·40자 초과</b>일 때.
+      거절되어도 <b>이미 적어 둔 코드는 그대로 남습니다.</b></td></tr>
+  <tr><td>머신코드를 넣으면</td><td><b>거절하고 이유를 말합니다.</b> <code>RCW5-CO-…</code>·<code>RCW5-ST-…</code> 는 머신코드이지 고객 코드가 아닙니다.
+      한 글자 차이라 가장 흔한 실수입니다.</td></tr>
+  <tr><td>저장되는 곳</td><td>라이선스 파일 <b>옆</b>입니다. 재설치해도 남고, 고객이 여는 편집 폴더가 아니라 실수로 지울 일이 적습니다.</td></tr>
+  <tr><td>인터넷</td><td><b>쓰지 않습니다.</b> 코드가 맞는지 확인하려고 어디에 물어보지 않습니다 — 모양만 봅니다.</td></tr>
+</tbody></table>
+<div class="warn">
+  이 코드는 고객 페이지에 <b>로그인하는 열쇠</b>입니다. 적어 두면 이 컴퓨터의 파일에 그대로 남으므로,
+  <b>여러 사람이 함께 쓰는 Windows 계정</b>에서는 적어 두지 않는 편이 낫습니다.
+  <code>RCWCustomerCode</code> 의 <b>Remove</b> 로 언제든 지울 수 있습니다.
+</div>
+
+<h2>RCWVersion — 어느 빌드가 돌고 있나</h2>
+<p>지원을 요청하실 때 <b>가장 먼저 필요한 정보</b>입니다. 실행하면 두 줄이 나옵니다.</p>
+<div class="out">RCW V5  5.1.2  Standard  net48  build 2026-08-14
+C:\Program Files\...\RCW_V5.rhp
+고객 코드: RCW-1A2B-3C4D-5E6F</div>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>값</th><th>뜻</th></tr>
+  <tr><td><code>5.1.2</code></td><td>버전 번호. 뒤에 <code>-trial</code> 같은 꼬리가 붙으면 그 빌드의 성격을 나타냅니다.</td></tr>
+  <tr><td><code>Standard</code></td><td>에디션. <code>Core</code> · <code>Standard</code> · <code>Internal</code> 중 하나이며, 평가판이면 <code>Trial</code> 이 함께 표시됩니다.</td></tr>
+  <tr><td><code>net48</code></td><td>돌고 있는 .NET 종류. Rhino 8 은 설정에 따라 다른 값이 나올 수 있습니다.</td></tr>
+  <tr><td><code>build …</code></td><td>그 빌드를 만든 날짜.</td></tr>
+  <tr><td>두 번째 줄</td><td><b>실제로 로드된 파일의 경로</b>입니다. 옛 버전이 지워지지 않고 남아 있을 때 이 줄이 답을 줍니다.</td></tr>
+  <tr><td>세 번째 줄</td><td><code>RCWCustomerCode</code> 로 <b>적어 둔 고객 코드</b>입니다. 적어 둔 것이 없으면 등록하라는 안내가 대신 나옵니다.</td></tr>
+</tbody></table>
+<div class="note">같은 줄이 <b>Rhino 를 켤 때도 한 번</b> 명령창에 나옵니다. 명령을 실행하지 않아도 위로 스크롤하면 볼 수 있습니다.</div>
+
+<h2>RCWUpdate — 새 버전 확인</h2>
+<p><b>알리기만 합니다.</b> 내려받거나 설치하지 않습니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>조작</th><th>결과</th></tr>
+  <tr><td><b>Enter</b></td><td>지금 확인합니다. 최신이면 "최신 버전입니다", 새 버전이 있으면 새 버전과 설치된 버전을 알려 주고
+      <b>다운로드 페이지를 열까요?</b> 라고 묻습니다.</td></tr>
+  <tr><td><b>AutoCheck</b></td><td>시작할 때의 <b>자동 확인</b>을 켜고 끕니다. 끄면 그 뒤로 아무것도 확인하지 않습니다.</td></tr>
+</tbody></table>
+<p>자동 확인은 이렇게 동작합니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>횟수</td><td><b>하루 한 번</b>, Rhino 시작이 끝난 뒤에 조용히 확인합니다. 시작을 붙들지 않습니다.</td></tr>
+  <tr><td>보내는 정보</td><td><b>없습니다.</b> 홈페이지의 버전 목록 파일 하나를 읽어 올 뿐이며,
+      머신코드·라이선스·도면은 <b>어디에도 보내지 않습니다.</b></td></tr>
+  <tr><td>실패했을 때</td><td><b>아무 말도 하지 않습니다.</b> 폐쇄망·방화벽 안에서도 경고가 뜨지 않습니다.
+      이유가 궁금하면 <code>RCWUpdate</code> 를 직접 실행하십시오 — 그때는 결과를 반드시 답합니다.</td></tr>
+  <tr><td>같은 창 반복</td><td>같은 새 버전으로 <b>창을 두 번 띄우지 않습니다.</b> 명령창 줄은 계속 남습니다.</td></tr>
+</tbody></table>
+<div class="note">설치하려면 <b>Rhino 를 닫아야 합니다.</b> 돌고 있는 동안에는 플러그인 파일이 잠겨 덮어쓸 수 없습니다.</div>
+
+<h2>PC 를 바꾸거나 다시 설치할 때</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>상황</th><th>해야 할 일</th></tr>
+  <tr><td>같은 PC 에 다시 설치</td><td>머신코드가 그대로이므로 <b>가지고 계신 <code>.lic</code> 을 <code>RCWLicense</code> 로 다시 가져오면</b> 됩니다.</td></tr>
+  <tr><td>도움말 언어를 바꾸려고 다시 설치</td><td>같은 설치 파일로 다른 언어를 골라 설치한 뒤, <b>같은 <code>.lic</code> 을 다시 가져오십시오.</b></td></tr>
+  <tr><td>PC 교체 · 머신코드 변경</td><td><b>새 라이선스가 필요합니다.</b> 고객 페이지에서 요청하시면 담당자 확인을 거쳐 발급됩니다.</td></tr>
+  <tr><td>같은 회사의 다른 사람</td><td>라이선스는 <b>PC 한 대당 하나</b>입니다. 사람마다 따로 받으셔야 합니다.</td></tr>
+</tbody></table>
+
+<h2>평가판(Trial)은 라이선스 파일이 필요 없습니다</h2>
+<p>
+  Core Trial 은 Core 범위로 <b>90일</b>, Standard Trial 은 전체 명령 범위로 <b>30일</b> 동작합니다.
+  기간은 <b>최초 정상 실행일</b>부터 세며, 같은 Windows 사용자 계정에서 재설치해도 시작일이 되돌아가지 않습니다.
+  두 평가 기간은 서로 독립입니다.
+</p>
+<div class="note">
+  평가판에는 <b><code>RCWMachineCode</code> · <code>RCWLicense</code> · <code>RCWCustomerCode</code> 가 들어 있지 않습니다.</b>
+  라이선스 파일도 고객 코드도 쓰지 않기 때문입니다. <code>RCWVersion</code> 과 <code>RCWUpdate</code> 는 평가판에도 있습니다.
+</div>
+
+<h2>문제가 생겼을 때</h2>
+<table class="desc-table">
+  <colgroup><col style="width:36%"><col style="width:64%"></colgroup>
+  <tbody><tr><th>증상</th><th>확인할 것</th></tr>
+  <tr><td>고객 코드가 기억나지 않는다</td><td><code>RCWVersion</code> 을 실행하십시오. 한 번 적어 두었다면 마지막 줄에 나옵니다. 적어 둔 적이 없으면 안내 메일을 찾으셔야 합니다.</td></tr>
+  <tr><td>고객 페이지에 로그인이 안 된다</td><td><code>RCW-</code> 로 시작하는 <b>고객 코드</b>를 넣으셨는지. <code>RCW5-</code> 는 로그인 코드가 아닙니다.</td></tr>
+  <tr><td>라이선스를 가져왔는데 그대로다</td><td><b>Rhino 를 다시 시작</b>하셨는지.</td></tr>
+  <tr><td>명령이 없다고 나온다</td><td><code>RCWVersion</code> 으로 <b>에디션</b>을 확인하십시오. 평가판에는 라이선스 명령이 없고,
+      Core 에는 Standard 전용 명령이 없습니다.</td></tr>
+  <tr><td>고친 줄 알았는데 옛날처럼 동작한다</td><td><code>RCWVersion</code> 의 <b>두 번째 줄</b>을 보십시오. 다른 폴더의 옛 빌드가 로드돼 있을 수 있습니다.</td></tr>
+</tbody></table>
+<p>지원을 요청하실 때는 <b><code>RCWVersion</code> 의 두 줄</b>, Rhino 버전, Windows 사용자 이름, 오류 메시지나 화면 캡처를 함께 보내 주십시오.</p>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>RcwHelp</code></td><td>설치된 RCW 도움말을 기본 웹 브라우저로 엽니다.</td></tr>
+  <tr><td><code>RCWFolder</code></td><td>고쳐서 쓰는 RCW 파일(블록·도면 양식·해치·데이터)이 모여 있는 폴더를 엽니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

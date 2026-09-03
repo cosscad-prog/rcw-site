@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><title>S2d, Sec2d - Section 2D</title><style>
+body{font-family:"맑은 고딕","Malgun Gothic",sans-serif;font-size:13px;color:#222;margin:20px 30px;line-height:1.7}h1{font-size:18px;border-bottom:2px solid #0066cc;padding-bottom:6px;color:#0066cc}h2{font-size:14px;border-left:4px solid #0066cc;padding-left:8px;margin-top:26px;color:#003d80}.cmd-box{display:inline-block;background:#f0f4ff;border:1px solid #99bbee;border-radius:4px;padding:2px 10px;font-family:Consolas,monospace;font-size:14px;font-weight:bold;color:#003d80}.step-list{padding-left:20px}.step-list li{margin-bottom:6px}.demo-images img{max-width:600px;border:1px solid #ccc;background:#fff}.warn{background:#fff1f0;border-left:4px solid #e07060;padding:8px 12px;margin-top:16px;font-size:12px}code{font-family:Consolas,monospace;background:#f4f7fb;padding:1px 4px;border-radius:3px}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>S2d, Sec2d &nbsp;—&nbsp; Section 2D</h1>
+<p><span class="cmd-box">S2d</span> <span class="cmd-box">Sec2d</span></p>
+<p><strong>S2d ,</strong>&nbsp;<strong>Sec2d</strong>는 선택한 Solid Unit의 View 방향을 기준으로&nbsp;Top/Right Section과 2D와 치수를 생성합니다.<br><font size="2" designtimesp="13814">완성된 Solid Model 을 이용하여 2D Section 을 만든다.&nbsp;&nbsp;&nbsp; <br designtimesp="13815">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+1. Profile Visual Line 과 Block Line이 생성된다.&nbsp;<br designtimesp="13816">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+2. Glass , BackPanel 이 있다면, 함께 나온다.&nbsp;<br designtimesp="13817"></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<font size="2" designtimesp="13818">&nbsp;3. Center Line 을 따라 치수가 기입된다. (Current Dim 
+style 을 따른다.)<br designtimesp="13819">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span lang="EN-US" style="FONT-SIZE: 10pt; FONT-FAMILY: &quot;Arial&quot;,sans-serif" designtimesp="13820"><font color="#ff0000" designtimesp="13821"><span style="font-size: 12px;"><span style="font-size: 13px;"><span style="font-size: 11px;">▶</span></span></span>&nbsp;<font color="#000000" designtimesp="13822">단면을 형성할 위치에 <strong designtimesp="13823">라인</strong>이 있어야 한다.&nbsp;</font></font></span></font></p>
+<h2>사용 목적</h2>
+<p>완성된 Solid Unit을 View 방향 기준 Top/Right 단면 2D와 치수로 만들 때 사용합니다. Glass·BackPanel이 있으면 함께 표현되며, 단면을 형성할 위치에 라인이 있어야 동작합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  <li><code>S2d</code> 또는 <code>Sec2d</code>를 입력합니다.</li><li><strong>Make2D를 적용할 객체 선택</strong> 프롬프트에서 대상 3D 객체를 선택합니다.</li><li>필요 시 <strong>단면을 형성할 라인</strong>을 선택합니다.</li><li>생성된 Section 곡선과 치수를 확인합니다.</li>
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/S2d_demo.mp4" autoplay muted loop playsinline aria-label="S2d 동작 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<div class="warning"><strong>주의:</strong> 선택 Unit의 View 각도에 따라 Section을 만들기 때문에 복잡한 방향의 모델은 정확한 Section이 나오지 않을 수 있습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

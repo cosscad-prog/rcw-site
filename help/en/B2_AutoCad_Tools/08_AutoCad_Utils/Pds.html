@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Pds - 08_AutoCad_Utils</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Pds &nbsp;—&nbsp; 08_AutoCad_Utils</h1>
+<p><span class="cmd-box">Pds</span></p>
+<p>
+  A command that <strong>aligns display direction of all Point objects in drawing to current view direction</strong> in batch.<br>
+  Without need for user to select objects, automatically finds and processes all Points in drawing.
+</p>
+<h2>Purpose</h2>
+<p>
+  Use when Points placed in drawing (e.g., <code>Dim_Points</code>, <code>NC_BottomPoint</code>, etc.) after view direction change
+  are drawn based on previous view direction and do not display correctly on screen.
+  On command execution, updates <code>Normal</code> vector of all Points in batch to current view direction (<code>ViewDirection</code>).
+</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Set view direction to desired state.</li>
+  <li>Enter <code>Pds</code> in command line and press Enter.</li>
+  <li>All Points in drawing are automatically processed without separate selection.</li>
+  <li>Verify number of Points processed in command window.</li>
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/C2730_PDS.mp4" autoplay muted loop playsinline aria-label="Pds execution example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Pds — Example of batch aligning Point display direction</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Object Selection Method</td><td>No user selection. Automatically collects <strong>all Point (DBPoint) objects</strong> in drawing using <code>SelectAll</code>.</td></tr>
+  <tr><td>Processing Content</td><td>Changes <code>Normal</code> vector of each Point to <code>ViewDirection</code> of current view.</td></tr>
+  <tr><td>System Variable Change</td><td>Sets <code>PDMODE = 35</code> (X mark + circle), <code>PDsize = 1</code>.</td></tr>
+  <tr><td>Repeated Execution</td><td>Internally repeats identical processing twice for stable application.</td></tr>
+  <tr><td>Output Message</td><td>After processing completion, <code>"Point N objects changed."</code> and <code>"Re_Draw_Point_and_Overkill completed."</code> are output in command window.</td></tr>
+  <tr><td>Applicable Environment</td><td>AutoCAD / BricsCAD</td></tr>
+</tbody></table>
+<h2>PDMODE 35 Display Format</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>System Variable</th><th>Description</th></tr>
+  <tr><td><code>PDMODE = 35</code></td><td>Displays Point as overlapping X mark and circle (3 + 32 = 35).</td></tr>
+  <tr><td><code>PDsize = 1</code></td><td>Sets Point display size to 1 in screen pixel units.</td></tr>
+</tbody></table>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Point Normal Update</td><td>Normal vector of all DBPoints in drawing is changed to current view direction.</td></tr>
+  <tr><td>PDMODE / PDsize Change</td><td>Point display format is set to X+circle (PDMODE=35), size 1 (PDsize=1).</td></tr>
+  <tr><td>Command Window Output</td><td>Number of processed Points and completion message are output.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> <code>Pds</code> applies to <strong>all</strong> Points in drawing.
+  Be aware that even if you want to process only Points on specific layer, all are changed without distinction.<br>
+  Since <code>PDMODE</code> and <code>PDsize</code> system variables are changed,
+  if different Point display format was previously used, same format will apply to subsequent Point creation.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

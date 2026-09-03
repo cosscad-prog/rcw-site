@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CCL, CCN, CCS - 02_Layer_Change</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-right:4px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>CCL, CCN, CCS &nbsp;—&nbsp; Layer / Color Organization</h1>
+<p><span class="cmd-box">CCL</span><span class="cmd-box">CCN</span><span class="cmd-box">CCS</span></p>
+<p>A collection of auxiliary commands to quickly organize work status based on current layer, selected object's layer, and object color.</p>
+<h2>Purpose</h2>
+<p>Move selected objects to the current layer, set the current layer from selected object's layer, or change object color by CAD Color Number to quickly align object classification and display status during work.</p>
+<h2>Command Summary</h2>
+<table class="desc-table">
+  <tbody><colgroup><col style="width:18%"><col style="width:30%"><col style="width:52%"></colgroup>
+  <tr><th>Command</th><th>Function</th><th>Usage Situation</th></tr>
+  <tr><td><code>CCL</code></td><td>Move selected objects to current layer</td><td>Use when gathering scattered objects to the current working layer.</td></tr>
+  <tr><td><code>CCS</code></td><td>Set selected object's layer as current layer</td><td>Use to set the reference object's layer as current layer for future object creation.</td></tr>
+  <tr><td><code>CCN</code></td><td>Change selected object color to CAD Color Number</td><td>Use to quickly change object display color without moving layers.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Enter <code>CCL</code>, <code>CCS</code>, or <code>CCN</code> in the AutoCAD or BricsCAD command line.</li>
+  <li>For <code>CCL</code> and <code>CCS</code>, select the reference object or objects to move as prompted.</li>
+  <li>For <code>CCN</code>, enter the CAD Color Number first, then select objects to change color.</li>
+  <li>After command completion, verify the Layer/Color result in the layer list and object properties.</li>
+</ol>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+

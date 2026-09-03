@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Bmt/Udt - 부재를 하나씩 만들기</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { max-width:600px; border:1px solid #ccc; background:#fff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1 id="bmt">Bmt/Udt &nbsp;—&nbsp; 부재를 하나씩 만들기</h1>
+<p><span class="cmd-box">Bmt</span> &nbsp; <span class="cmd-box">Udt</span></p>
+<p>
+  <strong>Bmt</strong> 는 <b>선 하나를 짚어 그 부재 하나만</b> 만듭니다.
+  <strong>Udt</strong> 는 그렇게 만든 부재들을 <b>한 셋으로 다시 지어</b> 부재끼리 맞물리는 절단까지 반영합니다.
+</p>
+
+<h2>사용 목적</h2>
+<p>
+  <code>UMD</code> 는 와이어프레임 group 을 <b>완전하게 준비하고 골라야</b> 결과가 나옵니다.
+  <code>Bmt</code> 는 같은 모델링 규칙을 <b>부재 하나 단위</b>로 줍니다 —
+  <b>처음 배우는 사람</b>과 <b>한두 부재만 고쳐야 하는 상황</b>을 위한 길입니다.
+  전체를 다시 돌리지 않고 필요한 것만 만들 수 있습니다.
+</p>
+
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 90%; min-width:220px; max-width:90%;">
+    <video src="../../../img/Bmt_Udt.mp4" autoplay muted loop playsinline aria-label="프로파일 group 을 고르고 선을 짚어 부재를 하나씩 만드는 과정" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>프로파일 group 하나를 고르고, 선을 짚을 때마다 그 부재가 생깁니다.</figcaption>
+  </figure>
+</div>
+
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li><code>Bmt</code> 를 실행하고 <b>Mullion 이나 Transom 프로파일 group 하나</b>를 고릅니다.
+      (명령창: <em>Select profile group</em>)</li>
+  <li>커서를 <b>와이어 근처로</b> 옮기면 그 선에 맞춘 <b>미리보기</b>가 나옵니다. 누르면 그 부재가 만들어집니다.
+      (명령창: <em>Move near a wire and click to create extrusion</em>)</li>
+  <li>선을 옮겨 가며 계속 짚습니다. <b>Enter</b> 나 <b>Esc</b> 로 끝냅니다.</li>
+  <li>뒤 부재는 <b>같은 와이어프레임 셋</b>에 이어서 더하면 됩니다.</li>
+  <li>Mullion 과 Transom 이 <b>다 있으면</b> <code>Udt</code> 로 그 셋을 다시 지어
+      <b>부재 간 절단이 보이게</b> 합니다. (명령창: <em>Select the BMT Wireframe group</em>)</li>
+</ol>
+
+<h2 id="udt">Udt &nbsp;—&nbsp; 셋을 다시 짓기</h2>
+<p>
+  <code>Bmt</code> 는 부재를 <b>하나씩</b> 세우므로, 아직 만들지 않은 이웃 부재와의 <b>맞물림(절단)</b>까지는 알 수 없습니다.
+  Mullion 과 Transom 이 다 놓인 뒤 <code>Udt</code> 를 돌리면 그 와이어프레임 셋을 통째로 다시 지어
+  <b>부재끼리 파고드는 자리</b>와 브래킷 재가공까지 반영합니다.
+</p>
+<div class="note">
+  <b>언제 돌리나:</b> 부재를 더 얹을 때마다 돌릴 필요는 없습니다. 그 셋이 <b>어느 정도 갖춰졌을 때</b> 한 번 돌리면 됩니다.
+  다시 돌리면 그 셋의 이전 산출물을 지우고 새로 만듭니다.
+</div>
+
+<h2>알아 둘 것</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>셋 단위로 묶입니다</td><td>만들어진 것은 <b>와이어프레임 셋 단위</b>로 묶입니다. 그래서 선택이 단순해지고,
+      <b>관계없는 유닛의 프로파일이 함께 갱신되지 않습니다.</b></td></tr>
+  <tr><td>방향은 원본에 남습니다</td><td>프로파일 방향은 <b>원본 group 에 저장</b>됩니다. 나중에 다시 만들어도
+      <b>지금의 뷰나 선택 방향에 좌우되지 않습니다.</b></td></tr>
+  <tr><td>단면을 찾는 방법</td><td>단면을 <b>layer 이름이 아니라 선에 심어진 group 번호</b>로 찾습니다.
+      그래서 <b>같은 layer 에 서로 다른 단면</b>을 둘 수 있습니다.</td></tr>
+  <tr><td>앵커(<code>ANP</code>) group</td><td>고른 group 의 이름표가 <code>ANP</code> 로 시작하면 <b>앵커 모드</b>로 동작합니다 —
+      선이 아니라 <code>AN_Point</code> layer 의 <b>점</b>에 블록·단면을 놓습니다. 같은 점을 다시 고르면 <b>바뀝니다.</b></td></tr>
+  <tr><td>단면 data 가 없으면</td><td>옛 기본 연장값을 씁니다 — <b>Brep·curve 는 50</b>, <b>원본 Surface 는 0</b>.</td></tr>
+</tbody></table>
+
+<div class="warn">
+  <b>한 유닛은 한 방식만 씁니다.</b> 같은 와이어프레임을 <code>Bmt</code>/<code>Udt</code> 로도 만들고
+  <code>SSP</code>/<code>UMD</code> 로도 만들 수는 없습니다. 섞으려 하면 그 유닛에서 멈추고 알립니다
+  (<em>SSP/UMD 로 만든 유닛이라 이 부재는 만들지 않았습니다</em>).
+  <br>
+  <b>방식을 바꾸려면</b> 확인창에서 <b>그 유닛의 산출물을 지우고 전환</b>하면 됩니다. 전용 명령은 없습니다.
+  <br>
+  ⚠️ 이 규칙이 있는 이유: <code>Udt</code> 로 만든 유닛은 <b>같은 layer 에 다른 단면</b>을 둘 수 있어
+  <code>UMD</code> 로는 <b>표현 자체가 안 됩니다.</b> <code>UMD</code> 가 건드리면 반드시 틀린 형상이 나옵니다.
+</div>
+
+<h2>안 될 때</h2>
+<table class="desc-table">
+  <colgroup><col style="width:44%"><col style="width:56%"></colgroup>
+  <tbody><tr><th>명령창에 나오는 말</th><th>뜻</th></tr>
+  <tr><td><em>Selected profile object is not in a group.</em></td><td>고른 것이 group 에 묶여 있지 않습니다.</td></tr>
+  <tr><td><em>Profile group must contain one valid curve on the Center1 layer.</em></td>
+      <td>그 group 에 <code>Center1</code> 곡선이 <b>하나</b> 있어야 합니다.</td></tr>
+  <tr><td><em>No Surface or Brep objects were found…</em></td><td>group 안에 단면 Surface 나 Brep 이 없습니다.</td></tr>
+  <tr><td><em>No wire curves were found outside…</em></td><td>짚을 와이어 선이 없습니다. 와이어프레임을 먼저 만드십시오.</td></tr>
+</tbody></table>
+<div class="note">
+  <b>단면 group 을 복사해서 쓰셨다면</b> 주의하십시오. 복사본은 <b>원본과 같은 group 번호</b>를 갖게 되어
+  어느 단면을 써야 할지 가릴 수 없습니다. 이때는 <b>아무것도 만들기 전에 멈추고</b> 어느 group 들이 겹쳤는지 알려 줍니다.
+</div>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>UMD</code></td><td>와이어프레임 group 전체를 한 번에 모델링합니다. <b>같은 유닛에 섞어 쓸 수 없습니다.</b></td></tr>
+  <tr><td><code>SSP</code></td><td>단면을 등록합니다. <code>UMD</code> 경로에서 씁니다.</td></tr>
+  <tr><td><code>Pname</code></td><td>단면에 이름·단중·추가 길이를 넣습니다.</td></tr>
+  <tr><td><code>FabNo</code></td><td>만들어진 부재에 제작 번호를 부여합니다.</td></tr>
+</tbody></table>
+
+<div class="note"><b>에디션:</b> <code>Bmt</code>·<code>Udt</code> 는 <b>Standard</b> 부터 들어 있습니다. Core 에는 없습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

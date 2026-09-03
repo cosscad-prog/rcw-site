@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Bmt/Udt - building members one at a time</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { max-width:600px; border:1px solid #ccc; background:#fff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1 id="bmt">Bmt/Udt &nbsp;&mdash;&nbsp; building members one at a time</h1>
+<p><span class="cmd-box">Bmt</span> &nbsp; <span class="cmd-box">Udt</span></p>
+<p>
+  <strong>Bmt</strong> builds <b>one member</b> from <b>one line you point at</b>.
+  <strong>Udt</strong> then rebuilds those members <b>as a single set</b>, so where they cut into one another shows.
+</p>
+
+<h2>Purpose</h2>
+<p>
+  <code>UMD</code> gives you nothing until a wireframe group is <b>complete and selected as a whole</b>.
+  <code>Bmt</code> offers the same modelling rules <b>one member at a time</b> - a way in for
+  <b>someone learning</b>, and for <b>fixing one or two members</b>. You build what you need without
+  running the whole thing again.
+</p>
+
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 90%; min-width:220px; max-width:90%;">
+    <video src="../../../../img/Bmt_Udt.mp4" autoplay muted loop playsinline aria-label="Choosing a profile group and pointing at lines to build members one by one" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Pick one profile group, then every line you point at becomes that member.</figcaption>
+  </figure>
+</div>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Run <code>Bmt</code> and select <b>one Mullion or Transom profile group</b>.
+      (prompt: <em>Select profile group</em>)</li>
+  <li>Move the cursor <b>near a wire</b> and a <b>preview</b> appears, aligned to that line. Click and the member is built.
+      (prompt: <em>Move near a wire and click to create extrusion</em>)</li>
+  <li>Keep pointing at lines. Finish with <b>Enter</b> or <b>Esc</b>.</li>
+  <li>Later members go on <b>the same wireframe set</b>.</li>
+  <li>Once <b>both</b> Mullions and Transoms are there, run <code>Udt</code> to rebuild the set so that
+      <b>the cuts between members show</b>. (prompt: <em>Select the BMT Wireframe group</em>)</li>
+</ol>
+
+<h2 id="udt">Udt &mdash; rebuilding the set</h2>
+<p>
+  <code>Bmt</code> raises members <b>one at a time</b>, so it cannot know how a member will meet a neighbour
+  that does not exist yet. Once the Mullions and Transoms are in place, <code>Udt</code> rebuilds that whole
+  wireframe set, working out <b>where members cut into each other</b> and redoing the bracket work.
+</p>
+<div class="note">
+  <b>When to run it:</b> not after every member. Run it once the set is <b>reasonably complete</b>.
+  Running it again clears that set's previous output and builds it afresh.
+</div>
+
+<h2>Worth knowing</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Grouped by set</td><td>What you build is grouped <b>per wireframe set</b>. Selection stays simple, and
+      <b>profiles in unrelated units are not updated along with it.</b></td></tr>
+  <tr><td>Direction stays with the original</td><td>Profile orientation is <b>stored on the original group</b>, so a later
+      rebuild <b>does not depend on your current view or the direction you picked in.</b></td></tr>
+  <tr><td>How sections are found</td><td>By the <b>group number embedded in the line</b>, not by layer name. That means
+      <b>different sections can live on the same layer.</b></td></tr>
+  <tr><td>Anchor (<code>ANP</code>) groups</td><td>If the group's label starts with <code>ANP</code> it works in <b>anchor mode</b> -
+      blocks and sections are placed on the <b>points</b> of the <code>AN_Point</code> layer rather than on lines.
+      Picking the same point again <b>replaces</b> what is there.</td></tr>
+  <tr><td>With no section data</td><td>The old default extensions are used - <b>50 for a Brep or curve</b>, <b>0 for the original surface</b>.</td></tr>
+</tbody></table>
+
+<div class="warn">
+  <b>A unit uses one method only.</b> The same wireframe cannot be built with <code>Bmt</code>/<code>Udt</code>
+  and with <code>SSP</code>/<code>UMD</code>. Mixing them stops at that unit and says so.
+  <br>
+  <b>To switch,</b> confirm in the dialog that <b>that unit's output is deleted</b> and the method changes. There is no separate command.
+  <br>
+  &#9888; Why the rule exists: a unit built with <code>Udt</code> may carry <b>different sections on one layer</b>,
+  which <code>UMD</code> <b>cannot represent at all</b>. If <code>UMD</code> touched it, the shape would be wrong.
+</div>
+
+<h2>When it does not work</h2>
+<table class="desc-table">
+  <colgroup><col style="width:44%"><col style="width:56%"></colgroup>
+  <tbody><tr><th>What the command line says</th><th>What it means</th></tr>
+  <tr><td><em>Selected profile object is not in a group.</em></td><td>What you picked is not in a group.</td></tr>
+  <tr><td><em>Profile group must contain one valid curve on the Center1 layer.</em></td>
+      <td>The group needs <b>one</b> curve on the <code>Center1</code> layer.</td></tr>
+  <tr><td><em>No Surface or Brep objects were found…</em></td><td>The group holds no section surface or Brep.</td></tr>
+  <tr><td><em>No wire curves were found outside…</em></td><td>There are no wires to point at. Build the wireframe first.</td></tr>
+</tbody></table>
+<div class="note">
+  <b>If you copied a section group,</b> take care. The copy carries <b>the same group number</b> as the original,
+  so there is no telling which section to use. It <b>stops before building anything</b> and names the groups that clash.
+</div>
+
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>UMD</code></td><td>Models a whole wireframe group at once. <b>Cannot be mixed on the same unit.</b></td></tr>
+  <tr><td><code>SSP</code></td><td>Registers sections, for the <code>UMD</code> route.</td></tr>
+  <tr><td><code>Pname</code></td><td>Enters a section's name, unit weight and additional lengths.</td></tr>
+  <tr><td><code>FabNo</code></td><td>Gives the built members their fabrication numbers.</td></tr>
+</tbody></table>
+
+<div class="note"><b>Edition:</b> <code>Bmt</code> and <code>Udt</code> are included from <b>Standard</b> upwards. They are not in Core.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

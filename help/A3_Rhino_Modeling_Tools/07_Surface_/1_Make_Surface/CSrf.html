@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>CSrf - 07_Surface_</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>CSrf &nbsp;—&nbsp; 07_Surface_</h1>
+<p><span class="cmd-box">CSrf</span></p>
+<p>선택한 Surface 면을 복사하여 새 Surface 객체로 생성하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Surface 복사</td><td>선택한 Surface 면을 별도의 Brep Surface로 복사합니다.</td></tr>
+  <tr><td>면 분리</td><td>기존 객체에서 필요한 면만 분리하여 후속 작업 기준으로 사용할 때 사용합니다.</td></tr>
+  <tr><td>레이어 정리</td><td>복사된 Surface는 <code>Surf</code> 레이어에 배치됩니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>CSrf</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>복사할 Surface를 선택합니다.</li>
+  <li>여러 Surface를 선택한 뒤 Enter로 선택을 완료합니다.</li>
+  <li><code>Surf</code> 레이어에 복사되어 생성된 Surface 객체를 확인합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/3621_CSrf.mp4" autoplay muted loop playsinline aria-label="CSrf command example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>선택한 Surface를 복사하여 별도 Surface로 만드는 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  
+  
+  <tr><td>대상 객체</td><td>선택한 Surface 면</td></tr>
+  <tr><td>생성 객체</td><td>복사된 Surface Brep 객체</td></tr>
+  
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>처리 결과</td><td>선택한 Surface 면이 복사되어 새 Surface 객체로 생성됩니다.</td></tr>
+  <tr><td>확인 위치</td><td>Rhino 화면과 <code>Surf</code> 레이어에서 복사된 Surface 객체를 확인합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 선택한 Brep의 Face를 <code>DuplicateFace(false)</code>로 복사하고 새 객체는 <code>Surf</code> 레이어에 둡니다. 원본 Solid는 변경하지 않으므로 기준면만 따로 뽑아 후속 Trim이나 Plane 작업에 쓰기 좋습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

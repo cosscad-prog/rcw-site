@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><title>Flist, Fablist - 제작 리스트</title><style>
+body{font-family:"맑은 고딕","Malgun Gothic",sans-serif;font-size:13px;color:#222;margin:20px 30px;line-height:1.7}h1{font-size:18px;border-bottom:2px solid #0066cc;padding-bottom:6px;color:#0066cc}h2{font-size:14px;border-left:4px solid #0066cc;padding-left:8px;margin-top:26px;color:#003d80}.cmd-box{display:inline-block;background:#f0f4ff;border:1px solid #99bbee;border-radius:4px;padding:2px 10px;font-family:Consolas,monospace;font-size:14px;font-weight:bold;color:#003d80}.desc-table{border-collapse:collapse;width:100%;margin-top:8px;table-layout:fixed}.desc-table th{background:#dce8f8;border:1px solid #aac4e8;padding:5px 10px;text-align:left}.desc-table td{border:1px solid #c8d8ec;padding:5px 10px;vertical-align:top}.desc-table tr:nth-child(even) td{background:#f7faff}.step-list{padding-left:20px}.step-list li{margin-bottom:6px}.demo-images img{max-width:600px;border:1px solid #ccc;background:#fff}code{font-family:Consolas,monospace;background:#f4f7fb;padding:1px 4px;border-radius:3px}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Flist, Fablist &nbsp;—&nbsp; 제작 리스트</h1>
+<p><span class="cmd-box">Flist</span> <span class="cmd-box">Fablist</span></p>
+<p><strong>Flist</strong>와 <strong>Fablist</strong>는 같은 기능을 실행하는 동일 명령어입니다. <br>선택한 Brep, 일반 Block, NBlock을 분석하여 Unit 단위 제작 리스트와 번호 표시를 작성합니다.<br><font size="2" designtimesp="12122">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1. 입면에 프로파일 해당 번호를 만든다.&nbsp;<br designtimesp="12124">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2. FabList 는 알루미늄 
+Profile, Steel Profile, 부자재 Profile, Block 순으로 정렬된다.&nbsp;&nbsp; <br designtimesp="12125"></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size="2" designtimesp="12126">&nbsp;3. Text 
+Size 는 Current Dim style 을 따른다.</font></p>
+<h2>사용 목적</h2>
+<p>선택한 Unit의 제작 리스트와 입면 번호 표시를 작성할 때 사용합니다. 알루미늄·스틸·부자재 Profile, Block 순으로 정렬된 제작 리스트가 필요할 때 사용하며, <code>Flist</code>와 동일한 명령입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  <li><code>Flist</code> 또는 <code>Fablist</code>를 입력합니다.</li><li>필요하면 <code>SubMaterial_No</code> 옵션을 On/Off로 변경합니다.</li><li><code>LabelType</code> 옵션으로 입면 번호 표시 방식을 선택합니다 — <strong>TypeA</strong>(원+번호) 또는 <strong>TypeB</strong>(라인별 미니 테이블).</li><li>필요하면 <code>LabelFontScale</code> 로 라벨 글자 크기 배율을 조정합니다(기본 2.5).</li><li><code>SaveAsDefault</code> 를 On 으로 두고 실행하면 현재 <code>LabelType</code>·<code>LabelFontScale</code> 가 기본값으로 저장되어, 다음부터 자동 적용됩니다.</li><li><strong>Select Brep, Block, NBlock objects for Fablist</strong> 프롬프트에서 대상 객체를 선택합니다.</li><li>Enter를 누르면 선택 객체를 분석해 제작 리스트를 작성합니다.</li>
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../img/fabList_demo2.mp4" autoplay muted loop playsinline aria-label="fabList_demo2" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>옵션</h2>
+<table class="desc-table"><colgroup><col style="width:24%"><col style="width:76%"></colgroup><tbody><tr><th>옵션</th><th>설명</th></tr><tr><td><code>SubMaterial_No</code></td><td>On 이면 부자재(Profile_ID 3) 번호 표시를 함께 생성합니다.</td></tr><tr><td><code>LabelType</code></td><td>입면 번호 표시 방식. <strong>TypeA</strong> = 원+번호(기존), <strong>TypeB</strong> = 라인별 미니 테이블.</td></tr><tr><td><code>LabelFontScale</code></td><td>라벨 글자 크기 배율. 표시 크기 = FontHeight × 이 값 × DimensionScale (기본 2.5).</td></tr><tr><td><code>SaveAsDefault</code></td><td>On 으로 실행하면 현재 <code>LabelType</code>·<code>LabelFontScale</code> 를 기본값으로 저장합니다(<code>System_Default.dat</code>).</td></tr></tbody></table>
+<h2>라벨 표시 방식 (TypeA / TypeB)</h2>
+<p>전체 제작 리스트 표는 두 방식 모두 동일하게 생성되며, <strong>입면에 표시되는 라벨</strong>만 달라집니다.</p>
+<table class="desc-table"><colgroup><col style="width:18%"><col style="width:82%"></colgroup><tbody>
+<tr><th>방식</th><th>설명</th></tr>
+<tr><td><strong>TypeA</strong></td><td>솔리드마다 <strong>원 + 번호</strong>를 지시선으로 표시합니다. 표의 NO 와 1:1 대응됩니다.</td></tr>
+<tr><td><strong>TypeB</strong></td><td>같은 <strong>센터라인(멤버)</strong>에 속한 솔리드들을 하나로 묶어, 그 라인의 <code>ProfileName Fab번호 - 수량</code> 행으로 구성된 <strong>미니 테이블</strong>을 만들고 멤버 중점에 지시선으로 연결합니다.</td></tr>
+</tbody></table>
+<div class="note">사용자마다 선호하는 방식이 다를 수 있습니다. <code>SaveAsDefault</code>=On 으로 한 번 실행해 두면, 이후 FabList 실행 시 저장된 방식·글자 크기가 자동으로 적용됩니다(설치 PC 단위로 저장).</div>
+<h2>명령어 Alias</h2>
+<table class="desc-table"><colgroup><col style="width:20%"><col style="width:80%"></colgroup><tbody><tr><th>명령어</th><th>설명</th></tr><tr><td><code>Flist</code></td><td><code>Fablist</code>와 같은 기능을 실행합니다.</td></tr><tr><td><code>Fablist</code></td><td><code>Flist</code>와 같은 기능을 실행합니다.</td></tr></tbody></table>
+<h2>출력 내용</h2>
+<table class="desc-table"><colgroup><col style="width:20%"><col style="width:80%"></colgroup><tbody><tr><th>항목</th><th>설명</th></tr><tr><td>Unit No</td><td>선택 그룹에서 읽은 Unit 번호입니다. 없거나 여러 개면 경고가 출력됩니다.</td></tr><tr><td>Fab 번호</td><td>Frame, Glass, BackPanel 등 객체 타입별 데이터를 읽어 번호 표시를 배치합니다.</td></tr><tr><td>리스트</td><td>ProfileName, FabStr, Spec, Code, Add 데이터 등을 기반으로 제작 리스트를 구성합니다.</td></tr></tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

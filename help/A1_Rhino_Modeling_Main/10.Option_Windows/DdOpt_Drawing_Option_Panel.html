@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>DdOpt - Drawing 옵션 패널</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; align-items:start; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>DdOpt &nbsp;—&nbsp; Drawing 옵션 패널</h1>
+<p><span class="cmd-box">DdOpt</span></p>
+<p><strong>DdOpt</strong>는 Modeling 후 <code>FDwg</code> 가공도를 내보내기 전, 도면 View와 치수 생성 방식을 설정하는 Drawing Option 창입니다. <br>기존 <code>DDOPT</code> 창과 같은 계열의 기능이지만, FDDS 가공도에 필요한 항목만 모아 정리한 패널입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>Rhino 명령창에 <code>DdOpt</code>를 입력합니다.</li>
+  <li>Drawing Option 패널에서 필요한 View, 치수, 거리, 보조 모델 표시 옵션을 설정합니다.</li>
+  <li><code>FDwg</code>를 실행하여 현재 설정을 기준으로 Frame 제작 가공도를 생성합니다.</li>
+
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 34%; min-width:200px; max-width:34%;">
+    <img src="../../img/DdOpt_panel_guide.png" alt="DdOpt panel guide" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>DdOpt Drawing Option 패널 (기본 설정 상태)</figcaption>
+  </figure>
+</div>
+<h2>기능 개요</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>주 사용 명령</td><td><code>FDwg</code> 제작 가공도를 만들 때 View, 거리, 치수, 보조 모델 표시 옵션을 지정합니다.</td></tr>
+  <tr><td>현재 선택을 기본값으로 저장</td><td>패널 상단의 작은 <b>D</b> 버튼. 현재 패널 설정을 <code>System_Default.dat</code> 에 기본값으로 저장합니다.</td></tr>
+  <tr><td>패널 동작</td><td><code>DdOpt</code> 명령을 실행하면 Drawing Option Dockable Panel을 엽니다. 열 때 저장된 기본값을 불러옵니다.</td></tr>
+</tbody></table>
+<h2>"D" 버튼 &nbsp;&mdash;&nbsp; 현재 선택을 기본값으로 저장</h2>
+<p>패널 상단의 작은 <b>D</b> 버튼입니다. 클릭하면 <strong>현재 패널의 모든 옵션 값(Group 1~4)</strong>을 <code>System_Default.dat</code> 에 기본값으로 저장합니다. 저장한 파일의 <b>전체 경로는 명령창에 표시됩니다.</b></p>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>동작</th><th>설명</th></tr>
+  <tr><td>버튼 클릭(저장)</td><td>현재 패널 값을 기본값으로 저장합니다. <b>D 버튼이 파란색으로</b> 바뀌어 저장 완료를 알려줍니다.</td></tr>
+  <tr><td>값 변경 시</td><td>저장 후 체크박스·입력값을 하나라도 바꾸면 <b>D 버튼이 원래 색으로</b> 돌아옵니다.</td></tr>
+  <tr><td>패널 열 때</td><td>저장된 기본값이 있으면 자동으로 불러와 각 항목에 적용합니다.</td></tr>
+  <tr><td>저장 파일</td><td><code>System_Default.dat</code>는 설치 PC 단위 파일로, FabList 등 다른 기능 설정과 함께 보관됩니다(서로의 값을 지우지 않습니다).</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 기존 <code>Apply File Data</code> 체크박스는 더 이상 사용하지 않습니다. 가공도에 파일 데이터를 적용하는 동작은 <strong>FDstyle(기록/재생)</strong>이 담당하며, 해당 데이터가 없으면 현재 패널 설정값을 사용합니다.</div>
+<h2>Group 1 - View / Max Only / Side Dim</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../img/1910_DdOpt1.png" alt="DdOpt view option group" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>View 생성 방향과 치수 표현 방식 설정</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>View Column</td><td>가공도를 생성할 방향을 정합니다. Back, Top, Front, Bottom, Back 계열 View를 선택합니다.</td></tr>
+  <tr><td>Max Only</td><td>해당 View에서 전체 최대 치수만 만들지 결정합니다.</td></tr>
+  <tr><td>Side Dim</td><td>좌우 Side Dimension을 상세하게 표현할지, Max 기준으로만 표현할지 결정합니다.</td></tr>
+</tbody></table>
+<h2>Group 2 - Drawing Distance</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../img/1910_DdOpt2.png" alt="DdOpt distance option group" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>가공도 배치 위치, 간격, Hole Dia 표기 범위 설정</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Fab Start Point</td><td>가공도가 시작될 기준 위치를 X, Z 값으로 정합니다.</td></tr>
+  <tr><td>Dwg Distance</td><td>X 값은 왼쪽 Section과 메인 가공도 사이의 거리이고, Z 값은 상하 가공도 사이의 거리입니다.</td></tr>
+  <tr><td>Fab No Distance</td><td>가장 아래 가공도에서 가공도 이름과 수량 Text가 위치할 거리를 정합니다.</td></tr>
+  <tr><td>Hole Dia</td><td>가공도에 생성되는 Hole Dia Dimension 중 표기할 최소, 최대 Dia 범위를 정합니다.</td></tr>
+</tbody></table>
+<h3>거리 항목 예시</h3>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../img/1911_DDOpt_005.png" alt="Fab Start Point 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fab Start Point — 가공도 시작 기준 위치(X, Z)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 25%; min-width:220px; max-width:25%;">
+    <img src="../../img/1911_DDOpt_006.png" alt="Dwg Distance 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Dwg Distance — Section ↔ 메인 가공도 간격(X), 상하 간격(Z)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../img/1911_DDOpt_007.png" alt="Fab No Distance 예시" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fab No Distance — Fab No 텍스트 배치 위치(X, Z)</figcaption>
+  </figure>
+</div>
+<h2>Group 3 - Extra Dim OnOff</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../img/1910_DdOpt3.png" alt="DdOpt extra dimension option group" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>추가 치수와 보조 Line 생성 여부 설정</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>90° Angle Dim</td><td><b>90도 각도만</b> 켜고 끕니다. 켜면 90도까지 전부 작성하고, 꺼도 <b>90도만 빠질 뿐</b> 45도 같은 나머지 각도는 그대로 작성됩니다 — 사면 각도는 도면에서 읽어야 하는 값이기 때문입니다. <code>[F]</code> 각도도 같은 규칙이라 <b>[F]90도만</b> 빠집니다. 자세한 규칙은 <code>FDwg</code>·<code>FDDS</code> 도움말을 보세요.</td></tr>
+  <tr><td>Center Dim</td><td>Center Line이 있을 때 Center Line 간 Dimension을 표기할지 결정합니다.</td></tr>
+  <tr><td>Hole Dim</td><td>홀·장공 관련 치수 표시 여부를 결정합니다. (예전 이름 <code>Cutting Dim</code>)</td></tr>
+  <tr><td>Unit No</td><td>가공도에 Unit No 정보를 표시할지 결정합니다.</td></tr>
+  <tr><td>Attach Dim</td><td>Bracket 같은 Attach Profile이 있을 때 Attach의 좌우 최대값을 기준으로 Dim Point를 만들고 치수를 그립니다.</td></tr>
+  <tr><td>P_Section</td><td>단면 Line을 보여 줍니다 — 왼쪽 Section과 메인 가공도 사이에 구분 Line을 생성할지 결정합니다. (예전 이름 <code>SectionLine</code>)</td></tr>
+</tbody></table>
+<h2>Group 4 - Model View</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../img/1910_DdOpt4.png" alt="DdOpt model view option group" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>2D 가공도 생성 후 보조 3D Model을 남길지 설정</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Shape Model</td><td>2D 가공도와 함께 원본 Shape 3D Model을 지우지 않고 보여줍니다.</td></tr>
+  <tr><td>Dim Model</td><td>2D 가공도와 함께 Dimension 계산용 3D Model을 지우지 않고 보여줍니다.</td></tr>
+  <tr><td>Angle Model</td><td>2D 가공도와 함께 Angle 계산용 3D Model을 지우지 않고 보여줍니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>FDwg</code></td><td><code>DdOpt</code> 설정을 사용하여 Frame 제작 가공도를 생성합니다.</td></tr>
+</tbody></table>
+<div class="warning"><strong>주의:</strong> <code>DdOpt</code>는 가공도 작성 옵션을 정하는 패널입니다. 실제 도면 생성은 <code>FDwg</code> 실행 시 이루어집니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

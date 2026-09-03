@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>ShowSVec - 07_Surface_</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>ShowSVec &nbsp;—&nbsp; 07_Surface_</h1>
+<p><span class="cmd-box">ShowSVec</span></p>
+<p>선택한 Surface에 이미 할당된 SVec 방향 Vector를 화면에 표시하는 명령입니다.</p>
+<h2>사용 목적</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Vector 확인</td><td>선택 Surface에 할당된 SVec 방향 정보를 화면에 표시합니다.</td></tr>
+  <tr><td>할당 여부 검토</td><td>SVec 정보가 이미 할당되어 있는지 확인할 때 사용합니다.</td></tr>
+  <tr><td>방향 검토</td><td>FabTable 또는 평판 모델링 전 X/Y/Z 방향이 올바른지 검토합니다.</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>ShowSVec</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>SVec 정보가 할당되어 있는지 확인할 Surface를 선택합니다.</li>
+  <li>선택을 완료합니다.</li>
+  <li>Rhino 화면에 표시되는 X/Y/Z 방향 Vector를 확인합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <video src="../../../img/3632_ShowSVec.mp4" autoplay muted loop playsinline aria-label="ShowSVec command example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Surface에 할당된 SVec 방향 Vector를 표시하는 예시</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  
+  
+  <tr><td>대상 객체</td><td>SVec 정보가 할당된 Surface</td></tr>
+  <tr><td>색상 기준</td><td>Red: X 방향축, Blue: Y 방향축, Green: Z 방향축</td></tr>
+  
+</tbody></table>
+<h2>실행 결과</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>처리 결과</td><td>선택 Surface의 SVec 방향 Vector가 화면에 표시됩니다.</td></tr>
+  <tr><td>확인 위치</td><td>Rhino 화면에서 X/Y/Z 방향축 표시를 확인합니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 새 방향을 계산하지 않고, Brep에 저장된 <code>Glassdata</code>를 읽어 X/Y/Z 화살표만 다시 그립니다. <code>SVec</code>나 <code>NVec</code>로 저장된 데이터가 없으면 <code>SVec 가 없습니다</code> 메시지가 표시됩니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

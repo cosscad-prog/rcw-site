@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>NBlock - Block</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>NBlock &nbsp;—&nbsp; Block</h1>
+<p><span class="cmd-box">NBlock</span> <span class="cmd-box">NamedBlock</span></p>
+<p>A command to create a Block from selected Objects based on internal Text names. When using the same shape and specification Curtainwall Units repeatedly, managing them as a single Block instead of continuously copying Groups reduces work time and file size.</p>
+<h2>Purpose</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Block Creation</td><td>Creates a Block from a Unit after modeling and FabNo organization is complete.</td></tr>
+  <tr><td>Repeated Unit Management</td><td>Units of the same size and shape can be created as Blocks and repeatedly placed.</td></tr>
+  <tr><td>Subsequent List Operations</td><td>Prepares Block data for creating <code>Molist</code>, <code>Cuttinglist</code>, and <code>Fblist</code>. <code>Fblist</code> uses a single selected Block.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  <li>Type <code>NBlock</code> in the Rhino command line and press Enter.</li>
+  <li>Select Objects to create as Blocks.</li>
+  <li>If there is Text in the selected Objects, the first Text excluding excluded Texts is used as the Block name.</li>
+  <li>If there is no Text to use in the selected Objects, enter a new name and specify the Text position on the screen.</li>
+  <li>If it is a new Block name, specify the Insert Point to create the Block.</li>
+  <li>If a Block with the same name already exists, the existing Block Definition is updated and the existing placed Instance is recreated in the same position and rotation state.</li>
+
+</ol>
+<h2>Usage Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 45%; min-width:220px; max-width:45%;">
+    <video src="../../../img/3.NBlock.mp4" autoplay muted loop playsinline aria-label="NBlock command example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Example of creating a Block based on internal Text names in Objects</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 45%; min-width:220px; max-width:45%;">
+    <video src="../../../img/3.NBlock_02.mp4" autoplay muted loop playsinline aria-label="NBlock update example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Example of recreating or updating a Block with the same name</figcaption>
+  </figure>
+</div>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  
+  
+  <tr><td>Block Name</td><td>Uses Text from inside the selected Object. Characters that cannot be used in names <code>/ \ : * ? " &lt; &gt; |</code> are replaced with <code>_</code>.</td></tr>
+  <tr><td>Reference Point</td><td>Finds the Block reference point at the location where the start points of <code>M_Center</code> and <code>T_Center</code> type Lines coincide. If the reference point cannot be found automatically, the user specifies it directly.</td></tr>
+  <tr><td>Existing Block Handling</td><td>If a Block with the same name already exists, the Definition is updated with the new shape and the existing Instance is repositioned based on the original Transform.</td></tr>
+  
+</tbody></table>
+<h2>Cautions</h2>
+<div class="warning">
+  <strong>Caution:</strong> <code>NBlock</code> must include one <code>M_Center Line</code>. Insert Point is based on the start point of the Mullion Center Line.
+</div>
+<div class="note">
+  <strong>Note:</strong> Text starting with <code>GS</code>, <code>VT</code>, <code>BP</code>, or <code>GR</code> are not used as Block names. Closed Polylines/PolyCurves in the same group as those Texts may also be excluded from Block targets.
+</div>
+<div class="note">
+  <strong>Note:</strong> If a Block with the same name was deleted but the Definition remains in Rhino, clean it up with <code>Purge</code>, or Insert the existing Block to check the status before running again.
+</div>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Processing Result</td><td>Selected Objects are created as Blocks with Text names, or existing Blocks with the same name are updated.</td></tr>
+  <tr><td>Verification Location</td><td>Check the created Block Instance, Block Insert Point, and Block name Text in the Rhino viewport.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> If a block with the same name already exists, the existing definition is deleted and the existing instance in the same location is recreated with the new definition. Since the reference point is found where the start points of Mullion/Transom center lines meet, related center line layers must be selected together for accurate insertion reference.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

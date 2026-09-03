@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>UMD - Unit Frame Modeling</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images img { max-width:600px; border:1px solid #ccc; background:#fff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>UMD &nbsp;—&nbsp; Unit Frame Modeling</h1>
+<p><span class="cmd-box">UMD</span></p>
+<p><strong>UMD</strong> analyzes the Mullion/Transom centerlines of the selected Unit group and automatically models the frame solids and related Blocks. It reads the Unit No TextDot inside the group to track progress and manage result group information.</p>
+
+<h2>Purpose</h2>
+<p>Used to automatically generate frame 3D solids from Units with Wire Frame (Mullion/Transom reference lines) and Section data prepared. As the core execution step of RCW modeling, it processes Mullion/Transom modeling, bracket remachining, and group organization in one operation to create the foundation model for subsequent numbering, list, and drawing work.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Prepare a Unit group with Wire Frame and Section data already entered.</li>
+  <li>Type <code>UMD</code> in the Rhino command line and press Enter.</li>
+  <li>At the <strong>Select Group objects</strong> prompt, select the Unit group to model.</li>
+  <li>Press Enter — Mullion modeling, Transom modeling, bracket remachining, and final grouping are executed in sequence for each group.</li>
+</ol>
+<h2>Example</h2>
+<video src="../../../../img/UMD_demo.mp4" autoplay muted loop playsinline aria-label="UMD operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:1 1 0; min-width:220px; max-width:calc(50% - 6px);">
+    
+    <figcaption></figcaption>
+  </figure>
+</div>
+<h2>Execution Flow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Step</th><th>Description</th></tr>
+  <tr><td>1. Group Selection</td><td>Selects Unit groups in GroupSelect mode. Processes groups as units rather than individual sub-objects.</td></tr>
+  <tr><td>2. Object Classification</td><td>Identifies Mullion Curves, Transom Curves, Attach Curves, and Anchor Points within the group.</td></tr>
+  <tr><td>3. Mullion Generation</td><td>Creates Mullion solids and related Blocks using Section/Profile data.</td></tr>
+  <tr><td>4. Transom Generation</td><td>Creates Transom solids incorporating Mullion results and bracket subtraction data.</td></tr>
+  <tr><td>5. Remachining / Grouping</td><td>If Transom bracket subtraction shapes exist, Mullion is remachined; results are organized into Unit groups.</td></tr>
+</tbody></table>
+<h2>Prerequisites</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Unit Group</td><td>A group created in the Wire Frame stage with a Unit No TextDot is recommended to easily track the workflow.</td></tr>
+  <tr><td>Section Data</td><td>Mullion/Transom data must be prepared in advance using <code>Pname</code>, <code>MakeM</code>, <code>MakeT</code>, etc.</td></tr>
+  <tr><td>Attach Info</td><td>If brackets or accessory machining are needed, the relevant Attach Curves and Anchor Points must be included in the group.</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Frame Solids</td><td>Brep objects with Mullion/Transom ProfileData are created.</td></tr>
+  <tr><td>Blocks</td><td>If brackets or accessories are needed, related Blocks or subtract shapes are also created.</td></tr>
+  <tr><td>Groups</td><td>The created models and reference objects are re-grouped by Unit.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>FabNo</code></td><td>Assigns fabrication numbers and ProfileData to the created frame solids.</td></tr>
+  <tr><td><code>Molist</code></td><td>Creates a quantity material list from the modeling result.</td></tr>
+  <tr><td><code>FDwg</code></td><td>Generates frame fabrication drawings.</td></tr>
+</tbody></table>
+<div class="warn"><strong>Caution:</strong> If reference lines or Section data are missing inside the group, some Mullion/Transom models may not be created or group errors may occur.</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

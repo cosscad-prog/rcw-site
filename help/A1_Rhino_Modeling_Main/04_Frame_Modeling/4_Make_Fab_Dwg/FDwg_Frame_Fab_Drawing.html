@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>FDwg - 프레임 제작 가공도 생성 (입면 홀 표현)</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    h3 { font-size:13px; margin-top:18px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .col-table { border-collapse:collapse; width:100%; margin-top:8px; font-size:12px; }
+    .col-table th { background:#dce8f8; border:1px solid #aac4e8; padding:4px 8px; text-align:center; font-weight:bold; word-break:keep-all;}
+    .col-table td { border:1px solid #c8d8ec; padding:4px 8px; vertical-align:top; word-break:keep-all;}
+    .col-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .new { background:#eefaf0; border-left:4px solid #38b86a; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .mini { font-size:12px; color:#555; }
+    .image-panel { display:flex; gap:18px; align-items:flex-start; margin:14px 0 8px; }
+    .image-panel img { width:52%; max-width:720px; min-width:360px; border:1px solid #c8d8ec; background:#fff; }
+    .callout-list { flex:1; min-width:240px; background:#f7faff; border:1px solid #c8d8ec; padding:10px 14px; }
+    .callout-list p { margin:0 0 8px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    @media (max-width:900px) { .image-panel { display:block; } .image-panel img { width:100%; min-width:0; } .callout-list { margin-top:10px; } }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>FDwg &nbsp;—&nbsp; 프레임 제작 가공도 생성 (입면 홀 표현)</h1>
+<p><span class="cmd-box">FDwg</span></p>
+<p>
+  <strong>FDwg</strong>는 <strong>FDDS</strong>와 동일하게 선택한 프레임 그룹 객체를 분석하여 제작 가공도(Fab Drawing)를 자동 생성하는 명령입니다.
+  모델을 가공도 위치로 복사·정렬한 뒤, 선택된 View 별로 2D 선, 단면, 홀 지름, 외곽 치수, 중심선 치수, 각도 치수,
+  Fab No / Quantity / Unit No 텍스트를 작성합니다.</p>
+<div>&nbsp;<strong style="font-family: &quot;Malgun Gothic&quot;, sans-serif;">FDwg는 여기에 더해, Bar 입면도(Front / Top / Bottom 등)에도 홀 정보를 함께 표시<span style="font-weight: 400;">하고 홀이 자재를 얼마나 관통하는지(깊이)를 Hidden Line으로 쉽게 파악할 수 있는 도면을 추가로 생성합니다.</span></strong></div>
+<div class="new">
+  <strong>FDDS → FDwg 핵심 차이:</strong>
+  <ul style="margin:6px 0 0 0; padding-left:18px;">
+    <li>Shape Curve 레이어를 OutLine Layer 로 표현합니다.&nbsp;</li>
+    <li>그 외 옵션·치수·텍스트·레이어 동작은 <strong>FDDS와 동일</strong>합니다.</li>
+  </ul>
+</div>
+<div class="note"><strong>참고:</strong> 이때 DimStyle 은 [DsOpt] 에 적용된 DimStyle 을 따른다. Profile 별 자동화를 위해 Fdds.dat 이 필요하며,&nbsp; Fdds.dat 에 Profile Name 및 해당 필요정보가 있어야 한다. Fdds.dat 해당 정보가 없다면 DdOpt 패널의 Drawing 옵션을 따른다.</div>
+<div class="note"><strong>FDstyle 기록/재생:</strong> FDwg/FDDS 는 <strong>FDstyle 패널</strong>의 모드를 따릅니다 — <strong>기록(ON)</strong> 모드에서 옵션·NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 Profile별로 기록하고, <strong>재생(OFF, 기본)</strong> 모드에서 이를 자동 재현합니다. 자세한 내용은 FDDS 도움말의 "FDstyle 기록 / 재생 모드"를 참고하세요.</div>
+<h2>사용 목적</h2>
+<p>FDwg 는 선택한 프레임 그룹 객체를 분석하여 제작 가공도(Fab Drawing)를 자동 생성하고, 입면도에서도 홀 위치와 가공 깊이를 한눈에 확인할 수 있게 하는 명령입니다.</p>
+<h2>기본 사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <li><strong>DdOpt</strong> 명령으로 Drawing 옵션 패널을 열고 필요한 View, 치수, 거리 옵션을 설정합니다.</li>
+  <li>프레임 모델에 <strong>FabNo</strong> 등으로 ProfileData / Fab No 정보가 먼저 입력되어 있어야 합니다.</li>
+  <li>Rhino 명령창에 <strong>FDwg</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li><strong>DdOpt · DsOpt 패널이 닫혀 있으면 FDwg 이 열어 준 뒤</strong> "지금 그 패널에 보이는 값 그대로 계속할까요?"
+      라고 묻습니다. <strong>예</strong> 는 그 값으로 그리고, <strong>아니오</strong> 는 여기서 멈춥니다 —
+      값을 확인·수정한 뒤 FDwg 을 다시 실행하십시오. 두 패널이 이미 열려 있으면 묻지 않고 바로 진행합니다.</li>
+  <li>명령 프롬프트 <strong>Select Group objects</strong> 에서 제작 가공도를 만들 프레임 그룹을 선택합니다.</li>
+  <li>Enter 를 누르면 그룹별로 가공도 모델과 치수가 생성되고, 입면도에 홀 깊이 Hidden Line이 함께 그려집니다.</li>
+
+
+
+
+
+
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <video src="../../../img/FDwg.mp4" autoplay muted loop playsinline aria-label="FDwg" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>FDDS 와 FDwg 의 차이점</figcaption>
+  </figure>
+</div>
+<h2>실행 흐름</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>단계</th><th>설명</th></tr>
+  <tr><td>1. 그룹 선택</td><td>GroupSelect 모드로 프레임 그룹을 선택합니다. 하위 객체 단독 선택이 아니라 그룹 단위 처리를 전제로 합니다.</td></tr>
+  <tr><td>2. 해치 패턴 확인</td><td><code>RCWFolder</code> 폴더의 <code>Hatch\acad.pat</code>에서 해치 패턴을 읽고 <code>ANGLE</code>, <code>ANSI31~ANSI38</code> 패턴이 있는지 확인합니다.</td></tr>
+  <tr><td>3. 레이어 준비</td><td><code>DIMS</code>, <code>Section_Curve</code>, <code>Dim_Point</code>, <code>Hole_Dia</code>, <code>Hole_Points</code>, <code>DimBox</code>, <code>Shape_Hidden</code> 등 레이어를 사용합니다.</td></tr>
+  <tr><td>4. 모델 정렬</td><td>선택 그룹에서 Shape 모델, DimBox 모델, 절단면 정보를 찾고 가공도 위치로 복사·정렬합니다.</td></tr>
+  <tr><td>5. View 생성</td><td>DdOpt에서 켜진 View만 생성합니다. Top Back, Top, Front, Bottom, Bottom Back을 개별적으로 만들 수 있습니다.</td></tr>
+  <tr><td>6. 치수/주기 작성</td><td>각 View에 외곽 치수, 세부 치수, 홀 지름, 각도 치수, 단면, Fab No, 수량, Unit No를 옵션에 따라 작성합니다.</td></tr>
+  <tr><td>7. 입면 홀 깊이 표현 <span class="mini">(FDwg 추가)</span></td><td>2D 투영의 Hidden Line 중 홀과 같은 깊이의 선을 선별해 입면도에 점선으로 그립니다.</td></tr>
+</tbody></table>
+<h2>입면도 홀 깊이 표현 (FDwg 추가 기능)</h2>
+<p>
+  FDwg는 가공도를 만들 때 Rhino의 2D 투영(<code>HiddenLineDrawing</code>)이 계산한 가려진 선(Hidden Line) 중,
+  <strong>홀과 같은 깊이(Z)에 위치한 선만 선별</strong>하여 입면도에 함께 그립니다.
+</p>
+<table class="desc-table">
+  <colgroup><col style="width:24%;"><col style="width:76%;"></colgroup>
+  <tbody>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>표현 방식</td><td>홀이 자재를 통과하는 구간을 <strong>Hidden Line(점선)</strong> 으로 표시합니다. 입면도에서 홀의 위치와 관통 깊이를 동시에 확인할 수 있습니다.</td></tr>
+  <tr><td>기준 정보</td><td>각 홀(HolePoint)의 Brep Bounding Box 깊이값과, 2D 투영으로 계산된 Hidden Line의 깊이값이 일치하는 것을 자동으로 골라냅니다. 반대편 벽 등 홀과 무관한 가려진 선은 제외됩니다.</td></tr>
+  <tr><td>표시 레이어</td><td>선별된 홀 Hidden Line은 <code>Shape_Hidden</code> 레이어(Hidden 선종류)에 그려집니다. 강조용 선이 아니라 일반 가려진 선으로 처리됩니다.</td></tr>
+  <tr><td>적용 View</td><td>FR / TO / BO / TB / BB 등 생성되는 모든 입면 View에 동일하게 적용되며, 프로파일 방향에 따라 알맞은 View에 자동으로 나타납니다.</td></tr>
+  <tr><td>기존 마커 유지</td><td>홀 중심선(<code>Hole_Center</code>), 단면 해치(<code>Hole_Hatch</code>), 홀 포인트(<code>Hole_Points</code>) 등 기존 표기는 그대로 유지되고, 그 위에 깊이 Hidden Line이 추가됩니다.</td></tr>
+  </tbody>
+</table>
+<h2>DdOpt 옵션 창 샘플</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../img/DdOpt_panel_guide.png" alt="DdOpt_panel_guide.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<p>FDwg도 FDDS와 동일하게 DdOpt 패널의 View 생성 여부, 거리값, 추가 치수, 보조 3D 표시 여부 설정을 그대로 사용합니다. 운영체제 테마나 화면 배율에 따라 패널 외형은 달라도 항목의 의미와 적용 순서는 동일합니다.</p>
+<h2>생성되는 주요 객체와 레이어</h2>
+<table class="col-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>레이어</th><th>내용</th></tr>
+  <tr><td><code>DIMS</code></td><td>일반 치수, 외곽 치수, 세부 치수</td></tr>
+  <tr><td><code>DIMS_Center</code></td><td>중심선 치수</td></tr>
+  <tr><td><code>DIMS_Angle</code></td><td>각도 치수. 90도 각도는 <b>90° Angle Dim 옵션</b>으로 켜고 끕니다(아래 참조)</td></tr>
+  <tr><td><code>Section_Curve</code></td><td>단면 2D 선</td></tr>
+  <tr><td><code>Separate_Curve</code></td><td>SectionLine 옵션이 켜진 경우 생성되는 분리선</td></tr>
+  <tr><td><code>Hole_Dia</code></td><td>홀 지름 표기</td></tr>
+  <tr><td><code>Hole_Center</code>, <code>Hole_Hatch</code></td><td>홀 중심선 및 단면 해치</td></tr>
+  <tr><td><code>Hole_Points</code></td><td>홀 위치 확인용 포인트</td></tr>
+  <tr><td><code>Shape_Hidden</code> <span class="mini">(FDwg 입면 홀 깊이)</span></td><td>입면도에 표시되는 홀 관통 깊이 Hidden Line(점선). 홀과 같은 깊이의 가려진 선만 선별되어 들어갑니다.</td></tr>
+  <tr><td><code>DimBox</code>, <code>DimBox1</code></td><td>치수 기준 모델</td></tr>
+  <tr><td><code>Profile_No_Qnt</code></td><td>Fab No, Quantity, Unit No 텍스트</td></tr>
+  <tr><td><code>NC_TopPoint</code>, <code>NC_BottomPoint</code></td><td>NC 데이터 산출용 상·하 기준 포인트</td></tr>
+</tbody></table>
+<h2>옵션 / 치수 설정</h2>
+<p>
+  FDwg의 View 선택, 거리, 추가 치수, 보조 3D 표시, 그리고 DsOpt / DimStyle 치수 배치 옵션은
+  <strong>FDDS와 완전히 동일</strong>하게 동작합니다. 각 옵션의 상세 설명은 FDDS 도움말 문서를 참고하세요.
+</p>
+<table class="desc-table">
+  <colgroup><col style="width:28%;"><col style="width:72%;"></colgroup>
+  <tbody>
+  <tr><th>옵션 그룹</th><th>요약</th></tr>
+  <tr><td>DdOpt Group 1 (View/Max Only/Side Dim)</td><td>생성할 View 방향과 각 View의 치수 표기 방식을 지정합니다.</td></tr>
+  <tr><td>DdOpt Group 2 (거리/홀 크기)</td><td>가공도 시작 위치, View 간격, Fab No 위치, 홀 인식 지름(Hole Dia Min)을 조정합니다.</td></tr>
+  <tr><td>DdOpt Group 3 (Extra Dim OnOff)</td><td>90° Angle / Center / Hole / Unit No / P_Section / Attach 추가 정보를 켜고 끕니다.</td></tr>
+  <tr><td>DdOpt Group 4 (Model View)</td><td>Shape / Dim / Angle 보조 모델을 도면에 남길지 결정합니다.</td></tr>
+  <tr><td>DsOpt / DimStyle</td><td>First Dist, Dim Gap, Angle Dist, TextSize 등 치수선 배치/크기를 결정합니다.</td></tr>
+  </tbody>
+</table>
+<div class="note">
+  <strong>옵션 적용 우선순위:</strong> <strong>재생 모드</strong>에서 <code>FDDS_Data.dat</code>에 해당 금형 행이 있으면 파일 값이 패널 값보다 우선합니다. 행이 없거나 파일이 없으면 DdOpt 패널 값을 사용합니다.
+</div>
+<h2>주의할 점</h2>
+<div class="warning">
+  <strong>해치 패턴:</strong> <code>RCWFolder</code> 폴더의 <code>Hatch\acad.pat</code>와 필수 해치 패턴이 없으면 FDwg가 중단되고 안내 메시지가 표시됩니다. Rhino의 Hatch 설정에서 acad.pat를 import해야 합니다.
+</div>
+<div class="warning">
+  <strong>그룹 데이터:</strong> FDwg는 선택 그룹에서 Profiles 레이어의 Shape 모델, ProfileData, Fab No, DimBox/DimBox1, 절단면 데이터를 찾습니다. FabNo 처리 전이거나 그룹 구조가 깨져 있으면 <code>Group Model Error</code>, <code>CutSurface Error</code> 같은 오류가 날 수 있습니다.
+</div>
+<div class="warning">
+  <strong>홀 인식:</strong> 홀은 원통형 Brep face를 기준으로 찾고, 지름이 Hole Dia Min 이상인 것만 표기합니다. 너무 작은 값은 불필요한 원형 면까지 잡고, 너무 큰 값은 실제 홀을 누락할 수 있습니다.
+</div>
+<div class="warning">
+  <strong>입면 홀 깊이 Hidden Line:</strong> 깊이 표현은 모델에 실제 가공된 형상에서 계산됩니다. 홀이 인식되지 않거나(원통형 face가 아님) 자재가 비정상 형상이면 Hidden Line이 나타나지 않을 수 있습니다. 점선이 과하거나 부족하면 모델의 홀/단면 형상을 먼저 확인하세요.
+</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+    <colgroup>
+  <col style="width: 20%;">
+  <col style="width: 80%;">
+</colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>FDDS</strong></td><td><b>폐기된 명령입니다.</b> 옛 기본 가공도 명령이며 FDwg는 FDDS에 입면 홀 깊이 표현을 더한 버전입니다.</td></tr>
+  <tr><td><strong>DdOpt</strong></td><td>FDwg / FDDS에서 사용하는 Drawing 옵션 패널을 엽니다.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>FDwg/FDDS 의 <strong>기록(ON)·재생(OFF)</strong> 모드를 전환하는 패널입니다. 재생 시 NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 자동 재현합니다.</td></tr>
+  <tr><td><strong>FabNo</strong></td><td>프레임 객체에 제작 번호와 ProfileData를 부여합니다. FDwg 실행 전 선행 작업으로 필요합니다.</td></tr>
+  <tr><td><strong>FabTable</strong></td><td>프레임 제작 번호/수량 테이블을 작성합니다. FDwg와 함께 제작 도면 세트를 구성합니다.</td></tr>
+</tbody></table>
+
+<h2>90° Angle Dim 옵션 &nbsp;—&nbsp; 90도 각도를 켜고 끕니다</h2>
+<p><code>DdOpt</code> 의 <b>90° Angle Dim</b> 은 <b>90도 각도만</b> 가르는 스위치입니다. 45도 같은 나머지 각도는 <b>옵션과 무관하게 언제나 그려집니다</b> — 사면 각도는 도면에서 읽어야 하는 값이기 때문입니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>90° Angle Dim</th><th>그려지는 각도</th></tr>
+  <tr><td><b>On</b></td><td>90도까지 <b>전부</b> 그립니다</td></tr>
+  <tr><td><b>Off</b></td><td><b>90도만 빠지고</b> 나머지는 그대로 그립니다</td></tr>
+</tbody></table>
+<p>예를 들어 <code>FR</code> 이 90도이고 <code>TP</code> 가 45도인 부재라면, 90° Angle Dim 을 끄면 <b>90도만 사라지고 45도는 그대로 남습니다.</b> <code>[F]</code> 각도(3D 실각도)도 같은 규칙을 따라 <b>[F]90도만</b> 빠집니다.</p>
+<div class="note"><b>90도 판정 기준:</b> 도면에 <code>90</code> 으로 찍힐 값을 90도로 봅니다(90도에서 0.05도 이내). 즉 <code>89.96&deg;</code>·<code>90.04&deg;</code> 는 90도로 보아 빠지고, <code>89.9&deg;</code>·<code>90.1&deg;</code> 는 90도가 아니므로 그대로 그려집니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

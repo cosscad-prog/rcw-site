@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Transom Line - Wire Frame 요소</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:600px; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Transom Line &nbsp;—&nbsp; Wire Frame 요소</h1>
+<p><span class="cmd-box">TC1 ~ TCXX</span></p>
+<p>Transom Line은 Wire Frame에서 가로 방향 Transom 기준선을 정의하는 요소입니다. <br><code><span style="font-family: &quot;Malgun Gothic&quot;, &quot;맑은 고딕&quot;, sans-serif;">T_Center1</span></code>부터 <code><span style="font-family: &quot;Malgun Gothic&quot;, &quot;맑은 고딕&quot;, sans-serif;">T_CenterXX</span></code>까지의 레이어명을 사용해 Transom 중심선을 구분합니다.</p>
+<h2>사용 목적</h2>
+<p>가로 부재(Transom)의 중심선을 <code>T_Center</code> 레이어 체계로 정리해, 이후 단면 배치와 Unit 모델링(<code>UMD</code>)이 가로 기준선을 올바르게 인식하도록 준비할 때 사용합니다. Transom 번호 순서와 좌→우 방향을 맞춰 두면 모델링 결과의 부재 순서가 정확해집니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>Rhino에서 Transom 기준선으로 사용할 Line을 준비합니다.</li>
+  <li><code><span style="font-family: &quot;Malgun Gothic&quot;, &quot;맑은 고딕&quot;, sans-serif;">TC1</span></code> ~ <code></code><span style="font-family: &quot;Malgun Gothic&quot;, &quot;맑은 고딕&quot;, sans-serif;"><code><span style="font-family: &quot;Malgun Gothic&quot;, &quot;맑은 고딕&quot;, sans-serif;">TCXX</span></code> </span>명령으로 선택한 선을 해당 `T_Center` 레이어로 지정합니다.</li>
+  <li>Transom Line의 방향이 좌에서 우 방향인지 확인합니다.</li>
+
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <img src="../../../img/Transom_Line.png" alt="Transom_Line.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Transom Line 방향과 레이어 구성</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어</td><td><code>T_Center1</code> ~ <code>T_CenterXX</code></td></tr>
+  <tr><td>작성 명령</td><td><code>TC1</code> ~ <code>TCXX</code></td></tr>
+  <tr><td>방향 기준</td><td>좌에서 우 방향으로 작성합니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><code>Mullion Line</code></td><td>세로 방향 Mullion 기준선을 정의합니다.</td></tr>
+  <tr><td><code>Direction Point</code></td><td>Mullion Line의 방향점을 지정합니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

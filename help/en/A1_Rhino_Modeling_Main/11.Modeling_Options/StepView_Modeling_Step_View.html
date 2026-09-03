@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><title>StepView - Modeling Step View Option</title><style>
+body{font-family:"맑은 고딕","Malgun Gothic",sans-serif;font-size:13px;color:#222;margin:20px 30px;line-height:1.7}h1{font-size:18px;border-bottom:2px solid #0066cc;padding-bottom:6px;color:#0066cc}h2{font-size:14px;border-left:4px solid #0066cc;padding-left:8px;margin-top:26px;color:#003d80}.cmd-box{display:inline-block;background:#f0f4ff;border:1px solid #99bbee;border-radius:4px;padding:2px 10px;font-family:Consolas,monospace;font-size:14px;font-weight:bold;color:#003d80}.desc-table{border-collapse:collapse;width:100%;margin-top:8px;table-layout:fixed}.desc-table th{background:#dce8f8;border:1px solid #aac4e8;padding:5px 10px;text-align:left}.desc-table td{border:1px solid #c8d8ec;padding:5px 10px;vertical-align:top}.step-list{padding-left:20px}.step-list li{margin-bottom:6px}code{font-family:Consolas,monospace;background:#f4f7fb;padding:1px 4px;border-radius:3px}</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>StepView &nbsp;—&nbsp; Modeling Step View Option</h1>
+<p><span class="cmd-box">StepView</span></p>
+<p><strong>StepView</strong> is a toggle command for controlling whether intermediate-step shapes are displayed during modeling.</p>
+
+<h2>Purpose</h2>
+<p>Used to toggle the display of intermediate modeling step shapes for verification. When enabled, retains auxiliary shapes from each modeling step for detailed inspection; when disabled, focuses on final result and cleans up intermediate geometry.</p>
+
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <code>StepView</code> in the Rhino command line and press Enter.</li>
+  <li>Toggle <code>Step_View_On</code> On or Off.</li>
+  <li>Run a modeling command to verify whether intermediate-step display is active.</li>
+</ol>
+<h2>Options</h2>
+<table class="desc-table"><colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+<tr><th>Option</th><th>Description</th></tr>
+<tr><td><code>Step_View_On</code></td><td>On: retains more auxiliary shapes from intermediate modeling steps for verification. Off: focuses on the final result and cleans up intermediate shapes.</td></tr>
+</table>
+<h2>Related Commands</h2>
+<p>Used together with <code>UMD</code> and <code>MVOption</code> during modeling review.</p>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

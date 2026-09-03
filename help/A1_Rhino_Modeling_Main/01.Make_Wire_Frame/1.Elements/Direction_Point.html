@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Direction Point - Wire Frame 요소</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:600px; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Direction Point &nbsp;—&nbsp; Wire Frame 요소</h1>
+<p><span class="cmd-box">MC1 ~ MCXX</span></p>
+<p>Direction Point는 Mullion Line의 방향을 판단하기 위한 점 요소입니다. <br>Mullion Line과 같은 이름의 레이어에 있어야 하며, 기준선의 끝점 근처에 배치해야 합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  
+  <li>Mullion Line과 같은 레이어 이름을 가진 점 또는 관련 객체를 준비합니다.</li>
+  <li>Direction Point를 Mullion Line 끝점 기준 반경 300mm 안쪽에 배치합니다.</li>
+  <li>Wire Frame 작성 전 방향점이 올바른 Mullion Line에 대응되는지 확인합니다.</li>
+
+
+
+
+
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../../img/Direction_Point.png" alt="Direction_Point.png" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Mullion Line 끝점 근처의 Direction Point</figcaption>
+  </figure>
+</div>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어</td><td>Mullion Line과 같은 <code>M_Center</code> 레이어를 사용합니다.</td></tr>
+  <tr><td>인식 범위</td><td>Mullion Line 끝점에서 300mm 반경 안에 있어야 방향점으로 인식됩니다.</td></tr>
+  <tr><td>사용 목적</td><td>Mullion Line의 방향과 기준 끝점을 판정합니다.</td></tr>
+</tbody></table>
+<div class="warning"><span style="font-weight: 700;">주의:</span>&nbsp; Direction Point가 끝점에서 너무 멀거나 다른 레이어에 있으면 해당 Mullion Line의 방향점으로 인식되지 않을 수 있습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>LDM - 04_Layer_Control</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .help-image { max-width:50%; min-width:360px; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .compact-table { width:auto; min-width:520px; max-width:720px; font-size:12px; }
+    .compact-table th, .compact-table td { padding:3px 8px; }
+    .compact-table code { background:transparent; padding:0; }
+    @media (max-width:760px) { .help-image { max-width:100%; min-width:0; } .compact-table { width:100%; min-width:0; } }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>LDM &nbsp;—&nbsp; 04_Layer_Control</h1>
+<p><span class="cmd-box">LDM</span></p>
+<p>초기 모델링과 도면 작업에 필요한 기본 Layer와 Annotation DimStyle을 한 번에 생성하는 세팅 명령입니다.</p>
+<h2>사용 목적</h2>
+<p>새 파일 또는 초기 작업 단계에서 자주 쓰는 기본 Layer와 DimScale별 DimStyle을 빠르게 준비해, 이후 모델링/치수/문자 작업의 기준을 통일할 때 사용합니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  
+  <li>Rhino 명령창에 <code>LDM</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>명령이 실행되면 기본 Layer와 Annotation DimStyle이 생성됩니다.</li>
+  <li>Rhino의 Layer 패널과 DimStyle/Annotation 설정에서 생성된 항목을 확인합니다.</li>
+
+</ol>
+<h2>실행 예시</h2>
+<h2>생성 Layer</h2>
+<table class="desc-table compact-table">
+  <colgroup><col style="width:65%"><col style="width:35%"></colgroup>
+  <tbody><tr><th>Layer</th><th>CAD Color Number</th></tr>
+  <tr><td><code>Default</code></td><td>7</td></tr>
+  <tr><td><code>Text</code></td><td>7</td></tr>
+  <tr><td><code>Dims</code></td><td>254</td></tr>
+  <tr><td><code>Layer 01</code></td><td>1</td></tr>
+  <tr><td><code>Layer 02</code></td><td>2</td></tr>
+  <tr><td><code>Layer 03</code></td><td>3</td></tr>
+  <tr><td><code>Layer 04</code></td><td>4</td></tr>
+  <tr><td><code>Layer 05</code></td><td>5</td></tr>
+  <tr><td><code>Layer 06</code></td><td>6</td></tr>
+  <tr><td><code>Layer 07</code></td><td>7</td></tr>
+</tbody></table>
+<h2>생성 DimStyle</h2>
+<table class="desc-table compact-table">
+  <colgroup><col style="width:42%"><col style="width:29%"><col style="width:29%"></colgroup>
+  <tbody><tr><th>DimStyle</th><th>TextHeight</th><th>DimScale</th></tr>
+  <tr><td><code>DS-01</code></td><td>1</td><td>1</td></tr>
+  <tr><td><code>DS-02</code></td><td>1</td><td>2</td></tr>
+  <tr><td><code>DS-03</code></td><td>1</td><td>3</td></tr>
+  <tr><td><code>DS-04</code></td><td>1</td><td>4</td></tr>
+  <tr><td><code>DS-05</code></td><td>1</td><td>5</td></tr>
+  <tr><td><code>DS-06</code></td><td>1</td><td>6</td></tr>
+  <tr><td><code>DS-08</code></td><td>1</td><td>8</td></tr>
+  <tr><td><code>DS-10</code></td><td>1</td><td>10</td></tr>
+  <tr><td><code>DS-12</code></td><td>1</td><td>12</td></tr>
+  <tr><td><code>DS-15</code></td><td>1</td><td>15</td></tr>
+  <tr><td><code>DS-20</code></td><td>1</td><td>20</td></tr>
+  <tr><td><code>DS-30</code></td><td>1</td><td>30</td></tr>
+  <tr><td><code>DS-40</code></td><td>1</td><td>40</td></tr>
+  <tr><td><code>DS-50</code></td><td>1</td><td>50</td></tr>
+  <tr><td><code>DS-80</code></td><td>1</td><td>80</td></tr>
+  <tr><td><code>DS-100</code></td><td>1</td><td>100</td></tr>
+  <tr><td><code>DS-200</code></td><td>1</td><td>200</td></tr>
+  <tr><td><code>DS-300</code></td><td>1</td><td>300</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> Layer의 Color 값은 Rhino CAD Color Number 기준입니다. 생성된 DimStyle은 모두 TextHeight 1을 기준으로 하고, 이름의 숫자와 같은 DimScale을 사용합니다. 한눈에 확인하려면 <code>DsOpt</code>를 실행해 패널 테이블에서 DimStyle 설정을 확인하십시오.</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>

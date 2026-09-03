@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FSC - 05_Drawing_Shortening</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    .warn { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; margin-bottom:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#556; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FSC &nbsp;—&nbsp; 05_Drawing_Shortening</h1>
+<p><span class="cmd-box">FSC</span></p>
+<p>
+  A command that automatically reduces 2D drawing <strong>in X-axis direction only</strong> (Drawing Shortening) to compress it to match form size.<br>
+  Automatically reads profile-specific settings from <code>AutoScale.dat</code> and applies shortening reference dimensions, target dimensions, and excluded sections.<br>
+  AutoCAD / BricsCAD only — not available in Rhino.
+</p>
+<h2>Purpose</h2>
+<p>
+  When actual shape dimensions exceed the maximum length that fits in form size,
+  selectively compress only sections meeting specified criteria to reduce drawing to match form size.
+  Dimension text is converted to fixed actual-size dimensions so original dimensions display even after compression.
+</p>
+<h2>Operation Flow</h2>
+<table class="desc-table">
+  <colgroup><col style="width:5%"><col style="width:28%"><col style="width:67%"></colgroup>
+  <tbody><tr><th>Step</th><th>Stage</th><th>Description</th></tr>
+  <tr><td>1</td><td>Object Selection</td><td>Select entire drawing (shape, dimensions, text, NC Points, etc.). All objects can be selected without filtering.</td></tr>
+  <tr><td>2</td><td>Profile Recognition</td><td>Reads drawing number text from selected <code>MText</code>, using first word before <code>-</code> or space as profile name. Loads configuration data for that profile from <code>AutoScale.dat</code>.</td></tr>
+  <tr><td>3</td><td>Range Measurement</td><td>Calculates total drawing width (<code>Max_distance</code>) from X coordinates of <code>NC_BottomPoint</code> layer Point (left reference) and <code>NC_TopPoint</code> layer Point (right reference).</td></tr>
+  <tr><td>4</td><td>Execution Condition Check</td><td>If current width (<code>Max_distance</code>) is less than target dimension (<code>MinFabdist</code>), shortening is not executed.</td></tr>
+  <tr><td>5</td><td>Dimension Fixed Conversion</td><td>Converts <code>RotatedDimension</code> in sections meeting or exceeding shortening reference (<code>min_ds</code>) to fixed actual-size text dimensions.</td></tr>
+  <tr><td>6</td><td>Excluded Section Selection</td><td>If <code>excute=1</code> in <code>AutoScale.dat</code>: Select dimension objects in sections not to shorten at <em>"Select excluded section Entity"</em> prompt.</td></tr>
+  <tr><td>7</td><td>Minimum Value Input</td><td>If <code>Min_excute=1</code> in <code>AutoScale.dat</code>: Directly enter target minimum width (previous input displays as default).</td></tr>
+  <tr><td>8</td><td>Per-Section Stretch</td><td>Pulls right from center point of each dimension section meeting shortening criteria along X-axis, compressing proportionally.</td></tr>
+  <tr><td>9</td><td>NC Data Table Movement</td><td>Moves objects (NC data table) on right of maximum drawing X in <code>NC4_data</code> / <code>NC3_data</code> layers leftward by total reduction distance.</td></tr>
+</tbody></table>
+<h2>AutoScale.dat Settings</h2>
+<table class="desc-table">
+  <colgroup><col style="width:8%"><col style="width:24%"><col style="width:18%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>Column</th><th>Item</th><th>Default Value</th><th>Description</th></tr>
+  <tr><td>[0]</td><td>Name</td><td>—</td><td>Profile name. Must match first word of drawing number for automatic application.</td></tr>
+  <tr><td>[1]</td><td>Shortening Reference (min_ds)</td><td>250</td><td>Only sections meeting or exceeding this value are targets for shortening. (Example: 250 = compress only if section length ≥ 250)</td></tr>
+  <tr><td>[2]</td><td>Total Shortening Dimension (MinFabdist)</td><td>300</td><td>Target total width of drawing after shortening.</td></tr>
+  <tr><td>[3]</td><td>Excluded Section Selection (excute)</td><td>1</td><td>If 1, displays excluded section selection prompt. If 0, skips.</td></tr>
+  <tr><td>[4]</td><td>Minimum Value Input (Min_excute)</td><td>1</td><td>If 1, displays direct minimum width input prompt. If 0, uses <code>MinFabdist</code> as-is.</td></tr>
+</tbody></table>
+<h2>Preparation</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td><code>NC_BottomPoint</code> Layer Point</td><td>Left reference point (minimum X value). If absent, replaced with entire shape range.</td></tr>
+  <tr><td><code>NC_TopPoint</code> Layer Point</td><td>Right reference point (maximum X value). If absent, replaced with entire shape range.</td></tr>
+  <tr><td><code>AutoScale.dat</code></td><td>Profile-specific shortening parameter file. If absent or profile name not found, defaults used (min_ds=250, MinFabdist=300).</td></tr>
+  <tr><td>Drawing Number MText</td><td>Selection range must include drawing number MText for profile to be automatically recognized.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  
+  <li>Verify that parameters for the profile are correctly entered in <code>AutoScale.dat</code>.</li>
+  <li>Verify that <code>NC_BottomPoint</code> / <code>NC_TopPoint</code> layer Points are placed on drawing.</li>
+  <li>Enter <code>FSC</code> in command line and press Enter.</li>
+  <li>At <em>"Select Entity"</em> prompt, select entire drawing including shapes, dimensions, drawing number text, and NC Points, then press Enter.</li>
+  <li>(If <code>excute=1</code>) At <em>"Select excluded section Entity"</em> prompt, select dimension objects in sections not to shorten and press Enter. If none, press Enter only.</li>
+  <li>(If <code>Min_excute=1</code>) Enter target minimum width. Pressing Enter only uses previous input or <code>AutoScale.dat</code>'s <code>MinFabdist</code>.</li>
+  <li>Drawing is automatically compressed in X-axis direction, and command window outputs <code>Maximum_distance</code> / <code>Minimum_distance</code> / ratio / actual movement distance.</li>
+
+
+
+
+</ol>
+<h2>Execution Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 50%; min-width:220px; max-width:50%;">
+    <img src="../../../img/C2210_FSC1.png" alt="FSC before and after comparison" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>FSC — Before and after X-axis Drawing Shortening</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 75%; min-width:220px; max-width:75%;">
+    <video src="../../../img/C2210_FSC3.mp4" autoplay muted loop playsinline aria-label="FSC execution process" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>FSC — Per-section stretch execution process</figcaption>
+  </figure>
+</div>
+<h2>Execution Result</h2>
+<table class="desc-table">
+  <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Drawing Compression</td><td>Each section meeting or exceeding shortening criteria is pulled proportionally along X-axis.</td></tr>
+  <tr><td>Dimension Fixed</td><td>Dimensions in compressed sections are converted to fixed actual-size text, displaying original dimensions even after compression.</td></tr>
+  <tr><td>NC Table Movement</td><td>NC data table on <code>NC4_data</code> / <code>NC3_data</code> layers is automatically moved leftward by total reduction distance.</td></tr>
+</tbody></table>
+<div class="note">
+  <strong>Note:</strong> If current drawing width (<code>Max_distance</code>) is already less than or equal to <code>AutoScale.dat</code>'s <code>MinFabdist</code>,
+  shortening will not execute and <em>"Not Working"</em> message displays.<br>
+  Sections below shortening criteria (<code>min_ds</code>) are not compressed, and minimum post-compression size (<code>Min_s</code>=30) is guaranteed.
+</div>
+<div class="warning">
+  <strong>Caution:</strong> FSC is not available in Rhino (AutoCAD / BricsCAD only).<br>
+  If selection range does not include <strong>drawing number MText</strong>, <code>AutoScale.dat</code> profile cannot be recognized and defaults are used.<br>
+  If <code>NC_BottomPoint</code> / <code>NC_TopPoint</code> layer Points are absent, drawing range calculation may be inaccurate.
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

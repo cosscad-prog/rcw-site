@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>System Default - Save User Default Settings</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn,.warning { background:#fff2f2; border-left:4px solid #e05050; color:#7f1d1d; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>System Default &nbsp;—&nbsp; Save User Default Settings</h1>
+<p>
+  RCW saves default settings for various features in a single file: <strong><code>System_Default.dat</code></strong>.
+  This file is stored <strong>per PC</strong>, so different users (PCs) can have different defaults.
+  Each feature automatically reads this file on execution and applies the saved defaults.
+</p>
+
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">
+    <img src="../../../img/system_default.png" alt="Where the D button sits in the DdOpt and DsOpt panels" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>The <b>D</b> button that saves the defaults - <b>top</b> of the <code>DdOpt</code> panel on the left, <b>below</b> <code>Apply</code> in <code>DsOpt</code> on the right.</figcaption>
+  </figure>
+</div>
+<h2>File Information</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Location</td><td><code>System_Default.dat</code> in the RCW data folder. <strong>The full path is printed to the command line when it saves</strong> - copy that line to find the file.</td></tr>
+  <tr><td>Format</td><td><code>key=value</code> one per line. Lines starting with <code>#</code> are comments.</td></tr>
+  <tr><td>Sharing</td><td>Multiple features share the same file. When saving, <strong>only its own entries are updated</strong> and other features' values are preserved.</td></tr>
+  <tr><td>Editing</td><td>If needed, the file can be opened directly in Notepad to edit values (no rebuild needed).</td></tr>
+</tbody></table>
+
+<h2>Currently Saved Items</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Feature</th><th>Saved Content</th></tr>
+  <tr><td><strong>DdOpt</strong></td><td>All Drawing option panel checkbox and input values (View / distance / dimension / model display, etc.).</td></tr>
+  <tr><td><strong>DsOpt</strong></td><td>The current <strong>DimStyle</strong> name, the multipliers (First, Gap, Angle, LnR) and the <code>Top/Bottom/Left/Right Max</code> check states.</td></tr>
+  <tr><td><strong>Fablist</strong></td><td>Label method (<code>Fablist_LabelType</code> = A/B) and label font scale (<code>Fablist_LabelFontScale</code>).</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> Saved items may <strong>expand to other features</strong> in the future. (Currently DdOpt, DsOpt and Fablist)</div>
+
+<h2>How to Save</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Feature</th><th>Method</th></tr>
+  <tr><td><strong>DdOpt</strong></td><td>Click the small <strong>D</strong> button near the <strong>top</strong> of the panel.</td></tr>
+  <tr><td><strong>DsOpt</strong></td><td>Click the small <strong>D</strong> button <strong>below</strong> the <strong>Apply</strong> button.</td></tr>
+  <tr><td><strong>Fablist</strong></td><td>During command execution, set the <code>SaveAsDefault</code> option to <strong>On</strong>, then after object selection completes, the current <code>LabelType</code> and <code>LabelFontScale</code> are saved as defaults.</td></tr>
+</tbody></table>
+
+<div class="note"><strong>How you know it took &mdash; the button turns blue.</strong>
+  Change any value afterwards and it <strong>goes back to its normal colour</strong>, so the button alone tells you
+  whether what is on screen still matches the saved defaults. The full path of the file is printed to the
+  <strong>command line</strong> at the same time.</div>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/SysDefault_DdOpt_D.png" alt="The D button at the top of the DdOpt panel" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption><b>DdOpt</b> &mdash; top of the panel, before the click.</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/SysDefault_DdOpt_D_saved.png" alt="The DdOpt D button turned blue after saving" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption><b>DdOpt</b> &mdash; after saving. The button is blue.</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/SysDefault_DsOpt_D.png" alt="The D button below Apply in the DsOpt panel" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption><b>DsOpt</b> &mdash; below <code>Apply</code>, before the click.</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/SysDefault_DsOpt_D_saved.png" alt="The DsOpt D button turned blue after saving" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption><b>DsOpt</b> &mdash; after saving. The button is blue.</figcaption>
+  </figure>
+</div>
+
+<h2>Application</h2>
+<ol class="step-list">
+  <li>When the corresponding feature is executed, the saved values from <code>System_Default.dat</code> are automatically read and applied.</li>
+  <li>If no saved value exists, the current (code) default is used, and missing items are automatically recorded.</li>
+  <li>Since each user (PC) has its own file, different users can always work with their preferred defaults.</li>
+</ol>
+
+<div class="warning"><strong>Caution:</strong> This file is a per-PC setting. To move the same defaults to another PC, the file must be copied.</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

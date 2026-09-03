@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>3.CT_Layer - Layer Making</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>3.CT_Layer &nbsp;—&nbsp; Layer Making</h1>
+<p><span class="cmd-box">CT0 ~ CT5 / CTL</span></p>
+<h2>Purpose</h2>
+<p>Creates <code>Center</code> series layers for pre-preparing section reference lines or centrelines with a numbered colour system.</p>
+<p>A set of commands for creating <code>Center</code> series Layers.</p>
+<h2>Included Commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>Command</th><th>Created Layer</th><th>Color / Attributes</th></tr>
+  <tr><td><code>CTL</code></td><td>Creates a <code>CenterXX</code> layer. Accepts numbers or characters.</td><td>When a number is entered, applies the CAD Color Number / Center Linetype</td></tr>
+  <tr><td><code>CT0</code></td><td>Creates the <code>Center0</code> layer.</td><td>White / Center Linetype</td></tr>
+  <tr><td><code>CT1</code></td><td>Creates the <code>Center1</code> layer.</td><td>Color 1 [CAD Color Number] / Center Linetype</td></tr>
+  <tr><td><code>CT2</code></td><td>Creates the <code>Center2</code> layer.</td><td>Color 2 [CAD Color Number] / Center Linetype</td></tr>
+  <tr><td><code>CT3</code></td><td>Creates the <code>Center3</code> layer.</td><td>Color 3 [CAD Color Number] / Center Linetype</td></tr>
+  <tr><td><code>CT4</code></td><td>Creates the <code>Center4</code> layer.</td><td>Color 4 [CAD Color Number] / Center Linetype</td></tr>
+  <tr><td><code>CT5</code></td><td>Creates the <code>Center5</code> layer.</td><td>Color 5 [CAD Color Number] / Center Linetype</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type the required command in the Rhino command line and press Enter.</li>
+  <li>The <code>*L</code> command appends the entered number or character directly after the base layer name to create the layer.</li>
+  <li>When a number is entered, it is used as the CAD Color Number. Numbers greater than 256 use the remainder when divided by 256 as the Color Number.</li>
+  <li>Check the Layer name, Color, and Linetype state in the Rhino Layer panel.</li>
+</ol>
+<h2>Key Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer Series</td><td><code>Center</code></td></tr>
+  <tr><td>Commands</td><td><code>CT0</code> ~ <code>CT5</code>, <code>CTL</code></td></tr>
+</tbody></table>
+<h2>Verifying Results</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer Name</td><td>Confirm the created layer name matches the Created Layer column.</td></tr>
+  <tr><td>Layer Color</td><td>Confirm the CAD Color Number or RGB value was applied.</td></tr>
+  <tr><td>Command Line</td><td>Check the guidance or completion message.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> CTL appends the entered value directly after <code>Center</code> to create a new layer. When a number is entered, the corresponding CAD Color Number is applied.</div>
+
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+</body>
+</html>
+
