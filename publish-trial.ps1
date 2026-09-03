@@ -237,15 +237,6 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
         Remove-Item -LiteralPath $uploadDir -Recurse -Force -ErrorAction SilentlyContinue
     }
 
-    # 다운로드 링크는 이름이 고정이라 고칠 게 없다. 대신 페이지가 안내하는
-    # 버전 문구를 맞춘다 — 받는 사람이 어느 빌드인지 알 길이 여기뿐이다.
-    Write-Host "`n사이트 버전 안내 갱신" -ForegroundColor Cyan
-    . (Join-Path $PSScriptRoot '_site-links.ps1')
-    Update-SiteDownloadLinks -Version $Version `
-        -RelativePath 'trial.html' `
-        -ConstantPrefix "var TRIAL_VERSION = '" `
-        -CommitMessage "Say the trial downloads are $Version"
-
 
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"
@@ -262,6 +253,19 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
     Write-Host "  릴리스 노트에는 싣지 않는다(GitHub 이 자체 제공). 발행 기록 문서에 옮겨 적을 것." -ForegroundColor DarkGray
     foreach ($f in $plan) { Write-Host ("  {0,-34} {1,6:N1} MB  {2}" -f $f.UploadName, $f.SizeMB, $f.Sha256) }
 }
+
+# 다운로드 링크는 이름이 고정이라 고칠 게 없다. 대신 페이지가 안내하는
+# 버전 문구를 맞춘다 — 받는 사람이 어느 빌드인지 알 길이 여기뿐이다.
+#
+# ⚠ 아래 도움말 동기화와 함께 릴리스 ShouldProcess 블록 **밖**에 둔다.
+#   -WhatIf 로 점검할 때 "어느 파일의 몇 곳이 바뀌는가" 가 보여야 하기 때문이다.
+#   실제로 고칠지는 Update-SiteDownloadLinks 가 자기 ShouldProcess 로 다시 판단한다.
+Write-Host "`n사이트 버전 안내 갱신" -ForegroundColor Cyan
+. (Join-Path $PSScriptRoot '_site-links.ps1')
+Update-SiteDownloadLinks -Version $Version `
+    -RelativePath 'trial.html' `
+    -ConstantPrefix "var TRIAL_VERSION = '" `
+    -CommitMessage "Say the trial downloads are $Version"
 
 # 설치본에는 도움말이 함께 들어간다. 새 설치 파일을 올렸으면 홈페이지 도움말도
 # 그 버전의 것이어야 한다 — 손으로 맞추면 어긋나므로 발행이 이어서 올린다.

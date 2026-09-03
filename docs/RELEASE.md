@@ -173,12 +173,27 @@ cd C:\std\Web\rcw-site
   이전 버전 파일이 섞여 올라가는 사고를 막는다)
 - 같은 태그의 릴리스가 이미 있으면 중단
 - 릴리스를 만들고 4개를 업로드한 뒤 latest 로 표시
+- 평가판 페이지가 안내하는 버전(`trial.html` 의 `TRIAL_VERSION` 한 줄)을 맞추고 커밋·푸시
 - **사이트 도움말을 이번 판의 도움말로 맞추고 커밋·푸시한다** — 설치본에 들어간 도움말과
   홈페이지(`/help`)가 어긋나지 않게 한다. 검색 인덱스가 낡았으면 경고를 찍는다.
   이 단계가 실패해도 릴리스는 그대로 두고, `pwsh -File .\publish-help.ps1 -Commit` 을
   직접 실행하라고 안내한다.
-  이 단계는 릴리스 블록 **밖**이라 `-WhatIf` 로도 보인다 — 도움말이 몇 개 바뀌는지,
-  검색 인덱스가 낡았는지 미리 확인할 수 있다(그때는 아무것도 바꾸지 않는다).
+
+**버전 표기와 도움말, 이 사이트 작업 둘은 릴리스 블록 밖에 있다** — 그래서 `-WhatIf` 로도
+무엇이 바뀔지 보인다(`trial.html` 몇 곳 · 도움말 몇 개 · 검색 인덱스가 낡았는지).
+그때는 세어 보여 주기만 하고 아무것도 바꾸지 않는다. 실측 확인:
+
+```
+사이트 버전 안내 갱신
+What if: Performing the operation "1 곳을 5.2.1 으로 갱신" on target "trial.html".
+  갱신 trial.html                   1 곳
+What if: Performing the operation "커밋·푸시 (trial.html)" on target "cosscad-prog/rcw-site".
+
+도움말 동기화
+  한글 문서 356개 · 인덱스보다 새 것 0개
+  바뀔 파일 0개
+What if: Performing the operation "도움말 0개 갱신" on target "…\help".
+```
 
 실제 발행 없이 점검만 하려면 `-WhatIf` 를 붙인다.
 
