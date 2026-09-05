@@ -2,6 +2,36 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 여기 있는 것이 전부 나온다(2026-08-14): 맨 앞 하나는 펼쳐지고, 이전 버전은 버전마다 한 줄로 접혀 눌러야 내용이 보인다. 그래서 계속 쌓아 둘 것 — 언제 무엇을 고쳤는지 되짚는 기록이다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
+      "version": "5.3.0",
+      "date": "2026-09-06",
+      "items": [
+        {
+          "ko": "<b>여러 프로파일을 한 부재로 묶는 합성 프로파일이 생겼습니다.</b> 폴리아미드 단열바처럼 서로 붙어 한 부재로 쓰이는 프로파일들을 <b>ComP</b> 로 고르고 이름을 하나 지어 주시면 됩니다. 그 뒤로는 가공도가 3~4장이 아니라 <b>1장</b>으로 나오고, 부재 목록·번호·절단 목록도 모두 <b>1개</b>로 셉니다. 묶은 것을 되돌리실 때는 <b>XcomP</b> 입니다.<br><br>묶어도 <b>구성원 각각의 이름·단중·재질은 그대로 남습니다</b> — 알루미늄과 폴리아미드를 나누어 발주하셔야 하기 때문입니다. 합성의 단위중량은 구성원 중량의 합으로 잡히고, 직접 적으시면 그 값이 우선합니다.",
+          "en": "<b>Several profiles can now be tied together as one member.</b> Where profiles are joined into a single member - polyamide thermal-break bars, typically - select them with <b>ComP</b> and give the group one name. From then on the fabrication drawing comes out as <b>one sheet</b> instead of three or four, and the material list, numbering and cutting list all count the group as <b>one part</b>. <b>XcomP</b> releases the tie again.<br><br>Each member <b>keeps its own name, unit weight and material</b>, because aluminium and polyamide still have to be ordered separately. The composite's unit weight is the sum of its members; type a value yourself and that value wins."
+        },
+        {
+          "ko": "<b>합성 프로파일을 Dtable 과 Pname 에서 한 덩어리로 보고 고치실 수 있습니다.</b> Dtable 에서는 합성이 자기 줄을 갖고, 그 아래에 구성원 줄들이 들여쓰여 붙습니다. 왼쪽의 삼각형으로 <b>접었다 펼</b> 수 있고, 칸 제목을 누르면 모든 합성이 한 번에 접힙니다.<br><br>구성원 전부가 같아야 하는 값(Profile ID · Fab ID · Group ID · 추가 길이)은 <b>합성 줄에서 한 번만</b> 고치시면 구성원 전부에 적용됩니다. 구성원 줄에서는 그 칸들이 흐리게 잠깁니다. Pname 도 같은 방식입니다 — 이름 칸 옆 목록에서 맨 위가 합성, 들여쓴 것이 구성원입니다.",
+          "en": "<b>Composites are shown and edited as one block in Dtable and Pname.</b> In Dtable the composite has its own row with its members indented beneath it. The triangle on the left <b>folds and unfolds</b> the group, and clicking the column header folds every composite at once.<br><br>Values that must match across all members - profile ID, fab ID, group ID and additional length - are edited <b>once on the composite row</b> and apply to every member; on member rows those cells are locked and greyed. Pname works the same way: in the list beside the name field, the first entry is the composite and the indented ones are its members."
+        },
+        {
+          "ko": "<b>가공도의 홀 처리 두 가지가 바뀌었습니다.</b> 첫째, 앞뒤로 관통하는 홀은 이제 <b>더 가까운 면</b> 쪽 뷰에 치수가 붙습니다. 전에는 정해진 우선순위대로 붙어서, 뒤쪽에 가까운 홀도 앞면 뷰에 나오곤 했습니다.<br><br>둘째, 축이 같은 홀을 하나로 합치는 기준이 <b>홀 지름</b>이 되었습니다. 전에는 60mm 안에 있으면 합쳤기 때문에, 상자형 단면에서 <b>앞벽과 뒷벽의 서로 다른 두 홀</b>이 하나로 뭉쳐 한쪽 치수가 사라지곤 했습니다. 이제 두 홀이 각각 나옵니다.",
+          "en": "<b>Two rules for holes on fabrication drawings have changed.</b> First, a hole that runs right through is now dimensioned on the view of the <b>nearer face</b>. It used to follow a fixed order of preference, so a hole close to the back could still be dimensioned on the front view.<br><br>Second, holes sharing an axis are merged by <b>hole diameter</b> rather than a fixed 60mm. On a box section that distance used to merge <b>two different holes, one in each wall</b>, into one - and one of the dimensions disappeared with it. Both now appear."
+        },
+        {
+          "ko": "<b>MakeM 과 MakeT 를 없앴습니다.</b> 단면이 Mullion 인지 Transom 인지는 <b>프로그램이 스스로 가립니다.</b> 손으로 나눠 찍던 이 두 명령은 그래서 쓰실 일이 없어졌습니다. 명령창에 입력하셔도 더 이상 나오지 않습니다.<br><br>기존 도면은 <b>그대로 열리고 그대로 쓰실 수 있습니다.</b> 단면 정보를 손보실 일이 있으면 <b>Pname</b> 이나 <b>Dtable</b> 을 쓰시면 됩니다.",
+          "en": "<b>MakeM and MakeT have been removed.</b> Whether a section is a mullion or a transom is <b>worked out by the program itself</b>, so the two commands that stamped that by hand no longer have a use; typing them does nothing. <b>Existing drawings open and work exactly as before</b> - use <b>Pname</b> or <b>Dtable</b> when you need to adjust section data."
+        },
+        {
+          "ko": "<b>평가판의 \"빌드 후 30일\" 제한을 없앴습니다.</b> 전에는 설치본이 만들어진 지 30일이 지나면 <b>새로 받으신 분도 시작조차 되지 않았습니다.</b> 체험을 시작하지도 못한 채 막히는 것이라 뜻이 맞지 않았습니다.<br><br>체험 기간은 예전과 같습니다 — <b>설치해서 처음 쓰신 날부터</b> Core 90일, Standard 30일입니다. 설치본이 오래되었다는 이유로 막히는 일은 이제 없습니다.",
+          "en": "<b>The trial's \"30 days from the build date\" limit is gone.</b> An installer older than 30 days would <b>refuse to start even for someone downloading it for the first time</b> - blocking a trial before it had begun, which was never the intent.<br><br>The trial period itself is unchanged: <b>90 days for Core and 30 days for Standard, counted from first use</b>. Nothing is blocked now because the installer file happens to be old."
+        },
+        {
+          "ko": "<b>도움말에 새 문서가 들어가고 구성이 정리되었습니다.</b> 합성 프로파일(ComP · XcomP)과 도면 일괄 출력(AtPlot) 문서가 새로 들어갔습니다. AtPlot 문서에는 출력이 되려면 갖춰야 할 두 가지 — 도면마다의 경계 폴리선과 도면 이름 — 을 앞에 적어 두었습니다.<br><br>Make Section 아래의 <b>3 Profile</b> 과 <b>4 Data</b> 는 <b>3 Profile Data</b> 하나로 합쳤고 뒤 번호가 하나씩 당겨졌습니다. 링크가 끊겨 있던 항목과 목록에서 빠져 있던 항목도 함께 정리했습니다.",
+          "en": "<b>New help pages and a tidier structure.</b> Composite profiles (ComP and XcomP) and batch plotting (AtPlot) now have their own pages; the AtPlot page opens with the two things a sheet needs before it can be plotted - its boundary polyline and its drawing name.<br><br>Under Make Section, <b>3 Profile</b> and <b>4 Data</b> have been merged into <b>3 Profile Data</b>, with the following folders renumbered. Broken links and entries missing from the folder listings were cleaned up at the same time."
+        }
+      ]
+    },
+    {
       "version": "5.2.2",
       "date": "2026-09-03",
       "deck": null,
