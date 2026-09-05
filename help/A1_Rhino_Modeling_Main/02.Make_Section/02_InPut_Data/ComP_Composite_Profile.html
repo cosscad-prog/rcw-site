@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>ComP / XcomP - 합성 프로파일</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:460px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>ComP / XcomP &nbsp;—&nbsp; 합성 프로파일</h1>
+<p><span class="cmd-box">ComP</span> <span class="cmd-box">XcomP</span></p>
+<p>폴리아미드 단열바처럼 <strong>서로 붙어 한 부재로 쓰이는 프로파일 여러 개</strong>를 하나의 이름으로 묶습니다.
+묶고 나면 가공도가 3~4장이 아니라 <strong>1장</strong>이 나오고, Molist·FabNo 도 <strong>1개</strong>로 셉니다.</p>
+
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>묶을 단면 Surface 를 <strong>2개 이상</strong> 선택합니다.</li>
+  <li>Rhino 명령창에 <strong>ComP</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li><strong>합성 프로파일 이름</strong>을 입력합니다. 이 이름이 가공도·리스트에 나오는 부재 이름이 됩니다.</li>
+  <li>모델링(<code>UMD</code>)을 실행하면 구성원들이 <strong>하나의 부재</strong>로 합쳐집니다.</li>
+</ol>
+<div class="note">단면의 <b>형상은 손대지 않습니다.</b> <code>ComP</code> 는 단면에 <b>표시(태그)만</b> 씁니다.
+실제로 형상이 합쳐지는 것은 모델링 중 solid 단계 한 번뿐입니다. 그래서 묶은 뒤에도 구성원 단면을 따로 고칠 수 있습니다.</div>
+
+<h2>묶으면 무엇이 하나가 되는가</h2>
+<table class="desc-table">
+  <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+  <tbody><tr><th>구분</th><th>내용</th></tr>
+  <tr><td><b>하나로 나오는 것</b></td><td>가공도(<code>FDwg</code>·<code>FDDS</code>) · <code>FabNo</code> 번호 · <code>Molist</code> · <code>Cuttinglist</code> ·
+      <code>Fablist</code> · <code>FabTable</code> · <code>UnitList</code> · IFC 내보내기 — 전부 <b>합성 이름 한 줄</b>로 잡힙니다.</td></tr>
+  <tr><td><b>구성원별로 남는 것</b></td><td>각 구성원의 이름·단중·재질·색상은 <b>그대로 보존</b>됩니다.
+      알루미늄과 폴리아미드를 나누어 발주해야 하기 때문입니다. 이 기록은 합치는 순간 부재에 함께 저장됩니다.</td></tr>
+</tbody></table>
+<div class="note"><b>합성의 단위중량은 구성원 중량의 합</b>입니다. 직접 값을 적으면 그 값이 우선하고, 비워 두면
+구성원 중량이 바뀔 때 따라서 바뀝니다.</div>
+
+<h2>데이터는 어디서 고치는가 &nbsp;—&nbsp; Pname</h2>
+<p>합성 단면을 <code>Pname</code> 으로 열면 이름 칸 오른쪽에 <b>구성원 목록</b>이 나타나고, 그 옆에 구성원 수가 표시됩니다.
+목록의 <b>맨 위가 합성</b>이고 <b>그 아래 들여쓴 것이 구성원</b>입니다.</p>
+<div class="demo-images">
+  <figure style="flex:0 1 48%; min-width:260px;">
+    <img src="../../../img/ComP_Pname_composite.png" alt="Pname 합성 모드 — 라벨이 Combined 이고 파랗다">
+    <figcaption><b>합성 모드</b> — 첫 칸 이름이 <code>Combined:</code> 로 바뀌고 라벨이 <b>파랗게</b> 표시됩니다.
+    여기서 고치는 값은 <b>합성 자신의 것</b>입니다.</figcaption>
+  </figure>
+  <figure style="flex:0 1 48%; min-width:260px;">
+    <img src="../../../img/ComP_Pname_member.png" alt="Pname 구성원 모드 — 공용 항목이 잠긴다">
+    <figcaption><b>구성원 모드</b> — 목록에서 구성원을 고르면 라벨이 <code>Profile Name:</code> 으로 돌아오고,
+    <b>공용 항목은 잠깁니다</b>(회색).</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+  <tbody><tr><th>어느 모드에서</th><th>무엇을 고치나</th></tr>
+  <tr><td><b>합성</b>(목록 맨 위)</td><td>합성 이름 · Description · Unit Weight · Color Code · Material ID · Alloy<br>
+      그리고 <b>공용 항목</b> — Profile ID · Fab ID · Group ID · Additional Length</td></tr>
+  <tr><td><b>구성원</b>(들여쓴 줄)</td><td>그 구성원의 이름 · Description · Unit Weight · Color Code · Material ID · Alloy</td></tr>
+</tbody></table>
+<div class="note"><b>공용 항목은 구성원 전부가 같은 값을 가져야 합니다.</b> 그래서 구성원 모드에서는 잠기고,
+합성 모드에서 한 번 고치면 구성원 전부에 적용됩니다.</div>
+
+<h2>표로 한 번에 보려면 &nbsp;—&nbsp; Dtable</h2>
+<p><code>Dtable</code> 에서도 합성은 <b>합성 줄 + 들여쓴 구성원 줄</b>로 나옵니다. 여러 합성을 한 화면에서 비교하며 고칠 때 씁니다.
+자세한 것은 <b>Dtable</b> 도움말을 보십시오.</p>
+
+<h2>XcomP &nbsp;—&nbsp; 묶음 풀기</h2>
+<p>합성 단면을 선택하고 <strong>XcomP</strong> 를 실행하면 표시가 지워져 <b>보통 프로파일로 돌아갑니다.</b></p>
+<table class="desc-table">
+  <colgroup><col style="width:34%"><col style="width:66%"></colgroup>
+  <tbody><tr><th>항목</th><th>풀면 어떻게 되나</th></tr>
+  <tr><td><b>이름(Profile Name)</b></td><td><b>그대로입니다.</b> 풀고 바로 쓸 수 있습니다.</td></tr>
+  <tr><td>가공(Block · Milling)</td><td><b>안 돌아옵니다.</b> 합성은 가공을 구성원 하나에만 담으므로, 원래 어느 바에 있었는지는 남아 있지 않습니다.</td></tr>
+  <tr><td>공용 항목(Profile ID · Fab ID · Group ID · 추가 길이)</td><td><b>안 돌아옵니다.</b> 이미 구성원 전부가 같은 값으로 맞춰진 뒤입니다.</td></tr>
+  <tr><td>Layer · 색</td><td><b>안 돌아옵니다.</b> <code>ComP</code> 가 구성원을 한 Layer 로 모으면서 색을 객체에 직접 넣습니다.</td></tr>
+</tbody></table>
+<div class="note"><b>잘못 묶었으면 합성 모드로 저장하기 전에 푸십시오.</b> 그 전에 풀면 잃는 것이 없습니다.</div>
+<div class="note"><code>XcomP</code> 은 <b>고른 것만</b> 풉니다. 같은 묶음의 단면이 도면에 남아 있으면 몇 개가 남았는지 알려 줍니다.
+반쪽으로 남기지 않으려면 묶음 전체를 고르십시오.</div>
+
+<h2>주의</h2>
+<div class="warning"><b>단면 group 을 복사했다면 <code>SSP</code> 를 먼저 돌리십시오.</b>
+단면을 복사하면 합성 표시까지 함께 복사되어 서로 다른 유닛이 같은 표시를 갖게 됩니다.
+그 상태로 <code>Pname</code> 을 열면 합성으로 열지 않고 안내만 표시합니다. <code>SSP</code> 가 복사본에 새 표시를 발급합니다.</div>
+<div class="warning">묶을 수 없는 단면이 하나라도 있으면 <b>아무것도 쓰지 않고 멈춥니다.</b> 반쪽짜리 합성이 생기면
+모델링까지 가서야 드러나기 때문입니다. 다음은 묶을 수 없습니다 —
+<b>이름이 비어 있는 단면</b> · <b>면이 여러 개인 단면</b>(그 경우 표시는 <code>Pname</code> 이 관리합니다).</div>
+<div class="warning">합성 이름에 <b>쉼표(,)</b> 는 쓸 수 없습니다. 구성원 기록이 쉼표로 칸을 나누기 때문입니다.</div>
+<div class="note"><b>구성원은 같은 Layer 에 모입니다.</b> <code>ComP</code> 가 이름을 받은 뒤 자동으로 옮기며,
+보이는 <b>색은 그대로</b> 유지됩니다. 서로 다른 Layer 에 있으면 불리언이 Layer 별로 돌아 구성원이 서로 다르게 잘리기 때문입니다.</div>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><b>Pname</b></td><td>합성과 구성원의 데이터를 고칩니다.</td></tr>
+  <tr><td><b>Dtable</b></td><td>여러 단면을 표로 모아 한 번에 고칩니다. 합성은 합성 줄 + 구성원 줄로 나옵니다.</td></tr>
+  <tr><td><b>SSP</b></td><td>단면 group 을 선택합니다. 복사된 합성 표시를 찾아 새로 발급합니다.</td></tr>
+  <tr><td><b>UMD</b></td><td>유닛을 모델링합니다. 합성은 이때 하나의 부재로 합쳐집니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

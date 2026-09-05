@@ -63,6 +63,39 @@
   <tr><td>Milling</td><td>Cuts the profile bar to the shape of a section polyline. Entered on the <b>Milling</b> tab at the right.</td></tr>
 </tbody></table>
 
+<h2>Composite profiles &nbsp;&mdash;&nbsp; Combined mode</h2>
+<p>Open a section tied with <code>ComP</code> &mdash; a polyamide thermal-break assembly, typically &mdash; and the window opens in
+<b>composite mode</b>. A <b>member list</b> appears beside the name field with the member count next to it.
+The <b>first entry is the composite</b>; the <b>indented entries are its members</b>.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 48%; min-width:260px;">
+    <img src="../../../../img/ComP_Pname_composite.png" alt="Pname in composite mode - the Combined labels are blue" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption><b>Composite mode</b> &mdash; the first label reads <code>Combined:</code> and the labels turn <b>blue</b>,
+    marking that what you edit belongs to <b>the composite</b>.</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 48%; min-width:260px;">
+    <img src="../../../../img/ComP_Pname_member.png" alt="Pname in member mode - shared items and both tabs are locked" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption><b>Member mode</b> &mdash; pick a member and the label returns to <code>Profile Name:</code>, with the
+    <b>shared items</b> and both <b>Block Insert / Milling</b> tabs locked.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Mode</th><th>What it edits</th></tr>
+  <tr><td><b>Composite</b><br>(first entry)</td><td>Composite name, Description, Unit Weight, Color Code, Material ID, Alloy,<br>
+      and the <b>shared items</b> &mdash; Profile ID, Fab ID, Group ID and the whole Additional Length box.</td></tr>
+  <tr><td><b>Member</b><br>(indented entry)</td><td>That member's own name, Description, Unit Weight, Color Code, Material ID, Alloy.</td></tr>
+</tbody></table>
+<div class="note"><b>Shared items must be identical across every member</b>, so they are locked in member mode and edited once in
+composite mode. The Additional Length box takes a <b>shared data</b> heading while a composite is open, which is how you can tell.</div>
+<div class="note"><b>Leave the unit weight blank and the sum of the members is used</b>, following them whenever they change.
+Type a value and that value wins.</div>
+<div class="note"><b>Machining (Block, Milling) belongs to the composite as a whole</b> and is stored on one member only,
+which is why both tabs are <b>read-only</b> in member mode.</div>
+<div class="warning">If you copied a section group, <b>run <code>SSP</code> first</b>. The copy carries the same composite tag as the
+original, so <code>Pname</code> will not open it as a composite and says so instead.</div>
+<p>Tying and releasing are done with <b>ComP</b> and <b>XcomP</b>; see the <b>ComP / XcomP</b> page for details.</p>
+
 <h2>Additional Length &nbsp;&mdash;&nbsp; bar length and end pieces</h2>
 <p>The <b>Additional Length</b> box at the bottom of the panel decides how far the profile bar runs past its center line, and how many pieces sit at that end. The two rows are the two ends of the bar.</p>
 <table class="desc-table">

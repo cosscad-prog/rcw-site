@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>ComP / XcomP - Composite Profile</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:460px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>ComP / XcomP &nbsp;&mdash;&nbsp; Composite Profile</h1>
+<p><span class="cmd-box">ComP</span> <span class="cmd-box">XcomP</span></p>
+<p>Ties several profiles that are joined into a single member &mdash; polyamide thermal-break bars, typically &mdash;
+under one name. Once tied, the fabrication drawing comes out as <strong>one sheet</strong> instead of three or four,
+and Molist and FabNo count the group as <strong>one part</strong>.</p>
+
+<h2>How to use</h2>
+<ol class="step-list">
+  <li>Select <strong>two or more</strong> section surfaces to tie together.</li>
+  <li>Type <strong>ComP</strong> in the Rhino command line and press Enter.</li>
+  <li>Enter the <strong>composite profile name</strong>. This is the part name that appears on drawings and lists.</li>
+  <li>Run the unit modelling (<code>UMD</code>); the members are merged into <strong>one part</strong>.</li>
+</ol>
+<div class="note">The section geometry is <b>not touched</b>. <code>ComP</code> only writes a <b>tag</b> onto the sections.
+The shapes are merged once, during modelling, at the solid stage &mdash; which is why each member section can still be
+edited separately after tying.</div>
+
+<h2>What becomes one</h2>
+<table class="desc-table">
+  <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+  <tbody><tr><th></th><th></th></tr>
+  <tr><td><b>Comes out as one</b></td><td>Fabrication drawings (<code>FDwg</code>, <code>FDDS</code>), <code>FabNo</code> numbering,
+      <code>Molist</code>, <code>Cuttinglist</code>, <code>Fablist</code>, <code>FabTable</code>, <code>UnitList</code> and the IFC export &mdash;
+      all of them see <b>one row under the composite name</b>.</td></tr>
+  <tr><td><b>Kept per member</b></td><td>Each member keeps its own name, unit weight, material and finish,
+      because aluminium and polyamide have to be ordered separately. That record is stored with the part when the shapes merge.</td></tr>
+</tbody></table>
+<div class="note">The <b>composite unit weight is the sum of its members</b>. Type a value and that value wins;
+leave it blank and it follows the members whenever their weights change.</div>
+
+<h2>Where the data is edited &nbsp;&mdash;&nbsp; Pname</h2>
+<p>Open a composite section with <code>Pname</code> and a <b>member list</b> appears beside the name field, with the member
+count next to it. The <b>first entry is the composite</b>; the <b>indented entries below are its members</b>.</p>
+<div class="demo-images">
+  <figure style="flex:0 1 48%; min-width:260px;">
+    <img src="../../../../img/ComP_Pname_composite.png" alt="Pname in composite mode - the labels turn blue and read Combined">
+    <figcaption><b>Composite mode</b> &mdash; the first label reads <code>Combined:</code> and the labels turn <b>blue</b>.
+    What you edit here belongs to <b>the composite itself</b>.</figcaption>
+  </figure>
+  <figure style="flex:0 1 48%; min-width:260px;">
+    <img src="../../../../img/ComP_Pname_member.png" alt="Pname in member mode - the shared items are locked">
+    <figcaption><b>Member mode</b> &mdash; pick a member from the list and the label returns to <code>Profile Name:</code>,
+    with the <b>shared items locked</b> (greyed).</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+  <tbody><tr><th>Mode</th><th>What it edits</th></tr>
+  <tr><td><b>Composite</b><br>(first entry)</td><td>Composite name, Description, Unit Weight, Color Code, Material ID, Alloy,<br>
+      and the <b>shared items</b> &mdash; Profile ID, Fab ID, Group ID, Additional Length.</td></tr>
+  <tr><td><b>Member</b><br>(indented entry)</td><td>That member's own name, Description, Unit Weight, Color Code, Material ID, Alloy.</td></tr>
+</tbody></table>
+<div class="note"><b>Shared items must be identical across every member.</b> That is why they are locked in member mode:
+edit them once in composite mode and they apply to all members.</div>
+
+<h2>Editing several at once &nbsp;&mdash;&nbsp; Dtable</h2>
+<p><code>Dtable</code> shows a composite the same way &mdash; a <b>composite row followed by indented member rows</b>.
+Use it to compare and edit several composites on one screen. See the <b>Dtable</b> page for details.</p>
+
+<h2>XcomP &nbsp;&mdash;&nbsp; releasing the tie</h2>
+<p>Select the composite sections and run <strong>XcomP</strong>; the tag is cleared and they become <b>ordinary profiles</b> again.</p>
+<table class="desc-table">
+  <colgroup><col style="width:34%"><col style="width:66%"></colgroup>
+  <tbody><tr><th>Item</th><th>After releasing</th></tr>
+  <tr><td><b>Profile Name</b></td><td><b>Unchanged</b> &mdash; usable straight away.</td></tr>
+  <tr><td>Machining (Block, Milling)</td><td><b>Does not come back.</b> A composite holds its machining on one member only,
+      so which bar it originally belonged to is no longer recorded.</td></tr>
+  <tr><td>Shared items (Profile ID, Fab ID, Group ID, Additional Length)</td><td><b>Do not come back</b> &mdash; every member
+      has already been set to the same value.</td></tr>
+  <tr><td>Layer and color</td><td><b>Do not come back.</b> <code>ComP</code> moves the members onto one layer and writes the
+      color onto the objects themselves.</td></tr>
+</tbody></table>
+<div class="note"><b>If you tied the wrong sections, release before saving in composite mode.</b> Release before that point and nothing is lost.</div>
+<div class="note"><code>XcomP</code> releases <b>only what you select</b>. If other sections of the same group are still in the drawing,
+it reports how many are left. Select the whole group so the composite is not left half registered.</div>
+
+<h2>Cautions</h2>
+<div class="warning"><b>Run <code>SSP</code> first if you copied a section group.</b>
+Copying a section copies its composite tag as well, so two different units end up carrying the same tag.
+Opened in that state, <code>Pname</code> will not open it as a composite and says so instead. <code>SSP</code> issues a fresh tag to the copy.</div>
+<div class="warning">If even one selected section cannot be tied, <b>nothing is written at all</b> &mdash; a half-tied composite
+would only surface once modelling runs. These cannot be tied: a section with <b>no name</b>, and a
+<b>multi-face section</b> (its tag is managed by <code>Pname</code> instead).</div>
+<div class="warning">A composite name cannot contain a <b>comma</b>, because the member record separates its fields with commas.</div>
+<div class="note"><b>Members are gathered onto one layer.</b> <code>ComP</code> moves them once the name is entered, and their
+<b>visible color is preserved</b>. Boolean operations run per layer, so members left on different layers would be cut differently.</div>
+
+<h2>Related commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><b>Pname</b></td><td>Edits the composite and member data.</td></tr>
+  <tr><td><b>Dtable</b></td><td>Edits many sections in one table; a composite appears as a composite row plus member rows.</td></tr>
+  <tr><td><b>SSP</b></td><td>Selects section groups; finds copied composite tags and issues new ones.</td></tr>
+  <tr><td><b>UMD</b></td><td>Models the unit &mdash; this is where a composite is merged into one part.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

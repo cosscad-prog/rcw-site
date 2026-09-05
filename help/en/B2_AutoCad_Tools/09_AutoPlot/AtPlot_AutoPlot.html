@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>AtPlot - AutoPlot batch plotting</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:520px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>AtPlot &nbsp;&mdash;&nbsp; AutoPlot (batch plotting)</h1>
+<p><span class="cmd-box">AtPlot</span></p>
+<p>Plots <strong>several sheets laid out in one drawing in a single run</strong>, instead of framing and printing each one
+by hand. Sheets can go straight to a printer or be collected into <strong>one PDF file</strong>.</p>
+
+<h2>Two things must be in place first</h2>
+<div class="warning"><b>A sheet without these does not appear in the list.</b></div>
+<table class="desc-table">
+  <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+  <tbody><tr><th>Required</th><th>Description</th></tr>
+  <tr><td><b>WS-PLOT boundary polyline</b></td><td>Each sheet must be framed by a <b>polyline on the <code>WS-PLOT</code> layer</b>.
+      <code>AtPlot</code> finds these polylines and counts each one as <b>one sheet</b>. Anything without one is not plotted.</td></tr>
+  <tr><td><b>Drawing name</b></td><td>Each sheet needs its <b>name (drawing number) text</b>. That name is what the list and the
+      saved file use; without it a sheet cannot be told apart.</td></tr>
+</tbody></table>
+<div class="note">Placing a title block with <code>SFB</code> and <code>FFB</code> supplies both &mdash; <code>FFB</code> copies the
+<b>boundary polyline</b> along with the form and fills in the <b>drawing number</b>. A drawing prepared with <code>FFB</code> is
+therefore ready for <code>AtPlot</code> as it stands.</div>
+
+<h2>How to use</h2>
+<ol class="step-list">
+  <li>Check that every sheet has its <code>WS-PLOT</code> boundary polyline and its drawing name.</li>
+  <li>Type <strong>AtPlot</strong> in the command line and press Enter.</li>
+  <li>In the <b>AtPlot &mdash; plot settings</b> dialog choose the printer, paper size and CTB.</li>
+  <li>Check the <b>order</b> of the listed sheets and drag to change it if needed.</li>
+  <li>Press <b>Plot</b>.</li>
+</ol>
+
+<h2>The plot settings dialog</h2>
+<div class="demo-images">
+  <figure style="flex:0 1 100%; min-width:260px;">
+    <img src="../../../img/AtPlot_dialog.png" alt="AtPlot plot settings - printer, paper, CTB, output file and the sheet list">
+    <figcaption>The sheets found are listed <b>in the order they will be plotted</b>, numbered, with each sheet's
+    <b>landscape / portrait</b> orientation on the right.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Field</th><th>Description</th></tr>
+  <tr><td>Printer</td><td>The printer to plot through. Its settings are used for file output as well.</td></tr>
+  <tr><td>Paper</td><td>Paper size (A3 and so on).</td></tr>
+  <tr><td>CTB</td><td>Plot style table (<code>acad.stb</code> and so on) &mdash; it decides line weights and color translation.</td></tr>
+  <tr><td>Output file</td><td>Path used when collecting the sheets into a file. <b>Browse</b> opens a file picker.</td></tr>
+  <tr><td><b>Save to this file</b></td><td><b>On</b>: every sheet goes into <b>one file</b> at that path.
+      <b>Off</b>: the sheets go straight to the printer.</td></tr>
+  <tr><td>Sheet list</td><td>The sheets found, numbered <b>in plotting order</b>. The count is shown above the list.</td></tr>
+  <tr><td>Landscape / portrait</td><td>The <b>paper orientation</b> taken from the shape of each boundary polyline.</td></tr>
+</tbody></table>
+
+<h2>Changing the order</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Action</th><th>Description</th></tr>
+  <tr><td>Drag</td><td>Drag a row to the position you want.</td></tr>
+  <tr><td>Several at once</td><td><b>Ctrl</b> picks scattered rows, <b>Shift</b> picks a run of them; they move together.</td></tr>
+  <tr><td><b>Sort by number</b></td><td>Orders the whole list by the number in the drawing name.</td></tr>
+</tbody></table>
+<div class="note">The order shown <b>is</b> the plotting order. When collecting into one file it is also the <b>page order</b>.</div>
+
+<h2>Environment</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><td>AutoCAD / BricsCAD only (not available in Rhino).</td><td></td></tr>
+</tbody></table>
+
+<h2>Related commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><b>SFB</b></td><td>Selects the company title block. The form must contain the <b>boundary polyline</b> and the drawing-number text.</td></tr>
+  <tr><td><b>FFB</b></td><td>Inserts the selected form, copying the boundary polyline with it and filling in the drawing number.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

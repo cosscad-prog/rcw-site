@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Dtable - Section Information Table</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Dtable &nbsp;—&nbsp; Section Information Table</h1>
+<p><span class="cmd-box">Dtable</span></p>
+<p>Opens a window that <strong>collects the section data of the selected Section Surfaces into one table so it can be reviewed and edited together</strong>.
+Instead of opening each profile separately with <strong>Pname</strong>, you can compare and edit the name, weight, IDs, additional lengths and extrusion values of several sections in one grid.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  
+  
+  
+  <li>Type <strong>Dtable</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the Section Surfaces to review and press Enter.</li>
+  <li>The <strong>Section_Information_Table</strong> window opens with one row per selected section.</li>
+  <li>Edit the values directly in the grid. Clicking a row shows a preview of that section on the left.</li>
+  <li><strong>Save All</strong> writes the edited values back to each section and closes the window. <strong>Close</strong> closes without saving.</li>
+
+
+
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <video src="../../../../img/Dtable_demo_2.mp4" autoplay muted loop playsinline aria-label="Selecting sections opens the Section_Information_Table for editing" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Selecting the sections opens the Section_Information_Table with one row per section. Values are edited in the grid, and the row being edited is previewed on the left.</figcaption>
+  </figure>
+</div>
+<h2>Always-Visible Columns</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 25%;">
+    <col style="width: 75%;">
+  </colgroup>
+  <tbody><tr><th>Column</th><th>Description</th></tr>
+  <tr><td>Profile Name</td><td>Profile name. Used as the shape name in drawings and lists.</td></tr>
+  <tr><td>Description</td><td>Profile description.</td></tr>
+  <tr><td>Unit Weight</td><td>Unit weight per meter. Used to calculate weight in material lists.</td></tr>
+  <tr><td>Color Code</td><td>Surface color code.</td></tr>
+</tbody></table>
+<p>Clicking the <strong>Profile Name</strong> header sorts the rows by name. Saving matches each row to its section through a <strong>hidden object identifier</strong> rather than the displayed row order, so sorting before saving does not mix up the values.</p>
+<h2>Tables Containing a Composite Profile</h2>
+<p>A <strong>composite profile</strong> tied with <code>ComP</code> appears as <strong>one block</strong> in the table:
+a <b>composite row</b> first, followed by its <b>indented member rows</b>.</p>
+<div class="demo-images">
+  <figure style="flex:0 1 100%; min-width:220px;">
+    <img src="../../../../img/ComP_Dtable.png" alt="Section_Information_Table with a composite row and indented member rows">
+    <figcaption>The bold <b>OBUK-0008_Com</b> at the top is the composite row; the three indented rows are its members.
+    <b>Profile ID, Fab ID and Group ID</b> are greyed on member rows, meaning they are locked.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 25%;">
+    <col style="width: 75%;">
+  </colgroup>
+  <tbody><tr><th>What you see</th><th>Meaning</th></tr>
+  <tr><td><b>Bold name</b></td><td>A top-level row &mdash; a composite name or an ordinary section name.</td></tr>
+  <tr><td><b>Indented name</b></td><td>A member of the composite directly above it.</td></tr>
+  <tr><td><code>▼</code> / <code>▶</code></td><td>The triangle at the left of a composite row. Click it to <b>fold or unfold</b>
+      that group's member rows; click the column header to fold or unfold <b>every</b> composite at once.</td></tr>
+  <tr><td><b>Greyed text</b></td><td>That cell is <b>locked</b> and cannot be edited.</td></tr>
+</tbody></table>
+<h2>Which Row Edits What</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 25%;">
+    <col style="width: 75%;">
+  </colgroup>
+  <tbody><tr><th>Row</th><th>Editable there</th></tr>
+  <tr><td><b>Composite row</b></td><td>Composite name, Description, Unit Weight, Color Code, Material ID, Alloy,<br>
+      and the <b>shared items</b> &mdash; Profile ID, Fab ID, Group ID, Additional Length, Extrusion.</td></tr>
+  <tr><td><b>Member row</b></td><td>That member's own name, Description, Unit Weight, Color Code, Material ID, Alloy.<br>
+      <b>Shared items are locked</b> (greyed text).</td></tr>
+</tbody></table>
+<div class="note"><b>Editing a shared item on the composite row updates the member rows immediately.</b>
+On save the value is written to every member &mdash; the composite row itself has no section object of its own.</div>
+<div class="note"><b>Folded rows are still saved.</b> Folding only affects what you see.</div>
+<div class="note"><b>Sorting keeps a group together.</b> Member rows sort under the <b>composite name</b>, not their own.
+Sorting in reverse also reverses the order inside a group.</div>
+<div class="warning">If you open <code>Dtable</code> with only <b>some</b> members of a composite selected, it does not open as a
+composite &mdash; each selected section stands as an ordinary row. Select the <b>whole group</b> to edit composite values.</div>
+<div class="note">The composite name can be edited here too. Tying and releasing are done with <b>ComP</b> and <b>XcomP</b>.</div>
+
+<h2>Collapsible Column Groups</h2>
+<p>Because the grid has many columns, the remaining fields are grouped behind three toggle buttons below the preview.
+Pressing a button expands (<code>▼</code>) or collapses (<code>▶</code>) that group.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 25%;">
+    <col style="width: 75%;">
+  </colgroup>
+  <tbody><tr><th>Group</th><th>Columns</th></tr>
+  <tr><td>Profile IDs<br>(expanded by default)</td><td>Material ID, Profile ID, Fab ID, Group ID, Alloy — the classification IDs of the member.</td></tr>
+  <tr><td>Additional Length</td><td>Add.Len (T/L), Add.Len (B/R) &mdash; the extra length at each end of the bar: top/bottom for a mullion, left/right for a transom.</td></tr>
+  <tr><td>Extrusion</td><td>Ext Length / Ext Interval / Ext Qty / Equal, in two sets marked <code>(T/L)</code> and <code>(B/R)</code> for the top-left and bottom-right extrusion data.</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 25%;">
+    <col style="width: 75%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Saving</td><td><strong>Save All</strong> writes every row back to its section. Each section that actually changed is reported in the command line as <code>Saved data for [profile name].</code></td></tr>
+  <tr><td>Dimension style</td><td>The dimension style in use before the command is restored when the command ends, including when the window is closed without saving.</td></tr>
+  <tr><td>Model geometry</td><td>Unchanged. Only the data stored on the sections is updated.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 25%;">
+    <col style="width: 75%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>Pname</strong></td><td>Enters and edits the profile data of a single section. Dtable handles the same data for several sections at once.</td></tr>
+  <tr><td><strong>PDlist</strong></td><td>Outputs section data as a list.</td></tr>
+  <tr><td><strong>PPlist</strong></td><td>Outputs the profile list.</td></tr>
+  <tr><td><strong>SSP</strong></td><td>Selects an existing Section Profile group.</td></tr>
+</tbody></table>
+<div class="warning">Caution: if the selected objects carry no section data, the command reports <code>The selected objects have no SectionCustomData.</code> and does not open the window. Enter the section data with <strong>Pname</strong> first.</div>
+<div class="warning">Caution: if an invalid value is found while saving, the window stays open instead of closing. Correct the reported value and press <strong>Save All</strong> again.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -63,6 +63,40 @@
   <tr><td>Milling</td><td>프로파일 바를 단면 폴리라인 모양으로 깎습니다. 오른쪽 <b>Milling</b> 탭에서 입력합니다.</td></tr>
 </tbody></table>
 
+<h2>합성 프로파일 &nbsp;—&nbsp; Combined 모드</h2>
+<p>폴리아미드 단열바처럼 <code>ComP</code> 로 묶은 단면을 열면 창이 <b>합성 모드</b>로 열립니다.
+이름 칸 오른쪽에 <b>구성원 목록</b>이 생기고 그 옆에 구성원 수가 표시됩니다.
+목록의 <b>맨 위가 합성</b>이고, <b>들여쓴 줄이 구성원</b>입니다.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 48%; min-width:260px;">
+    <img src="../../../img/ComP_Pname_composite.png" alt="Pname 합성 모드 — Combined 라벨이 파랗다" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption><b>합성 모드</b> — 첫 라벨이 <code>Combined:</code> 로 바뀌고 라벨들이 <b>파랗게</b> 표시됩니다.
+    지금 고치는 값이 <b>합성의 것</b>이라는 표시입니다.</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 48%; min-width:260px;">
+    <img src="../../../img/ComP_Pname_member.png" alt="Pname 구성원 모드 — 공용 항목과 두 탭이 잠긴다" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption><b>구성원 모드</b> — 목록에서 구성원을 고르면 라벨이 <code>Profile Name:</code> 으로 돌아오고,
+    <b>공용 항목</b>과 <b>Block Insert · Milling</b> 두 탭이 잠깁니다.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>모드</th><th>고치는 대상</th></tr>
+  <tr><td><b>합성</b><br>(목록 맨 위)</td><td>합성 이름 · Description · Unit Weight · Color Code · Material ID · Alloy<br>
+      그리고 <b>공용 항목</b> — Profile ID · Fab ID · Group ID · Additional Length 상자 전체</td></tr>
+  <tr><td><b>구성원</b><br>(들여쓴 줄)</td><td>그 구성원의 이름 · Description · Unit Weight · Color Code · Material ID · Alloy</td></tr>
+</tbody></table>
+<div class="note"><b>공용 항목은 구성원 전부가 같은 값이어야 합니다.</b> 그래서 구성원 모드에서는 잠기고,
+합성 모드에서 한 번 고치면 구성원 전부에 적용됩니다. 합성일 때 Additional Length 상자의 제목이
+<b>Additional Length - 공유data</b> 로 바뀌는 것이 그 표시입니다.</div>
+<div class="note"><b>단위중량을 비워 두면 구성원 중량의 합</b>이 쓰이고, 구성원 중량이 바뀌면 따라서 바뀝니다.
+직접 값을 적으면 그 값이 우선합니다.</div>
+<div class="note"><b>가공(Block · Milling)은 합성 하나의 것</b>이라 구성원 한 곳에만 담깁니다.
+그래서 구성원 모드에서는 두 탭이 <b>읽기 전용</b>으로 표시됩니다.</div>
+<div class="warning">단면 group 을 복사했다면 <b><code>SSP</code> 를 먼저 돌리십시오.</b> 복사본은 원본과 같은 합성 표시를 들고 있어,
+<code>Pname</code> 이 합성으로 열지 않고 안내만 표시합니다.</div>
+<p>묶고 푸는 것은 <b>ComP</b> · <b>XcomP</b> 입니다. 자세한 것은 <b>ComP / XcomP</b> 도움말을 보십시오.</p>
+
 <h2>Additional Length &nbsp;&mdash;&nbsp; 바 길이와 조각</h2>
 <p>창 아래쪽 <b>Additional Length</b> 상자는 프로파일 바를 중심선보다 얼마나 더 길게 뽑을지, 그리고 그 끝에 조각을 몇 개 놓을지를 정합니다. 줄은 두 개이고 각각 바의 한쪽 끝을 뜻합니다.</p>
 <table class="desc-table">
@@ -129,6 +163,8 @@
   <tbody><tr><th>명령어</th><th>설명</th></tr>
   <tr><td><code>Pname</code></td><td>Profile 정보 입력 창을 엽니다.</td></tr>
   <tr><td><code>PPI</code></td><td>Profile 정보 입력과 같은 용도의 명령입니다.</td></tr>
+  <tr><td><code>ComP</code> · <code>XcomP</code></td><td>프로파일 여러 개를 하나의 합성 프로파일로 묶고, 다시 풉니다.</td></tr>
+  <tr><td><code>Dtable</code></td><td>여러 단면의 같은 정보를 표로 모아 한 번에 고칩니다.</td></tr>
 </tbody></table>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 
