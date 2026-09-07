@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>문의 답장 — 홍보형(본문에 붙여넣는 메일)</title>
+<style>
+  /* ⚠️ 여기 CSS 는 **화면(도구 막대·안내)** 만 꾸민다.
+     메일 본문(아래 article#letter)은 스타일을 한 줄도 여기에 두지 않고
+     전부 태그 안에 직접 적었다 — 메일 프로그램은 <style> 을 지우는 곳이 많다.
+     표(table)로 짠 것도 같은 이유다. Outlook 은 div 배치를 제대로 못 그린다. */
+  :root {
+    --ink:#101828; --muted:#667085; --line:#e4e7ec; --navy:#101f3d; --blue:#2667d9;
+    --blue-dark:#17499e; --mist:#f7f9fc;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#e9edf2; color:var(--ink);
+         font-family:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",system-ui,sans-serif; }
+
+  .tools { position:sticky; top:0; z-index:9; display:flex; flex-wrap:wrap; gap:8px;
+           align-items:center; padding:11px 18px; background:var(--navy); color:#fff;
+           box-shadow:0 2px 14px rgba(16,31,61,.25); }
+  .tools .brand { font-weight:800; letter-spacing:-.02em; font-size:14px; margin-right:4px; }
+  .tools .who { font-size:12.5px; color:#a9bbd8; margin-right:auto; }
+  .tools nav { display:flex; gap:4px; margin-right:10px; }
+  .tools nav a, .tools nav span.cur { padding:5px 10px; border-radius:7px; font-size:12.5px;
+                 font-weight:700; color:#c9d8f2; text-decoration:none; }
+  .tools nav a:hover { background:#1d3257; color:#fff; }
+  .tools nav span.cur { background:#fff; color:var(--navy); }
+  .btn { padding:7px 13px; border:1px solid #33507f; border-radius:8px; background:#1a2c4d;
+         color:#e8eefb; font-size:12.5px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .btn:hover { background:#24406e; border-color:#4a6ea8; }
+  .btn.primary { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .btn.primary:hover { background:#3a7aec; }
+  .btn.on { background:#fff; color:var(--navy); border-color:#fff; }
+  .say { font-size:12.5px; color:#9ff0c0; min-width:92px; }
+
+  .wrap { max-width:860px; margin:0 auto; padding:22px 18px 70px; }
+  .meta { background:#fff; border:1px solid var(--line); border-left:4px solid var(--blue);
+          border-radius:12px; padding:15px 18px; margin:0 0 16px; font-size:13px;
+          line-height:1.75; color:#3d4a5c; }
+  .meta b { color:var(--ink); }
+  .meta ol, .meta ul { margin:8px 0 0; padding-left:20px; }
+  .meta li { margin:3px 0; }
+  .meta .warn { color:#a8500f; }
+  .subject { background:#fff; border:1px solid var(--line); border-radius:12px;
+             padding:13px 18px; margin:0 0 16px; font-size:13.5px; display:flex;
+             gap:12px; align-items:center; flex-wrap:wrap; }
+  .subject .lab { font-size:11.5px; font-weight:800; color:var(--muted); letter-spacing:.03em; }
+  .subject .val { font-weight:700; flex:1; min-width:260px; }
+  .cases { display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:#fff;
+           border:1px solid var(--line); border-radius:12px; padding:12px 18px; margin:0 0 16px;
+           font-size:13px; }
+  .cases b { font-size:12.5px; }
+  .cases button { padding:6px 12px; border:1px solid var(--line); border-radius:8px;
+                  background:var(--mist); color:#3d4a5c; font:inherit; font-size:12.5px;
+                  font-weight:700; cursor:pointer; }
+  .cases button:hover { border-color:var(--blue); color:var(--blue-dark); }
+  .cases button.on { background:var(--blue); border-color:var(--blue); color:#fff; }
+
+  /* 편지(=메일 본문)는 회색 바탕 위에 놓는다. 실제로 메일함에서 보이는 모습에 가깝게. */
+  .stage { background:#f2f4f7; padding:26px 0; border-radius:14px;
+           box-shadow:0 1px 3px rgba(16,24,40,.08), 0 14px 40px rgba(16,24,40,.10); }
+  .stage[contenteditable="true"] { outline:2px dashed var(--blue); outline-offset:10px; }
+
+  /* 아직 못 채운 곳. 화면에서만 노랗고 복사·인쇄에는 안 따라간다. */
+  .fill { background:#fff6d6; border-bottom:1px dashed #d8b64a; padding:0 3px; }
+  body.plain .fill, body.copying .fill { background:none; border-bottom:none; padding:0; }
+
+  @media (max-width:640px) { .tools .who { display:none; } }
+  @media print { .tools, .meta, .subject, .cases { display:none; }
+                 body { background:#fff; } .stage { box-shadow:none; padding:0; }
+                 .fill { background:none; border-bottom:none; } }
+</style>
+</head>
+<body>
+
+<div class="tools">
+  <span class="brand">RCW 문의 답변</span>
+  <nav>
+    <span class="cur">④ 홍보형(본문)</span>
+    <a href="reply-1-stick-core.html">① 스틱</a>
+    <a href="reply-2-unit-standard.html">② 유닛</a>
+    <a href="reply-3-curved-professional.html">③ 곡선</a>
+  </nav>
+  <span class="who">메일 본문에 붙여넣는 답장</span>
+  <button class="btn" id="edit">편집 켜기</button>
+  <button class="btn" id="marks">표시 끄기</button>
+  <button class="btn" id="subj">제목 복사</button>
+  <button class="btn primary" id="copy">메일용으로 복사</button>
+  <span class="say" id="say"></span>
+</div>
+
+<div class="wrap">
+
+  <div class="meta">
+    <b>이 문안은 첨부가 아니라 메일 <u>본문</u>에 넣는 것입니다.</b>
+    <b>[메일용으로 복사]</b> → Gmail 작성창에 <b>붙여넣기</b> 하면 이 모양 그대로 들어갑니다.
+    (표와 색은 태그 안에 직접 넣어 두었습니다. 메일 프로그램이 <code>&lt;style&gt;</code> 을
+    지워도 모양이 살아남습니다.)
+    <ul>
+      <li><b>그림은 홈페이지에서 불러옵니다</b> — 파일이 붙지 않아 메일이 가볍고, 사이트 그림을
+          바꾸면 이미 보낸 메일도 같이 바뀝니다. 받는 분이 그림 표시를 막아 두었을 때를 위해
+          <b>대체 글</b>을 넣어 두었습니다.</li>
+      <li>같은 파일로 <b>첨부본</b>도 뽑을 수 있습니다 —
+          <code>node docs/mail/export-attach.js "docs/mail/reply-promo.html"</code></li>
+    </ul>
+    <b class="warn">보내기 전에</b>
+    <ol>
+      <li>위의 <b>[① ② ③]</b> 로 그분 형상에 맞는 줄을 골라 두십시오. 고른 줄만 강조되고
+          권장 표시가 따라 붙습니다.</li>
+      <li><b class="warn">가격 두 칸</b>을 채우십시오. 노란 자리가 남아 있으면 그대로 나갑니다.</li>
+      <li><b>[표시 끄기]</b> 로 실제 보내지는 모습을 확인하십시오.</li>
+      <li>⚠️ <b>검토만 하는 곳(컨설팅 등)에는 이 문안을 보내지 마십시오.</b> 이 프로그램은
+          발주·제작을 위한 도구입니다. 그런 문의에는 권하지 않는 편지를 따로 씁니다.</li>
+    </ol>
+  </div>
+
+  <div class="subject">
+    <span class="lab">제목</span>
+    <span class="val" id="subject-text">[RCW] 문의 주셔서 감사합니다 — RCW V5 안내와 가격</span>
+  </div>
+
+  <div class="cases">
+    <b>형상 고르기</b>
+    <button type="button" data-case="core">① 평면 스틱 → Core</button>
+    <button type="button" data-case="std">② 유닛 · 삼각형 → Standard</button>
+    <button type="button" data-case="pro">③ 곡선 · 판재 → Professional</button>
+    <button type="button" data-case="none">고르지 않음(물어보기)</button>
+  </div>
+
+<!-- ══════════════ 여기부터가 메일 본문 ══════════════
+     ★ 고칠 때 지킬 것 — 메일 프로그램에서 깨지지 않게 하려는 규칙이다.
+       · 배치는 전부 <table> 로. div 로 짜면 Outlook 이 무너뜨린다.
+       · 스타일은 태그 안에 직접(inline). <style> 은 지워지는 곳이 많다.
+       · flex · grid · position · background-image 는 쓰지 않는다.
+       · 그림에는 반드시 alt 를 넣는다. 막아 둔 사람에게는 그 글자만 보인다.
+       · 폭은 600px. 그보다 넓으면 휴대폰에서 가로로 밀린다.            -->
+<div class="stage" id="letter">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background:#f2f4f7;">
+<tr><td align="center" style="padding:0 12px;">
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px;max-width:600px;border-collapse:collapse;background:#ffffff;border-radius:16px;overflow:hidden;font-family:'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif;color:#101828;">
+
+    <!-- 머리 -->
+    <tr><td align="center" style="padding:34px 40px 6px 40px;">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:#101f3d;">RCW&nbsp;V5</div>
+      <div style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#667085;padding-top:5px;">CURTAIN WALL FOR RHINO</div>
+    </td></tr>
+
+    <!-- 제목 -->
+    <tr><td align="center" style="padding:22px 44px 0 44px;">
+      <div style="font-size:26px;line-height:1.42;font-weight:800;letter-spacing:-.02em;color:#101828;">
+        문의 주셔서 감사합니다
+      </div>
+      <div style="font-size:17px;line-height:1.55;font-weight:700;color:#2667d9;padding-top:10px;">
+        커튼월 3D 모델 하나로,<br>가공도와 발주 물량까지
+      </div>
+    </td></tr>
+
+    <!-- 인사 -->
+    <tr><td style="padding:20px 44px 0 44px;">
+      <p style="margin:0 0 12px 0;font-size:15px;line-height:1.85;color:#33405a;text-align:center;">
+        <span class="fill">《회사명》</span> <span class="fill">《담당자님》</span> 안녕하십니까.<br>
+        RCW V5에 관심 가져 주셔서 감사합니다.
+      </p>
+      <p style="margin:0;font-size:15px;line-height:1.85;color:#33405a;text-align:center;">
+        문의 주신 <b>어떤 버전이 맞는지</b>와 <b>가격</b>을 아래에 정리해 드렸습니다.
+        그에 앞서, 이 프로그램이 무엇을 하는 도구인지 먼저 보여 드리겠습니다.
+      </p>
+    </td></tr>
+
+    <!-- 사진 + 소개 (2단)
+         ★ 사진을 폭 가득 넣지 않는다 — case_hero.jpg 는 1200x1800 세로형이라
+           600px 로 깔면 높이가 900px 이 되어 메일 절반을 사진이 먹는다. -->
+    <tr><td style="padding:26px 44px 0 44px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+        <tr>
+          <td width="200" valign="top" style="padding:0 18px 0 0;">
+            <img src="https://rcw-site.vercel.app/img/case_hero.jpg" width="200" alt="곡면 유리 커튼월 고층 건물"
+                 style="display:block;width:200px;max-width:200px;height:auto;border:0;border-radius:10px;outline:none;text-decoration:none;">
+          </td>
+          <td valign="top">
+            <p style="margin:0 0 12px 0;font-size:15px;line-height:1.8;color:#33405a;">
+              RCW V5는 <b>Rhino 7 · Rhino 8 에서 동작하는 커튼월 전용 플러그인</b>입니다.
+            </p>
+            <p style="margin:0;font-size:15px;line-height:1.8;color:#33405a;">
+              커튼월 단면과 와이어프레임을 <b>실제 제작용 3D 모델</b>로 바꾸고,
+              그 모델 하나에서 공장이 필요로 하는 자료를 자동으로 뽑아냅니다.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+
+    <!-- 기능 1 -->
+    <tr><td style="padding:26px 44px 0 44px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+        <tr>
+          <td width="170" valign="top" style="padding:0 16px 0 0;">
+            <img src="https://rcw-site.vercel.app/img/analyze_01_model.png" width="170" alt="유닛 프레임 3D 모델"
+                 style="display:block;width:170px;max-width:170px;height:auto;border:1px solid #e4e7ec;border-radius:8px;">
+          </td>
+          <td valign="top">
+            <div style="font-size:16px;font-weight:800;color:#101828;padding-bottom:6px;">① 단면과 선만 있으면 모델이 섭니다</div>
+            <div style="font-size:14px;line-height:1.75;color:#475467;">
+              멀리언 · 트랜섬 · 유리 · 백패널이 실제 단면 그대로 세워집니다.
+              보기용 모델이 아니라 <b>치수가 맞는 제작용 모델</b>입니다.
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+
+    <!-- 기능 2 -->
+    <tr><td style="padding:22px 44px 0 44px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+        <tr>
+          <td width="170" valign="top" style="padding:0 16px 0 0;">
+            <img src="https://rcw-site.vercel.app/img/analyze_02_fabno.jpg" width="170" alt="부재 자동 번호"
+                 style="display:block;width:170px;max-width:170px;height:auto;border:1px solid #e4e7ec;border-radius:8px;">
+          </td>
+          <td valign="top">
+            <div style="font-size:16px;font-weight:800;color:#101828;padding-bottom:6px;">② 번호와 가공도가 자동으로 나옵니다</div>
+            <div style="font-size:14px;line-height:1.75;color:#475467;">
+              부재가 수백 개여도 사람이 세지 않습니다. 가공도는
+              <b>홀 · 장공 · 노치 치수</b>까지 붙어 공장이 그대로 씁니다.
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+
+    <!-- 기능 3 -->
+    <tr><td style="padding:22px 44px 0 44px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+        <tr>
+          <td width="170" valign="top" style="padding:0 16px 0 0;">
+            <img src="https://rcw-site.vercel.app/img/analyze_04_cuttinglist.png" width="170" alt="컷팅리스트와 물량표"
+                 style="display:block;width:170px;max-width:170px;height:auto;border:1px solid #e4e7ec;border-radius:8px;">
+          </td>
+          <td valign="top">
+            <div style="font-size:16px;font-weight:800;color:#101828;padding-bottom:6px;">③ 발주 물량이 같은 모델에서 나옵니다</div>
+            <div style="font-size:14px;line-height:1.75;color:#475467;">
+              부재표 · 부속표 · 컷팅리스트 · 물량, 그리고 2D 도면과 NC 데이터까지.
+              단면을 고치면 <b>전부 따라옵니다</b> — 도면과 물량이 어긋나지 않습니다.
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+
+    <!-- 버튼 -->
+    <tr><td align="center" style="padding:30px 44px 0 44px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+        <tr><td align="center" bgcolor="#2667d9" style="border-radius:10px;">
+          <a href="https://rcw-site.vercel.app/trial"
+             style="display:inline-block;padding:14px 30px;font-size:15px;font-weight:800;color:#ffffff;text-decoration:none;border-radius:10px;">
+            평가판 신청하기 &rarr;
+          </a>
+        </td></tr>
+      </table>
+      <div style="font-size:12.5px;line-height:1.7;color:#667085;padding-top:10px;">
+        Core 90일 · Standard 30일 &nbsp;|&nbsp; 두 기간은 서로 별개입니다
+      </div>
+    </td></tr>
+
+    <!-- 구분선 -->
+    <tr><td style="padding:30px 44px 0 44px;">
+      <div style="height:1px;background:#e4e7ec;line-height:1px;font-size:0;">&nbsp;</div>
+    </td></tr>
+
+    <!-- 답변 1 — 어느 버전 -->
+    <tr><td style="padding:26px 44px 0 44px;">
+      <div style="font-size:18px;font-weight:800;color:#101828;padding-bottom:8px;">어느 버전이 맞습니까</div>
+      <p style="margin:0 0 14px 0;font-size:14.5px;line-height:1.8;color:#475467;">
+        기능 목록보다 <b>형상</b>이 먼저입니다. 형상이 감당되지 않으면 뒤의 기능은 쓸 일이 없기 때문입니다.
+      </p>
+
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;font-size:14px;">
+        <tr>
+          <td style="padding:9px 12px;background:#f7f9fc;border:1px solid #e4e7ec;font-size:12.5px;font-weight:800;color:#667085;">프로젝트 형상</td>
+          <td width="34%" style="padding:9px 12px;background:#f7f9fc;border:1px solid #e4e7ec;font-size:12.5px;font-weight:800;color:#667085;">필요한 버전</td>
+        </tr>
+        <tr id="row-core">
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;">평면 스틱(Stick) 타입</td>
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;font-weight:800;white-space:nowrap;">Core<span id="badge-core" style="display:none;margin-left:8px;padding:1px 8px;border-radius:999px;background:#2667d9;color:#ffffff;font-size:11px;font-weight:800;">해당</span></td>
+        </tr>
+        <tr id="row-std">
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;">유닛(Unit) 타입 · 삼각형 등 평면이 아닌 유닛</td>
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;font-weight:800;white-space:nowrap;">Standard<span id="badge-std" style="display:none;margin-left:8px;padding:1px 8px;border-radius:999px;background:#2667d9;color:#ffffff;font-size:11px;font-weight:800;">해당</span></td>
+        </tr>
+        <tr id="row-pro">
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;">곡선(커브)이 있는 형상 · 판재(Sheet) 가공</td>
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;font-weight:800;white-space:nowrap;">Professional<span id="badge-pro" style="display:none;margin-left:8px;padding:1px 8px;border-radius:999px;background:#2667d9;color:#ffffff;font-size:11px;font-weight:800;">해당</span></td>
+        </tr>
+      </table>
+
+      <p id="verdict" style="margin:14px 0 0 0;font-size:14.5px;line-height:1.8;color:#33405a;">
+        다루시는 형상이 <b>어느 쪽에 해당하는지</b> 알려 주시면 정확히 말씀드리겠습니다.
+        도면이나 3D 형상을 하나 보내 주시면 저희가 보고 판단해 드립니다.
+      </p>
+    </td></tr>
+
+    <!-- 답변 2 — 가격 -->
+    <tr><td style="padding:26px 44px 0 44px;">
+      <div style="font-size:18px;font-weight:800;color:#101828;padding-bottom:10px;">가격</div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;font-size:14px;">
+        <tr>
+          <td style="padding:9px 12px;background:#f7f9fc;border:1px solid #e4e7ec;font-size:12.5px;font-weight:800;color:#667085;">버전</td>
+          <td width="32%" style="padding:9px 12px;background:#f7f9fc;border:1px solid #e4e7ec;font-size:12.5px;font-weight:800;color:#667085;">가격</td>
+          <td width="26%" style="padding:9px 12px;background:#f7f9fc;border:1px solid #e4e7ec;font-size:12.5px;font-weight:800;color:#667085;">라이선스</td>
+        </tr>
+        <tr id="price-core">
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;font-weight:800;">Core<span id="pbadge-core" style="display:none;margin-left:8px;padding:1px 8px;border-radius:999px;background:#2667d9;color:#ffffff;font-size:11px;font-weight:800;">권장</span></td>
+          <td align="right" style="padding:9px 12px;border:1px solid #e4e7ec;white-space:nowrap;"><span class="fill">《&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;》</span> 원</td>
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;white-space:nowrap;">영구 · PC 1대</td>
+        </tr>
+        <tr id="price-std">
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;font-weight:800;">Standard<span id="pbadge-std" style="display:none;margin-left:8px;padding:1px 8px;border-radius:999px;background:#2667d9;color:#ffffff;font-size:11px;font-weight:800;">권장</span></td>
+          <td align="right" style="padding:9px 12px;border:1px solid #e4e7ec;white-space:nowrap;"><span class="fill">《&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;》</span> 원</td>
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;white-space:nowrap;">영구 · PC 1대</td>
+        </tr>
+        <tr id="price-pro">
+          <td style="padding:9px 12px;border:1px solid #e4e7ec;font-weight:800;">Professional<span id="pbadge-pro" style="display:none;margin-left:8px;padding:1px 8px;border-radius:999px;background:#2667d9;color:#ffffff;font-size:11px;font-weight:800;">권장</span></td>
+          <td colspan="2" style="padding:9px 12px;border:1px solid #e4e7ec;color:#475467;">형상과 개발 범위에 따라 별도로 안내드립니다</td>
+        </tr>
+      </table>
+      <p style="margin:10px 0 0 0;font-size:13px;line-height:1.75;color:#667085;">
+        부가세 <span class="fill">《별도》</span>이며 세금계산서 발행됩니다.
+        설치하시려면 <b>Windows용 Rhino 7 또는 Rhino 8</b> 이 필요합니다(RCW 가격에 포함되지 않습니다).
+      </p>
+    </td></tr>
+
+    <!-- 다음 단계 -->
+    <tr><td style="padding:26px 44px 0 44px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background:#f7f9fc;border:1px solid #e4e7ec;border-radius:12px;">
+        <tr><td style="padding:18px 20px;">
+          <div style="font-size:15px;font-weight:800;color:#101828;padding-bottom:8px;">다음으로 하실 수 있는 것</div>
+          <div style="font-size:14px;line-height:1.9;color:#475467;">
+            · 평가판을 받아 직접 확인해 보시거나<br>
+            · <b>실제로 다루시는 형상 하나를 주시면</b> 그 형상으로 어디까지 나오는지 보여 드리거나<br>
+            · 화면 공유로 시연해 드립니다 (<span class="fill">《30분 정도》</span>)
+          </div>
+        </td></tr>
+      </table>
+    </td></tr>
+
+    <!-- 보조 버튼 -->
+    <tr><td align="center" style="padding:22px 44px 0 44px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+        <tr>
+          <td align="center" style="border:1px solid #d0d7e2;border-radius:10px;padding:0;">
+            <a href="https://rcw-site.vercel.app/help"
+               style="display:inline-block;padding:12px 22px;font-size:14px;font-weight:700;color:#17499e;text-decoration:none;">사용 설명서 보기</a>
+          </td>
+          <td width="10" style="font-size:0;line-height:0;">&nbsp;</td>
+          <td align="center" style="border:1px solid #d0d7e2;border-radius:10px;padding:0;">
+            <a href="https://rcw-site.vercel.app"
+               style="display:inline-block;padding:12px 22px;font-size:14px;font-weight:700;color:#17499e;text-decoration:none;">제품 소개 보기</a>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+
+    <!-- 맺음 -->
+    <tr><td style="padding:26px 44px 0 44px;">
+      <p style="margin:0;font-size:15px;line-height:1.85;color:#33405a;">
+        궁금하신 것이 더 있으시면 <b>이 메일로 그대로 회신</b> 주십시오.<br>감사합니다.
+      </p>
+    </td></tr>
+
+    <!-- 꼬리말 -->
+    <tr><td style="padding:26px 44px 34px 44px;">
+      <div style="height:1px;background:#e4e7ec;line-height:1px;font-size:0;margin-bottom:18px;">&nbsp;</div>
+      <div style="font-size:13.5px;line-height:1.8;color:#475467;">
+        <b style="color:#101828;"><span class="fill">《보내는 사람》</span></b><br>
+        베임테크<br>
+        <a href="mailto:beimptech@gmail.com" style="color:#17499e;text-decoration:none;">beimptech@gmail.com</a><br>
+        <a href="https://rcw-site.vercel.app" style="color:#17499e;text-decoration:none;">rcw-site.vercel.app</a>
+      </div>
+      <div style="font-size:11.5px;line-height:1.7;color:#98a2b3;padding-top:14px;">
+        이 메일은 홈페이지로 문의 주신 분께 보내는 답장입니다.
+        AutoCAD · BricsCAD 커튼월 유틸리티는 별개이며 무상입니다 —
+        <a href="https://rcw-site.vercel.app/cad" style="color:#667085;">rcw-site.vercel.app/cad</a>
+      </div>
+    </td></tr>
+
+  </table>
+
+</td></tr>
+</table>
+</div>
+<!-- ══════════════ 메일 본문 끝 ══════════════ -->
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var letter = document.getElementById('letter');
+  var say    = document.getElementById('say');
+  var timer  = null;
+
+  function tell(msg) {
+    say.textContent = msg;
+    clearTimeout(timer);
+    timer = setTimeout(function () { say.textContent = ''; }, 3200);
+  }
+
+  /* ── 형상 고르기 ────────────────────────────────────────────
+     고른 줄만 강조하고 배지를 붙인다. 강조는 **인라인 스타일**로 넣는다 —
+     class 로 하면 메일에 붙여넣을 때 색이 빠진다. */
+  var CASES = {
+    core: { name: 'Core',
+            line: '말씀하신 형상이 <b>평면 스틱(Stick) 타입</b>이라면 <b>Core</b> 로 충분합니다. ' +
+                  '모델링부터 가공도 · 물량까지 Core 안에서 끝납니다.' },
+    std:  { name: 'Standard',
+            line: '<b>유닛 타입</b>이거나 삼각형처럼 <b>평면이 아닌 유닛</b>이 하나라도 들어오면 ' +
+                  '<b>Standard</b> 가 필요합니다. 창호(Vent) · 그릴(Grill) · BIM 데이터도 여기에 들어갑니다.' },
+    pro:  { name: 'Professional',
+            line: '<b>곡선(커브)</b>이 들어간 형상은 Standard 로 다루지 못합니다. ' +
+                  '형상을 세우는 첫 단계에서 막히기 때문입니다. 판재(Sheet) 가공과 함께 <b>Professional</b> 범위입니다. ' +
+                  '형상마다 달라, 자료를 보내 주시면 보고 범위와 비용을 제안드립니다.' },
+    none: { name: '',
+            line: '다루시는 형상이 <b>어느 쪽에 해당하는지</b> 알려 주시면 정확히 말씀드리겠습니다. ' +
+                  '도면이나 3D 형상을 하나 보내 주시면 저희가 보고 판단해 드립니다.' }
+  };
+  var KEYS = ['core', 'std', 'pro'];
+
+  function pick(k) {
+    KEYS.forEach(function (n) {
+      var on = (n === k);
+      // 표 행 — 배경은 셀마다 넣어야 메일에서 산다(tr 배경은 지워지는 곳이 있다)
+      ['row-' + n, 'price-' + n].forEach(function (id) {
+        var tr = document.getElementById(id);
+        if (!tr) return;
+        [].forEach.call(tr.cells, function (td) { td.style.background = on ? '#eaf1ff' : ''; });
+      });
+      var b = document.getElementById('badge-' + n);
+      var p = document.getElementById('pbadge-' + n);
+      if (b) b.style.display = on ? 'inline-block' : 'none';
+      if (p) p.style.display = on ? 'inline-block' : 'none';
+    });
+    document.getElementById('verdict').innerHTML = (CASES[k] || CASES.none).line;
+
+    [].forEach.call(document.querySelectorAll('.cases button'), function (btn) {
+      btn.classList.toggle('on', btn.getAttribute('data-case') === k);
+    });
+    tell(CASES[k] && CASES[k].name ? CASES[k].name + ' 로 맞췄습니다' : '형상을 묻는 문장으로 두었습니다');
+  }
+  [].forEach.call(document.querySelectorAll('.cases button'), function (btn) {
+    btn.addEventListener('click', function () { pick(btn.getAttribute('data-case')); });
+  });
+
+  /* ── 편집 ─────────────────────────────────────────────────── */
+  var editBtn = document.getElementById('edit');
+  editBtn.addEventListener('click', function () {
+    var on = letter.getAttribute('contenteditable') === 'true';
+    letter.setAttribute('contenteditable', on ? 'false' : 'true');
+    editBtn.classList.toggle('on', !on);
+    editBtn.textContent = on ? '편집 켜기' : '편집 끄기';
+    if (!on) { letter.focus(); tell('고치실 수 있습니다 (저장은 안 됩니다)'); }
+  });
+
+  var markBtn = document.getElementById('marks');
+  markBtn.addEventListener('click', function () {
+    var plain = document.body.classList.toggle('plain');
+    markBtn.textContent = plain ? '표시 켜기' : '표시 끄기';
+    tell(plain ? '실제 보내지는 모습' : '채울 곳을 표시합니다');
+  });
+
+  function restore() {
+    document.body.classList.remove('copying');
+    document.removeEventListener('keyup', restore, true);
+    document.removeEventListener('mousedown', restore, true);
+  }
+
+  function copyNode(node, what) {
+    document.body.classList.add('copying');
+    var sel = window.getSelection();
+    var range = document.createRange();
+    range.selectNodeContents(node);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    if (ok) { sel.removeAllRanges(); restore(); tell(what + '을 복사했습니다'); return; }
+    document.addEventListener('keyup', restore, true);
+    document.addEventListener('mousedown', restore, true);
+    tell('선택해 두었습니다 — Ctrl+C 를 누르세요');
+  }
+
+  document.getElementById('copy').addEventListener('click', function () { copyNode(letter, '본문'); });
+  document.getElementById('subj').addEventListener('click', function () {
+    copyNode(document.getElementById('subject-text'), '제목');
+  });
+
+  window.addEventListener('load', function () {
+    tell('빈 곳 ' + letter.querySelectorAll('.fill').length + '군데 — 형상도 골라 두십시오');
+  });
+})();
+</script>
+</body>
+</html>

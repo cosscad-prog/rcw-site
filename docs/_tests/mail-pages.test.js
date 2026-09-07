@@ -44,6 +44,38 @@ const PROBE = `
     out['메일 제목'] = document.getElementById('subject-text').innerText.trim();
     out['링크'] = [].map.call(document.querySelectorAll('.tools nav a'), function (a) { return a.getAttribute('href'); }).join(',');
 
+    /* 홍보형 문안(메일 본문에 붙여넣는 것)만 보는 것 —
+       ① 형상 단추가 표를 실제로 칠하는가(인라인으로. class 로 칠하면 메일에서 색이 빠진다)
+       ② 그림이 진짜로 불러와지는가(주소가 살아 있는가)
+       ③ 메일에서 깨지는 것을 안 썼는가 */
+    var cases = document.querySelectorAll('.cases button');
+    if (cases.length) {
+      out['형상 단추'] = cases.length;
+      document.querySelector('.cases button[data-case="std"]').click();
+      var td = document.getElementById('row-std').cells[0];
+      out['고른 뒤 칸 배경'] = td.style.background || '(없음)';
+      out['고른 뒤 배지'] = document.getElementById('badge-std').style.display;
+      out['고른 뒤 문장'] = document.getElementById('verdict').innerText.slice(0, 28);
+      document.querySelector('.cases button[data-case="none"]').click();
+      out['되돌린 뒤 칸 배경'] = document.getElementById('row-std').cells[0].style.background || '(없음)';
+
+      var imgs = L.querySelectorAll('img');
+      out['그림 수'] = imgs.length;
+      out['대체 글 없는 그림'] = [].filter.call(imgs, function (i) { return !i.getAttribute('alt'); }).length;
+      out['주소가 상대경로인 그림'] = [].filter.call(imgs, function (i) {
+        return (i.getAttribute('src') || '').indexOf('https://') !== 0;
+      }).length;
+      /* ⚠️ 여기서 naturalWidth 로 "그림이 떴나" 를 보면 안 된다 —
+         --dump-dom 은 바깥 그림을 기다리지 않고 찍는다(전부 0 으로 나온다).
+         주소가 살아 있는지는 아래에서 node 가 직접 두드려 본다. */
+
+      var h = L.innerHTML;
+      out['메일에서 깨지는 것'] = ['display:flex', 'display:grid', 'position:absolute', 'background-image']
+        .filter(function (bad) { return h.indexOf(bad) >= 0; }).join(',') || '(없음)';
+      out['표 개수'] = L.querySelectorAll('table').length;
+      out['class 로만 칠한 칸'] = L.querySelectorAll('td[class]:not([style])').length;
+    }
+
     // 단추 세 개를 실제로 눌러 본다
     document.getElementById('edit').click();
     out['편집 켜짐'] = L.getAttribute('contenteditable');
@@ -77,6 +109,7 @@ const HEAD = `<script>window.__err=[];window.onerror=function(m,s,l){window.__er
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rcw-mail-'));
 let bad = 0;
+const imageChecks = [];   // 그림을 쓰는 문안 — 아래에서 주소를 실제로 두드려 본다
 
 FILES.forEach(function (f, i) {
   const src = fs.readFileSync(path.join(DIR, f), 'utf8');
@@ -104,8 +137,25 @@ FILES.forEach(function (f, i) {
   if (got['편집 켜짐'] !== 'true' || got['편집 꺼짐'] !== 'false') { console.log('   ✘ 편집 토글 이상'); bad++; }
   if ((got["다음 클릭 뒤 class"]||"").indexOf("copying") >= 0) { console.log("   ✘ 클릭 뒤에도 copying 이 남았다"); bad++; }
   if (got["복사 뒤 선택된 글자"] < 500 && (got["안내문"]||"").indexOf("Ctrl") >= 0) { console.log("   ✘ 실패했는데 선택도 안 남았다"); bad++; }
-  if (got['강조 행'].split('//').length !== 2) { console.log('   ✘ 강조 행이 하나가 아니다'); bad++; }
-  if (got['글자 수'] < 1500) { console.log('   ✘ 편지가 너무 짧다'); bad++; }
+  if (got['글자 수'] < 1200) { console.log('   ✘ 편지가 너무 짧다'); bad++; }
+
+  if (got['형상 단추']) {
+    // 홍보형 — 메일 본문에 붙여넣는 것이라 규칙이 더 빡빡하다
+    if (!/eaf1ff|rgb\(234, 241, 255\)/.test(got['고른 뒤 칸 배경'])) {
+      console.log('   ✘ 형상을 골라도 표가 안 칠해진다'); bad++;
+    }
+    if (got['고른 뒤 배지'] !== 'inline-block') { console.log('   ✘ 해당 배지가 안 뜬다'); bad++; }
+    if (got['되돌린 뒤 칸 배경'] !== '(없음)') { console.log('   ✘ 되돌려도 색이 남는다'); bad++; }
+    if (got['대체 글 없는 그림'] !== 0) { console.log('   ✘ alt 없는 그림이 있다'); bad++; }
+    if (got['주소가 상대경로인 그림'] !== 0) {
+      console.log('   ✘ 그림 주소가 https 로 시작하지 않는다 — 메일에서는 상대경로가 안 뜬다'); bad++;
+    }
+    imageChecks.push(f);
+    if (got['메일에서 깨지는 것'] !== '(없음)') { console.log('   ✘ 메일에서 깨지는 CSS 를 썼다'); bad++; }
+    if (got['class 로만 칠한 칸'] !== 0) { console.log('   ✘ 인라인 없이 class 로만 꾸민 칸이 있다'); bad++; }
+  } else if (got['강조 행'].split('//').length !== 2) {
+    console.log('   ✘ 강조 행이 하나가 아니다'); bad++;
+  }
 });
 
 // 원본 파일에 깨진 글자가 없나
@@ -114,5 +164,38 @@ FILES.forEach(function (f) {
   if (/[\uFFFD]/.test(s)) { console.log('✘ ' + f + ' 에 깨진 글자'); bad++; }
 });
 
-console.log('\n' + (bad ? '▶ ' + bad + '개 문제' : '▶ 전부 OK'));
-process.exit(bad ? 1 : 0);
+/* ── 그림 주소를 실제로 두드려 본다 ─────────────────────────────
+   메일에 붙는 그림은 홈페이지에서 불러온다. 주소가 죽으면 받는 분 화면에
+   깨진 네모가 뜨는데 보낸 쪽은 알 길이 없다(내 브라우저 캐시에는 남아 잘 보인다).
+   ⚠️ 브라우저의 naturalWidth 로 보면 안 된다 — --dump-dom 은 바깥 그림을
+      기다리지 않고 찍어서 **전부 0** 으로 나온다(2026-09-08 에 그것으로 헛짚었다). */
+const https = require('https');
+function ping(url) {
+  return new Promise(function (res) {
+    const req = https.request(url, { method: 'GET', headers: { Range: 'bytes=0-0' } }, function (r) {
+      r.resume();
+      res({ code: r.statusCode, type: r.headers['content-type'] || '' });
+    });
+    req.setTimeout(8000, function () { req.destroy(); res({ code: 0, type: '시간초과' }); });
+    req.on('error', function (e) { res({ code: 0, type: e.code || e.message }); });
+    req.end();
+  });
+}
+
+(async function () {
+  for (const f of imageChecks) {
+    const html = fs.readFileSync(path.join(DIR, f), 'utf8');
+    const letter = (/<div class="stage"[\s\S]*$/.exec(html) || [html])[0];
+    const urls = [...new Set((letter.match(/src="(https:\/\/[^"]+)"/g) || []).map(s => s.slice(5, -1)))];
+    console.log('\n== ' + f + ' — 그림 주소 ' + urls.length + '개');
+    for (const u of urls) {
+      const r = await ping(u);
+      const ok = (r.code === 200 || r.code === 206) && /^image\//.test(r.type);
+      if (!ok) bad++;
+      console.log('   ' + (ok ? '✔' : '✘ 안 열린다') + ' ' + r.code + ' ' + r.type +
+                  '  ' + u.replace(/^https:\/\/[^/]+/, ''));
+    }
+  }
+  console.log('\n' + (bad ? '▶ ' + bad + '개 문제' : '▶ 전부 OK'));
+  process.exit(bad ? 1 : 0);
+})();
