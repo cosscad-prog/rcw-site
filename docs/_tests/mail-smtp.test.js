@@ -208,6 +208,30 @@ const MESSAGE = 'Core 와 Standard 차이가 궁금합니다.\n줄바꿈도 그�
   ok('기본 수신 주소', cfg.to === 'beimptech+rcw@gmail.com', cfg.to);
   ok('앱 비밀번호의 공백을 턴다', cfg.pass === 'abcdefghijklmnop', cfg.pass);
   ok('기본 서버', cfg.host === 'smtp.gmail.com' && cfg.port === 465, cfg.host + ':' + cfg.port);
+  ok('MAIL_FROM 을 안 넣으면 보낸사람 = 계정', cfg.from === 'beimptech@gmail.com', cfg.from);
+
+  /* ── 6. MAIL_FROM — 보이는 주소와 봉투 주소는 다른 것이다 ──
+     받은 편지함의 보낸사람 칸은 헤더 From 이고, 서버가 인증을 보는 것은 봉투(MAIL FROM)다.
+     MAIL_FROM 을 바꿔도 봉투는 계정 그대로여야 한다 — 봉투를 바꾸면 Gmail 이 거부한다. */
+  console.log('\n== MAIL_FROM 으로 보낸사람 바꾸기');
+  process.env.MAIL_FROM = 'beimptech+rcw@gmail.com';
+  const s6 = await fakeSmtp();
+  const sent6 = await mail.sendMail(
+    { subject: '[RCW 문의] 회사 이름', text: '본문', replyToName: '이름', replyToEmail: 'c@example.com' },
+    function () { return net.connect(s6.port, '127.0.0.1'); }
+  );
+  await s6.settle();
+  const raw6 = s6.text();
+  const envelope = (s6.said.find(function (l) { return l.indexOf('MAIL FROM') === 0; }) || '');
+  const rcpt = (s6.said.find(function (l) { return l.indexOf('RCPT TO') === 0; }) || '');
+  console.log('     | ' + envelope + '\n     | ' + rcpt + '\n     | From: ' + header(raw6, 'From')[0]);
+  ok('sendMail 이 true', sent6 === true);
+  ok('보이는 보낸사람 = MAIL_FROM',
+     header(raw6, 'From')[0].indexOf('<beimptech+rcw@gmail.com>') > 0, header(raw6, 'From')[0]);
+  ok('봉투는 계정 그대로', envelope === 'MAIL FROM:<beimptech@gmail.com>', envelope);
+  ok('받는 곳은 그대로', rcpt === 'RCPT TO:<beimptech+rcw@gmail.com>', rcpt);
+  s6.close();
+  delete process.env.MAIL_FROM;
 
   console.log('\n' + (fails ? '▶ ' + fails + '개 실패' : '▶ 전부 OK'));
   process.exit(fails ? 1 : 0);

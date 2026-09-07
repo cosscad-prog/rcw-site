@@ -19,6 +19,9 @@
      MAIL_APP_PASSWORD  Gmail 앱 비밀번호 16자리     (계정 비밀번호가 아니다.
                         구글이 4자리씩 띄어 보여주므로 공백째 붙여넣어도 되게 턴다)
      MAIL_TO            받는 주소                   생략하면 아래 DEFAULT_TO
+     MAIL_FROM          받은 편지함에 보이는 보낸사람 주소. 생략하면 MAIL_USERNAME.
+                        ⚠️ Gmail 은 인증 계정이나 등록된 별칭이 아니면 이 값을 조용히
+                        자기 주소로 갈아 끼운다. 넣어 보고 실제로 온 메일로 확인할 것.
      MAIL_HOST/MAIL_PORT  시험용. 생략하면 smtp.gmail.com:465
 
    GitHub Actions 의 하루 요약 메일(.github/workflows/daily-report.yml)이 쓰는
@@ -46,6 +49,13 @@ function mailConfig() {
     user: user,
     pass: pass,
     to:   env('MAIL_TO') || DEFAULT_TO,
+    // 받은 편지함의 **보낸사람 칸**에 보이길 바라는 주소. 봉투(MAIL FROM)는 언제나
+    // 인증한 계정이고, 이건 헤더 From 하나만 바꾼다.
+    // ⚠️ Gmail 은 인증한 계정이나 "다른 주소에서 메일 보내기"에 등록한 별칭이 아니면
+    //    이 값을 **말없이 자기 주소로 갈아 끼운다**(오류가 아니라 조용한 치환이다).
+    //    `beimptech+rcw@` 같은 변형이 통과하는지는 실제로 한 통 보내 봐야 안다.
+    //    치환돼도 잃는 것은 없다 — 받는 주소(To)와 제목은 그대로라 그쪽으로 거를 수 있다.
+    from: env('MAIL_FROM') || user,
     host: env('MAIL_HOST') || 'smtp.gmail.com',
     port: Number(env('MAIL_PORT') || 465)
   };
@@ -215,20 +225,22 @@ function smtpSend(o) {
 /**
  * 메일 한 통. 실패해도 던지지 않는다 — 부르는 쪽(알림)은 부가 기능이다.
  * @param {object} m  subject, text, replyToName, replyToEmail
+ * @param {function} [connect]  시험용 이음매(smtpSend 로 그대로 넘긴다). 운영에서는 안 쓴다.
  * @returns {Promise<boolean>} 보냈으면 true, 설정이 없거나 실패하면 false
  */
-async function sendMail(m) {
+async function sendMail(m, connect) {
   const cfg = mailConfig();
   if (!cfg) return false;                    // 미설정 = 메일 없음. 오류가 아니다.
   try {
     const message = buildMessage({
-      from: cfg.user, to: cfg.to,
+      from: cfg.from, to: cfg.to,          // 헤더 From = 보이는 주소
       subject: m.subject, text: m.text,
       replyToName: m.replyToName, replyToEmail: m.replyToEmail
     });
     await smtpSend({
       host: cfg.host, port: cfg.port, user: cfg.user, pass: cfg.pass,
-      from: cfg.user, to: cfg.to, message: message
+      from: cfg.user, to: cfg.to,          // 봉투 MAIL FROM = 인증한 계정(바꾸면 거부당한다)
+      message: message, connect: connect
     });
     return true;
   } catch (err) {

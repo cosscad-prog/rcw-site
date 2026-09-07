@@ -219,6 +219,7 @@ Cloudflare R2 + 10분짜리 서명 URL 로 바꾸면 되고, 함수의 `fileList
 | `MAIL_USERNAME` | 보내는 Gmail 주소 (예: `beimptech@gmail.com`) |
 | `MAIL_APP_PASSWORD` | Gmail **앱 비밀번호** 16자리. 계정 비밀번호가 아니다 (공백째 붙여넣어도 된다) |
 | `MAIL_TO` | *(생략 가능)* 받는 주소. 없으면 `beimptech+rcw@gmail.com` |
+| `MAIL_FROM` | *(생략 가능)* 받은 편지함의 **보낸사람** 칸에 보일 주소. 없으면 `MAIL_USERNAME` |
 
 앱 비밀번호는 Google 계정 → 보안 → **2단계 인증을 켠 뒤** "앱 비밀번호" 에서 만든다.
 GitHub Actions 의 하루 요약 메일이 쓰는 비밀값과 **같은 이름·같은 값**이다(`daily-report.yml`).
@@ -236,6 +237,23 @@ GitHub Actions 의 하루 요약 메일이 쓰는 비밀값과 **같은 이름·
 
 ⚠️ **Trial 신청과 라이선스 요청은 여전히 텔레그램만이다.** 필요해지면 `_notify.js` 의
 `notifyTrialRequest()` 에서 `mailContact()` 와 같은 식으로 부르면 된다.
+
+#### 자동분류(Gmail 필터)를 걸 자리 — **받는 주소가 확실하다**
+
+| 거는 곳 | 값 | 확실한가 |
+|---|---|---|
+| **받는사람(To)** | `beimptech+rcw@gmail.com` | ✅ 우리가 정한다. 항상 이 값이다 |
+| **제목** | `[RCW 문의] ` 로 시작 | ✅ 항상 이 모양이다 |
+| 보낸사람(From) | `MAIL_FROM` 에 넣은 값 | ⚠️ **Gmail 이 갈아 끼울 수 있다**(아래) |
+
+**보낸사람 칸을 `beimptech+rcw@gmail.com` 로 보이게 하려면** `MAIL_FROM` 에 그 주소를 넣는다.
+다만 Gmail SMTP 는 **인증한 계정이나 "다른 주소에서 메일 보내기"에 등록한 별칭이 아닌 From 을
+말없이 자기 주소로 바꿔 버린다.** 오류가 아니라 조용한 치환이라 로그에도 안 남는다 —
+`+rcw` 변형이 통과하는지는 **실제로 온 메일의 보낸사람을 눈으로 봐야** 안다.
+치환되더라도 잃는 것은 없다. 받는 주소와 제목은 그대로라 필터는 그쪽으로 걸면 된다.
+
+봉투(SMTP `MAIL FROM`)는 **언제나 인증한 계정**이다. 그것까지 바꾸면 Gmail 이 거부한다 —
+`_mail.js` 는 헤더 From 하나만 바꾸고 봉투는 건드리지 않는다(`mail-smtp.test.js` 가 이걸 본다).
 
 ★ **Trial 신청 행의 id 는 브라우저가 만들어 보낸다.** 다운로드 클릭을 같은 신청과 엮는 열쇠라서,
 `/api/trial` 은 형식만 검사해 그 값을 그대로 저장하고 **응답으로 되돌려 준다**(`request_id`).
