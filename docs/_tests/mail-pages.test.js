@@ -12,7 +12,9 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const DIR = path.join(__dirname, '..', 'mail');
-const FILES = ['reply-1-stick-core.html', 'reply-2-unit-standard.html', 'reply-3-curved-professional.html'];
+/* 폴더에 있는 문안을 전부 본다 — 틀(reply-*.html)과, 그 자리에 있는 고객별 편지까지.
+   고객별 편지는 .gitignore 로 로컬에만 있으므로, 새로 받은 저장소에서는 틀 세 통만 돈다. */
+const FILES = fs.readdirSync(DIR).filter(function (f) { return /\.html$/i.test(f); }).sort();
 
 const CHROME = process.env.CHROME || [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
