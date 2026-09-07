@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>문의 답변 ① 스틱 타입 — Core</title>
+<style>
+  :root {
+    --ink:#101828; --muted:#667085; --line:#e4e7ec; --paper:#fff;
+    --mist:#f7f9fc; --navy:#101f3d; --blue:#2667d9; --blue-dark:#17499e;
+    --sky:#eaf1ff; --amber:#fff5e6; --amber-line:#f0d3a5;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#e9edf2; color:var(--ink);
+         font-family:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",system-ui,sans-serif; }
+
+  /* ── 위쪽 도구 막대 (메일에는 안 들어간다) ───────────────────── */
+  .tools { position:sticky; top:0; z-index:9; display:flex; flex-wrap:wrap; gap:8px;
+           align-items:center; padding:11px 18px; background:var(--navy); color:#fff;
+           box-shadow:0 2px 14px rgba(16,31,61,.25); }
+  .tools .brand { font-weight:800; letter-spacing:-.02em; font-size:14px; margin-right:4px; }
+  .tools .who { font-size:12.5px; color:#a9bbd8; margin-right:auto; }
+  .tools nav { display:flex; gap:4px; margin-right:10px; }
+  .tools nav a { padding:5px 10px; border-radius:7px; font-size:12.5px; font-weight:700;
+                 color:#c9d8f2; text-decoration:none; border:1px solid transparent; }
+  .tools nav a:hover { background:#1d3257; color:#fff; }
+  .tools nav a.on { background:#fff; color:var(--navy); }
+  .btn { padding:7px 13px; border:1px solid #33507f; border-radius:8px; background:#1a2c4d;
+         color:#e8eefb; font-size:12.5px; font-weight:700; cursor:pointer;
+         font-family:inherit; }
+  .btn:hover { background:#24406e; border-color:#4a6ea8; }
+  .btn.primary { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .btn.primary:hover { background:#3a7aec; }
+  .btn.on { background:#fff; color:var(--navy); border-color:#fff; }
+  .say { font-size:12.5px; color:#9ff0c0; min-width:92px; }
+
+  /* ── 편집 안내 · 제목 ───────────────────────────────────────── */
+  .wrap { max-width:860px; margin:0 auto; padding:22px 18px 70px; }
+  .meta { background:#fff; border:1px solid var(--line); border-left:4px solid var(--blue);
+          border-radius:12px; padding:15px 18px; margin:0 0 16px; font-size:13px;
+          line-height:1.75; color:#3d4a5c; }
+  .meta b { color:var(--ink); }
+  .meta ol { margin:8px 0 0; padding-left:20px; }
+  .meta li { margin:3px 0; }
+  .subject { background:#fff; border:1px solid var(--line); border-radius:12px;
+             padding:13px 18px; margin:0 0 16px; font-size:13.5px; display:flex;
+             gap:12px; align-items:center; flex-wrap:wrap; }
+  .subject .lab { font-size:11.5px; font-weight:800; color:var(--muted); letter-spacing:.03em; }
+  .subject .val { font-weight:700; flex:1; min-width:260px; }
+
+  /* ── 편지지 ─────────────────────────────────────────────────── */
+  .sheet { background:var(--paper); border-radius:14px; padding:52px 56px 46px;
+           box-shadow:0 1px 3px rgba(16,24,40,.08), 0 14px 40px rgba(16,24,40,.10);
+           font-size:15px; line-height:1.85; }
+  .sheet[contenteditable="true"] { outline:2px dashed var(--blue); outline-offset:12px; }
+  .sheet p { margin:0 0 14px; }
+  .sheet h2 { margin:34px 0 14px; padding:0 0 0 11px; font-size:16px; line-height:1.5;
+              border-left:3px solid var(--blue); letter-spacing:-.01em; }
+  .sheet h3 { margin:20px 0 8px; font-size:14.5px; color:var(--blue-dark); }
+  .sheet ul { margin:0 0 14px; padding-left:20px; }
+  .sheet li { margin:5px 0; }
+  .sheet a { color:var(--blue-dark); }
+  .lead { color:#33405a; }
+  .hello { font-size:15.5px; }
+
+  table.t { width:100%; border-collapse:collapse; margin:6px 0 14px; font-size:14px; }
+  table.t th, table.t td { border:1px solid var(--line); padding:9px 12px; text-align:left;
+                           vertical-align:middle; }
+  table.t thead th { background:var(--mist); font-size:12.5px; color:var(--muted);
+                     font-weight:800; letter-spacing:.02em; }
+  table.t td.plan { white-space:nowrap; font-weight:800; }
+  tr.pick td, tr.pick th { background:var(--sky); }
+  tr.pick td.plan { color:var(--blue-dark); }
+  .mark { display:inline-block; margin-left:8px; padding:1px 8px; border-radius:999px;
+          background:var(--blue); color:#fff; font-size:11px; font-weight:800; vertical-align:middle; }
+
+  .note { border:1px solid var(--amber-line); background:var(--amber); border-radius:10px;
+          padding:13px 16px; margin:0 0 14px; font-size:14px; }
+  .note b { color:#8a5a10; }
+
+  .price td.num { text-align:right; white-space:nowrap; font-size:14.5px; }
+  .fill { background:#fff6d6; border-bottom:1px dashed #d8b64a; padding:0 3px; }
+  body.plain .fill { background:none; border-bottom:none; padding:0; }
+
+  .sign { margin-top:34px; padding-top:16px; border-top:1px solid var(--line);
+          font-size:13.5px; color:#42505f; line-height:1.7; }
+  .sign b { color:var(--ink); font-size:14px; }
+
+  @media (max-width:640px) {
+    .sheet { padding:32px 22px; }
+    .tools .who { display:none; }
+  }
+  @media print {
+    .tools, .meta, .subject { display:none; }
+    body { background:#fff; }
+    .sheet { box-shadow:none; padding:0; }
+  }
+  /* 복사하는 순간만: 노란 표시와 안내를 뺀다 */
+  body.copying .fill { background:none; border-bottom:none; padding:0; }
+</style>
+</head>
+<body>
+
+<div class="tools">
+  <span class="brand">RCW 문의 답변</span>
+  <nav>
+    <a class="on" href="reply-1-stick-core.html">① 스틱 · Core</a>
+    <a href="reply-2-unit-standard.html">② 유닛 · Standard</a>
+    <a href="reply-3-curved-professional.html">③ 곡선 · Professional</a>
+  </nav>
+  <span class="who">평면 스틱 타입 문의에 보내는 문안</span>
+  <button class="btn" id="edit">편집 켜기</button>
+  <button class="btn" id="marks">빈 칸 표시 끄기</button>
+  <button class="btn" id="subj">제목 복사</button>
+  <button class="btn primary" id="copy">메일용으로 복사</button>
+  <span class="say" id="say"></span>
+</div>
+
+<div class="wrap">
+
+  <div class="meta">
+    <b>언제 이 문안을 씁니까</b> — 다루시는 프로젝트가 <b>평면 스틱(Stick) 타입</b> 위주일 때.
+    유닛 타입이나 삼각형처럼 평면이 아닌 형상, 창호가 들어오면 <a href="reply-2-unit-standard.html">②번</a>,
+    곡선이나 판재까지면 <a href="reply-3-curved-professional.html">③번</a>을 쓰십시오.
+    <br>
+    <b>보내기 전에</b>
+    <ol>
+      <li><b>가격 두 칸을 채웠는지</b> — 빈 칸 그대로 나가면 안 됩니다. VAT 표기도 함께.</li>
+      <li>노란 <span class="fill">《 》</span> 자리를 전부 고쳤는지 — <b>[빈 칸 표시 끄기]</b> 로 실제 모습을 확인.</li>
+      <li>없는 기능을 있다고 적지 않았는지.</li>
+      <li><b>[메일용으로 복사]</b> → 메일 창에 붙여넣기(서식 그대로). 답장은 알림 메일에 그대로 회신하면 문의자에게 갑니다.</li>
+    </ol>
+  </div>
+
+  <div class="subject">
+    <span class="lab">제목</span>
+    <span class="val" id="subject-text">[RCW] 문의 주셔서 감사합니다 — Core 버전 안내와 가격</span>
+  </div>
+
+  <article class="sheet" id="letter">
+
+    <p class="hello"><span class="fill">《회사명》</span> <span class="fill">《담당자님》</span> 안녕하십니까.</p>
+
+    <p class="lead">
+      RCW V5에 관심 가져 주셔서 감사합니다.<br>
+      문의 주신 두 가지 &mdash; <span class="fill">《업무》</span>에 어떤 버전이 맞는지, 그리고 가격 &mdash;
+      을 순서대로 말씀드리겠습니다.
+    </p>
+
+    <h2>RCW V5는 어떤 프로그램입니까</h2>
+    <p>
+      Rhino 7 &middot; Rhino 8 에서 동작하는 <b>커튼월 전용 플러그인</b>입니다(Windows).
+      단독 프로그램이 아니라 Rhino 안에서 도는 도구라, Rhino 가 설치되어 있어야 합니다.
+    </p>
+    <p>
+      하는 일은 하나입니다 &mdash; 커튼월 단면과 와이어프레임을 <b>실제 제작용 3D 모델</b>로 바꾸고,
+      그 모델 하나에서 공장이 필요로 하는 자료를 자동으로 뽑아냅니다.
+    </p>
+    <ul>
+      <li>프레임(멀리언 &middot; 트랜섬) &middot; 유리 &middot; 백패널 모델링</li>
+      <li>부재 자동 번호</li>
+      <li>가공도 &mdash; 홀 &middot; 장공 &middot; 노치 치수까지</li>
+      <li>부재표 &middot; 부속표 &middot; 컷팅리스트 &middot; 물량</li>
+      <li>2D 도면과 NC 가공 데이터</li>
+    </ul>
+    <p>3D 모델링 자체가 목적이 아니라, <b>그 뒤의 도면과 물량을 위한 도구</b>입니다.</p>
+
+    <h2>어느 버전이 필요한지는 형상이 정합니다</h2>
+    <p>
+      기능 목록보다 이 기준이 먼저입니다. 형상이 감당되지 않으면 뒤의 기능은 쓸 일이 없기 때문입니다.
+    </p>
+    <table class="t">
+      <thead>
+        <tr><th>프로젝트 형상</th><th style="width:34%">필요한 버전</th></tr>
+      </thead>
+      <tbody>
+        <tr class="pick">
+          <th style="font-weight:600">평면 스틱(Stick) 타입</th>
+          <td class="plan">Core<span class="mark">해당</span></td>
+        </tr>
+        <tr>
+          <th style="font-weight:600">유닛(Unit) 타입 &middot; 삼각형 등 평면이 아닌 유닛</th>
+          <td class="plan">Standard</td>
+        </tr>
+        <tr>
+          <th style="font-weight:600">곡선(커브)이 있는 형상 &middot; 판재(Sheet) 가공</th>
+          <td class="plan">Professional</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>말씀하신 범위라면 Core 로 충분합니다</h2>
+    <p>
+      평면 스틱 타입 위주라면 모델링부터 가공도 &middot; 물량까지 Core 안에서 전부 끝납니다.
+      지금 쓰지 않으실 기능에 비용을 들이실 이유는 없습니다.
+    </p>
+
+    <h3>Core 로 하실 수 있는 것</h3>
+    <ul>
+      <li>프레임(멀리언 &middot; 트랜섬) 유닛 모델링</li>
+      <li>유리 &middot; 백패널 모델링과 번호 &middot; 리스트</li>
+      <li>가공도, 부재표 &middot; 부속표, 컷팅리스트, 물량 산출</li>
+      <li>2D 도면과 NC 데이터</li>
+      <li>레이어 &middot; 블록 &middot; 치수 유틸리티</li>
+    </ul>
+
+    <h3>Core 에 없는 것 (Standard 이상)</h3>
+    <ul>
+      <li>창호(Vent) &middot; 그릴(Grill) 모델링</li>
+      <li>유닛 타입 모델링과 유닛 리스트 &middot; 유닛 표</li>
+      <li>BIM 데이터 산출</li>
+      <li>웹뷰어 &mdash; Rhino 가 없는 분께 3D 모델을 링크로 열어 보여 주는 기능</li>
+      <li>사용자 바리스트, 서피스 &middot; 각도 &middot; 실린더 도구</li>
+    </ul>
+
+    <div class="note">
+      <b>한 가지만 미리 말씀드립니다.</b>
+      앞으로 유닛 타입이나 삼각형처럼 평면이 아닌 형상, 또는 창호가 포함된 프로젝트를 맡으실 예정이라면
+      처음부터 Standard 를 보시는 편이 낫습니다. 나중에 올리실 수도 있지만,
+      프로젝트가 진행되는 중에 바꾸는 것은 번거롭습니다.
+    </div>
+
+    <h2>미리 아셔야 할 점</h2>
+    <ul>
+      <li><b>Rhino 7 또는 Rhino 8(Windows)이 따로 필요합니다.</b> RCW 가격에 포함되지 않으며, 맥에서는 동작하지 않습니다.</li>
+      <li><b>처음에 준비 작업이 있습니다.</b> 회사에서 쓰시는 단면을 한 번 등록해 두어야 그 뒤가 자동으로 흘러갑니다.
+          이 작업이 끝나기 전에는 손으로 그리는 것보다 빠르지 않습니다.
+          <span class="fill">《도입 초기에 이 부분을 함께 봐 드립니다》</span></li>
+      <li><b>라이선스는 PC 1대 기준입니다.</b> PC를 바꾸시면 홈페이지에서 재발급을 요청하시면 되고, 비용은 없습니다.</li>
+    </ul>
+
+    <h2>가격</h2>
+    <table class="t price">
+      <thead>
+        <tr><th>버전</th><th style="width:32%">가격</th><th style="width:26%">라이선스</th></tr>
+      </thead>
+      <tbody>
+        <tr class="pick">
+          <td class="plan">Core<span class="mark">권장</span></td>
+          <td class="num"><span class="fill">《&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;》</span> 원</td>
+          <td>영구 &middot; PC 1대</td>
+        </tr>
+        <tr>
+          <td class="plan">Standard</td>
+          <td class="num"><span class="fill">《&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;》</span> 원</td>
+          <td>영구 &middot; PC 1대</td>
+        </tr>
+        <tr>
+          <td class="plan">Professional</td>
+          <td class="num" colspan="2">형상과 개발 범위에 따라 달라 별도로 안내드립니다</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>부가세 <span class="fill">《별도》</span>이며, 세금계산서 발행됩니다.</li>
+      <li>같은 회사에서 여러 대를 쓰실 경우 <span class="fill">《&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;》</span></li>
+      <li>새 버전 업그레이드는 <span class="fill">《&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;》</span></li>
+    </ul>
+
+    <h2>먼저 써 보실 수 있습니다</h2>
+    <p>
+      평가판은 신청하시면 바로 받으실 수 있습니다 &mdash;
+      <a href="https://rcw-site.vercel.app/trial">https://rcw-site.vercel.app/trial</a>
+    </p>
+    <p>
+      Core 는 <b>90일</b>, Standard 는 <b>30일</b>이며 두 기간은 서로 별개입니다.
+      Standard 평가판은 전체 기능이 열려 있으니, 두 버전의 차이를 직접 보시고 정하셔도 됩니다.
+    </p>
+    <ul>
+      <li>설치 안내 &mdash; <a href="https://rcw-site.vercel.app/guide-ko">https://rcw-site.vercel.app/guide-ko</a></li>
+      <li>사용 설명서 &mdash; <a href="https://rcw-site.vercel.app/help">https://rcw-site.vercel.app/help</a></li>
+      <li>AutoCAD &middot; BricsCAD 커튼월 유틸리티(별개 &middot; <b>무상</b>) &mdash;
+          <a href="https://rcw-site.vercel.app/cad">https://rcw-site.vercel.app/cad</a></li>
+    </ul>
+
+    <h2>다음으로 하실 수 있는 것</h2>
+    <ul>
+      <li>평가판을 받아 직접 확인해 보시거나</li>
+      <li>실제 도면 하나를 주시면 <b>그 도면으로</b> 어디까지 나오는지 보여 드리거나</li>
+      <li>화면 공유로 시연해 드립니다 (<span class="fill">《30분 정도》</span>)</li>
+    </ul>
+    <p>편하신 쪽을 말씀해 주시면 그대로 맞춰 드리겠습니다.</p>
+
+    <p>궁금하신 것이 더 있으시면 이 메일로 그대로 회신 주십시오.<br>감사합니다.</p>
+
+    <div class="sign">
+      <b><span class="fill">《보내는 사람》</span></b><br>
+      베임테크<br>
+      beimptech@gmail.com<br>
+      <a href="https://rcw-site.vercel.app">https://rcw-site.vercel.app</a>
+    </div>
+
+  </article>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var letter = document.getElementById('letter');
+  var say    = document.getElementById('say');
+  var timer  = null;
+
+  function tell(msg) {
+    say.textContent = msg;
+    clearTimeout(timer);
+    timer = setTimeout(function () { say.textContent = ''; }, 3200);
+  }
+
+  /* 편집 — 이 페이지에서 그대로 고치고 복사한다.
+     ⚠️ 저장되지 않는다. 다음에도 쓸 문구는 이 HTML 파일을 직접 고칠 것. */
+  var editBtn = document.getElementById('edit');
+  editBtn.addEventListener('click', function () {
+    var on = letter.getAttribute('contenteditable') === 'true';
+    letter.setAttribute('contenteditable', on ? 'false' : 'true');
+    editBtn.classList.toggle('on', !on);
+    editBtn.textContent = on ? '편집 켜기' : '편집 끄기';
+    if (!on) { letter.focus(); tell('고치실 수 있습니다 (저장은 안 됩니다)'); }
+  });
+
+  /* 빈 칸의 노란 표시는 화면에서만 쓴다. 복사할 때는 아래에서 잠깐 지우므로,
+     이 단추는 "실제로 보내지는 모습" 을 눈으로 확인하는 용도다. */
+  var markBtn = document.getElementById('marks');
+  markBtn.addEventListener('click', function () {
+    var plain = document.body.classList.toggle('plain');
+    markBtn.textContent = plain ? '빈 칸 표시 켜기' : '빈 칸 표시 끄기';
+    tell(plain ? '실제 보내지는 모습' : '빈 칸을 표시합니다');
+  });
+
+  function restore() {
+    document.body.classList.remove('copying');
+    document.removeEventListener('keyup', restore, true);
+    document.removeEventListener('mousedown', restore, true);
+  }
+
+  /* 복사.
+     ★ 브라우저가 화면에 보이는 그대로(서식 포함) 복사하게 두는 것이 가장 낫다.
+       HTML 을 손으로 만들어 넣는 방법은 글꼴·표 선이 다 빠진 채로 붙는다.
+     ★ 노란 표시는 잠깐 지우고 복사한다 — 안 그러면 메일에 형광펜이 그대로 간다.
+     ★ 복사가 막히면(브라우저 설정 등) 선택은 그대로 남긴다. Ctrl+C 한 번이면 되고,
+       그때까지 노란 표시도 감춰 둔다. */
+  function copyNode(node, what) {
+    document.body.classList.add('copying');
+    var sel = window.getSelection();
+    var range = document.createRange();
+    range.selectNodeContents(node);
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+
+    if (ok) {
+      sel.removeAllRanges();
+      restore();
+      tell(what + '을 복사했습니다');
+      return;
+    }
+    document.addEventListener('keyup', restore, true);
+    document.addEventListener('mousedown', restore, true);
+    tell('선택해 두었습니다 — Ctrl+C 를 누르세요');
+  }
+
+  document.getElementById('copy').addEventListener('click', function () {
+    copyNode(letter, '본문');
+  });
+  document.getElementById('subj').addEventListener('click', function () {
+    copyNode(document.getElementById('subject-text'), '제목');
+  });
+
+  // 남은 빈 칸이 몇 개인지 알려 준다 — 가격을 비운 채 보내는 사고를 막는 장치다.
+  window.addEventListener('load', function () {
+    var n = letter.querySelectorAll('.fill').length;
+    if (n) tell('채울 곳 ' + n + '군데');
+  });
+})();
+</script>
+</body>
+</html>
