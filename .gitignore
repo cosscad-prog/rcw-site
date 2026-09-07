@@ -54,6 +54,7 @@ customers.csv*
 # 그래서 문안 틀(reply-*.html)만 추적하고, 고객별 편지와 워드 원고는 로컬에만 둔다.
 docs/mail/*
 !docs/mail/reply-*.html
+!docs/mail/export-attach.js
 
 # 파이썬이 스크립트를 실행하면 생긴다. 저장소에 들어갈 것이 아니다.
 __pycache__/
