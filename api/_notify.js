@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------
-   운영자 알림 (텔레그램)
+   운영자 알림 (텔레그램 + 문의는 메일도)
 
    발급기는 요청이 들어와도 스스로 켜지지 않는다. 서명 개인키가 발급 PC 밖으로
    나가지 않게 하려고 "발급기를 닫는 것이 곧 잠금" 으로 설계했기 때문이다
@@ -10,11 +10,19 @@
      여기서 모든 예외를 삼키고, 부르는 쪽은 결과를 보지 않는다.
      환경변수가 없으면 조용히 아무것도 하지 않는다(로컬·미설정 환경에서 정상 동작).
 
+   ★ 제품 문의만 메일도 함께 보낸다(2026-09-07). 알림이 텔레그램 한 곳에만
+     남으면 놓친 순간 되찾을 데가 Supabase 대시보드뿐이다. 메일은 검색이 되고
+     답장이 문의자에게 바로 간다. 보내는 코드는 `_mail.js`, 받는 곳은
+     기본이 beimptech+rcw@gmail.com 이다.
+
    환경변수
      TELEGRAM_BOT_TOKEN   @BotFather 로 만든 봇 토큰
      TELEGRAM_CHAT_ID     알림을 받을 대화 id (봇에게 아무 말이나 보낸 뒤
                           https://api.telegram.org/bot<토큰>/getUpdates 에서 확인)
+     MAIL_USERNAME / MAIL_APP_PASSWORD / MAIL_TO   → `_mail.js` 머리말 참조
 ------------------------------------------------------------------ */
+
+const { sendMail } = require('./_mail');
 
 const TIMEOUT_MS = 4000;
 
@@ -125,14 +133,56 @@ async function notifyLicenseRequest(info) {
 }
 
 /**
+ * 문의 내용을 메일로 한 통 보낸다 (텔레그램과 같은 내용, 줄이지 않은 본문).
+ *
+ * 텔레그램은 4096자 제한이 있어 긴 문의를 잘라 보내지만 메일은 5000자를 그대로
+ * 담는다. 받는 사람이 [답장] 을 누르면 문의자에게 가도록 Reply-To 를 붙인다.
+ */
+async function mailContact(info) {
+  const who = [info.company, info.name].filter(Boolean).join(' ') || '(이름 미기재)';
+  const line = '─'.repeat(30);
+
+  const body = [
+    '홈페이지에 제품 문의가 들어왔습니다.',
+    '',
+    '보낸이   ' + who,
+    '메일     ' + (info.email || '-'),
+    '연락처   ' + (info.phone || '-'),
+    '경로     ' + (info.source_page || '-'),
+    '접수     ' + kstStamp(new Date()) + ' KST',
+    '',
+    line,
+    String(info.message || '').trim(),
+    line,
+    '',
+    '이 메일에 그대로 답장하면 문의하신 분에게 갑니다.',
+    '지난 문의는 https://rcw-site.vercel.app/admin 의 [문의] 탭에 모두 남아 있습니다.'
+  ].join('\n');
+
+  return sendMail({
+    subject: '[RCW 문의] ' + who,
+    text: body,
+    replyToName: info.name,
+    replyToEmail: info.email
+  });
+}
+
+/**
  * 홈페이지 제품 문의가 들어왔다고 알린다 (api/contact.js).
  *
  * 라이선스 알림과 달리 연락처를 가리지 않는다. 이 알림을 보고 바로 답장·전화를
  * 해야 하는데 가려 놓으면 결국 대시보드를 열어야 하기 때문이다.
  *
+ * 텔레그램과 메일을 **나란히** 보낸다. 한쪽이 느려도 다른 쪽이 그만큼 늦지 않고,
+ * 한쪽이 실패해도 다른 쪽은 간다.
+ *
  * @param {object} info  name, company, phone, email, message, source_page
  */
 async function notifyContact(info) {
+  await Promise.all([telegramContact(info), mailContact(info).catch(function () { return false; })]);
+}
+
+async function telegramContact(info) {
   try {
     const who = [info.company, info.name].filter(Boolean).join('  ') || '(이름 미기재)';
 

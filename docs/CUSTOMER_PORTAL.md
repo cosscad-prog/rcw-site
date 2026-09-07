@@ -202,9 +202,40 @@ Cloudflare R2 + 10분짜리 서명 URL 로 바꾸면 되고, 함수의 `fileList
 **환경변수는 위의 두 개 그대로이고 따로 설정할 것이 없다.**
 
 ```
-브라우저 ─▶ /api/contact ─service key─▶ contacts        저장 ─▶ notifyContact()      ─▶ 텔레그램
+브라우저 ─▶ /api/contact ─service key─▶ contacts        저장 ─▶ notifyContact()      ─▶ 텔레그램 + 메일
 브라우저 ─▶ /api/trial   ─service key─▶ trial_requests  저장 ─▶ notifyTrialRequest() ─▶ 텔레그램
 ```
+
+### 5-1. 문의는 메일로도 온다 (2026-09-07 추가)
+
+**제품 문의만** 메일이 한 통 더 간다 — 기본 수신 주소 **`beimptech+rcw@gmail.com`**.
+텔레그램 알림을 놓치면 되찾을 데가 Supabase 대시보드뿐이었다. 메일은 검색이 되고,
+**[답장] 을 누르면 문의자에게 바로 간다**(`Reply-To` 에 문의자 주소를 넣는다).
+
+**Vercel 환경변수** (Settings → Environment Variables, Production) — 셋 다 넣어야 메일이 나간다
+
+| 이름 | 값 |
+|---|---|
+| `MAIL_USERNAME` | 보내는 Gmail 주소 (예: `beimptech@gmail.com`) |
+| `MAIL_APP_PASSWORD` | Gmail **앱 비밀번호** 16자리. 계정 비밀번호가 아니다 (공백째 붙여넣어도 된다) |
+| `MAIL_TO` | *(생략 가능)* 받는 주소. 없으면 `beimptech+rcw@gmail.com` |
+
+앱 비밀번호는 Google 계정 → 보안 → **2단계 인증을 켠 뒤** "앱 비밀번호" 에서 만든다.
+GitHub Actions 의 하루 요약 메일이 쓰는 비밀값과 **같은 이름·같은 값**이다(`daily-report.yml`).
+
+- 보내는 코드는 **`api/_mail.js`** — 라이브러리 없이 SMTP(`smtp.gmail.com:465`)를 직접 말한다.
+  이 저장소에는 `package.json` 이 없다(빌드 단계가 없는 것이 이 사이트의 배포 방식이다)
+- `_` 로 시작하므로 **Vercel 함수 개수(Hobby 12개)에 포함되지 않는다.** 지금 11개다
+- **환경변수가 없으면 조용히 메일만 없다.** 접수·저장·텔레그램은 그대로다
+- 메일이 실패해도(앱 비밀번호 오류 → SMTP 535, 8초 타임아웃) **접수는 200 이다**.
+  실패는 Vercel 로그에만 `[mail] 발송 실패:` 로 남는다 — 비밀번호는 로그에 안 찍는다
+- 텔레그램과 **나란히** 보낸다. 최악의 지연은 둘을 더한 값이 아니라 8초다
+- 텔레그램은 본문을 1200자로 줄이지만 **메일은 안 자른다**(저장 한도 5000자 그대로)
+- 문의자가 적은 이름·메일이 헤더에 들어가므로 **줄바꿈을 털고** 주소 형태를 검사한다
+  (안 그러면 이름 칸에 개행을 넣어 `Bcc:` 를 지어낼 수 있다 — 헤더 주입)
+
+⚠️ **Trial 신청과 라이선스 요청은 여전히 텔레그램만이다.** 필요해지면 `_notify.js` 의
+`notifyTrialRequest()` 에서 `mailContact()` 와 같은 식으로 부르면 된다.
 
 ★ **Trial 신청 행의 id 는 브라우저가 만들어 보낸다.** 다운로드 클릭을 같은 신청과 엮는 열쇠라서,
 `/api/trial` 은 형식만 검사해 그 값을 그대로 저장하고 **응답으로 되돌려 준다**(`request_id`).

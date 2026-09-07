@@ -6,6 +6,9 @@ Supabase 와 텔레그램에는 아무것도 나가지 않고, 설치할 것도 
 ```bash
 node docs/_tests/contact-api.test.js
 node docs/_tests/trial-api.test.js
+node docs/_tests/mail-smtp.test.js
+node docs/_tests/admin-ids.test.js
+node docs/_tests/admin-contacts-browser.test.js   # 헤드리스 크롬 필요
 node docs/_tests/todo-names.test.js
 node docs/_tests/todo-sync.test.js
 node docs/_tests/todo-render.test.js
@@ -26,6 +29,45 @@ node docs/_tests/todo-history.test.js
 | 텔레그램 실패 → **접수는 200** | 알림은 부가 기능이다 |
 | 한도 초과 본문 → 저장 ≤ DB 제약, 알림 ≤ 4096자 | 텔레그램 상한을 넘으면 알림이 통째로 사라진다 |
 | (trial) 보낸 id == 저장 id == 응답 id | 다운로드 클릭을 신청과 엮는 열쇠다 |
+| 정상 접수 → **메일 1통**, Reply-To 는 문의자 | 답장이 문의자에게 가야 메일로 받는 뜻이 산다 |
+| 메일 실패 → **접수는 200**, 텔레그램은 그대로 | 메일도 부가 기능이다 |
+| 긴 본문: 텔레그램은 자르고 **메일은 안 자른다** | 자를 이유가 없는 쪽까지 자르면 원문을 잃는다 |
+
+⚠️ `contact-api.test.js` 는 `api/_mail.js` 의 `sendMail` 을 **contact.js 를 요구하기 전에**
+갈아 끼운다. `_notify.js` 가 `const { sendMail } = require('./_mail')` 로 그 순간 값을
+집어가기 때문이다 — 순서를 바꾸면 시험이 **진짜 메일을 보낸다**.
+
+## 메일 원문 (`mail-smtp.test.js`)
+
+가짜 SMTP 서버를 띄워 `api/_mail.js` 로 한 통 보내고, **무엇을 말했는지** 본다.
+
+| 확인 | 왜 |
+|---|---|
+| `EHLO → AUTH → MAIL → RCPT → DATA → QUIT` 순서 | 한 줄만 어긋나도 Gmail 은 그냥 끊는다 |
+| `AUTH PLAIN` 이 NUL 로 나뉜 아이디·비밀번호 | 형식이 틀리면 535 만 돌아온다 |
+| 여러 줄 응답(`250-SIZE…`)을 **한 응답**으로 | 줄 단위로 세면 그다음 명령과 어긋난다 |
+| 제목·본문이 한 글자도 안 틀리고 되살아난다 | 한글은 base64 로 감싸야 7비트를 지난다 |
+| `Reply-To` 가 문의자 | 답장이 나에게 되돌아오면 의미가 없다 |
+| 이름·제목에 개행을 넣어도 **헤더가 안 늘어난다** | 헤더 주입 — `Bcc:` 를 지어낼 수 있다 |
+| 535 → 던지되 **오류 문구에 비밀번호가 없다** | 로그에 비밀번호를 남기면 안 된다 |
+| 환경변수 없음 → `sendMail` 이 조용히 `false` | 로컬·미설정 환경에서 정상 동작이어야 한다 |
+
+### ⚠️ 못 잡는 것
+**TLS 자체와 Gmail 의 진짜 응답.** 인증서를 만들 수 없어 시험은 평문 서버에 붙는다
+(`smtpSend` 의 `connect` 를 갈아 끼운다. 운영 경로는 언제나 `tls.connect` 다).
+앱 비밀번호가 맞는지, 465 가 막혀 있지 않은지는 **한 번 실제로 보내 봐야** 안다.
+
+## `/admin` [문의] 탭 (`admin-ids.test.js` · `admin-contacts-browser.test.js`)
+
+| 검사 | 보는 것 |
+|---|---|
+| `admin-ids.test.js` | 스크립트가 부르는 `getElementById` 이름이 **문서에 다 있나**. 탭을 더할 때 markup·`VIEWS`·`TITLES` 중 하나를 빠뜨리면 로그인 뒤 **화면 전체가 멎는다** |
+| `admin-contacts-browser.test.js` | 헤드리스 크롬으로 실제로 열어, 가짜 문의 3건이 **몇 줄 그려졌는지** 센다. 카드 숫자, 검색(내용까지), 펼치기, [답장] `mailto`, CSV 따옴표 처리, 다른 탭이 안 망가졌는지 |
+
+### ⚠️ 못 잡는 것
+**진짜 로그인과 RLS.** 조회 정책 `admin can read contacts`(`docs/supabase-downloads.sql`)가
+실제로 적용됐는지는 **로그인해서 한 번 열어 봐야** 안다. 정책이 없으면 빈 목록이 아니라
+오류가 오고, 화면에는 "조회 정책이 적용됐는지 확인하세요" 가 뜬다.
 
 ## ⚠️ 스텁을 고칠 때
 

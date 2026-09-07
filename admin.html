@@ -122,6 +122,13 @@
   .sub { display:block; margin-top:3px; color:var(--muted); font-size:11.5px;
          max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
+  /* 문의 내용 — 길어야 세 줄이다. 한 건이 화면을 다 먹으면 목록이 아니라 편지가 된다.
+     누르면 펼친다(.open). 줄바꿈은 원문 그대로 살린다. */
+  .msg { max-width:520px; white-space:pre-wrap; word-break:break-word; cursor:pointer;
+         display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; }
+  .msg.open { display:block; -webkit-line-clamp:none; }
+  .msg:hover { color:var(--blue-dark); }
+
   /* 영구/구독 — 한 줄에 들어가도록 전부 inline 이다 */
   .plan { font-weight:700; }
   .plan.perp { color:var(--muted); font-weight:600; }   /* 영구는 챙길 일이 없다 */
@@ -186,6 +193,7 @@
     <button id="tab-renew" class="on">갱신<span class="count" id="tab-renew-n"></span></button>
     <button id="tab-cust">고객<span class="count" id="tab-cust-n"></span></button>
     <button id="tab-trial">트라이얼 다운로드<span class="count" id="tab-trial-n"></span></button>
+    <button id="tab-contact">문의<span class="count" id="tab-contact-n"></span></button>
     <button id="tab-rel">배포 현황</button>
   </div>
 
@@ -361,6 +369,47 @@
   </p>
 </div>
 
+<!-- ── 문의 ───────────────────────────────────────────────────
+     홈페이지 문의 폼(/contact → api/contact.js → contacts 표)으로 들어온 것.
+     알림(텔레그램·메일)을 놓쳤을 때 되찾는 곳이자, 지난 문의를 다시 읽는 곳이다. -->
+<div id="view-contact" style="display:none">
+  <div class="cards">
+    <div class="card"><b id="m-today">0</b><span>오늘 문의</span></div>
+    <div class="card"><b id="m-week">0</b><span>최근 7일</span></div>
+    <div class="card"><b id="m-total">0</b><span>전체 문의</span></div>
+    <div class="card"><b id="m-people">0</b><span>문의한 사람(이메일 기준)</span></div>
+  </div>
+
+  <div class="tools">
+    <input id="mq" type="search" placeholder="이름 · 회사 · 전화 · 이메일 · 문의 내용으로 검색">
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>접수</th><th>이름</th><th>회사</th><th>전화번호</th><th>이메일</th>
+        <th>어느 페이지</th><th>문의 내용</th><th></th>
+      </tr>
+    </thead>
+    <tbody id="mrows"><tr><td colspan="8" class="empty">불러오는 중…</td></tr></tbody>
+  </table>
+
+  <p class="note">
+    <b>[답장]</b> 을 누르면 메일 프로그램이 그 사람 주소로 열립니다.
+    문의 내용은 <b>세 줄까지</b> 보이고, 눌러서 펼칩니다.
+  </p>
+
+  <p class="note">
+    같은 문의가 <b>텔레그램</b>과 <b>메일</b>(beimptech+rcw@gmail.com)로도 갑니다.
+    셋 다 같은 <code>contacts</code> 표에서 나온 것이고, 여기 목록이 원본입니다 —
+    알림을 놓쳤거나 지웠어도 문의는 이 표에 남습니다.
+    <br>
+    ⚠️ <b>답장했는지 여부는 표시되지 않습니다.</b> <code>contacts</code> 에 그 칸이 없습니다
+    (<code>docs/supabase-setup.sql</code>). 필요하면 칸을 먼저 만들어야 합니다 —
+    <b>SQL 먼저, 배포 나중</b>입니다.
+  </p>
+</div>
+
 <div id="view-rel" style="display:none">
   <div class="peek">
     <b>고객이 보는 화면 그대로 열기</b>
@@ -477,20 +526,25 @@
     load();
     loadCustomers();
     loadRenewals();
+    loadContacts();
   });
 
   // ── 탭 ────────────────────────────────────────────────────
-  var TITLES = { renew: '갱신 — 오늘 챙길 고객', cust: '고객', trial: '트라이얼 다운로드 기록', rel: '배포 현황 — 지금 올라가 있는 것' };
+  var TITLES = { renew: '갱신 — 오늘 챙길 고객', cust: '고객', trial: '트라이얼 다운로드 기록',
+                 contact: '문의 — 홈페이지로 들어온 것', rel: '배포 현황 — 지금 올라가 있는 것' };
+  // ★ 탭을 더할 때는 이 배열 두 곳과 TITLES 를 함께 고친다. 하나만 고치면
+  //   getElementById 가 null 을 돌려주고 그 자리에서 스크립트가 통째로 멎는다.
+  var VIEWS = ['renew', 'cust', 'trial', 'contact', 'rel'];
   var view = 'renew';
   function switchView(next) {
     view = next;
-    ['renew', 'cust', 'trial', 'rel'].forEach(function (name) {
+    VIEWS.forEach(function (name) {
       document.getElementById('view-' + name).style.display = next === name ? 'block' : 'none';
       document.getElementById('tab-' + name).classList.toggle('on', next === name);
     });
     document.getElementById('view-title').textContent = TITLES[next];
   }
-  ['renew', 'cust', 'trial', 'rel'].forEach(function (name) {
+  VIEWS.forEach(function (name) {
     document.getElementById('tab-' + name).addEventListener('click', function () { switchView(name); });
   });
 
@@ -502,6 +556,7 @@
     load();
     loadCustomers();
     loadRenewals();
+    loadContacts();
   }
 
   function load() {
@@ -1132,6 +1187,99 @@
       (requests.length ? '검색 결과가 없습니다.' : '아직 신청이 없습니다.') + '</td></tr>';
   }
 
+  // ── 문의 ──────────────────────────────────────────────────
+  /* 홈페이지 문의(contacts 표). 서버 함수를 새로 만들지 않는다 —
+     로그인한 관리자 토큰으로 PostgREST 를 그대로 읽는다
+     (정책 "admin can read contacts", docs/supabase-downloads.sql).
+     읽기만 하고 아무것도 쓰지 않는다. */
+  var contacts = [];
+  var mRowsEl  = document.getElementById('mrows');
+  var mqEl     = document.getElementById('mq');
+
+  function loadContacts() {
+    mRowsEl.innerHTML = '<tr><td colspan="8" class="empty">불러오는 중…</td></tr>';
+    api('/rest/v1/contacts?select=*&order=created_at.desc&limit=2000')
+      .then(function (data) {
+        contacts = data || [];
+        summarizeContacts();
+        renderContacts();
+      })
+      .catch(function (err) {
+        console.error(err);
+        /* 조회 정책이 없으면 로그인해도 빈 목록이 아니라 오류가 온다.
+           "불러오지 못했습니다" 한 마디로는 어디를 고칠지 알 수 없어 자리를 적어 둔다. */
+        mRowsEl.innerHTML = '<tr><td colspan="8" class="empty">불러오지 못했습니다. ' +
+          '다시 로그인하거나, 조회 정책(docs/supabase-downloads.sql 의 ' +
+          '<b>admin can read contacts</b>)이 실제로 적용됐는지 확인하세요.</td></tr>';
+      });
+  }
+
+  function summarizeContacts() {
+    var now = new Date();
+    var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    var weekAgo = startOfToday - 6 * 86400000;
+    var today = 0, week = 0, people = {};
+
+    contacts.forEach(function (c) {
+      var t = new Date(c.created_at).getTime();
+      if (t >= startOfToday) today++;
+      if (t >= weekAgo) week++;
+      people[(c.email || '').trim().toLowerCase()] = 1;
+    });
+
+    document.getElementById('m-today').textContent  = today;
+    document.getElementById('m-week').textContent   = week;
+    document.getElementById('m-total').textContent  = contacts.length;
+    document.getElementById('m-people').textContent = Object.keys(people).length;
+    document.getElementById('tab-contact-n').textContent = contacts.length ? '(' + contacts.length + ')' : '';
+  }
+
+  /* [답장] 은 메일 프로그램을 여는 것뿐이다(서버를 안 거친다).
+     주소 형태가 아니면 단추를 아예 안 만든다 — 눌러도 아무 일이 없는 단추가 더 나쁘다. */
+  function replyHref(c) {
+    var mail = String(c.email || '').trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) return '';
+    var quoted = String(c.message || '').trim().slice(0, 300).split('\n').join('\n> ');
+    var body = '안녕하세요, ' + (c.name || '') + '님.\n\nRCW 제품 문의 주셔서 감사합니다.\n\n\n' +
+               '───── 보내주신 문의 (' + fmt(c.created_at, true) + ') ─────\n> ' + quoted + '\n';
+    return 'mailto:' + encodeURIComponent(mail).replace(/%40/g, '@') +
+           '?subject=' + encodeURIComponent('[RCW] 문의 주신 건에 대한 답변') +
+           '&body=' + encodeURIComponent(body);
+  }
+
+  function renderContacts() {
+    var q = mqEl.value.trim().toLowerCase();
+    var html = '';
+    contacts.forEach(function (c) {
+      // 내용까지 검색한다. "그때 그 회사가 뭘 물었더라" 로 찾는 일이 대부분이다.
+      var hay = [c.name, c.company, c.phone, c.email, c.message, c.source_page].join(' ').toLowerCase();
+      if (q && hay.indexOf(q) === -1) return;
+
+      var href = replyHref(c);
+      html += '<tr>' +
+        '<td class="when"><b>' + fmt(c.created_at) + '</b>' + fmt(c.created_at, true).slice(11) + '</td>' +
+        '<td class="nw">' + esc(c.name) + '</td>' +
+        '<td class="nw">' + esc(c.company) + '</td>' +
+        '<td class="nw">' + esc(c.phone) + '</td>' +
+        '<td>' + esc(c.email) + '</td>' +
+        '<td class="dim">' + esc(c.source_page || '—') + '</td>' +
+        '<td><div class="msg" title="눌러서 펼치기">' + esc(c.message) + '</div></td>' +
+        '<td>' + (href ? '<a class="btn mini" href="' + esc(href) + '">답장</a>' : '<span class="dim">—</span>') +
+        '</td>' +
+        '</tr>';
+    });
+    mRowsEl.innerHTML = html || '<tr><td colspan="8" class="empty">' +
+      (contacts.length ? '검색 결과가 없습니다.' : '아직 문의가 없습니다.') + '</td></tr>';
+  }
+
+  // 긴 문의는 세 줄만 보인다. 눌러서 펼치고 다시 눌러 접는다.
+  mRowsEl.addEventListener('click', function (e) {
+    var box = e.target && e.target.classList && e.target.classList.contains('msg') ? e.target : null;
+    if (box) box.classList.toggle('open');
+  });
+
+  mqEl.addEventListener('input', renderContacts);
+
   function fmt(ts, withTime) {
     var d = new Date(ts), p = function (n) { return (n < 10 ? '0' : '') + n; };
     var day = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
@@ -1252,6 +1400,20 @@
         ].map(csvCell).join(','));
       });
       download('rcw-customers-' + fmt(Date.now()) + '.csv', kLines);
+      return;
+    }
+
+    if (view === 'contact') {
+      // 문의 내용에는 줄바꿈과 쉼표가 흔하다. csvCell 이 따옴표로 감싸므로 그대로 넣는다.
+      var mHead = ['접수', '이름', '회사', '전화번호', '이메일', '어느 페이지', '문의 내용'];
+      var mLines = [mHead.join(',')];
+      contacts.forEach(function (c) {
+        mLines.push([
+          fmt(c.created_at, true), c.name, c.company, c.phone, c.email,
+          c.source_page || '', c.message
+        ].map(csvCell).join(','));
+      });
+      download('rcw-contacts-' + fmt(Date.now()) + '.csv', mLines);
       return;
     }
 

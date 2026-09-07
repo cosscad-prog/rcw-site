@@ -93,7 +93,18 @@ anon 키는 **공개를 전제로 만들어진 키**다. 이 키로 할 수 있�
 보내는 코드는 `api/_notify.js` 의 `notifyContact()` / `notifyTrialRequest()` 다.
 자세한 것은 `docs/CUSTOMER_PORTAL.md`.
 
-아래 Resend + Edge Function 방식은 **대안**이다(메일로 받고 싶을 때). 지금은 할 필요가 없다.
+★ **제품 문의는 2026-09-07부터 메일도 한 통 간다** — `beimptech+rcw@gmail.com`.
+Vercel 환경변수 `MAIL_USERNAME` / `MAIL_APP_PASSWORD`(+`MAIL_TO`)를 넣으면 나가고,
+없으면 조용히 텔레그램만 간다. 보내는 코드는 `api/_mail.js`(라이브러리 없이 Gmail SMTP).
+설명은 `docs/CUSTOMER_PORTAL.md` 의 **5-1**.
+
+★ **지난 문의는 `/admin` 의 [문의] 탭에서 본다** (2026-09-07 추가). 검색·CSV·[답장] 이 있어
+이제 Supabase 대시보드를 열 일이 거의 없다. 조회는 로그인한 관리자 토큰으로 하고,
+정책은 아래 `admin can read contacts`(`docs/supabase-downloads.sql`)를 쓴다.
+
+아래 Resend + Edge Function 방식은 **쓰지 않는다.** 위의 Gmail SMTP 로 갈음했다
+(가입할 서비스가 하나 줄고, 발신 주소가 우리 것이며, Edge Function 을 따로 배포하지 않는다).
+남겨 두는 것은 되돌릴 때를 위한 기록이다.
 
 이 설정을 하지 않으면 Supabase 대시보드에 직접 들어가야 접수를 확인할 수 있다.
 
@@ -159,6 +170,9 @@ Deno.serve(async (req) => {
 ---
 
 ## 접수 확인하는 법
+
+**첫 번째 자리는 `/admin` 이다** — [문의] 탭(문의)과 [트라이얼 다운로드] 탭(신청·다운로드).
+아래 대시보드는 그것으로 안 되는 것(칸 고치기, 통째로 내보내기)이 있을 때 쓴다.
 
 **Table Editor** → `contacts` 또는 `trial_requests`
 
