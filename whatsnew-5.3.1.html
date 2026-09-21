@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What's New 5.3.1</title>
+<meta name="description" content="RCW V5.3.1 에 들어온 합성 프로파일(ComP)과 Main-Sub 세트(FabG), 그리고 그것을 확인하는 목록 명령을 한 장씩 봅니다.">
+<meta property="og:title" content="What's New 5.3.1">
+<meta property="og:description" content="합성 프로파일과 Main-Sub 세트 — 묶고, 확인하고, 가공도에서 한 장으로 받습니다.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>:root{color-scheme:light}html,body{margin:0;padding:0}img,video{max-width:100%}</style>
+</head>
+<body>
+
+
+
+<style>
+  :root {
+    --ground: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E9EEF3;
+    --ink: #101820;
+    --ink-2: #3B4956;
+    --muted: #67757F;
+    --rule: #D6DEE6;
+    --rule-strong: #B2BFCB;
+    --accent: #0A6494;
+    --accent-soft: #E1EDF5;
+    --new: #0F6B4A;
+    --new-soft: #E0F0E8;
+    --warn: #8A6612;
+    --warn-soft: #F7EFDA;
+    --crit: #A82F1D;
+    --crit-soft: #F8E7E3;
+    --shot-bg: #FFFFFF;
+
+    --f-body: "IBM Plex Sans KR", "Malgun Gothic", system-ui, sans-serif;
+    --f-disp: "IBM Plex Sans Condensed", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
+    --f-mono: "IBM Plex Mono", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0C1116; --surface: #141C23; --surface-2: #1B252E;
+      --ink: #E6EDF3; --ink-2: #BDC9D4; --muted: #87949F;
+      --rule: #26313B; --rule-strong: #394753;
+      --accent: #5DB0E0; --accent-soft: #142E3D;
+      --new: #62C79A; --new-soft: #122E24;
+      --warn: #D9AE55; --warn-soft: #2C2616;
+      --crit: #EE8A76; --crit-soft: #33201C;
+      --shot-bg: #EDF1F4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0C1116; --surface: #141C23; --surface-2: #1B252E;
+    --ink: #E6EDF3; --ink-2: #BDC9D4; --muted: #87949F;
+    --rule: #26313B; --rule-strong: #394753;
+    --accent: #5DB0E0; --accent-soft: #142E3D;
+    --new: #62C79A; --new-soft: #122E24;
+    --warn: #D9AE55; --warn-soft: #2C2616;
+    --crit: #EE8A76; --crit-soft: #33201C;
+    --shot-bg: #EDF1F4;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .deck { height: 100dvh; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; }
+  .deck::-webkit-scrollbar { display: none; }
+
+  .slide {
+    min-height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    padding: 68px 3.4vw 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .slide-inner { width: 100%; max-width: 1520px; margin: 0 auto; }
+
+  /* ---- bar ---- */
+  .bar {
+    position: fixed; inset: 0 0 auto 0; height: 48px;
+    display: flex; align-items: center; gap: 14px; padding: 0 3.4vw;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    z-index: 40;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+  }
+  .bar .brand { font-weight: 600; color: var(--ink-2); letter-spacing: 0.12em; }
+  .bar .spacer { flex: 1; }
+  .bar button {
+    font: inherit; letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid var(--rule-strong); color: var(--ink-2);
+    padding: 4px 10px; border-radius: 3px; cursor: pointer;
+  }
+  .bar button:hover { background: var(--surface); }
+  .bar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #counter { font-variant-numeric: tabular-nums; color: var(--ink-2); font-weight: 600; }
+  .progress { position: fixed; inset: 47px 0 auto 0; height: 2px; z-index: 41; }
+  .progress span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .18s linear; }
+
+  /* ---- title ---- */
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 16px;
+  }
+  .title-slide h1 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(38px, 6.4vw, 76px); line-height: 1.02;
+    letter-spacing: -0.02em; margin: 0 0 20px; text-wrap: balance;
+  }
+  .title-slide .sub { font-size: clamp(16px, 1.8vw, 20px); color: var(--ink-2); max-width: 58ch; margin: 0 0 32px; }
+
+  .agenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .agenda div { background: var(--surface); padding: 15px 17px 17px; }
+  .agenda .n { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--accent); margin: 0 0 5px; }
+  .agenda .t { font-family: var(--f-disp); font-size: 19px; font-weight: 700; margin: 0 0 4px; }
+  .agenda p { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+
+  /* ---- head ---- */
+  .head {
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    padding-bottom: 11px; border-bottom: 2px solid var(--rule-strong); margin-bottom: 18px;
+  }
+  .head .no {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(26px, 2.6vw, 36px); line-height: 1; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .head h2 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(24px, 2.7vw, 38px); line-height: 1.06;
+    letter-spacing: -0.015em; margin: 0; text-wrap: balance;
+  }
+  .head .cmds { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+  .pill {
+    display: inline-block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px; vertical-align: 3px;
+  }
+  .p-new { background: var(--new-soft); color: var(--new); }
+  .p-chg { background: var(--accent-soft); color: var(--accent); }
+  .p-std { background: var(--warn-soft); color: var(--warn); }
+  .p-name { background: var(--crit-soft); color: var(--crit); }
+
+  .lede { font-size: clamp(15.5px, 1.45vw, 18px); color: var(--ink-2); max-width: 92ch; margin: 0 0 18px; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  /* ---- image + text layout ---- */
+  .stage { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+  .stage.wide-img { grid-template-columns: 1.55fr 1fr; }
+  .stage.even { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 1080px) { .stage, .stage.wide-img, .stage.even { grid-template-columns: 1fr; } }
+
+  figure.shot { margin: 0; }
+  figure.shot img,
+  figure.shot video {
+    display: block; width: 100%; height: auto;
+    max-height: calc(100dvh - 330px);
+    object-fit: contain; object-position: center top;
+    background: var(--shot-bg);
+    border: 1px solid var(--rule-strong);
+    cursor: zoom-in;
+  }
+  figure.shot figcaption {
+    font-family: var(--f-mono); font-size: 11px; color: var(--muted);
+    margin-top: 6px; letter-spacing: 0.02em;
+  }
+  .shots { display: grid; gap: 14px; }
+  .shots.two { grid-template-columns: 1fr 1fr; }
+  .shots.two figure.shot img,
+  .shots.two figure.shot video { max-height: calc(100dvh - 360px); }
+  .shots.grid4 { grid-template-columns: 1fr 1fr; }
+  .shots.grid4 figure.shot img,
+  .shots.grid4 figure.shot video { max-height: calc(50dvh - 190px); }
+  .shots.grid5 { grid-template-columns: repeat(3, 1fr); }
+  .shots.grid5 figure.shot img,
+  .shots.grid5 figure.shot video { max-height: calc(50dvh - 190px); }
+  @media (max-width: 700px) { .shots.two, .shots.grid4, .shots.grid5 { grid-template-columns: 1fr; } }
+
+  .col { display: flex; flex-direction: column; gap: 12px; }
+
+  .card { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--accent); padding: 13px 16px 16px; }
+  .card.is-new { border-top-color: var(--new); }
+  .card.is-demo { border-top-color: var(--muted); }
+  .card.is-warn { border-top-color: var(--warn); }
+  .card > h3 {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-weight: 500;
+  }
+  .card.is-new > h3 { color: var(--new); }
+  .card.is-warn > h3 { color: var(--warn); }
+
+  .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .card ul li { padding-left: 14px; position: relative; font-size: 14.5px; line-height: 1.55; }
+  .card ul li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 6px; height: 2px; background: var(--rule-strong); }
+  .card ul li span.sub { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+
+  .card ol { margin: 0; padding-left: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 8px; }
+  .card ol li { counter-increment: s; padding-left: 24px; position: relative; font-size: 14.5px; line-height: 1.5; }
+  .card ol li::before {
+    content: counter(s); position: absolute; left: 0; top: 0;
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--accent); font-weight: 600;
+    width: 16px; text-align: right;
+  }
+
+  .say {
+    background: var(--accent-soft); border-left: 3px solid var(--accent);
+    padding: 11px 16px; margin-top: 16px;
+    font-size: clamp(14.5px, 1.3vw, 17px); line-height: 1.5; color: var(--ink);
+  }
+  .say .lbl {
+    display: block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px;
+  }
+
+  code { font-family: var(--f-mono); font-size: 0.87em; background: var(--surface-2); padding: 0.1em 0.36em; border-radius: 2px; color: var(--ink-2); }
+  .card ul li code, .say code, .card ol li code { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+
+  table.mini { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.mini th, table.mini td { text-align: left; padding: 5px 9px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  table.mini th { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  table.mini td:first-child { font-family: var(--f-mono); font-size: 12.5px; white-space: nowrap; color: var(--accent); }
+
+  /* ---- divider ---- */
+  .divider { background: var(--surface); }
+  .divider .kicker { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+  .divider h2 { font-family: var(--f-disp); font-weight: 700; font-size: clamp(32px, 4.8vw, 58px); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 16px; text-wrap: balance; }
+  .divider p { font-size: clamp(16px, 1.6vw, 19px); color: var(--ink-2); max-width: 62ch; margin: 0; }
+  .divider .items { margin-top: 26px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 7px 18px; }
+
+  /* ---- overlays ---- */
+  .overlay { position: fixed; inset: 0; background: color-mix(in srgb, var(--ground) 96%, transparent); z-index: 60; padding: 64px 3.4vw 36px; overflow-y: auto; display: none; }
+  .overlay.open { display: block; }
+  .overlay h2 { font-family: var(--f-disp); font-size: 24px; margin: 0 0 18px; font-weight: 700; }
+  .idx { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 9px; max-width: 1520px; margin: 0 auto; }
+  .idx a { display: block; background: var(--surface); border: 1px solid var(--rule); padding: 10px 13px; text-decoration: none; color: var(--ink); }
+  .idx a:hover, .idx a:focus-visible { border-color: var(--accent); outline: none; }
+  .idx a .n { font-family: var(--f-mono); font-size: 10.5px; color: var(--accent); letter-spacing: 0.08em; }
+  .idx a .t { font-weight: 600; font-size: 14.5px; display: block; margin-top: 2px; }
+  .idx a .d { font-size: 12.5px; color: var(--muted); display: block; }
+  .keys { max-width: 1520px; margin: 22px auto 0; font-family: var(--f-mono); font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 20px; }
+  .keys kbd { font-family: inherit; background: var(--surface-2); border: 1px solid var(--rule); border-radius: 3px; padding: 1px 6px; color: var(--ink-2); }
+
+  #zoom {
+    position: fixed; inset: 0; z-index: 80; display: none;
+    background: color-mix(in srgb, #000 82%, transparent);
+    align-items: center; justify-content: center; padding: 2vh 2vw; cursor: zoom-out;
+  }
+  #zoom.open { display: flex; }
+  #zoom img,
+  #zoom video { max-width: 100%; max-height: 96vh; object-fit: contain; background: #fff; border: 1px solid rgba(255,255,255,.3); }
+  #zoom img[hidden], #zoom video[hidden] { display: none; }
+
+  @media print {
+    .bar, .progress, .overlay, #zoom { display: none !important; }
+    .deck { height: auto; overflow: visible; }
+    .slide { min-height: 0; page-break-after: always; padding: 20px 0; border: none; }
+    figure.shot img,
+    figure.shot video { max-height: 420px; }
+  }
+
+  /* 그림이 칸을 억지로 채우지 않게 한다.
+     width:100% + object-fit:contain 이면 비율이 안 맞는 그림은 좌우에 흰 띠가 생긴다
+     (그 띠는 img 자신의 배경색이다). 자기 비율대로 놓고 칸을 넘지 않게만 막는다.
+     작은 그림을 늘려 흐려지게 하지도 않는다.
+     ⚠️ 선택자를 위 규칙과 <b>같은 명시도</b>로 쓸 것 — 전에 video 만 `.shot video` (0,1,1) 로
+     적어 두었더니, 위 `figure.shot video` (0,1,2) 가 이겨 흰 띠가 되살아났다(2026-08-28). */
+  figure.shot img,
+  figure.shot video { width: auto; max-width: 100%; margin-inline: auto; display: block; }
+</style>
+
+<div class="bar">
+  <span class="brand">RCW · What's New 5.3.1</span>
+  <span id="counter">1 / 7</span>
+  <span class="spacer"></span>
+  <button id="btn-index" type="button">목차 · G</button>
+</div>
+<div class="progress"><span id="bar-fill" style="width: 14.2857%;"></span></div>
+
+<div class="overlay" id="overlay">
+  <h2>목차</h2>
+  <div class="idx" id="idx"></div>
+  <div class="keys">
+    <span><kbd>→</kbd> <kbd>Space</kbd> 다음</span>
+    <span><kbd>←</kbd> 이전</span>
+    <span><kbd>G</kbd> 목차</span>
+    <span><kbd>Home</kbd> 처음</span>
+    <span>그림 클릭 = 크게 보기</span>
+    <span><kbd>Esc</kbd> 닫기</span>
+  </div>
+</div>
+
+<div id="zoom"><img alt="" hidden><video muted loop playsinline hidden></video></div>
+
+<div class="deck" id="deck">
+
+  <!-- 표지 -->
+  <section class="slide title-slide" data-title="표지" data-desc="5.3.1 개요" id="slide-0">
+    <div class="slide-inner">
+      <p class="eyebrow">RCW for Rhino · 5.3.1 에 새로 들어온 것</p>
+      <h1>What's New 5.3.1</h1>
+      <p class="sub">
+        단면 <b>여러 개를 한 부재로</b> 쓰는 일과, 부재에 <b>딸려 가는 부속</b>을 다루는 네 명령입니다.
+        묶는 명령 둘과 <b>제대로 묶였는지 확인하는 목록</b> 둘이 짝을 이룹니다.
+      </p>
+      <div class="agenda">
+        <div><p class="n">묶는다</p><p class="t">ComP · XcomP</p><p>붙어서 한 부재로 쓰이는 프로파일을 <b>하나의 이름</b>으로</p></div>
+        <div><p class="n">묶는다</p><p class="t">FabG · XFabG</p><p>Main 과 그에 붙는 Sub 를 <b>한 세트</b>로</p></div>
+        <div><p class="n">확인한다</p><p class="t">ComPlist · FabGList</p><p>묶은 것을 도면에 <b>표로</b> 펼쳐 잘못을 빨갛게</p></div>
+      </div>
+      <div class="say">
+        <span class="lbl">여는 말</span>
+        묶는 것보다 <b>제대로 묶였는지 아는 것</b>이 어려웠습니다. 그래서 이번에는 묶는 명령과
+        <b>확인하는 목록</b>을 함께 넣었습니다 — 가공도까지 가서야 잘못을 아는 일을 없애자는 것입니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 ComP -->
+  <section class="slide" data-title="ComP / XcomP" data-desc="여러 단면을 한 부재로" id="slide-1">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">01</span>
+        <h2>ComP / XcomP <span class="pill p-new">합성 프로파일</span></h2>
+        <span class="cmds">ComP · XcomP</span>
+      </div>
+      <p class="lede">
+        폴리아미드 단열바처럼 <b>서로 붙어 한 부재로 쓰이는 프로파일 여러 개</b>를 하나의 이름으로 묶습니다.
+        묶고 나면 가공도가 3~4장이 아니라 <b>1장</b>이고, Molist · FabNo 도 <b>1개</b>로 셉니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="img/deck/ComP.mp4" autoplay muted loop playsinline preload="metadata" aria-label="단면 여러 개를 고르고 ComP 로 묶으면 Pname 이 합성 모드로 열린다"></video>
+          <figcaption>단면 둘 이상을 고르고 ComP → <b>Pname</b> 이 <b>합성 모드</b>로 열립니다</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>어떻게 쓰나</h3>
+            <ul>
+              <li>묶을 <b>단면 Surface 를 2개 이상</b> 고르고 <code>ComP</code>.</li>
+              <li><code>Pname</code> 이 <b>합성 모드</b>로 열립니다 — 여기에 넣은 <b>합성 이름</b>이 가공도·리스트에 나오는 부재 이름입니다.</li>
+              <li><code>UMD</code> 를 돌리면 구성원들이 <b>하나의 부재</b>로 합쳐집니다.</li>
+              <li>푸는 것은 <code>XcomP</code>.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>무엇이 하나가 되고, 무엇이 남나</h3>
+            <table class="mini">
+              <tbody><tr><th>하나로</th><td>가공도 · FabNo · Molist · Cuttinglist · Fablist · FabTable · UnitList · IFC</td></tr>
+              <tr><th>그대로</th><td>구성원의 <b>이름 · 단중 · 재질 · 색상</b> — 알루미늄과 폴리아미드를 나누어 발주해야 하므로</td></tr>
+              <tr><th>중량</th><td>합성의 단위중량은 <b>구성원 중량의 합</b>(직접 적으면 그 값이 우선)</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        형상은 <b>손대지 않습니다.</b> <code>ComP</code> 는 단면에 <b>표시만</b> 씁니다 —
+        실제로 합쳐지는 것은 모델링 중 한 번뿐이라, 묶은 뒤에도 구성원 단면을 따로 고치실 수 있습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 ComPlist -->
+  <section class="slide" data-title="ComPlist" data-desc="합성이 제대로 묶였는가" id="slide-2">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">02</span>
+        <h2>ComPlist <span class="pill p-new">신규</span></h2>
+        <span class="cmds">ComPlist</span>
+      </div>
+      <p class="lede">
+        고르신 단면 중 <b>합성 프로파일만</b> 모아, 합성마다 <b>한 칸씩</b> 도면에 그립니다 —
+        형상 · 합성 이름 · 구성원이 함께 나오고, <b>잘못 묶인 것은 빨간 글자</b>로 무엇이 문제인지 적습니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="img/deck/ComPList.mp4" autoplay muted loop playsinline preload="metadata" aria-label="단면을 고르고 위치를 찍으면 합성마다 한 칸씩 목록이 그려진다"></video>
+          <figcaption>단면을 고르고 자리를 찍으면 합성마다 한 칸</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>칸 하나에 들어가는 것</h3>
+            <ul>
+              <li><b>합성 이름</b>과 그 형상</li>
+              <li><b>구성원 목록</b> — 이름과 Layer</li>
+              <li><b>문제</b>가 있으면 빨간 줄로 — 구성원이 1개뿐(합쳐지지 않습니다) · 이름이 구성원마다 다름 ·
+                  구성원이 여러 Layer 에 걸침 · 복사된 단면 · 고르지 않은 구성원이 더 있음</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>알아 두실 것</h3>
+            <ul>
+              <li><b>group 이 없어도 됩니다</b> — 따로 그려 두신 단면도 고르시면 그대로 읽습니다.</li>
+              <li>합성이 아닌 단면이 섞여 있어도 괜찮습니다 — 목록에서 빠집니다.</li>
+              <li>명령창에도 요약이 찍힙니다 — 고른 단면 수 · 합성 수 · <b>문제 있는 합성 수</b>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        합성을 여러 개 만든 뒤 <b>"제대로 묶였는가"</b> 를 한눈에 보는 자리입니다.
+        여기서 빨간 줄이 없으면 모델링으로 넘어가셔도 됩니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 FabG -->
+  <section class="slide" data-title="FabG / XFabG" data-desc="Main 과 Sub 를 한 세트로" id="slide-3">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">03</span>
+        <h2>FabG / XFabG <span class="pill p-new">Main-Sub 세트</span></h2>
+        <span class="cmds">FabG · XFabG</span>
+      </div>
+      <p class="lede">
+        한 단면 group 안에서 <b>선택된 Main 프로파일과, 그와 함께 가공도에 표시되기를 원하는 Sub 프로파일</b>을 한 세트로 묶습니다.
+        <b>첫 번째로 고른 것이 Main</b>, 그 뒤에 고른 것이 모두 Sub 입니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="img/deck/FabG_FabGList.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Main 단면을 하나 고르고 Sub 단면들을 고르면 한 세트로 묶인다"></video>
+          <figcaption>Main 하나 → Sub 들 → 한 세트</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>묶으면 무엇이 달라지나</h3>
+            <ul>
+              <li>Main 의 가공도에 그 세트의 <b>Sub 가 Main 의 Parts 로</b> 함께 나옵니다.</li>
+              <li>부속자재 표(<code>FabBomTable</code>)가 그 Sub 들의 <b>수량을 셉니다</b>.</li>
+              <li>Main 이나 Sub 에 등록해 두신 <b>블록도 함께</b> 따라옵니다.</li>
+              <li>단면 Surface 뿐 아니라 <b>폴리라인</b>(브래킷을 만드는 자르개)도 고르실 수 있습니다.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>왜 묶어야 하나</h3>
+            <ul>
+              <li>한 group 에 Main-Sub 세트가 <b>둘 이상</b>이면, 묶지 않을 경우 <b>두 Main 이 서로 남의 Sub 까지</b> 가져갑니다.</li>
+              <li>Sub 를 나중에 더하실 때는 <b>같은 Main 으로 다시</b> 실행하시면 그 세트에 더해집니다.</li>
+              <li>푸는 것은 <code>XFabG</code> — 단면의 이름·데이터는 그대로입니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>형상은 손대지 않습니다.</b> 단면에 세트 표시만 씁니다 — 그래서 표시를 바꾸신 뒤에는
+        <code>UMD</code> 부터 다시 돌리셔야 결과에 반영됩니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 가공도 결과 -->
+  <section class="slide" data-title="가공도에서" data-desc="Sub 가 Main 의 Parts 로" id="slide-4">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>가공도에서 <span class="pill p-chg">결과</span></h2>
+        <span class="cmds">FDwg · FabBomTable</span>
+      </div>
+      <p class="lede">
+        묶어 두신 세트는 <b>Main 프로파일의 가공도 한 장</b>에 함께 나옵니다.
+        Sub 는 이름·가공번호와 함께 <b>Parts</b> 로 표시되고, 수량은 부속자재 표가 셉니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <img src="img/deck/FabG_FDwg.png" alt="Main 가공도에 세트의 Sub 가 Parts 로 함께 표시된 모습">
+          <figcaption>Main 의 가공도 — 세트의 Sub 가 함께</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card">
+            <h3>함께 나오는 것</h3>
+            <ul>
+              <li>자기 세트의 <b>Sub 만</b> — 다른 세트의 Sub 는 오지 않습니다.</li>
+              <li>Sub 에 달린 <b>블록</b> 중 모델에 남는 종류는 위치가 표시되고 <b>수량이 세어집니다</b>.</li>
+              <li>합성(<code>ComP</code>)으로 묶인 부재는 <b>한 장</b>으로 나옵니다.</li>
+            </ul>
+          </div>
+          <div class="card is-warn">
+            <h3>순서</h3>
+            <ul>
+              <li><code>ComP</code> · <code>FabG</code> 로 묶기 → <code>ComPlist</code> · <code>FabGList</code> 로 확인</li>
+              <li>→ <code>UMD</code> → <code>FabNo</code> → <code>FabTable</code> → <code>FDwg</code></li>
+              <li>표시를 바꾸시면 <b>모델링부터 다시</b>입니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        묶는 일은 <b>단면 단계</b>에서 끝냅니다. 그 뒤로는 가공도까지 자동으로 따라옵니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 FabGList -->
+  <section class="slide" data-title="FabGList" data-desc="세트가 제대로 묶였는가" id="slide-5">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">05</span>
+        <h2>FabGList <span class="pill p-new">신규</span></h2>
+        <span class="cmds">FabGList</span>
+      </div>
+      <p class="lede">
+        <code>FabG</code> 로 묶은 세트를 <b>세트마다 한 칸씩</b> 도면에 그려 보여 줍니다 —
+        Main 과 Sub 가 함께 적히고, <b>잘못 묶인 것은 빨간 글자</b>로 알려 줍니다.
+      </p>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <video src="img/deck/FabG_FabGList.mp4" autoplay muted loop playsinline preload="metadata" aria-label="FabG 로 묶은 세트를 FabGList 로 확인한다"></video>
+          <figcaption>묶고 → 바로 확인</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>칸 하나에 들어가는 것</h3>
+            <ul>
+              <li><b>Main</b> 과 그 형상 · <b>Sub 목록</b></li>
+              <li><b>합성은 한 부재로 접어</b> 보여 줍니다 — 구성원 넷짜리 합성이 "Sub 넷" 으로 보이지 않게.</li>
+              <li>빨간 줄 — <b>Main 이 없음</b>(Sub 가 아무 데도 안 붙습니다) · Main 이 둘 이상 ·
+                  Main 의 Group ID 가 1 이 아님 · 합성 구성원 일부에만 표시가 걸림</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>ComPlist 와 나란히</h3>
+            <ul>
+              <li>둘 다 <b>고른 것을 그대로</b> 읽습니다(group 밖의 단면도).</li>
+              <li>칸 배치와 형상 축척은 <code>PFList</code> 와 같습니다.</li>
+              <li>확인이 끝나면 목록은 지우셔도 됩니다 — <b>도면에 그린 그림</b>일 뿐입니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>묶었으면 확인하십시오.</b> 목록 두 개는 그 한 가지를 위해 만들었습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 정리 -->
+  <section class="slide" data-title="정리" data-desc="세 문장으로" id="slide-6">
+    <div class="slide-inner">
+      <p class="kicker">정리</p>
+      <h2>세 문장으로</h2>
+      <div class="agenda">
+        <div><p class="n">하나</p><p class="t">묶는다</p><p><b>ComP</b> 는 붙어서 한 부재가 되는 프로파일을, <b>FabG</b> 는 Main 과 그에 붙는 Sub 를 묶습니다.</p></div>
+        <div><p class="n">둘</p><p class="t">확인한다</p><p><b>ComPlist · FabGList</b> 가 묶은 것을 표로 펼치고 <b>잘못은 빨갛게</b> 적습니다.</p></div>
+        <div><p class="n">셋</p><p class="t">가공도로</p><p>합성은 <b>한 장</b>으로, 세트의 Sub 는 <b>Main 의 Parts</b> 로 나오고 수량이 세어집니다.</p></div>
+      </div>
+      <div class="say">
+        <span class="lbl">맺는 말</span>
+        가공도까지 가서야 잘못을 아는 일을 없애자는 것이 이번 네 명령의 뜻입니다.
+        <b>단면 단계에서 묶고, 그 자리에서 확인하십시오.</b>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var counter = document.getElementById('counter');
+  var fill = document.getElementById('bar-fill');
+  var overlay = document.getElementById('overlay');
+  var idx = document.getElementById('idx');
+  var btn = document.getElementById('btn-index');
+  var zoom = document.getElementById('zoom');
+  var zoomImg = zoom.querySelector('img');
+  var zoomVideo = zoom.querySelector('video');
+  var current = 0;
+
+  idx.innerHTML = '';
+  slides.forEach(function (s, i) {
+    s.id = 'slide-' + i;
+    var a = document.createElement('a');
+    a.href = '#slide-' + i;
+    a.innerHTML = '<span class="n">' + (i + 1).toString().padStart(2, '0') + '</span>' +
+      '<span class="t"></span><span class="d"></span>';
+    a.querySelector('.t').textContent = s.dataset.title || ('슬라이드 ' + (i + 1));
+    a.querySelector('.d').textContent = s.dataset.desc || '';
+    a.addEventListener('click', function () { closeOverlay(); });
+    idx.appendChild(a);
+  });
+
+  function render() {
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    fill.style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+  function go(n) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    current = n;
+    slides[n].scrollIntoView({ block: 'start' });
+    render();
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var i = slides.indexOf(e.target);
+        if (i >= 0) { current = i; render(); }
+      }
+    });
+  }, { root: deck, threshold: 0.5 });
+  slides.forEach(function (s) { io.observe(s); });
+
+  function openOverlay() { overlay.classList.add('open'); }
+  function closeOverlay() { overlay.classList.remove('open'); }
+  function toggleOverlay() { overlay.classList.toggle('open'); }
+  btn.addEventListener('click', toggleOverlay);
+
+  /* 그림이든 영상이든 눌러 크게 본다. GIF 를 영상으로 옮기면서(2026-08-28) 영상도 받게 했다 —
+     전에는 img 만 봐서 영상 슬라이드는 눌러도 아무 일도 일어나지 않았다. */
+  function closeZoom() {
+    zoom.classList.remove('open');
+    zoomImg.src = ''; zoomImg.hidden = true;
+    zoomVideo.pause(); zoomVideo.removeAttribute('src'); zoomVideo.load(); zoomVideo.hidden = true;
+  }
+
+  deck.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target.closest('figure.shot img, figure.shot video') : null;
+    if (!el) return;
+    if (el.tagName === 'VIDEO') {
+      zoomImg.hidden = true;
+      zoomVideo.src = el.getAttribute('src');
+      zoomVideo.setAttribute('aria-label', el.getAttribute('aria-label') || '');
+      zoomVideo.hidden = false;
+      zoomVideo.play();
+    } else {
+      zoomVideo.hidden = true;
+      zoomImg.src = el.src;
+      zoomImg.alt = el.alt;
+      zoomImg.hidden = false;
+    }
+    zoom.classList.add('open');
+  });
+  zoom.addEventListener('click', closeZoom);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') {
+      if (zoom.classList.contains('open')) { closeZoom(); }
+      else closeOverlay();
+      return;
+    }
+    if (zoom.classList.contains('open')) return;
+    if (k === 'g' || k === 'G' || k === 'ㅎ') { e.preventDefault(); toggleOverlay(); return; }
+    if (overlay.classList.contains('open')) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ') { e.preventDefault(); go(current + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(current - 1); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
