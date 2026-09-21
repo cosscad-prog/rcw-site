@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -26,7 +26,7 @@
 <h1>FDstyle &nbsp;—&nbsp; Fabrication Drawing Record / Playback Panel</h1>
 <p><span class="cmd-box">FDstyle</span></p>
 <p>
-  <strong>FDstyle</strong> opens and closes the <strong>FDwg Pipeline panel</strong>. In this panel, you can switch between <strong>Recording (ON)</strong> and <strong>Playback (OFF, default)</strong> modes for fabrication drawing (FDDS / FDwg) work,
+  <strong>FDstyle</strong> opens and closes the <strong>FDwg Pipeline panel</strong>. In this panel, you can switch between <strong>Recording (ON)</strong> and <strong>Playback (OFF, default)</strong> modes for fabrication drawing (FDwg) work,
   and manage drawing template registration/insertion and per-Profile progress tracking all in one place.
 </p>
 <div class="note"><strong>Note:</strong> Entering the same command again closes the panel (toggle). Recording/Playback mode switching is done via the <strong>banner button at the top of the panel</strong>, not via command. (Legacy commands <code>FDP</code> and <code>FDwgStyle</code> have been consolidated into <code>FDstyle</code>.)</div>
@@ -47,7 +47,7 @@
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>Mode</th><th>Behavior</th></tr>
-  <tr><td><strong>Record (ON)</strong></td><td>When <code>FDwg</code> / <code>FDDS</code> runs, the current options and additional work — NC table, FSC compression, annotations/leaders, accessory table, detail views (F3D), templates — are saved per Profile. Additional leaders, text, and label moves made during recording are also automatically recorded together.</td></tr>
+  <tr><td><strong>Record (ON)</strong></td><td>When <code>FDwg</code> runs, the current options and additional work — NC table, FSC compression, annotations/leaders, accessory table, detail views (F3D), templates — are saved per Profile. Additional leaders, text, and label moves made during recording are also automatically recorded together.</td></tr>
   <tr><td><strong>Playback (OFF, default)</strong></td><td>When creating a drawing for the same Profile, reads and <strong>automatically reproduces</strong> the recorded content. If no recorded data exists, uses the current <code>DdOpt</code> panel settings.</td></tr>
 </tbody></table>
 <div class="note"><strong>Note:</strong> File data application is handled by this <strong>Playback Mode</strong>. If no recorded data exists, the current DdOpt panel values are used. Default values can be saved in advance using the <strong>Save Current Selection as Default</strong> feature in DdOpt.</div>
@@ -104,7 +104,6 @@
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>FDDS</strong></td><td><b>Retired command.</b> Fabrication drawings are made with <code>FDwg</code>. Follows FDstyle Record/Playback mode.</td></tr>
   <tr><td><strong>FDwg</strong></td><td>Creates the frame fabrication drawing, hole depth on the elevation (Hidden Line) included. Follows the FDstyle mode (record / playback).</td></tr>
   <tr><td><strong>DdOpt</strong></td><td>Fabrication drawing Drawing Options panel. Used when Playback has no recorded data.</td></tr>
   <tr><td><strong>SFB / FFB</strong></td><td>Template selection (SFB) / insertion (FFB). Same functions as the panel's [Form Template] and [Insert Form] buttons.</td></tr>

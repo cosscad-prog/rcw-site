@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FabGList - FabG Set Check List</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FabGList &nbsp;&mdash;&nbsp; FabG Set Check List</h1>
+<p><span class="cmd-box">FabGList</span></p>
+<p>Collects <strong>only the sections and polylines that carry a FabG set mark</strong> from the selected objects (grouped or not) and draws one cell per set,
+showing the <b>shapes and names of its main and subs</b>. Sets that are tied wrongly are flagged in <b>red text</b>.
+Use it to check the sets you made with <code>FabG</code>.</p>
+
+<h2>How to use</h2>
+<ol class="step-list">
+  <li>Type <strong>FabGList</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the <strong>sections and polylines</strong> to check and press Enter. Objects in a group are selected with their group, and <b>objects outside any group can be picked one by one</b>; preselection works too. Objects without a set mark are left out of the list.</li>
+  <li>The command line prints a summary: sections selected, objects with a set mark, sets, and <b>sets with problems</b>, followed by one line per set with its contents and problems.</li>
+  <li>Click the <strong>point</strong> where the list is drawn.</li>
+</ol>
+<div class="note">Cell shape and layout are the same as <code>ComPlist</code>. Sets with the same name stack down one column, and each cell is grouped.</div>
+
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <video src="../../../../img/FabG_FabGList.mp4" autoplay muted loop playsinline aria-label="Checking a set tied with FabG by running FabGList" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>A set tied with <code>FabG</code>, checked with <code>FabGList</code>. Each set gets one cell listing its main and its subs.</figcaption>
+  </figure>
+</div>
+
+<h2>What each cell shows</h2>
+<table class="desc-table">
+  <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+  <tbody><tr><th>Line</th><th>Content</th></tr>
+  <tr><td><b>FabG</b></td><td>The large text at the top &mdash; the first eight characters of the set number (<code>FabG : 8f6dd754</code>), to tell sets apart when a group holds more than one.</td></tr>
+  <tr><td><b>Group Name</b></td><td>The name of that section group (the unit name), or <b>(no group)</b>.</td></tr>
+  <tr><td><b>Main</b></td><td>The number of main <b>parts</b> and each part. <b>A composite counts as one part</b> however many members it has, and only its name is shown (<code>- OBUK-0003_Com</code>); an ordinary section shows <b>name [Layer]</b>.</td></tr>
+  <tr><td><b>Sub</b></td><td>The number of sub parts and each part: a composite on one line, an ordinary section as <b>name [Layer]</b>, a polyline with <code>(polyline)</code>.</td></tr>
+  <tr><td><b>Shape</b></td><td>The set's main and subs drawn in their actual arrangement, in the lower part of the cell.</td></tr>
+</tbody></table>
+
+<h2>Red lines &nbsp;&mdash;&nbsp; what is wrong and how to fix it</h2>
+<p>Problems are written on the <b>DiesText layer (red)</b> as lines starting with <code>!!</code>.</p>
+<table class="desc-table">
+  <colgroup><col style="width:38%"><col style="width:62%"></colgroup>
+  <tbody><tr><th>Red line</th><th>Meaning and fix</th></tr>
+  <tr><td>No Main - the subs attach to nothing</td><td>A sub attaches only to the main of its own set. Pick a main and run <code>FabG</code> again, or release the remaining subs with <code>XFabG</code>.</td></tr>
+  <tr><td>No Sub</td><td>The set ties nothing. Add subs (run <code>FabG</code> again on the same main) or release it.</td></tr>
+  <tr><td>Tag without a role (M/S)</td><td>The mark is neither main nor sub, so it is used for neither. Run <code>FabG</code> on that object again.</td></tr>
+  <tr><td>Main xN - a set has one Main</td><td>There are two or more main parts (a composite counts as one). Release the set and tie it again with a single main.</td></tr>
+  <tr><td>[name] Group_ID=… (not 1. Main-Group - no center line on the fab drawing)</td><td>The drawing does not take the center line from that main. Set Group ID to <b>1. Main-Group</b> in <code>Pname</code>, or run <code>FabG</code> again (it sets this for you).</td></tr>
+  <tr><td>Composite [name]: Main (or Sub) on M of N members</td><td>Only some members carry the mark, so results can change from run to run. <b>Run <code>FabG</code> again</b> on that composite (it writes to every member).</td></tr>
+  <tr><td>Not selected: N more in this group<br>(cell without a group: &hellip; outside any group)</td><td>The cell sees only part of the set. Select the <b>whole group</b> (or, without a group, the rest of the set) and run it again.</td></tr>
+  <tr><td>Copied sections: N carry another section's composite tag</td><td>Appears only in cells without a group: copies of composite sections are mixed into the set. Run <code>ComP</code> on them again.</td></tr>
+</tbody></table>
+
+<h2>Cautions</h2>
+<div class="note"><b>Only single-face sections and polylines are read.</b> Modelled parts (solids) are not counted. Objects outside any group are listed too.</div>
+<div class="note">In a cell without a group, <b>copies of non-composite sections cannot be told apart</b> (they carry no copy mark). Two identical mains are caught by the "Main xN" red line, but a copied sub only shows up as a higher count.</div>
+<div class="warning">The shapes in the cells are <b>copies with the section data removed</b>. If the command line reports that copies still carry section data,
+<b>delete this list</b> before running <code>UMD</code> or <code>PFList</code>.</div>
+
+<h2>Related commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><b>FabG</b></td><td>Ties one main and its subs into a set; <b>XFabG</b> releases it.</td></tr>
+  <tr><td><b>ComPlist</b></td><td>Checks composite profiles in the same way.</td></tr>
+  <tr><td><b>Pname</b></td><td>Edits section data such as the name and Group ID.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

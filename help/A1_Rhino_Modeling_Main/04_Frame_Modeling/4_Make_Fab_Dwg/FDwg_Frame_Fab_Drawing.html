@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -41,19 +41,18 @@
 <h1>FDwg &nbsp;—&nbsp; 프레임 제작 가공도 생성 (입면 홀 표현)</h1>
 <p><span class="cmd-box">FDwg</span></p>
 <p>
-  <strong>FDwg</strong>는 <strong>FDDS</strong>와 동일하게 선택한 프레임 그룹 객체를 분석하여 제작 가공도(Fab Drawing)를 자동 생성하는 명령입니다.
+  <strong>FDwg</strong> 는 선택한 프레임 그룹 객체를 분석하여 제작 가공도(Fab Drawing)를 자동 생성하는 명령입니다.
   모델을 가공도 위치로 복사·정렬한 뒤, 선택된 View 별로 2D 선, 단면, 홀 지름, 외곽 치수, 중심선 치수, 각도 치수,
   Fab No / Quantity / Unit No 텍스트를 작성합니다.</p>
 <div>&nbsp;<strong style="font-family: &quot;Malgun Gothic&quot;, sans-serif;">FDwg는 여기에 더해, Bar 입면도(Front / Top / Bottom 등)에도 홀 정보를 함께 표시<span style="font-weight: 400;">하고 홀이 자재를 얼마나 관통하는지(깊이)를 Hidden Line으로 쉽게 파악할 수 있는 도면을 추가로 생성합니다.</span></strong></div>
 <div class="new">
-  <strong>FDDS → FDwg 핵심 차이:</strong>
+  <strong>레이어 표현:</strong>
   <ul style="margin:6px 0 0 0; padding-left:18px;">
     <li>Shape Curve 레이어를 OutLine Layer 로 표현합니다.&nbsp;</li>
-    <li>그 외 옵션·치수·텍스트·레이어 동작은 <strong>FDDS와 동일</strong>합니다.</li>
   </ul>
 </div>
 <div class="note"><strong>참고:</strong> 이때 DimStyle 은 [DsOpt] 에 적용된 DimStyle 을 따른다. Profile 별 자동화를 위해 Fdds.dat 이 필요하며,&nbsp; Fdds.dat 에 Profile Name 및 해당 필요정보가 있어야 한다. Fdds.dat 해당 정보가 없다면 DdOpt 패널의 Drawing 옵션을 따른다.</div>
-<div class="note"><strong>FDstyle 기록/재생:</strong> FDwg/FDDS 는 <strong>FDstyle 패널</strong>의 모드를 따릅니다 — <strong>기록(ON)</strong> 모드에서 옵션·NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 Profile별로 기록하고, <strong>재생(OFF, 기본)</strong> 모드에서 이를 자동 재현합니다. 자세한 내용은 FDDS 도움말의 "FDstyle 기록 / 재생 모드"를 참고하세요.</div>
+<div class="note"><strong>FDstyle 기록/재생:</strong> FDwg 는 <strong>FDstyle 패널</strong>의 모드를 따릅니다 — <strong>기록(ON)</strong> 모드에서 옵션·NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 Profile별로 기록하고, <strong>재생(OFF, 기본)</strong> 모드에서 이를 자동 재현합니다. 자세한 내용은 <code>FDstyle</code> 도움말을 참고하세요.</div>
 <h2>사용 목적</h2>
 <p>FDwg 는 선택한 프레임 그룹 객체를 분석하여 제작 가공도(Fab Drawing)를 자동 생성하고, 입면도에서도 홀 위치와 가공 깊이를 한눈에 확인할 수 있게 하는 명령입니다.</p>
 <h2>기본 사용 방법</h2>
@@ -91,7 +90,7 @@
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
     <video src="../../../img/FDwg.mp4" autoplay muted loop playsinline aria-label="FDwg" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
-    <figcaption>FDDS 와 FDwg 의 차이점</figcaption>
+    <figcaption>FDwg 실행 예시</figcaption>
   </figure>
 </div>
 <h2>실행 흐름</h2>
@@ -132,7 +131,7 @@
     <figcaption></figcaption>
   </figure>
 </div>
-<p>FDwg도 FDDS와 동일하게 DdOpt 패널의 View 생성 여부, 거리값, 추가 치수, 보조 3D 표시 여부 설정을 그대로 사용합니다. 운영체제 테마나 화면 배율에 따라 패널 외형은 달라도 항목의 의미와 적용 순서는 동일합니다.</p>
+<p>FDwg 는 DdOpt 패널의 View 생성 여부, 거리값, 추가 치수, 보조 3D 표시 여부 설정을 그대로 사용합니다. 운영체제 테마나 화면 배율에 따라 패널 외형은 달라도 항목의 의미와 적용 순서는 동일합니다.</p>
 <h2>생성되는 주요 객체와 레이어</h2>
 <table class="col-table">
   <colgroup>
@@ -156,7 +155,7 @@
 <h2>옵션 / 치수 설정</h2>
 <p>
   FDwg의 View 선택, 거리, 추가 치수, 보조 3D 표시, 그리고 DsOpt / DimStyle 치수 배치 옵션은
-  <strong>FDDS와 완전히 동일</strong>하게 동작합니다. 각 옵션의 상세 설명은 FDDS 도움말 문서를 참고하세요.
+  DdOpt · DsOpt 패널의 설정을 그대로 씁니다. 각 옵션의 상세 설명은 <code>DdOpt</code> · <code>DsOpt</code> 도움말을 참고하세요.
 </p>
 <table class="desc-table">
   <colgroup><col style="width:28%;"><col style="width:72%;"></colgroup>
@@ -192,9 +191,8 @@
   <col style="width: 80%;">
 </colgroup>
   <tbody><tr><th>명령어</th><th>설명</th></tr>
-  <tr><td><strong>FDDS</strong></td><td><b>폐기된 명령입니다.</b> 옛 기본 가공도 명령이며 FDwg는 FDDS에 입면 홀 깊이 표현을 더한 버전입니다.</td></tr>
-  <tr><td><strong>DdOpt</strong></td><td>FDwg / FDDS에서 사용하는 Drawing 옵션 패널을 엽니다.</td></tr>
-  <tr><td><strong>FDstyle</strong></td><td>FDwg/FDDS 의 <strong>기록(ON)·재생(OFF)</strong> 모드를 전환하는 패널입니다. 재생 시 NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 자동 재현합니다.</td></tr>
+  <tr><td><strong>DdOpt</strong></td><td>FDwg에서 사용하는 Drawing 옵션 패널을 엽니다.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>FDwg 의 <strong>기록(ON)·재생(OFF)</strong> 모드를 전환하는 패널입니다. 재생 시 NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 자동 재현합니다.</td></tr>
   <tr><td><strong>FabNo</strong></td><td>프레임 객체에 제작 번호와 ProfileData를 부여합니다. FDwg 실행 전 선행 작업으로 필요합니다.</td></tr>
   <tr><td><strong>FabTable</strong></td><td>프레임 제작 번호/수량 테이블을 작성합니다. FDwg와 함께 제작 도면 세트를 구성합니다.</td></tr>
 </tbody></table>

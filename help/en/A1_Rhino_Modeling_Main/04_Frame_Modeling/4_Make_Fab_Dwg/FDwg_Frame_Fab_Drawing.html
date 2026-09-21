@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -41,7 +41,7 @@
 <h1>FDwg &nbsp;—&nbsp; Frame Fab Drawing (Elevation Hole Representation)</h1>
 <p><span class="cmd-box">FDwg</span></p>
 <p>
-  <strong>FDwg</strong> analyzes the selected frame group objects in the same way as <strong>FDDS</strong> to automatically generate a fabrication drawing (Fab Drawing).
+  <strong>FDwg</strong> analyzes the selected frame group objects to automatically generate a fabrication drawing (Fab Drawing).
   It copies/aligns the model to the drawing position, then for each selected View creates 2D lines, sections, hole diameters, overall dimensions, center-line dimensions, angle dimensions,
   and Fab No / Quantity / Unit No text.
 </p>
@@ -49,14 +49,13 @@
   <strong>Additionally, FDwg displays hole information on the Bar elevation views (Front / Top / Bottom, etc.) and generates a drawing where you can easily understand how deeply each hole penetrates through the material via Hidden Lines.</strong>
 </div>
 <div class="new">
-  <strong>FDDS → FDwg key differences:</strong>
+  <strong>Layer output:</strong>
   <ul style="margin:6px 0 0 0; padding-left:18px;">
     <li>Shape Curve layer is represented as OutLine Layer.</li>
-    <li>All other options, dimensions, text, and layer operations are <strong>identical to FDDS</strong>.</li>
   </ul>
 </div>
 <div class="note"><strong>Note:</strong> The DimStyle follows the DimStyle applied in [DsOpt]. For per-profile automation, Fdds.dat is required and must contain the Profile Name and needed information. If that information is missing, the Drawing options in the DdOpt panel are used.</div>
-<div class="note"><strong>FDstyle Record/Playback:</strong> FDwg/FDDS follows the mode of the <strong>FDstyle panel</strong> — in <strong>Record (ON)</strong> mode it records options, NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates per profile, and in <strong>Playback (OFF, default)</strong> mode it automatically reproduces them. For details, see the "FDstyle Record / Playback Mode" section in the FDDS help documentation.</div>
+<div class="note"><strong>FDstyle Record/Playback:</strong> FDwg follows the mode of the <strong>FDstyle panel</strong> — in <strong>Record (ON)</strong> mode it records options, NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates per profile, and in <strong>Playback (OFF, default)</strong> mode it automatically reproduces them. For details, see the "FDstyle Record / Playback Mode" section in the the <code>FDstyle</code> page.</div>
 <h2>Purpose</h2>
 <p>FDwg analyzes the selected frame group objects to auto-generate a fabrication drawing and lets you confirm hole position and penetration depth at a glance on the elevation view as well.</p>
 <h2>Basic Usage</h2>
@@ -94,7 +93,7 @@
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
     <video src="../../../../img/FDwg.mp4" autoplay muted loop playsinline aria-label="FDwg fabrication drawing example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
-    <figcaption>Difference between FDDS and FDwg</figcaption>
+    <figcaption>FDwg in use</figcaption>
   </figure>
 </div>
 <h2>Execution Flow</h2>
@@ -135,7 +134,7 @@
     <figcaption></figcaption>
   </figure>
 </div>
-<p>Like FDDS, FDwg uses the DdOpt panel settings for View generation, distance values, extra dimensions, and auxiliary 3D display as-is. The panel appearance may differ depending on the OS theme or display scaling, but the meaning of the items and the order they are applied are identical.</p>
+<p>FDwg uses the DdOpt panel settings for View generation, distance values, extra dimensions, and auxiliary 3D display as-is. The panel appearance may differ depending on the OS theme or display scaling, but the meaning of the items and the order they are applied are identical.</p>
 <h2>Generated Main Objects and Layers</h2>
 <table class="col-table">
   <colgroup>
@@ -159,7 +158,7 @@
 <h2>Options / Dimension Settings</h2>
 <p>
   FDwg's View selection, distances, extra dimensions, auxiliary 3D display, and DsOpt / DimStyle dimension placement options behave
-  <strong>exactly like FDDS</strong>. For detailed descriptions of each option, refer to the FDDS help document.
+  follow the DdOpt and DsOpt panels. For detailed descriptions of each option, see the <code>DdOpt</code> and <code>DsOpt</code> pages.
 </p>
 <table class="desc-table">
   <colgroup><col style="width:28%;"><col style="width:72%;"></colgroup>
@@ -195,9 +194,8 @@
   <col style="width: 80%;">
 </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>FDDS</strong></td><td><b>Retired command.</b> The old base fab drawing command; FDwg is FDDS plus elevation hole-depth representation.</td></tr>
-  <tr><td><strong>DdOpt</strong></td><td>Opens the Drawing option panel used by FDwg / FDDS.</td></tr>
-  <tr><td><strong>FDstyle</strong></td><td>The panel that toggles <strong>Record (ON) / Playback (OFF)</strong> mode for FDwg/FDDS. In Playback it automatically reproduces NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates.</td></tr>
+  <tr><td><strong>DdOpt</strong></td><td>Opens the Drawing option panel used by FDwg.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>The panel that toggles <strong>Record (ON) / Playback (OFF)</strong> mode for FDwg. In Playback it automatically reproduces NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates.</td></tr>
   <tr><td><strong>FabNo</strong></td><td>Assigns fab numbers and ProfileData to frame objects. Required before running FDwg.</td></tr>
   <tr><td><strong>FabTable</strong></td><td>Creates the frame fab number/quantity table to complete the drawing set with FDwg.</td></tr>
 </tbody></table>

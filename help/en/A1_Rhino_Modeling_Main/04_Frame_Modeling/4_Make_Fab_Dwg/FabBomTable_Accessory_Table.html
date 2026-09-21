@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -26,10 +26,10 @@
 <p><span class="cmd-box">FabBomTable</span></p>
 <p>
   <strong>FabBomTable</strong> (formerly <code>FBL</code>) is a command to place an <strong>accessory (BOM) table</strong> at any desired position on a fabrication drawing by clicking.
-  The table content is automatically collected from <strong>accessories</strong> (brackets, sleeves, attachments, etc.) when <code>FDwg</code> / <code>FDDS</code> generates the drawing.
+  The table content is automatically collected from <strong>accessories</strong> (brackets, sleeves, attachments, etc.) when <code>FDwg</code> generates the drawing.
 </p>
 <h2>Purpose</h2>
-<p>Used to organize and display a list of accessories used in the fabrication drawing (types, quantities, etc.). Accessories are automatically collected when the drawing is generated; this command only specifies where to place the collected table. The position is saved as relative coordinates to the drawing anchor, and is automatically regenerated at the same location when FDDS runs in Playback Mode.</p>
+<p>Used to organize and display a list of accessories used in the fabrication drawing (types, quantities, etc.). Accessories are automatically collected when the drawing is generated; this command only specifies where to place the collected table. The position is saved as relative coordinates to the drawing anchor, and is automatically regenerated at the same location when FDwg runs in Playback Mode.</p>
 <h2>How to Use</h2>
 <ol class="step-list">
   
@@ -37,9 +37,11 @@
   
   
   <li>Type <code>FabBomTable</code> in the Rhino command line.</li>
-  <li>At the <strong>Select fabrication drawing for accessory table</strong> prompt, select the target drawing. (Must be a drawing created by FDwg/FDDS to have ProfileName tags.)</li>
-  <li>As you move the mouse, a <strong>table size and row separator preview</strong> (orange) is displayed. Click the desired <strong>top-left position</strong>.</li>
-  <li>The accessory table is drawn at that position. (If an existing table is present, it is replaced.)</li>
+  <li>At the <strong>Select a fab drawing for the accessory table</strong> prompt, click a <strong>line or dimension</strong> of the target drawing. The table of that drawing's profile is used. (Must be a drawing created by FDwg to have ProfileName tags.)
+    <br>Pressing <strong>Enter</strong> here uses the drawing from the last FDwg run.</li>
+  <li>As you move the mouse, a <strong>table size and row separator preview</strong> (orange) is displayed. Click where the table's <strong>top-right corner</strong> should be.</li>
+  <li>The accessory table is drawn at that position and <strong>the command ends</strong>. Existing tables are left alone, so delete any you no longer want.</li>
+  <li>To place a table on another drawing, press <strong>Enter</strong> to run the command again.</li>
 
 
 
@@ -56,13 +58,14 @@
 <table class="desc-table">
   <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
   <tbody><tr><th>Item</th><th>Description</th></tr>
-  <tr><td>Table Content</td><td>Filled with accessory data <strong>automatically collected</strong> during drawing generation (FDwg/FDDS) from brackets, sleeves, and attachments in the group.</td></tr>
-  <tr><td>Position Placement</td><td>Use the mouse preview (table border + row separators) to click and place the top-left corner. Table size is automatically determined by the number of accessory types and text size.</td></tr>
+  <tr><td>Table Content</td><td>Filled with accessory data <strong>automatically collected</strong> during drawing generation (FDwg) from brackets, sleeves, and attachments in the group.</td></tr>
+  <tr><td>Drawing Selection</td><td>The table content is chosen by the profile name (ProfileName) of the clicked drawing object. Clicking an untagged object such as a title text uses the nearest drawing. Several drawings can be done one after another in a single run.</td></tr>
+  <tr><td>Position Placement</td><td>Use the mouse preview (table border + row separators) to click and place the top-right corner. Table size is automatically determined by the number of accessory types and text size.</td></tr>
   <tr><td>Replacement</td><td>If a table already exists for the same Profile, it is erased and redrawn.</td></tr>
-  <tr><td>Playback Reproduction</td><td>The placement position is saved as relative coordinates to the drawing origin and is automatically regenerated at the same location in FDDS during <strong>FDstyle Playback Mode</strong>.</td></tr>
+  <tr><td>Playback Reproduction</td><td>The placement position is saved as relative coordinates to the drawing origin and is automatically regenerated at the same location in FDwg during <strong>FDstyle Playback Mode</strong>.</td></tr>
 </tbody></table>
-<div class="note"><strong>Note:</strong> The table content is not created by this command but is <strong>automatically collected when the drawing is generated</strong>. If no accessories are collected, a message "No collected accessories" appears — first run FDwg/FDDS with a group containing accessories.</div>
-<div class="warning"><strong>Caution:</strong> If you select an object without ProfileName tags (not created by FDwg/FDDS), the table cannot be created.</div>
+<div class="note"><strong>Note:</strong> The table content is not created by this command but is <strong>automatically collected when the drawing is generated</strong>. If no accessories are collected, a message "No collected accessories" appears — first run FDwg with a group containing accessories.</div>
+<div class="warning"><strong>Caution:</strong> If you select an object without ProfileName tags (not created by FDwg), the table cannot be created.</div>
 <h2>Related Commands</h2>
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>

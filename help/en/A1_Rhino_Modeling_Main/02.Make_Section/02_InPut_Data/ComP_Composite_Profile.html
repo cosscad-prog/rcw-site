@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -37,9 +37,14 @@ and Molist and FabNo count the group as <strong>one part</strong>.</p>
 <ol class="step-list">
   <li>Select <strong>two or more</strong> section surfaces to tie together.</li>
   <li>Type <strong>ComP</strong> in the Rhino command line and press Enter.</li>
-  <li>Enter the <strong>composite profile name</strong>. This is the part name that appears on drawings and lists.</li>
+  <li>The <code>Pname</code> panel <strong>opens in composite mode</strong>. The name box holds a <b>provisional name</b>
+      (the first member name).</li>
+  <li>Enter the <strong>composite profile name</strong> and the rest of the data in the panel, then press <strong>Save</strong>.
+      This is the part name that appears on drawings and lists.</li>
   <li>Run the unit modelling (<code>UMD</code>); the members are merged into <strong>one part</strong>.</li>
 </ol>
+<div class="warning"><b>Close the panel without editing the name and the provisional name stays.</b> That name is what goes onto
+drawings and order sheets &mdash; the command line says it is provisional, so check it and settle the name in <code>Pname</code>.</div>
 <div class="note">The section geometry is <b>not touched</b>. <code>ComP</code> only writes a <b>tag</b> onto the sections.
 The shapes are merged once, during modelling, at the solid stage &mdash; which is why each member section can still be
 edited separately after tying.</div>
@@ -48,7 +53,7 @@ edited separately after tying.</div>
 <table class="desc-table">
   <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
   <tbody><tr><th></th><th></th></tr>
-  <tr><td><b>Comes out as one</b></td><td>Fabrication drawings (<code>FDwg</code>, <code>FDDS</code>), <code>FabNo</code> numbering,
+  <tr><td><b>Comes out as one</b></td><td>Fabrication drawings (<code>FDwg</code>), <code>FabNo</code> numbering,
       <code>Molist</code>, <code>Cuttinglist</code>, <code>Fablist</code>, <code>FabTable</code>, <code>UnitList</code> and the IFC export &mdash;
       all of them see <b>one row under the composite name</b>.</td></tr>
   <tr><td><b>Kept per member</b></td><td>Each member keeps its own name, unit weight, material and finish,
@@ -109,9 +114,11 @@ Copying a section copies its composite tag as well, so two different units end u
 Opened in that state, <code>Pname</code> will not open it as a composite and says so instead. <code>SSP</code> issues a fresh tag to the copy.</div>
 <div class="warning">If even one selected section cannot be tied, <b>nothing is written at all</b> &mdash; a half-tied composite
 would only surface once modelling runs. These cannot be tied: a section with <b>no name</b>, and a
-<b>multi-face section</b> (its tag is managed by <code>Pname</code> instead).</div>
-<div class="warning">A composite name cannot contain a <b>comma</b>, because the member record separates its fields with commas.</div>
-<div class="note"><b>Members are gathered onto one layer.</b> <code>ComP</code> moves them once the name is entered, and their
+<b>multi-face section</b> (its tag is managed by <code>Pname</code> instead).<br>
+Each rejected section gets a <b>red mark (TextDot)</b> on the <code>No_Data</code> layer &mdash; <code>No_Data</code> (no section data), <code>No_Name</code> (empty name), <code>Multi_Face</code> or <code>Not_Section</code>. Running <code>ComP</code> again after fixing them removes the marks.</div>
+<div class="warning">A composite name cannot contain a <b>comma</b>, because the member record separates its fields with commas.
+The <code>Pname</code> panel refuses such a name on save.</div>
+<div class="note"><b>Members are gathered onto one layer.</b> <code>ComP</code> moves them as it writes the tag, and their
 <b>visible color is preserved</b>. Boolean operations run per layer, so members left on different layers would be cut differently.</div>
 
 <h2>Related commands</h2>

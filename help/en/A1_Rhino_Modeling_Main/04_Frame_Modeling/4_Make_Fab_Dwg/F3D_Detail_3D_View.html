@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -29,7 +29,7 @@
   Use this to show complex machining areas or bracket connection points in three dimensions.
 </p>
 <h2>Purpose</h2>
-<p>Provides 3D detail views of areas difficult to understand from 2D drawings alone, allowing fabricators to see the spatial relationship and machining details at a chosen angle. Once captured, the viewing direction and scale are saved and automatically reproduced when drawings are regenerated via FDDS/FDwg playback.</p>
+<p>Provides 3D detail views of areas difficult to understand from 2D drawings alone, allowing fabricators to see the spatial relationship and machining details at a chosen angle. Once captured, the viewing direction and scale are saved and automatically reproduced when drawings are regenerated via FDwg playback.</p>
 <h2>How to Use</h2>
 <ol class="step-list">
   
@@ -69,7 +69,7 @@
   <tr><td>Angle Adjustment</td><td>Performed in a separate viewport with an embedded actual Rhino 3D viewport. Only the selected member is isolated and displayed.</td></tr>
   <tr><td>2D Conversion</td><td>Creates 2D lines with Hidden Line Removal (perspective projection) from the captured camera angle. Output is perspective, not orthographic — exactly as it appears on screen in 3D.</td></tr>
   <tr><td>Insertion</td><td>After clicking the insertion point, drag to set scale. A border box is drawn around the result.</td></tr>
-  <tr><td>Playback Reproduction</td><td>Camera and scale information are saved and automatically reproduced at the same angle and scale in FDDS/FDwg during <strong>FDstyle Playback Mode</strong>.</td></tr>
+  <tr><td>Playback Reproduction</td><td>Camera and scale information are saved and automatically reproduced at the same angle and scale in FDwg during <strong>FDstyle Playback Mode</strong>.</td></tr>
 </tbody></table>
 <div class="note"><strong>Note:</strong> When F3D is used in Recording Mode, the detail view information is recorded and automatically redrawn during playback. (See <code>FDstyle</code> help for details.)</div>
 <div class="warning"><strong>Caution:</strong> The member (Brep) and <code>ProfileName</code> data must be present. If ProfileName is not found, the command will stop. Output is always at model scale (1:1); zoom in/out in the 3D viewport is for viewing and angle adjustment only.</div>

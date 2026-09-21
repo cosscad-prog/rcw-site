@@ -66,6 +66,24 @@ Instead of opening each profile separately with <strong>Pname</strong>, you can 
   <tr><td>Unit Weight</td><td>Unit weight per meter. Used to calculate weight in material lists.</td></tr>
   <tr><td>Color Code</td><td>Surface color code.</td></tr>
 </tbody></table>
+<h2>Copying a value into other profiles</h2>
+<p>The table selects by <strong>cell</strong>. Drag, or hold <kbd>Shift</kbd> / <kbd>Ctrl</kbd>, to pick several cells at once.
+To change a value, start typing or press <kbd>F2</kbd>.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 25%;">
+    <col style="width: 75%;">
+  </colgroup>
+  <tbody><tr><th>Key</th><th>What it does</th></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td><td>Copies the <b>values only</b> of the selected cells - column headers do not come along.</td></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td><td>Pastes. If you copied a <b>single</b> value it goes into <b>every selected cell</b> - this is how you give several profiles the same value at once.
+  If you copied several cells, they are laid out as a block with the <b>current cell</b> as the top-left corner.</td></tr>
+</tbody></table>
+<p>Right-click for a <strong>Copy / Paste</strong> menu. After a paste, the line under the preview says how many cells were written,
+for example <code>Pasted 3 cell(s)</code>.</p>
+<div class="warning">Note: <b>locked cells</b> (a member row's Profile ID, Fab ID, Group ID, Additional Length and Extrusion) and
+<b>values that are not in the list</b> are left alone. Those counts are shown too, so when the number is not what you expected you can see what was left out.
+Pasting into a shared cell of a composite row writes it to every member of that composite.</div>
 <p>Clicking the <strong>Profile Name</strong> header sorts the rows by name. Saving matches each row to its section through a <strong>hidden object identifier</strong> rather than the displayed row order, so sorting before saving does not mix up the values.</p>
 <h2>Tables Containing a Composite Profile</h2>
 <p>A <strong>composite profile</strong> tied with <code>ComP</code> appears as <strong>one block</strong> in the table:

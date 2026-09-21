@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>FabG / XFabG - Main-Sub Set</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FabG / XFabG &nbsp;&mdash;&nbsp; Main-Sub Set</h1>
+<p><span class="cmd-box">FabG</span> <span class="cmd-box">XFabG</span></p>
+<p>Ties <strong>the main profile you pick and the sub profiles you want shown with it on the fabrication drawing</strong>
+into one set inside a section group.</p>
+
+<h2>When to use it</h2>
+<p>Use it when you want the sub profiles to appear <b>as parts of the main profile</b> on the main profile's
+fabrication drawing. The sub profiles are listed by <code>FabBomTable</code>.</p>
+<p>The <b>first profile you pick is the main</b>; <b>every profile picked after that is a sub</b>.
+Any <b>block attached to the main or to a sub is included</b> as well.</p>
+<div class="note">When a group holds <b>two or more</b> main-sub sets, tie them into sets so they do not mix.
+Without the set mark a sub is found by axis (center line) alone, and each main takes the other set's subs as well.</div>
+
+<h2>How to use</h2>
+<ol class="step-list">
+  <li>Type <strong>FabG</strong> in the Rhino command line and press Enter.</li>
+  <li>Click <strong>one main profile section</strong>. Only <b>the section you click</b> is picked, not the whole group.</li>
+  <li>Click the <strong>sub sections</strong> that belong to that main one by one, then press Enter.
+      Besides section surfaces you can also pick <b>polylines</b> (for example, the cutter polyline that makes a bracket).</li>
+  <li>The command line reports how many were written and the sub names &mdash; <b>counted by reading the tags back</b>.</li>
+  <li>Run <code>UMD</code> &rarr; <code>FabNo</code> &rarr; <code>FabTable</code> &rarr; <code>FDwg</code> again, and the output follows the sets.</li>
+</ol>
+<div class="note">The section geometry is <b>not touched</b>. <code>FabG</code> only writes a <b>set mark</b> onto the sections.
+After changing marks, run modelling again for them to take effect.</div>
+
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <video src="../../../../img/FabG_FabGList.mp4" autoplay muted loop playsinline aria-label="Picking one main section and then the sub sections ties them into a set" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Pick the main first, then the subs, and they are tied into one set. Check the result with <code>FabGList</code>.</figcaption>
+  </figure>
+</div>
+
+<h2>What FabG also takes care of</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>Item</th><th>Behavior</th></tr>
+  <tr><td><b>Main Group ID</b></td><td>If the main's Group ID is not <b>1. Main-Group</b>, it is <b>set to 1</b>, because the fabrication drawing
+      uses that value to pick the center line and the drawing's primary part. The command line says so when it changes.</td></tr>
+  <tr><td><b>Composite profiles (ComP)</b></td><td>If the main or a sub is a composite member, <b>every member of that composite</b> gets the same mark.
+      Clicking one member is enough.</td></tr>
+  <tr><td><b>Adding subs later</b></td><td>If the main already has a set, <b>that set is reused</b>. Run the command again on the same main to add subs.</td></tr>
+  <tr><td><b>Sections from another set</b></td><td>They <b>move to this set</b>. The command line reports how many moved.</td></tr>
+</tbody></table>
+
+<h2>What appears on the fabrication drawing</h2>
+<ul>
+  <li>The main's drawing shows <b>only the subs of its own set</b>, with their names and fabrication numbers.</li>
+  <li>The accessory table (<code>FabBomTable</code>) counts only the subs of that set.</li>
+  <li>Blocks carried by a sub (such as stud bolts) that <b>remain in the model as blocks</b> are located on the main's drawing and counted.
+      Blocks that are only shown and do not remain in the model do not appear on the drawing.</li>
+</ul>
+
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <img src="../../../../img/FabG_FDwg.png" alt="A main profile's fabrication drawing showing the set's subs as its parts" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>The main profile's fabrication drawing. The subs tied into the set appear <b>as parts of the main</b>, and <code>FabBomTable</code> counts them.</figcaption>
+  </figure>
+</div>
+
+<h2>XFabG &nbsp;&mdash;&nbsp; releasing a set</h2>
+<p>Run <strong>XFabG</strong>, pick the sections (or polylines) to release and press Enter; the set mark is cleared.
+Section names and data stay as they are.</p>
+<ul>
+  <li>Pick one composite member and <b>all members of that composite</b> are released together.</li>
+  <li>If sections of the same set remain in the drawing, it reports how many mains and subs are left.
+      <b>A sub whose set has no main attaches to nothing.</b> Release the whole set, or deal with its main as well.</li>
+</ul>
+
+<h2>Cautions</h2>
+<div class="warning">If <b>even one picked object cannot be tagged, nothing is written</b> &mdash; a half-made set would only surface on the drawing.
+These cannot be tagged: an object <b>with no section data</b>, a section <b>with an empty name</b> (run <code>Pname</code> first for both),
+and a <b>multi-face section</b>.<br>
+Each rejected object gets a <b>red mark (TextDot)</b> on the <code>No_Data</code> layer (<code>No_Data</code>, <code>No_Name</code>, <code>Multi_Face</code>, <code>Not_Section</code>); running <code>FabG</code> again removes them.</div>
+<div class="note">If the main is also picked as a sub, it is left out. A member of the main's own composite picked as a sub stays a main.</div>
+<div class="note"><b>Check the result with <code>FabGList</code>.</b> It draws the mains and subs of each set and flags problems such as
+a missing main or missing subs in red.</div>
+
+<h2>Related commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><b>FabGList</b></td><td>Draws a list of FabG sets only and flags sets that are tied wrongly.</td></tr>
+  <tr><td><b>Pname</b></td><td>Enters section data such as the name and Group ID. Needed before FabG.</td></tr>
+  <tr><td><b>ComP</b></td><td>Ties several profiles into one composite profile. A composite can be a FabG main or sub.</td></tr>
+  <tr><td><b>UMD</b></td><td>Models the unit; the set marks are carried onto the parts here.</td></tr>
+  <tr><td><b>FDwg</b></td><td>Makes fabrication drawings; a main's drawing shows the subs of its own set.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

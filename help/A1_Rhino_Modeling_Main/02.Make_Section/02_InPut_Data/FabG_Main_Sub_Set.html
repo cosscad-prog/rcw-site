@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>FabG / XFabG - Main-Sub 세트</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>FabG / XFabG &nbsp;—&nbsp; Main-Sub 세트</h1>
+<p><span class="cmd-box">FabG</span> <span class="cmd-box">XFabG</span></p>
+<p>한 단면 group 안에서 <strong>선택된 Main 프로파일과 같이 가공도에 표시되기를 원하는 Sub 프로파일</strong>을 한 세트로 묶습니다.</p>
+
+<h2>언제 쓰는가</h2>
+<p>Main 프로파일의 가공도를 작성하면 Sub 프로파일들이 <b>Main 프로파일의 Parts 로 가공도에 함께 나타내기를 원할 때</b> 사용합니다.
+Sub 프로파일들은 <code>FabBomTable</code> 로 표시됩니다.</p>
+<p><b>첫 번째 선택된 프로파일이 Main</b> 프로파일이며, <b>이후 선택된 모든 프로파일이 Sub</b> 프로파일입니다.
+Main 프로파일이나 Sub 프로파일에 <b>연결된 Block 도 포함</b>됩니다.</p>
+<div class="note">한 group 안에 Main-Sub 세트가 <b>둘 이상</b>이면 세트를 묶어 주어야 서로 섞이지 않습니다.
+묶지 않으면 Sub 를 축(센터라인)으로만 찾기 때문에 두 Main 이 서로 남의 Sub 까지 가져갑니다.</div>
+
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <strong>FabG</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li><strong>Main 프로파일 단면</strong>을 하나 클릭합니다. group 전체가 아니라 <b>클릭한 단면 하나만</b> 잡힙니다.</li>
+  <li>그 Main 에 붙을 <strong>Sub 단면들</strong>을 하나씩 클릭하고 Enter 를 누릅니다.
+      단면(Surface)뿐 아니라 <b>폴리라인</b>(예: bracket 을 만드는 자르개 폴리라인)도 고를 수 있습니다.</li>
+  <li>명령창에 쓴 개수와 Sub 이름이 찍힙니다. <b>되읽어서 확인한 수</b>입니다.</li>
+  <li>모델링(<code>UMD</code>) → <code>FabNo</code> → <code>FabTable</code> → <code>FDwg</code> 순서로 다시 실행하면 세트대로 나옵니다.</li>
+</ol>
+<div class="note">단면의 <b>형상은 손대지 않습니다.</b> <code>FabG</code> 는 단면에 <b>세트 표시만</b> 씁니다.
+표시를 바꾼 뒤에는 모델링부터 다시 해야 결과에 반영됩니다.</div>
+
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <video src="../../../img/FabG_FabGList.mp4" autoplay muted loop playsinline aria-label="Main 단면을 하나 고르고 Sub 단면들을 고르면 한 세트로 묶인다" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Main 을 하나 고르고 이어서 Sub 들을 고르면 한 세트로 묶입니다. 묶은 결과는 <code>FabGList</code> 로 확인합니다.</figcaption>
+  </figure>
+</div>
+
+<h2>FabG 가 함께 해 주는 것</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>항목</th><th>내용</th></tr>
+  <tr><td><b>Main 의 Group ID</b></td><td>Main 의 Group ID 가 <b>1. Main-Group</b> 이 아니면 <b>1 로 맞춥니다.</b> 가공도가 센터라인과 도면의 주 부재를
+      이 값으로 정하기 때문입니다. 바꾼 경우 명령창에 한 줄 알려 드립니다.</td></tr>
+  <tr><td><b>합성 프로파일(ComP)</b></td><td>고른 Main 이나 Sub 가 합성의 구성원이면 <b>그 합성의 구성원 전원</b>에 같은 표시를 씁니다.
+      구성원 하나만 클릭하시면 됩니다.</td></tr>
+  <tr><td><b>Sub 를 나중에 더할 때</b></td><td>Main 이 이미 세트를 갖고 있으면 <b>그 세트를 그대로 이어 씁니다.</b> 같은 Main 으로 다시 실행해 Sub 를 추가하십시오.</td></tr>
+  <tr><td><b>다른 세트에 있던 단면</b></td><td>이 세트로 <b>옮겨집니다.</b> 몇 개가 옮겨졌는지 명령창에 알려 드립니다.</td></tr>
+</tbody></table>
+
+<h2>가공도에 어떻게 나오는가</h2>
+<ul>
+  <li>Main 의 가공도에 <b>자기 세트의 Sub 만</b> 이름·가공번호와 함께 표시됩니다.</li>
+  <li>부속자재 목록(<code>FabBomTable</code>)에도 자기 세트의 Sub 만 세어집니다.</li>
+  <li>Sub 에 달린 블록(studbolt 등) 중 <b>모델에 블록으로 남는 종류</b>는 Main 가공도에 위치가 표시되고 수량이 세어집니다.
+      모델에 남지 않고 보여 주기만 하는 블록은 가공도에 나오지 않습니다.</li>
+</ul>
+
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <img src="../../../img/FabG_FDwg.png" alt="Main 가공도에 세트의 Sub 가 Parts 로 함께 표시된 모습" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Main 프로파일의 가공도입니다. 세트로 묶인 <b>Sub 가 Main 의 Parts 로 함께</b> 나오고, 수량은 <code>FabBomTable</code> 이 셉니다.</figcaption>
+  </figure>
+</div>
+
+<h2>XFabG &nbsp;—&nbsp; 세트 풀기</h2>
+<p><strong>XFabG</strong> 를 실행하고 풀 단면(또는 폴리라인)을 고른 뒤 Enter 를 누르면 세트 표시가 지워집니다.
+단면의 이름·데이터는 그대로입니다.</p>
+<ul>
+  <li>합성 구성원을 하나 고르면 <b>그 합성의 구성원 전원</b>이 함께 풀립니다.</li>
+  <li>같은 세트의 단면이 도면에 남아 있으면 Main·Sub 가 몇 개 남았는지 알려 드립니다.
+      <b>자기 세트의 Main 이 없는 Sub 는 아무 데도 붙지 않습니다.</b> 세트 전체를 풀거나 Main 도 함께 정리하십시오.</li>
+</ul>
+
+<h2>주의</h2>
+<div class="warning">고른 것 중 <b>하나라도 묶을 수 없으면 아무것도 쓰지 않고 멈춥니다.</b> 반쪽짜리 세트는 가공도까지 가서야 드러나기 때문입니다.
+다음은 묶을 수 없습니다 — <b>단면 정보가 없는 것</b> · <b>이름이 비어 있는 단면</b>(둘 다 <code>Pname</code> 을 먼저 하십시오) ·
+<b>면이 여러 개인 단면</b>.<br>
+걸린 자리에는 <b>빨간 표시(TextDot)</b>가 <code>No_Data</code> Layer 에 섭니다(<code>No_Data</code> · <code>No_Name</code> · <code>Multi_Face</code> · <code>Not_Section</code>). <code>FabG</code> 를 다시 실행하면 지워집니다.</div>
+<div class="note">Main 을 Sub 로도 골랐다면 그것은 빼고 진행합니다. Main 과 같은 합성의 구성원을 Sub 로 골라도 Main 으로 둡니다.</div>
+<div class="note"><b>잘 묶였는지는 <code>FabGList</code> 로 확인하십시오.</b> 세트마다 Main·Sub 목록을 그리고, Main 없음·Sub 없음 같은 문제를 빨간 글자로 알려 줍니다.</div>
+
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><b>FabGList</b></td><td>FabG 세트만 모아 목록으로 그리고 잘못 묶인 것을 알려 줍니다.</td></tr>
+  <tr><td><b>Pname</b></td><td>단면의 이름과 Group ID 등 데이터를 넣습니다. FabG 전에 필요합니다.</td></tr>
+  <tr><td><b>ComP</b></td><td>여러 프로파일을 합성 프로파일 하나로 묶습니다. 합성도 FabG 의 Main·Sub 가 될 수 있습니다.</td></tr>
+  <tr><td><b>UMD</b></td><td>유닛을 모델링합니다. 세트 표시는 이때 부재에 실립니다.</td></tr>
+  <tr><td><b>FDwg</b></td><td>가공도를 만듭니다. Main 가공도에 자기 세트의 Sub 가 나옵니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

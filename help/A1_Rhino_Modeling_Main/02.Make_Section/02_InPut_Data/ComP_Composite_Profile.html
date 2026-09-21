@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -36,9 +36,13 @@
 <ol class="step-list">
   <li>묶을 단면 Surface 를 <strong>2개 이상</strong> 선택합니다.</li>
   <li>Rhino 명령창에 <strong>ComP</strong> 를 입력하고 Enter 를 누릅니다.</li>
-  <li><strong>합성 프로파일 이름</strong>을 입력합니다. 이 이름이 가공도·리스트에 나오는 부재 이름이 됩니다.</li>
+  <li><code>Pname</code> 창이 <strong>합성 모드로 열립니다</strong>. 이름 칸에는 <b>임시 이름</b>(구성원 중 첫 번째 이름)이 들어 있습니다.</li>
+  <li>창에서 <strong>합성 프로파일 이름</strong>과 나머지 데이터를 넣고 <strong>Save</strong> 를 누릅니다.
+      이 이름이 가공도·리스트에 나오는 부재 이름이 됩니다.</li>
   <li>모델링(<code>UMD</code>)을 실행하면 구성원들이 <strong>하나의 부재</strong>로 합쳐집니다.</li>
 </ol>
+<div class="warning"><b>이름을 안 고치고 창을 닫으면 임시 이름이 그대로 남습니다.</b> 그 이름이 가공도·발주서에 나갑니다 —
+명령창에도 임시값이라고 한 줄 찍히니, 확인하고 <code>Pname</code> 에서 확정하십시오.</div>
 <div class="note">단면의 <b>형상은 손대지 않습니다.</b> <code>ComP</code> 는 단면에 <b>표시(태그)만</b> 씁니다.
 실제로 형상이 합쳐지는 것은 모델링 중 solid 단계 한 번뿐입니다. 그래서 묶은 뒤에도 구성원 단면을 따로 고칠 수 있습니다.</div>
 
@@ -46,7 +50,7 @@
 <table class="desc-table">
   <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
   <tbody><tr><th>구분</th><th>내용</th></tr>
-  <tr><td><b>하나로 나오는 것</b></td><td>가공도(<code>FDwg</code>·<code>FDDS</code>) · <code>FabNo</code> 번호 · <code>Molist</code> · <code>Cuttinglist</code> ·
+  <tr><td><b>하나로 나오는 것</b></td><td>가공도(<code>FDwg</code>) · <code>FabNo</code> 번호 · <code>Molist</code> · <code>Cuttinglist</code> ·
       <code>Fablist</code> · <code>FabTable</code> · <code>UnitList</code> · IFC 내보내기 — 전부 <b>합성 이름 한 줄</b>로 잡힙니다.</td></tr>
   <tr><td><b>구성원별로 남는 것</b></td><td>각 구성원의 이름·단중·재질·색상은 <b>그대로 보존</b>됩니다.
       알루미늄과 폴리아미드를 나누어 발주해야 하기 때문입니다. 이 기록은 합치는 순간 부재에 함께 저장됩니다.</td></tr>
@@ -103,9 +107,11 @@
 그 상태로 <code>Pname</code> 을 열면 합성으로 열지 않고 안내만 표시합니다. <code>SSP</code> 가 복사본에 새 표시를 발급합니다.</div>
 <div class="warning">묶을 수 없는 단면이 하나라도 있으면 <b>아무것도 쓰지 않고 멈춥니다.</b> 반쪽짜리 합성이 생기면
 모델링까지 가서야 드러나기 때문입니다. 다음은 묶을 수 없습니다 —
-<b>이름이 비어 있는 단면</b> · <b>면이 여러 개인 단면</b>(그 경우 표시는 <code>Pname</code> 이 관리합니다).</div>
-<div class="warning">합성 이름에 <b>쉼표(,)</b> 는 쓸 수 없습니다. 구성원 기록이 쉼표로 칸을 나누기 때문입니다.</div>
-<div class="note"><b>구성원은 같은 Layer 에 모입니다.</b> <code>ComP</code> 가 이름을 받은 뒤 자동으로 옮기며,
+<b>이름이 비어 있는 단면</b> · <b>면이 여러 개인 단면</b>(그 경우 표시는 <code>Pname</code> 이 관리합니다).<br>
+걸린 단면 자리에는 <b>빨간 표시(TextDot)</b>가 <code>No_Data</code> Layer 에 섭니다 — <code>No_Data</code>(단면 정보 없음) · <code>No_Name</code>(이름 없음) · <code>Multi_Face</code> · <code>Not_Section</code>. 고친 뒤 <code>ComP</code> 를 다시 실행하면 지워집니다.</div>
+<div class="warning">합성 이름에 <b>쉼표(,)</b> 는 쓸 수 없습니다. 구성원 기록이 쉼표로 칸을 나누기 때문입니다.
+<code>Pname</code> 창이 저장할 때 막습니다.</div>
+<div class="note"><b>구성원은 같은 Layer 에 모입니다.</b> <code>ComP</code> 가 표시를 쓰면서 자동으로 옮기며,
 보이는 <b>색은 그대로</b> 유지됩니다. 서로 다른 Layer 에 있으면 불리언이 Layer 별로 돌아 구성원이 서로 다르게 잘리기 때문입니다.</div>
 
 <h2>관련 명령어</h2>

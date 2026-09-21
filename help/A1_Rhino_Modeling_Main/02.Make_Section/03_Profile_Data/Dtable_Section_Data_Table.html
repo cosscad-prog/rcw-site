@@ -66,6 +66,24 @@
   <tr><td>Unit Weight</td><td>미터당 단위 중량(Kg/M)입니다. 부재 리스트의 중량 계산에 사용됩니다.</td></tr>
   <tr><td>Color Code</td><td>표면 색상 코드입니다.</td></tr>
 </tbody></table>
+<h2>값을 복사해서 다른 프로파일에 붙여넣기</h2>
+<p>표는 <strong>칸 단위</strong>로 고릅니다. 칸을 끌거나 <kbd>Shift</kbd>·<kbd>Ctrl</kbd> 과 함께 눌러 여러 칸을 한 번에 고를 수 있습니다.
+값을 고치려면 글자를 치거나 <kbd>F2</kbd> 를 누릅니다.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 25%;">
+    <col style="width: 75%;">
+  </colgroup>
+  <tbody><tr><th>키</th><th>하는 일</th></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td><td>고른 칸의 <b>값만</b> 복사합니다(칸 제목은 따라오지 않습니다).</td></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td><td>붙여넣습니다. 복사한 값이 <b>하나</b>면 <b>고른 칸 전부</b>에 그 값이 들어갑니다 &mdash; 여러 프로파일의 같은 항목을 한 번에 맞출 때 씁니다.
+  여러 칸을 복사했으면 <b>지금 칸</b>을 왼쪽 위로 삼아 블록으로 들어갑니다.</td></tr>
+</tbody></table>
+<p>오른쪽 단추를 누르면 <strong>복사 / 붙여넣기</strong> 차림표가 나옵니다. 붙여넣은 뒤에는 미리보기 아래에
+<code>붙여넣기 3칸</code> 처럼 <b>들어간 칸 수</b>가 적힙니다.</p>
+<div class="warning">주의: <b>잠긴 칸</b>(구성원 줄의 Profile ID·Fab ID·Group ID·Additional Length·Extrusion)과
+<b>목록에 없는 값</b>은 들어가지 않습니다. 그 수도 함께 적히므로, 숫자가 생각과 다르면 무엇이 빠졌는지 알 수 있습니다.
+합성 줄의 공용 칸에 붙여넣으면 그 묶음의 구성원 전부에 함께 들어갑니다.</div>
 <p><strong>Profile Name</strong> 머리글을 클릭하면 이름순으로 정렬됩니다. 저장은 화면에 보이는 행 순서가 아니라 각 행이 들고 있는 <strong>숨은 객체 식별자</strong>를 기준으로 하므로, 정렬한 뒤에 저장해도 값이 엉키지 않습니다.</p>
 <h2>합성 프로파일이 있는 표</h2>
 <p><code>ComP</code> 로 묶은 <strong>합성 프로파일</strong>은 표에서도 <strong>한 덩어리</strong>로 나옵니다.

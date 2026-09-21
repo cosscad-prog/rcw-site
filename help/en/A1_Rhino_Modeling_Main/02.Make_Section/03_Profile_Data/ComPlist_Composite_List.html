@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>ComPlist - Composite Profile Check List</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>ComPlist &nbsp;&mdash;&nbsp; Composite Profile Check List</h1>
+<p><span class="cmd-box">ComPlist</span></p>
+<p>Collects <strong>only the composite profiles (ComP)</strong> from the selected sections (grouped or not) and draws one cell per composite,
+showing its <b>shape, composite name and members</b>. Composites that are tied wrongly are flagged in <b>red text</b>.
+Use it after making several composites to see at a glance whether they were tied correctly.</p>
+
+<h2>How to use</h2>
+<ol class="step-list">
+  <li>Type <strong>ComPlist</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the <strong>sections</strong> to check and press Enter. Sections in a group are selected with their group, and <b>sections outside any group can be picked one by one</b>; preselection works too. Non-composite sections may be included &mdash; they are simply left out of the list.</li>
+  <li>The command line prints a summary: sections selected, composite members, composites, and <b>composites with problems</b>, followed by one line per composite with its members and problems.</li>
+  <li>Click the <strong>point</strong> where the list is drawn.</li>
+</ol>
+<div class="note">The cells are laid out like <code>PFList</code>: <b>composites with the same name stack down one column</b>, and a new name starts the next column to the right.
+Shapes are drawn at 0.5 scale, and each cell is grouped.</div>
+
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 100%; min-width:220px; max-width:100%;">
+    <video src="../../../../img/ComPList.mp4" autoplay muted loop playsinline aria-label="Selecting sections and clicking a point draws one cell per composite" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
+    <figcaption>Select the sections, click a point, and each composite is drawn as a cell with its <b>shape, composite name and members</b>. A composite that is tied wrongly is flagged in red inside its cell.</figcaption>
+  </figure>
+</div>
+
+<h2>What each cell shows</h2>
+<table class="desc-table">
+  <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+  <tbody><tr><th>Line</th><th>Content</th></tr>
+  <tr><td><b>Composite name</b></td><td>In large text at the top.</td></tr>
+  <tr><td><b>Group Name</b></td><td>The name of that section group (the unit name), or <b>(no group)</b>.</td></tr>
+  <tr><td><b>Members</b></td><td>The member count, then <b>name [Layer]</b> for each member, in the same order as the <code>Pname</code> list (aluminum, steel, then accessories; larger area first within each).</td></tr>
+  <tr><td><b>Shape</b></td><td>The member sections drawn together in the composite's shape, in the lower part of the cell.</td></tr>
+</tbody></table>
+
+<h2>Red lines &nbsp;&mdash;&nbsp; what is wrong and how to fix it</h2>
+<p>Problems are written on the <b>DiesText layer (red)</b> as lines starting with <code>!!</code>.</p>
+<table class="desc-table">
+  <colgroup><col style="width:36%"><col style="width:64%"></colgroup>
+  <tbody><tr><th>Red line</th><th>Meaning and fix</th></tr>
+  <tr><td>Only 1 member - it will NOT be combined</td><td>Modelling does not merge a composite without a partner. Pick <b>two or more</b> members and run <code>ComP</code> again.</td></tr>
+  <tr><td>Composite name differs by member</td><td>One composite carries different names. Save the name once in <code>Pname</code> composite mode.</td></tr>
+  <tr><td>Composite name is empty</td><td>Enter a name in <code>Pname</code> composite mode.</td></tr>
+  <tr><td>Members are on N layers</td><td>Boolean operations run per layer, so the members would be cut differently. Gather them onto one layer (running <code>ComP</code> again does this).</td></tr>
+  <tr><td>Not selected: N more member(s) in this group<br>(cell without a group: &hellip; outside any group)</td><td>The cell sees only part of the composite. Select the <b>whole group</b> (or, without a group, the remaining members too) and run it again.</td></tr>
+  <tr><td>N member(s) of this composite are outside any group<br>(cell without a group: &hellip; inside a group)</td><td>The members of one composite are split between a group and no group. Put them in the same group.</td></tr>
+  <tr><td>Copied sections: they carry another section's composite tag</td><td>Copying a section that is not in a group copies its composite tag too. <code>SSP</code> does not repair such copies (it works on selected groups), so they are gathered in a cell of their own instead of being mixed with the original. Run <code>ComP</code> on them again.</td></tr>
+</tbody></table>
+<div class="note">One line is a hint rather than a problem: <b>"Name = a member name (ComP provisional name?)"</b>.
+The provisional name that <code>ComP</code> filled in may still be there &mdash; check that it is the name you intended.</div>
+
+<h2>Cautions</h2>
+<div class="note"><b>Only sections are read.</b> Modelled composite parts (solids) are not counted. Composite sections outside any group are listed too.</div>
+<div class="note">A <b>copied unit</b> carrying the same composite is in a different group, so it gets <b>its own cell</b>. Sections outside any group have no group to separate them, so copies are gathered in a <b>separate copy cell</b> rather than mixed with the original.</div>
+<div class="warning">The shapes in the cells are <b>copies with the section data removed</b>. If the command line reports that copies still carry section data,
+<b>delete this list</b> before running <code>UMD</code> or <code>PFList</code>; otherwise those copies may be counted as real sections.</div>
+
+<h2>Related commands</h2>
+<table class="desc-table">
+  <colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><b>ComP</b></td><td>Ties several profiles into one composite profile.</td></tr>
+  <tr><td><b>Pname</b></td><td>Edits the composite and member data.</td></tr>
+  <tr><td><b>FabGList</b></td><td>Checks FabG sets in the same way.</td></tr>
+  <tr><td><b>PFList</b></td><td>Draws every profile in the same cell layout.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

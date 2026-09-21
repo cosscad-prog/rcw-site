@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -27,7 +27,7 @@
 <p><span class="cmd-box">FDstyle</span></p>
 <p>
   <strong>FDstyle</strong>은 <strong>FDwg Pipeline 패널</strong>을 열고 닫는 명령입니다. 이 패널에서
-  가공도(FDDS / FDwg) 작업을 <strong>기록(ON)</strong> 하거나 <strong>재생(OFF, 기본)</strong> 하는 모드를 전환하고,
+  가공도(FDwg) 작업을 <strong>기록(ON)</strong> 하거나 <strong>재생(OFF, 기본)</strong> 하는 모드를 전환하고,
   도면 <strong>양식 등록·삽입</strong>과 Profile별 작업 상태 확인을 한곳에서 처리합니다.
 </p>
 <div class="note"><strong>참고:</strong> 같은 명령을 다시 입력하면 패널이 닫힙니다(토글). 기록/재생 전환은 명령이 아니라 <strong>패널 상단의 배너 버튼</strong>으로 합니다. (구 <code>FDP</code>·<code>FDwgStyle</code> 명령은 <code>FDstyle</code>로 통합되었습니다.)</div>
@@ -52,7 +52,7 @@
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>모드</th><th>동작</th></tr>
-  <tr><td><strong>기록 (ON)</strong></td><td><code>FDwg</code> / <code>FDDS</code> 를 실행하면 현재 옵션과 추가 작업 — NC 테이블, FSC 압축, 주석/지시선, 부속자재 표, 부분확대(F3D), 도면 양식 — 을 Profile별로 저장합니다. 기록 중 직접 추가한 지시선·텍스트·라벨 이동도 자동으로 함께 기록됩니다.</td></tr>
+  <tr><td><strong>기록 (ON)</strong></td><td><code>FDwg</code> 를 실행하면 현재 옵션과 추가 작업 — NC 테이블, FSC 압축, 주석/지시선, 부속자재 표, 부분확대(F3D), 도면 양식 — 을 Profile별로 저장합니다. 기록 중 직접 추가한 지시선·텍스트·라벨 이동도 자동으로 함께 기록됩니다.</td></tr>
   <tr><td><strong>재생 (OFF, 기본)</strong></td><td>같은 Profile의 가공도를 만들 때 기록된 내용을 읽어 <strong>자동으로 재현</strong>합니다. 기록된 데이터가 없으면 현재 <code>DdOpt</code> 패널 설정값을 사용합니다.</td></tr>
 </tbody></table>
 <div class="note"><strong>참고:</strong> 파일 데이터 적용은 이 <strong>재생 모드</strong>가 담당합니다. 기록된 데이터가 없으면 DdOpt 패널의 현재 설정값을 사용하며, DdOpt의 <strong>현재 선택을 기본값으로 저장</strong> 기능으로 기본값을 미리 저장해 둘 수 있습니다.</div>
@@ -109,7 +109,6 @@
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>명령어</th><th>설명</th></tr>
-  <tr><td><strong>FDDS</strong></td><td><b>폐기된 명령입니다.</b> 가공도는 <code>FDwg</code> 으로 만듭니다.</td></tr>
   <tr><td><strong>FDwg</strong></td><td>프레임 제작 가공도를 생성합니다. 입면 홀 깊이(Hidden Line)까지 그립니다. FDstyle 모드(기록/재생)를 따릅니다.</td></tr>
   <tr><td><strong>DdOpt</strong></td><td>가공도 Drawing 옵션 패널. 재생 데이터가 없을 때 이 값을 사용합니다.</td></tr>
   <tr><td><strong>SFB / FFB</strong></td><td>도면 양식 선택(SFB)·삽입(FFB). 패널의 [도면양식]·[양식삽입] 버튼과 같은 기능입니다.</td></tr>
