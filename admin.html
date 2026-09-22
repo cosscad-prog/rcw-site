@@ -384,6 +384,24 @@
     내려받기 CSV 는 묶지 않은 <b>원래 기록 그대로</b>입니다.
   </p>
 
+  <h3 class="sec">플러그인이 스스로 받아 간 것<span class="mini" id="pl-mini"></span></h3>
+  <table>
+    <thead>
+      <tr>
+        <th>받아 간 때</th><th>무엇</th><th>어느 판</th><th>어디서</th><th>설치</th>
+      </tr>
+    </thead>
+    <tbody id="plrows"><tr><td colspan="5" class="empty">불러오는 중…</td></tr></tbody>
+  </table>
+
+  <p class="note">
+    RCW 가 켜질 때 뜨는 <b>새 버전 알림</b>에서 [예] 를 눌러 받아 간 기록입니다.
+    브라우저를 거치지 않으므로 크롬 경고와 SmartScreen 이 뜨지 않습니다.
+    <b>누가 받았는지는 알 수 없습니다</b> — 배포판 플러그인에는 고객 코드가 없어서,
+    설치할 때 그 PC 에 만들어 둔 <b>설치 번호</b>로만 구분합니다(사람이 아니라 대수를 셉니다).
+    그 번호를 지우고 다시 받으면 같은 PC 가 두 대로 보입니다.
+  </p>
+
   <h3 class="sec">트라이얼 신청</h3>
   <table>
     <thead>
@@ -614,21 +632,29 @@
        브라우저가 남긴다. 2026-07-26~08-24 에는 뒤쪽이 통째로 막혀 있었는데
        (RLS 정책 누락 + lang NOT NULL) 신청 목록이 화면에 없어서 그 사실이
        드러나지 않았다. 이제 둘을 나란히 둔다. */
+    plRowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오는 중…</td></tr>';
     Promise.all([
       api('/rest/v1/downloads?select=*&order=created_at.desc&limit=2000'),
-      api('/rest/v1/trial_requests?select=*&order=created_at.desc&limit=2000')
+      api('/rest/v1/trial_requests?select=*&order=created_at.desc&limit=2000'),
+      /* 플러그인이 스스로 받아 간 것. 위 둘과 <b>다른 것을 센다</b> —
+         저 둘은 사람이 페이지에서 누른 것이고 이것은 설치가 스스로 받아 간 것이다.
+         한 표에 섞으면 '받아간 사람' 수가 사람 수도 대수도 아닌 값이 된다. */
+      api('/rest/v1/plugin_downloads?select=*&order=created_at.desc&limit=2000')
     ])
       .then(function (r) {
         all = r[0] || [];
         requests = r[1] || [];
+        pluginDls = r[2] || [];
         summarize();
         render();
         renderRequests();
+        renderPlugin();
       })
       .catch(function (err) {
         console.error(err);
         rowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
         qRowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다.</td></tr>';
+        plRowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다.</td></tr>';
       });
   }
 
@@ -1018,6 +1044,8 @@
 
   var requests = [];                                   // trial_requests (신청서)
   var qRowsEl  = document.getElementById('qrows');
+  var pluginDls = [];                                  // plugin_downloads (플러그인이 스스로 받아 간 것)
+  var plRowsEl  = document.getElementById('plrows');
 
   function keyOf(r) { return (r.email || '').trim().toLowerCase(); }
 
@@ -1196,6 +1224,58 @@
     if (!text) { alert('releases.json 을 읽지 못해 문안을 만들 수 없습니다. 새로 고침해 보십시오.'); return; }
     copyText(text, e.target);
   });
+
+  /* 플러그인이 스스로 받아 간 기록.
+     ★ 사람 단위로 묶지 않는다 — 누구인지 모르기 때문이다. 한 줄이 한 번의 받기다.
+       설치 번호가 같으면 같은 PC 라는 것만 알 수 있어, 같은 번호에 옅은 표시를 준다. */
+  function renderPlugin() {
+    var q = qEl.value.trim().toLowerCase();
+    var html = '';
+    var shown = 0;
+
+    pluginDls.forEach(function (r) {
+      var short = shortId(r.install_id);
+      var hay = [r.edition, r.rhino, r.version, r.kind, short].join(' ').toLowerCase();
+      if (q && hay.indexOf(q) === -1) { return; }
+      shown++;
+
+      html += '<tr>' +
+        '<td class="when"><b>' + fmt(r.created_at) + '</b>' + hhmm(r.created_at) + '</td>' +
+        '<td class="ver"><span class="tag ' + (r.edition === 'Standard' ? 'std' : 'core') + '">' +
+          esc(r.edition || '?') + '</span> Rhino ' + esc(r.rhino || '?') + '</td>' +
+        '<td class="ver"><span class="vno">' + esc(r.version || '—') + '</span></td>' +
+        '<td><span class="tag ' + (r.kind === 'trial' ? 'nodl' : 'gotdl') + '">' +
+          (r.kind === 'trial' ? '평가판' : '유료판') + '</span></td>' +
+        '<td class="mono">' + esc(short) + '</td>' +
+        '</tr>';
+    });
+
+    plRowsEl.innerHTML = html || '<tr><td colspan="5" class="empty">' +
+      (pluginDls.length ? '검색 결과가 없습니다.' : '아직 플러그인으로 받아 간 기록이 없습니다.') + '</td></tr>';
+
+    var mini = document.getElementById('pl-mini');
+    if (mini) {
+      // 대수는 설치 번호로 센다. 번호를 못 적은 기록(빈 칸)은 대수에 넣지 않는다 —
+      // 그것까지 한 대로 세면 실제보다 적게 나온다.
+      var seen = {}, machines = 0;
+      pluginDls.forEach(function (r) {
+        if (!r.install_id) { return; }
+        if (seen[r.install_id]) { return; }
+        seen[r.install_id] = 1;
+        machines++;
+      });
+      mini.textContent = pluginDls.length
+        ? pluginDls.length + '건 · ' + machines + '대'
+        : '';
+    }
+  }
+
+  /* 설치 번호는 32자라 표에 그대로 쓰면 다른 칸을 다 밀어낸다.
+     앞 8자만 쓴다 — 지금 규모(수십 대)에서 앞 8자가 겹칠 일은 없다. */
+  function shortId(id) {
+    var text = String(id == null ? '' : id);
+    return text ? text.slice(0, 8) : '(없음)';
+  }
 
   function renderRequests() {
     var q = qEl.value.trim().toLowerCase();
@@ -1478,7 +1558,7 @@
     row.className    = open ? 'person has-more' : 'person has-more open';
   });
 
-  qEl.addEventListener('input', function () { render(); renderRequests(); });
+  qEl.addEventListener('input', function () { render(); renderRequests(); renderPlugin(); });
 
   // ── CSV ───────────────────────────────────────────────────
   function csvCell(v) {

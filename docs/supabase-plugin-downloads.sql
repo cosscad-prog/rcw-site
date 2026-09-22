@@ -45,3 +45,12 @@ comment on table public.plugin_downloads is
 
 -- 브라우저에서 직접 읽거나 쓰지 못하게 한다. 서버 함수(service key)만 다룬다.
 alter table public.plugin_downloads enable row level security;
+
+-- 관리자 화면이 읽을 수 있게 한다. 다른 표(downloads · contacts · customer_access)와
+-- 같은 모양이다: 로그인한 관리자만 SELECT, 쓰기는 서버 함수(service key)만.
+-- anon 에게는 아무것도 열지 않는다 — 이 표는 브라우저가 직접 쓸 일이 없다.
+create policy "admin can read plugin downloads"
+  on public.plugin_downloads
+  for select
+  to authenticated
+  using (true);
