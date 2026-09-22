@@ -32,6 +32,10 @@ on:
         description: '안내할 버전 (비우면 releases.json 의 맨 앞)'
         type: string
         default: ''
+      test_to:
+        description: '시험 발송 주소 (넣으면 이 주소로 한 통만 보내고 끝낸다 — 사용자에게는 안 감)'
+        type: string
+        default: ''
 
 jobs:
   notice:
@@ -49,6 +53,8 @@ jobs:
           MAIL_TO:              ${{ secrets.MAIL_TO }}
           REPLY_TO:             ${{ secrets.REPLY_TO }}
           VERSION:              ${{ inputs.version }}
+          # 넣으면 이 주소로 한 통만 보내고 끝낸다. 트라이얼 사용자에게는 가지 않는다.
+          TEST_TO:              ${{ inputs.test_to }}
           # ★ Variables 에 SEND_TRIAL_MAIL=true 를 넣기 전에는 미리보기만 한다
           SEND_TRIAL_MAIL:      ${{ vars.SEND_TRIAL_MAIL }}
           MAX_SEND:             ${{ vars.MAX_SEND }}

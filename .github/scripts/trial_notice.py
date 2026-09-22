@@ -231,6 +231,25 @@ def main():
     note = load_release(env("VERSION", required=False))
     version = note["version"]
 
+    # ── 시험 발송 ──────────────────────────────────────────────────────
+    # TEST_TO 가 있으면 그 주소로 **한 통만** 보내고 끝낸다.
+    # 트라이얼 사용자에게는 한 통도 가지 않고, notified_version 도 건드리지 않는다.
+    # 왜 필요한가: 미리보기 메일은 "누구에게 갈 예정" 만 적어 보내므로
+    # **실제 편지의 본문과 양식을 볼 수 없다**(2026-09-22 사용자 지적).
+    test_to = (env("TEST_TO", required=False) or "").strip()
+    if test_to:
+        sample = {"id": "0", "company": "보기용", "name": "받는분"}
+        subject, body = build_mail(sample, note)
+        context = ssl.create_default_context()
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context, timeout=30)
+        try:
+            server.login(user, password)
+            send(server, user, test_to, reply_to, "[시험] " + subject, body)
+        finally:
+            server.quit()
+        print("시험 발송 1통 → %s (트라이얼 사용자에게는 보내지 않았고 기록도 남기지 않았습니다)" % test_to)
+        return
+
     rows = fetch_people(base_url, key)
     due, skipped = pick(rows, version)
 
