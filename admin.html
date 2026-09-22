@@ -388,10 +388,10 @@
   <table>
     <thead>
       <tr>
-        <th>신청일</th><th>이름</th><th>회사</th><th>전화번호</th><th>이메일</th><th>받아 갔나</th><th>카톡</th>
+        <th>신청일</th><th>신청한 사람</th><th>연락처</th><th>받아 갔나</th><th>카톡</th>
       </tr>
     </thead>
-    <tbody id="qrows"><tr><td colspan="7" class="empty">불러오는 중…</td></tr></tbody>
+    <tbody id="qrows"><tr><td colspan="5" class="empty">불러오는 중…</td></tr></tbody>
   </table>
 
   <p class="note">
@@ -608,7 +608,7 @@
 
   function load() {
     rowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오는 중…</td></tr>';
-    qRowsEl.innerHTML = '<tr><td colspan="7" class="empty">불러오는 중…</td></tr>';
+    qRowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오는 중…</td></tr>';
     /* 다운로드 기록과 신청서를 함께 읽는다.
        ★ 둘은 다른 것을 센다 — 신청은 서버(/api/trial)가 남기고, 다운로드는
        브라우저가 남긴다. 2026-07-26~08-24 에는 뒤쪽이 통째로 막혀 있었는데
@@ -628,7 +628,7 @@
       .catch(function (err) {
         console.error(err);
         rowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
-        qRowsEl.innerHTML = '<tr><td colspan="7" class="empty">불러오지 못했습니다.</td></tr>';
+        qRowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다.</td></tr>';
       });
   }
 
@@ -1227,15 +1227,15 @@
 
       html += '<tr>' +
         '<td class="when"><b>' + fmt(r.created_at) + '</b>' + fmt(r.created_at, true).slice(11) + '</td>' +
-        '<td>' + esc(r.name) + '</td>' +
-        '<td>' + esc(r.company) + '</td>' +
-        '<td>' + esc(r.phone) + '</td>' +
-        '<td>' + esc(r.email) + '</td>' +
+        '<td class="who"><b>' + esc(r.name || '-') + '</b>' +
+          (r.company ? '<span>' + esc(r.company) + '</span>' : '') + '</td>' +
+        '<td class="contact"><a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' +
+          (r.phone ? '<span>' + esc(r.phone) + '</span>' : '') + '</td>' +
         '<td class="kind">' + mark + '</td>' +
         '<td><button class="btn mini" type="button" data-kakao="' + esc(r.id) + '">카톡문안</button></td>' +
         '</tr>';
     });
-    qRowsEl.innerHTML = html || '<tr><td colspan="7" class="empty">' +
+    qRowsEl.innerHTML = html || '<tr><td colspan="5" class="empty">' +
       (requests.length ? '검색 결과가 없습니다.' : '아직 신청이 없습니다.') + '</td></tr>';
   }
 
