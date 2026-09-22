@@ -99,6 +99,72 @@ async function findCustomerByCode(rawCode, select) {
   return Array.isArray(rows) && rows.length ? rows[0] : null;
 }
 
+/* ── 플러그인이 스스로 받아 갈 때 ────────────────────────────────────
+   RCW V5 알림창에서 [예] 를 누르면 플러그인이 여기로 온다. 기록을 남기고
+   GitHub 릴리스로 넘긴다(302).
+
+   ★ 왜 브라우저를 안 거치게 하는가 — 브라우저가 붙이는 '인터넷에서 왔다'는 표식
+     때문에 크롬 경고와 SmartScreen 이 뜬다. 프로그램이 직접 받으면 둘 다 안 뜬다
+     (2026-09-22 실측). 그래서 이 문은 <b>받는 길</b>이지 페이지가 아니다.
+
+   ★ 기록이 업데이트를 막아서는 안 된다. Supabase 가 죽어 있어도 302 는 나간다.
+     (플러그인 쪽에도 같은 원칙의 보호가 하나 더 있다 — 이 주소가 통째로 실패하면
+      GitHub 으로 바로 간다.)
+
+   ★ 넘기는 주소는 <b>우리가 짓는다.</b> 요청에 들어온 값을 그대로 Location 에
+     쓰지 않는다 — 그러면 이 주소가 아무 데로나 보내 주는 발판이 된다.
+     파일 이름이 정해진 형태가 아니면 400 으로 끊는다.
+──────────────────────────────────────────────────────────────────── */
+const PLUGIN_FILE_RE = /^RCW_V5_(Core|Standard)(_Trial)?_Rhino([78])\.exe$/;
+
+const RELEASE_REPO = {
+  customer: 'https://github.com/cosscad-prog/rcw-customer-releases',
+  trial:    'https://github.com/cosscad-prog/rcw-releases'
+};
+
+async function pluginDownload(req, res, kind) {
+  const query = req.query || {};
+  const fileName = String(query.file || '').trim();
+  const match = PLUGIN_FILE_RE.exec(fileName);
+
+  // 평가판 파일은 _Trial 이 있고 유료판 파일은 없다. 엇갈리면 엉뚱한 저장소를
+  // 가리키게 되므로 여기서 끊는다.
+  const isTrialFile = Boolean(match && match[2]);
+  if (!match || isTrialFile !== (kind === 'trial')) {
+    return res.status(400).json({ error: 'bad_file' });
+  }
+
+  const installId = /^[0-9a-f]{8,64}$/i.test(String(query.id || '')) ? String(query.id) : null;
+  const version   = /^\d+\.\d+\.\d+$/.test(String(query.v || '')) ? String(query.v) : null;
+
+  try {
+    await db('plugin_downloads', {
+      method: 'POST',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({
+        kind,
+        install_id: installId,
+        edition: match[1],
+        rhino: match[3],
+        version,
+        file_name: fileName,
+        ip: clientIp(req),
+        user_agent: userAgent(req)
+      })
+    });
+  } catch (err) {
+    console.error('[plugin] 다운로드 기록 실패:', err.message);
+  }
+
+  const target = RELEASE_REPO[kind] + '/releases/latest/download/' + fileName;
+
+  // 받는 주소는 판마다 달라진다. 중간에 끼는 것들이 옛 주소를 물고 있으면
+  // 새 판이 나와도 옛 설치본이 내려간다.
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Location', target);
+  return res.status(302).end();
+}
+
 module.exports = {
   supabaseBase,
   db,
@@ -110,5 +176,6 @@ module.exports = {
   userAgent,
   adminTokenMatches,
   readBody,
-  findCustomerByCode
+  findCustomerByCode,
+  pluginDownload
 };

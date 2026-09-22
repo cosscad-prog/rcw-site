@@ -23,9 +23,16 @@ function clientIp(req) {
   return (req.socket && req.socket.remoteAddress ? req.socket.remoteAddress : '').slice(0, 60);
 }
 
+const { pluginDownload } = require('./_rcw');
+
 module.exports = async function handler(req, res) {
+  // 플러그인이 스스로 받으러 온 것. 기록하고 GitHub 으로 넘긴다(_rcw.js 의 pluginDownload).
+  // 아래 POST 갈래는 고객 페이지에서 사람이 누른 것을 기록한다 — 둘은 표가 다르다.
+  // 새 함수를 만들지 않는 이유: Vercel Hobby 는 함수 12개가 한계이고 지금 11개다.
+  if (req.method === 'GET') return pluginDownload(req, res, 'customer');
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).end();
   }
 

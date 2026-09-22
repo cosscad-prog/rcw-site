@@ -26,7 +26,7 @@
 ------------------------------------------------------------------ */
 
 const crypto = require('crypto');
-const { db, readBody } = require('./_rcw');
+const { db, readBody, pluginDownload } = require('./_rcw');
 const { notifyTrialRequest } = require('./_notify');
 
 // DB 의 check 제약과 같은 한도. 여기서 잘라야 초과 입력이 500 이 아니라 정상 접수가 된다.
@@ -130,8 +130,13 @@ async function handleDownload(body, res) {
 }
 
 module.exports = async function handler(req, res) {
+  // 플러그인이 스스로 받으러 온 것. 기록하고 GitHub 으로 넘긴다(_rcw.js 의 pluginDownload).
+  // 새 함수를 만들지 않는 이유: Vercel Hobby 는 함수 12개가 한계이고 지금 11개다.
+  // 하나 더 만들면 천장에 붙어 다음에 무엇을 추가하는 순간 배포가 조용히 실패한다.
+  if (req.method === 'GET') return pluginDownload(req, res, 'trial');
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ error: 'method_not_allowed' });
   }
 
