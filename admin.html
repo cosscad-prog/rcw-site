@@ -63,9 +63,47 @@
   .tag.repeat { background:#fff3e0; color:var(--amber); border:1px solid #f0d3a5; }
   .tag.core { background:var(--sky); color:var(--blue-dark); }
   .tag.std  { background:#e9f6ee; color:var(--green); }
-  .prev { margin:6px 0 0; padding:7px 10px; border-left:3px solid #e3ecf2;
-          background:#fbfdfe; color:var(--muted); font-size:12px; }
-  .prev div { white-space:nowrap; }
+  /* 다운로드 표 - 한 사람이 한 줄이다(2026-09-22).
+     그전에는 다운로드 한 건이 한 줄이었고 그 줄 아래에 '이전 N건' 이 또 붙어,
+     세 번 받아 간 사람은 같은 기록이 화면에 여섯 번까지 나왔다. */
+  td.when { width:13%; }
+  td.who { width:22%; }
+  td.contact { width:27%; }
+  td.ver { width:28%; }
+  td.times { width:10%; }
+  td.who b { display:block; font-size:13.5px; color:var(--ink); }
+  td.who span { display:block; margin-top:2px; color:var(--muted); font-size:12px; }
+  td.contact { white-space:nowrap; }
+  td.contact a { color:var(--blue-dark); text-decoration:none; }
+  td.contact a:hover { text-decoration:underline; }
+  td.contact span { display:block; margin-top:2px; color:var(--muted); font-size:12px;
+                    font-variant-numeric:tabular-nums; }
+  td.ver .tag { margin:0 6px 0 0; }
+  td.ver .and { display:block; margin-top:4px; }
+  td.times { text-align:right; white-space:nowrap; }
+  td.times .once { color:var(--muted); font-size:12px; }
+  .more { display:inline-flex; align-items:center; gap:6px; padding:3px 10px;
+          border:1px solid var(--line); border-radius:999px; background:#fff;
+          color:var(--muted); font:inherit; font-size:12px; font-weight:800;
+          cursor:pointer; }
+  .more:hover { border-color:#c9d6df; color:var(--ink); }
+  .more i { width:0; height:0; border-left:4px solid transparent;
+            border-right:4px solid transparent; border-top:5px solid currentColor;
+            transition:transform .15s; }
+  tr.person.has-more { cursor:pointer; }
+  tr.person.open .more i { transform:rotate(180deg); }
+  tr.person.open { background:#f7fbfd; }
+  tr.detail { display:none; }
+  tr.detail.open { display:table-row; }
+  tr.detail:hover { background:transparent; }
+  tr.detail > td { padding-top:0; padding-bottom:12px; }
+  ul.hist { margin:0; padding:8px 12px; list-style:none; border-left:3px solid #e3ecf2;
+            background:#fbfdfe; border-radius:0 8px 8px 0; }
+  ul.hist li { display:flex; align-items:center; gap:10px; padding:3px 0; white-space:nowrap; }
+  ul.hist .t { min-width:110px; color:var(--muted); font-size:12px;
+               font-variant-numeric:tabular-nums; }
+  ul.hist .n { min-width:34px; color:var(--muted); font-size:11.5px; font-weight:800; }
+  ul.hist .last { color:var(--green); font-size:11.5px; font-weight:800; }
   .empty { padding:40px 0; text-align:center; color:var(--muted); }
   .note { margin:14px 0 0; color:var(--muted); font-size:12px; }
   .sec { margin:26px 0 10px; font-size:14px; font-weight:800; }
@@ -326,15 +364,19 @@
   <table>
     <thead>
       <tr>
-        <th>날짜</th><th>이름</th><th>회사</th><th>전화번호</th><th>이메일</th><th>다운로드 버전</th>
+        <th>최근 다운로드</th><th>받아 간 사람</th><th>연락처</th>
+        <th>받아 간 것</th><th style="text-align:right">횟수</th>
       </tr>
     </thead>
-    <tbody id="rows"><tr><td colspan="6" class="empty">불러오는 중…</td></tr></tbody>
+    <tbody id="rows"><tr><td colspan="5" class="empty">불러오는 중…</td></tr></tbody>
   </table>
 
   <p class="note">
-    같은 이메일이 다시 받으면 <span class="tag repeat">N회차</span> 를 붙이고 그 아래에 이전 기록을 함께 보여줍니다.
+    <b>이메일 하나가 한 줄</b>입니다. 여러 번 받아 간 사람은 횟수 칸의
+    <span class="more" style="cursor:default">N회 <i></i></span> 를 누르면 받아 간 기록이 모두 펼쳐집니다.
+    날짜는 <b>가장 최근</b> 것이고, '받아 간 것' 은 그 사람이 받아 간 <b>종류</b>입니다(같은 종류는 한 번만 씁니다).
     기록은 다운로드 <b>버튼을 누른 시점</b>이며, 내려받기 완료 여부까지는 알 수 없습니다.
+    내려받기 CSV 는 묶지 않은 <b>원래 기록 그대로</b>입니다.
   </p>
 
   <h3 class="sec">트라이얼 신청</h3>
@@ -560,7 +602,7 @@
   }
 
   function load() {
-    rowsEl.innerHTML = '<tr><td colspan="6" class="empty">불러오는 중…</td></tr>';
+    rowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오는 중…</td></tr>';
     qRowsEl.innerHTML = '<tr><td colspan="7" class="empty">불러오는 중…</td></tr>';
     /* 다운로드 기록과 신청서를 함께 읽는다.
        ★ 둘은 다른 것을 센다 — 신청은 서버(/api/trial)가 남기고, 다운로드는
@@ -580,7 +622,7 @@
       })
       .catch(function (err) {
         console.error(err);
-        rowsEl.innerHTML = '<tr><td colspan="6" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
+        rowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
         qRowsEl.innerHTML = '<tr><td colspan="7" class="empty">불러오지 못했습니다.</td></tr>';
       });
   }
@@ -1305,50 +1347,117 @@
     });
   }
 
+  /* 여러 기록에 흩어진 값 중 가장 최근에 채워진 것을 고른다.
+     이름·회사·전화는 비어 있는 기록이 섞여 있어(옛 양식), 최신 한 건만 보면 빈 칸이 된다. */
+  function pickField(rows, field) {
+    for (var i = 0; i < rows.length; i++) {
+      var v = String(rows[i][field] == null ? '' : rows[i][field]).trim();
+      if (v) return v;
+    }
+    return '';
+  }
+
+  /* 사람 단위로 묶는다.
+     ★ 묶는 열쇠는 keyOf(=이메일)다 - 카드의 '받아간 사람(이메일 기준)' 과 같은 기준이라야
+       카드 숫자와 이 표의 줄 수가 어긋나지 않는다. 이름으로 묶으면 동명이인이 한 줄이 되고,
+       회사로 묶으면 한 회사의 여러 사람이 한 줄이 된다. */
+  function groupPeople(rows) {
+    var order = [], byKey = {};
+    rows.forEach(function (r) {
+      var k = keyOf(r);
+      if (!byKey[k]) { byKey[k] = { key: k, rows: [] }; order.push(byKey[k]); }
+      byKey[k].rows.push(r);
+    });
+    order.forEach(function (g) {
+      g.rows.sort(function (a, b) {
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      g.last    = g.rows[0];
+      g.email   = g.last.email || g.key;
+      g.name    = pickField(g.rows, 'name');
+      g.company = pickField(g.rows, 'company');
+      g.phone   = pickField(g.rows, 'phone');
+    });
+    order.sort(function (a, b) {
+      return new Date(b.last.created_at) - new Date(a.last.created_at);
+    });
+    return order;
+  }
+
+  /* 받아 간 '종류'. 같은 에디션·Rhino 를 다섯 번 받아도 한 번만 쓴다 -
+     칸이 같은 딱지로 도배되면 정작 두 종류를 받아 간 사람이 눈에 띄지 않는다. */
+  function verTags(rows) {
+    var seen = {}, out = [];
+    rows.forEach(function (r) {
+      var k = r.edition + '|' + r.rhino;
+      if (seen[k]) { return; }
+      seen[k] = 1;
+      out.push('<span class="tag ' + (r.edition === 'Standard' ? 'std' : 'core') + '">' +
+               esc(r.edition) + '</span> Rhino ' + esc(r.rhino));
+    });
+    return out.length < 2 ? out.join('')
+      : out[0] + out.slice(1).map(function (t) { return '<span class="and">' + t + '</span>'; }).join('');
+  }
+
+  function hhmm(ts) { return fmt(ts, true).slice(11); }
+
   function render() {
     var q = qEl.value.trim().toLowerCase();
-    // 최신순 목록. 같은 이메일의 이전 기록은 그 행 아래에 함께 보여준다.
-    var seen = {};   // 이메일 → 아직 안 쓴 이전 기록들
-    all.forEach(function (r) {
-      var k = keyOf(r);
-      (seen[k] = seen[k] || []).push(r);
-    });
-
+    var groups = groupPeople(all);
     var html = '';
-    var shown = 0;
-    all.forEach(function (r) {
-      var hay = [r.name, r.company, r.phone, r.email].join(' ').toLowerCase();
-      if (q && hay.indexOf(q) === -1) return;
 
-      var mine  = seen[keyOf(r)] || [];
-      var idx   = mine.indexOf(r);                 // 0 = 가장 최근
-      var count = mine.length - idx;               // 이 사람의 몇 번째 다운로드인가
-      var prev  = mine.slice(idx + 1);             // 이 행보다 앞선 기록
+    groups.forEach(function (g) {
+      var hay = [g.name, g.company, g.phone, g.email].join(' ').toLowerCase();
+      if (q && hay.indexOf(q) === -1) { return; }
 
-      var prevHtml = '';
-      if (prev.length) {
-        prevHtml = '<div class="prev">이전 ' + prev.length + '건' +
-          prev.map(function (p) {
-            return '<div>' + fmt(p.created_at, true) + ' · ' + p.edition +
-                   ' Rhino ' + p.rhino + langLabel(p.lang) + '</div>';
-          }).join('') + '</div>';
-      }
+      var n = g.rows.length;
 
-      html += '<tr>' +
-        '<td class="when"><b>' + fmt(r.created_at) + '</b>' + fmt(r.created_at, true).slice(11) +
-          (count > 1 ? '<span class="tag repeat">' + count + '회차</span>' : '') + '</td>' +
-        '<td>' + esc(r.name) + '</td>' +
-        '<td>' + esc(r.company) + '</td>' +
-        '<td>' + esc(r.phone) + '</td>' +
-        '<td>' + esc(r.email) + '</td>' +
-        '<td class="ver">' + verLabel(r) + prevHtml + '</td>' +
+      html += '<tr class="person' + (n > 1 ? ' has-more' : '') + '">' +
+        '<td class="when"><b>' + fmt(g.last.created_at) + '</b>' + hhmm(g.last.created_at) + '</td>' +
+        '<td class="who"><b>' + esc(g.name || '-') + '</b>' +
+          (g.company ? '<span>' + esc(g.company) + '</span>' : '') + '</td>' +
+        '<td class="contact"><a href="mailto:' + esc(g.email) + '">' + esc(g.email) + '</a>' +
+          (g.phone ? '<span>' + esc(g.phone) + '</span>' : '') + '</td>' +
+        '<td class="ver">' + verTags(g.rows) + '</td>' +
+        '<td class="times">' + (n > 1
+          ? '<button class="more" type="button">' + n + '회 <i></i></button>'
+          : '<span class="once">1회</span>') + '</td>' +
         '</tr>';
-      shown++;
+
+      // 펼침 줄은 미리 만들어 두고 숨긴다. 누를 때 새로 그리지 않으므로
+      // 검색어가 걸린 상태에서 펼쳐도 줄이 어긋나지 않는다.
+      if (n > 1) {
+        html += '<tr class="detail"><td></td><td colspan="4"><ul class="hist">' +
+          g.rows.map(function (r, i) {
+            return '<li><span class="n">' + (n - i) + '회</span>' +
+                   '<span class="t">' + fmt(r.created_at, true) + '</span>' +
+                   verLabel(r) +
+                   (i === 0 ? '<span class="last">최근</span>' : '') + '</li>';
+          }).join('') + '</ul></td></tr>';
+      }
     });
 
-    rowsEl.innerHTML = html || '<tr><td colspan="6" class="empty">' +
+    rowsEl.innerHTML = html || '<tr><td colspan="5" class="empty">' +
       (all.length ? '검색 결과가 없습니다.' : '아직 다운로드 기록이 없습니다.') + '</td></tr>';
   }
+
+  /* 펼치기. 표를 다시 그려도 tbody 자체는 그대로라 한 번만 붙이면 계속 듣는다. */
+  rowsEl.addEventListener('click', function (e) {
+    var el = e.target, row = null;
+    while (el && el !== rowsEl) {
+      if (el.tagName === 'TR') { row = el; break; }
+      el = el.parentNode;
+    }
+    if (!row || row.className.indexOf('person') === -1) { return; }
+
+    var detail = row.nextSibling;
+    while (detail && detail.nodeType !== 1) { detail = detail.nextSibling; }
+    if (!detail || detail.className.indexOf('detail') === -1) { return; }
+
+    var open = detail.className.indexOf('open') !== -1;
+    detail.className = open ? 'detail' : 'detail open';
+    row.className    = open ? 'person has-more' : 'person has-more open';
+  });
 
   qEl.addEventListener('input', function () { render(); renderRequests(); });
 
