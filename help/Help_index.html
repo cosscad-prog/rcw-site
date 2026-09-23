@@ -742,6 +742,14 @@ document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('.folder-items').forEach(function(el){el.classList.add('collapsed');});
   document.querySelectorAll('.folder-toggle').forEach(function(btn){btn.classList.add('collapsed');});
   var _base=decodeURIComponent(window.location.href.replace(/\/[^\/]*$/,'/'));
+  function normHelpPath(p){
+    if(!p)return p;
+    p=p.split(/[?#]/)[0];
+    if(/\/$/.test(p))return p+'index.html';
+    // "확장자 모양이면 둔다" 로 하면 안 된다 — '5.TC_Layer.html' 같은 이름이 20개 있다(→ '5.TC_Layer').
+    if(!/\.html?$/i.test(p))return p+'.html';
+    return p;
+  }
   function getRelPath(href){
     try{var d=decodeURIComponent(href);return d.indexOf(_base)===0?d.substring(_base.length):''}catch(e){return '';}
   }
@@ -749,7 +757,9 @@ document.addEventListener('DOMContentLoaded',function(){
     if(!e.data)return;
     if(e.data.action==='navigate') navigateAndExpand(e.data.path);
     if(e.data.action==='pageLoaded'){
-      var p=getRelPath(e.data.href);
+      // 웹(Cloudflare Pages)은 x.html 을 x 로, 폴더/index.html 을 폴더/ 로 바꿔 보낸다(끌 수 없다).
+      // 사이드바 링크는 .html 로 적혀 있으므로 비교 전에 되돌린다. file:// 에서는 그대로다.
+      var p=normHelpPath(getRelPath(e.data.href));
       if(p){p=p.replace(/^en\//,'');if(p.indexOf('welcome.html')===-1)expandToPath(p);}
     }
   });
