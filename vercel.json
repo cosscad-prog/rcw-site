@@ -5,23 +5,106 @@
     {
       "source": "/img/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/rcw/img/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/help/img/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/rcw/help/img/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
       ]
     },
     {
       "source": "/releases.json",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=60, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=60, must-revalidate"
+        }
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "rcw-site.vercel.app"
+        }
+      ],
+      "destination": "https://www.beimptech.com/rcw",
+      "permanent": true
+    },
+    {
+      "source": "/rcw/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "rcw-site.vercel.app"
+        }
+      ],
+      "destination": "https://www.beimptech.com/rcw/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/((?!api/|releases\\.json$|robots\\.txt$).+)",
+      "has": [
+        {
+          "type": "host",
+          "value": "rcw-site.vercel.app"
+        }
+      ],
+      "destination": "https://www.beimptech.com/rcw/$1",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "destination": "/rcw",
+      "permanent": false
+    },
+    {
+      "source": "/((?!rcw$|rcw/|api/|img/|releases\\.json$|robots\\.txt$|favicon\\.ico$).+)",
+      "destination": "/rcw/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/$1.html" }
+    {
+      "source": "/rcw",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/rcw/:path*",
+      "destination": "/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1.html"
+    }
   ]
 }
