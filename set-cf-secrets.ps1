@@ -18,6 +18,18 @@ Set-Location $PSScriptRoot
 
 $names = 'SUPABASE_SERVICE_KEY', 'CUSTOMER_ADMIN_TOKEN', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID', 'MAIL_APP_PASSWORD'
 $values = @{}
+
+# 관리자 토큰은 발급기 설정 파일에 이미 있다 — 있으면 그걸 쓰고 묻지 않는다.
+$portalCfg = 'C:\std\RCW_V4_13.3\artifacts\RCW_V5\LicenseIssuer\portal-config.json'
+if (Test-Path $portalCfg) {
+    $tok = [string](Get-Content $portalCfg -Raw -Encoding UTF8 | ConvertFrom-Json).adminToken
+    if ($tok.Trim()) {
+        $values['CUSTOMER_ADMIN_TOKEN'] = $tok.Trim()
+        $names = $names | Where-Object { $_ -ne 'CUSTOMER_ADMIN_TOKEN' }
+        Write-Host "CUSTOMER_ADMIN_TOKEN — 발급기 설정 파일에서 읽음 ($($tok.Trim().Length)자)"
+    }
+}
+
 foreach ($name in $names) {
     $secure = Read-Host "$name (빈칸=건너뜀)" -AsSecureString
     $plain = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
