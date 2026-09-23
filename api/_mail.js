@@ -147,7 +147,13 @@ function buildMessage(m) {
  */
 function smtpSend(o) {
   return new Promise(function (resolve, reject) {
+    // 통로 고르기: 시험 이음매 > 호스트가 넣어 준 통로 > Node tls.
+    // Cloudflare 는 lib/vercel-shim.js 가 globalThis.RCW_TLS_CONNECT 에 cloudflare:sockets
+    // 통로를 넣어 둔다(Workers 에는 동작하는 tls.connect 가 없다). 대화 로직은 공통이다.
     const sock = (o.connect || function () {
+      if (typeof globalThis.RCW_TLS_CONNECT === 'function') {
+        return globalThis.RCW_TLS_CONNECT({ host: o.host, port: o.port });
+      }
       return tls.connect({ host: o.host, port: o.port, servername: o.host });
     })();
 
