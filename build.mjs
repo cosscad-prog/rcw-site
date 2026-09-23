@@ -27,7 +27,7 @@ const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, 'dist');
 
 // dist/rcw/ 에 그대로 옮길 루트 페이지들. 새 페이지를 추가하면 여기 한 줄만 늘리면
-// 되고, _redirects 의 clean-URL 규칙도 이 목록에서 자동으로 만들어진다(아래).
+// 되고, _redirects 의 옛 평면 경로 전달 규칙도 이 목록에서 자동으로 만들어진다(아래).
 const ROOT_PAGES = [
   'admin.html', 'cad.html', 'contact.html', 'customer.html',
   'guide-en.html', 'guide-ko.html', 'index.html', 'modeling.html',
@@ -101,6 +101,7 @@ function redirectsFile(pageNames) {
   lines.push('/         /rcw/              302');
   lines.push('');
   lines.push('# 옛 평면 경로(북마크·이메일에 남아 있을 수 있는 링크) → /rcw 아래로');
+  lines.push('/help     /rcw/help/        301');
   lines.push('/help/*   /rcw/help/:splat  301');
   for (const name of pageNames) {
     const bare = name.replace(/\.html$/, '');
