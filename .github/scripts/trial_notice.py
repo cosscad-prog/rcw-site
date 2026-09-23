@@ -50,7 +50,7 @@ from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 
 KST = timezone(timedelta(hours=9))
-SITE = "https://rcw-site.vercel.app"
+SITE = "https://www.beimptech.com/rcw"
 RELEASES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "releases.json")
 
 SUBJECT = "[RCW] 트라이얼 {version} 안내 — 링크만 누르시면 됩니다"

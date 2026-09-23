@@ -27,7 +27,7 @@ from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 
 KST = timezone(timedelta(hours=9))
-ADMIN_URL = "https://rcw-site.vercel.app/admin"
+ADMIN_URL = "https://www.beimptech.com/rcw/admin"
 
 EDITION_DAYS = {"Core": 90, "Standard": 30}
 LANG_LABEL = {"ko-KR": "한국어", "en-US": "English"}

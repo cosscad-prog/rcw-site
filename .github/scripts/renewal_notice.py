@@ -79,7 +79,7 @@ BODY = """{company} {name}님, 안녕하세요.
 
 갱신하시면 새 라이선스 파일을 보내 드립니다.
 고객 페이지에서 내려받아 Rhino 에서 RCWLicense 명령으로 등록하시면 됩니다.
-  https://rcw-site.vercel.app/customer
+  https://www.beimptech.com/rcw/customer
 
 ★ 기간이 끝나도 작성하신 도면(3dm)은 그대로 열립니다.
    RCW 명령만 사용할 수 없게 됩니다.
@@ -266,7 +266,7 @@ def main():
                                 row.get("phone") or "-", why))
 
         lines.append("")
-        lines.append("관리 화면: https://rcw-site.vercel.app/admin")
+        lines.append("관리 화면: https://www.beimptech.com/rcw/admin")
 
         subject = ("[RCW 갱신] 안내 %d통 발송%s" % (sent, (" · 실패 %d" % failed) if failed else "")
                    if really_send else "[RCW 갱신] 미리보기 — 보낼 안내 %d통" % len(due))
