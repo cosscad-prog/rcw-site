@@ -5,6 +5,10 @@ node_modules/
 .vercel
 .env*
 
+# Cloudflare 이사 — build.mjs 산출물과 wrangler 로그인/캐시
+dist/
+.wrangler/
+
 # img/ 는 실제 사용 중인 파일만 추적한다.
 # (폴더에는 help 문서용 이미지가 함께 있으나 사이트가 쓰는 것은 아래 목록뿐이다.
 #  새 이미지를 넣었는데 커밋되지 않으면 여기에 한 줄 추가하는 것을 잊은 것이다.)

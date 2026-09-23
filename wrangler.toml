@@ -1,0 +1,7 @@
+# Cloudflare Pages 설정. Git 연동 빌드도 이 파일을 읽는다.
+# api/*.js 가 require('crypto')·Buffer·process.env 를 쓴다 — nodejs_compat 없이는
+# functions/ 번들링 단계에서 그 모듈을 못 찾아 빌드가 실패한다.
+name = "rcw-site"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
