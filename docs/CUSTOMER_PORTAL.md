@@ -1,7 +1,7 @@
 # 기존 고객 다운로드 페이지
 
 구매 고객이 라이선스 코드로 들어와 최신 설치 파일을 받는 페이지다.
-주소는 `https://rcw-site.vercel.app/customer` 이며, 검색에는 노출되지 않는다(`noindex`).
+주소는 `https://www.beimptech.com/rcw/customer` 이며, 검색에는 노출되지 않는다(`noindex`).
 
 ## 어떻게 동작하나
 
@@ -305,7 +305,7 @@ Customer portal: customer added.
 
 ```json
 {
-  "endpoint": "https://rcw-site.vercel.app/api/customer-upsert",
+  "endpoint": "https://www.beimptech.com/api/customer-upsert",
   "adminToken": "2단계에서 만든 그 값"
 }
 ```

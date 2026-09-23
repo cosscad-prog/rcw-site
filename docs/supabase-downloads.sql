@@ -110,7 +110,7 @@ group by c.relname, c.relrowsecurity;
 --     Password     : 충분히 긴 비밀번호
 --     Auto Confirm : 켬  (확인 메일 없이 바로 로그인 가능)
 --
---   이 계정으로 https://rcw-site.vercel.app/admin 에 로그인한다.
+--   이 계정으로 https://www.beimptech.com/rcw/admin 에 로그인한다.
 --   가입 페이지는 만들지 않으므로 이 계정 외에는 조회할 수 없다.
 --   Authentication → Providers → Email 에서 "Enable sign ups" 를 꺼 두면
 --   외부에서 계정을 새로 만드는 경로까지 막힌다.
