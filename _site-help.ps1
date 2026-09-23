@@ -16,7 +16,7 @@ $script:DefaultHelpSource = if ($env:RCW_HELP_SOURCE) { $env:RCW_HELP_SOURCE } e
 $script:HelpExcludedDirs  = @('editor', 'python', '__pycache__', 'Help_PDF')
 $script:HelpExcludedFiles = @('*.py', '*.pyc', '*.bak', '*.md', '*.tsv', '*.txt', '*.pptx', '*.bat')
 
-# /help 로 들어온 사람을 프레임으로 보낸다. 원본에 없는 파일이라 /MIR 뒤에 다시 만든다.
+# /rcw/help 로 들어온 사람을 프레임으로 보낸다. 원본에 없는 파일이라 /MIR 뒤에 다시 만든다.
 # ⚠ 절대경로로 보낼 것 — trailingSlash:false 라 /help 에는 슬래시가 없고,
 #   상대경로는 사이트 루트로 풀려 404 가 된다.
 $script:HelpRedirectHtml = @'
@@ -25,11 +25,11 @@ $script:HelpRedirectHtml = @'
 <head>
 <meta charset="utf-8">
 <title>RCW Help</title>
-<meta http-equiv="refresh" content="0; url=/help/Help_index.html">
-<link rel="canonical" href="/help/Help_index.html">
-<script>location.replace('/help/Help_index.html');</script>
+<meta http-equiv="refresh" content="0; url=/rcw/help/Help_index.html">
+<link rel="canonical" href="/rcw/help/Help_index.html">
+<script>location.replace('/rcw/help/Help_index.html');</script>
 </head>
-<body><p><a href="/help/Help_index.html">RCW 도움말 열기</a></p></body>
+<body><p><a href="/rcw/help/Help_index.html">RCW 도움말 열기</a></p></body>
 </html>
 '@
 
