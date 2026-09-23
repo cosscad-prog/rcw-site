@@ -200,7 +200,7 @@ RCW V5 $Version 트라이얼
 - 한국어 · 영어를 설치할 때 고릅니다(설치 파일 하나에 두 언어가 들어 있습니다)
 - 트라이얼은 인증 코드가 필요 없습니다
 
-설치 안내: https://rcw-site.vercel.app/guide-ko.html
+설치 안내: https://www.beimptech.com/rcw/guide-ko.html
 
 $changeSection
 "@
@@ -240,7 +240,7 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
 
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"
-    Write-Host "  사이트   https://rcw-site.vercel.app/trial"
+    Write-Host "  사이트   https://www.beimptech.com/rcw/trial"
 
     Show-TrialShelfLife
 

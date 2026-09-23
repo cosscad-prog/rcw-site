@@ -86,7 +86,7 @@ Write-Host "`n===== 2. 고객에게 보낼 코드 =====`n" -ForegroundColor Cyan
 "  에디션  : $Edition"
 "  코드    : $code"
 ""
-Write-Host "  고객 페이지: https://rcw-site.vercel.app/customer" -ForegroundColor DarkGray
+Write-Host "  고객 페이지: https://www.beimptech.com/rcw/customer" -ForegroundColor DarkGray
 Write-Host "  메일 문안  : docs\MIGRATION_EMAIL_ko.md" -ForegroundColor DarkGray
 
 Write-Host "`n확인할 것" -ForegroundColor Yellow
