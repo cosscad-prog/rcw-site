@@ -156,7 +156,7 @@ async function mailContact(info) {
     line,
     '',
     '이 메일에 그대로 답장하면 문의하신 분에게 갑니다.',
-    '지난 문의는 https://rcw-site.vercel.app/admin 의 [문의] 탭에 모두 남아 있습니다.'
+    '지난 문의는 https://www.beimptech.com/rcw/admin 의 [문의] 탭에 모두 남아 있습니다.'
   ].join('\n');
 
   return sendMail({
