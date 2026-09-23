@@ -1,4 +1,4 @@
-# Cloudflare Pages(rcw-site) 에 비밀값 5개를 넣는다 — Production 과 Preview 둘 다.
+﻿# Cloudflare Pages(rcw-site) 에 비밀값 5개를 넣는다 — Production 과 Preview 둘 다.
 # 값은 화면에 안 보이게 입력받는다. 빈칸으로 Enter 하면 그 항목은 건너뛴다(다시 실행하면 된다).
 #
 # ★ 파이프(`$v | wrangler ...`)로 넘기지 않는다 — Windows PowerShell 은 끝에 줄바꿈을 붙이고,
