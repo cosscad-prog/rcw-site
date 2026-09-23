@@ -35,7 +35,7 @@ from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 
 KST = timezone(timedelta(hours=9))
-ADMIN_URL = "https://rcw-site.vercel.app/admin"
+ADMIN_URL = "https://www.beimptech.com/rcw/admin"
 
 # 급한 순서대로. stage 값은 뷰의 stage_now 와 글자까지 같아야 한다.
 # (key, 짧은 이름, 제목, 오늘 할 일) — 짧은 이름은 맨 위 요약 줄에 쓴다.

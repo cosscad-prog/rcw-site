@@ -49,7 +49,7 @@ Vercel + GitHub 연동. 프레임워크 프리셋 `Other`, 빌드 명령 없음,
 ## 도움말 (/help)
 
 플러그인에 들어가는 도움말(`C:\std\RCW_V4_13.3\help`)을 **그대로 복사해** 웹에 올린다.
-주소는 <https://rcw-site.vercel.app/help> 이고 로그인 없이 누구나 볼 수 있다.
+주소는 <https://www.beimptech.com/rcw/help> 이고 로그인 없이 누구나 볼 수 있다.
 
 **새 버전을 발행하면 자동으로 따라간다.** 설치본에는 도움말이 함께 들어가므로,
 `publish-trial.ps1` 과 `publish-customer.ps1` 이 릴리스를 올린 뒤 이어서 사이트 도움말을

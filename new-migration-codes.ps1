@@ -132,7 +132,7 @@ Write-Host "`n===== 2. 고객별 안내 코드 =====`n" -ForegroundColor Cyan
 $plan | Format-Table Company, Name, Edition, Code -AutoSize
 
 Write-Host "안내 메일에는 그 고객의 코드 하나만 넣으십시오." -ForegroundColor DarkGray
-Write-Host "고객 페이지: https://rcw-site.vercel.app/customer" -ForegroundColor DarkGray
+Write-Host "고객 페이지: https://www.beimptech.com/rcw/customer" -ForegroundColor DarkGray
 
 if ($OutCsv) {
     $plan | Export-Csv -LiteralPath $OutCsv -NoTypeInformation -Encoding UTF8

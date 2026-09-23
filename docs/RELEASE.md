@@ -87,7 +87,7 @@ RCW V5 90일 트라이얼 (Core 기능 범위)
 - 한국어 / 영어 별도 설치 파일
 - 트라이얼은 인증 코드가 필요 없습니다
 
-설치 안내: https://rcw-site.vercel.app/guide-ko.html
+설치 안내: https://www.beimptech.com/rcw/guide-ko.html
 ```
 
 ### 파일 업로드

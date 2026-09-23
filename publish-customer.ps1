@@ -133,7 +133,7 @@ $notes = @"
 RCW V5 $Version
 
 기존 고객용 설치 파일입니다. 다운로드는 고객 페이지에서 안내됩니다.
-https://rcw-site.vercel.app/customer
+https://www.beimptech.com/rcw/customer
 
 | 에디션 | 명령 범위 |
 |---|---|
@@ -190,7 +190,7 @@ if ($PSCmdlet.ShouldProcess("$Repo", "릴리스 $tag 발행")) {
 
     Write-Host "`n완료" -ForegroundColor Green
     Write-Host "  릴리스   https://github.com/$Repo/releases/tag/$tag"
-    Write-Host "  고객페이지 https://rcw-site.vercel.app/customer"
+    Write-Host "  고객페이지 https://www.beimptech.com/rcw/customer"
 }
 
 # 설치본에는 도움말이 함께 들어간다. 새 설치 파일을 올렸으면 홈페이지 도움말도
