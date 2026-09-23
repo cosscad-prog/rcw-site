@@ -89,27 +89,23 @@ function headersFile() {
 }
 
 function redirectsFile(pageNames) {
+  // ★ CF Pages 는 *.html 정적 파일을 "확장자 없이도" 자동으로 서비스하고,
+  //   .html 로 직접 부르면 확장자 없는 쪽으로 308 을 스스로 보낸다(플랫폼 기본 동작,
+  //   끌 수 없다 — 실측 2026-09-23). 그 위에 "확장자를 붙여주는" 내 rewrite 를 얹었더니
+  //   /rcw/admin ↔ /rcw/admin.html 이 서로를 308 로 돌려보내는 무한루프가 났다.
+  //   그래서 clean-URL 규칙은 만들지 않는다 — 플랫폼이 이미 한다.
   const lines = [];
   lines.push('# 이 파일은 build.mjs 가 만든다 — 손으로 고치면 다음 빌드에서 사라진다.');
   lines.push('');
-  lines.push('# /rcw 진입점');
-  lines.push('/rcw      /rcw/index.html   200');
-  lines.push('/rcw/     /rcw/index.html   200');
-  lines.push('/         /rcw              302');
+  lines.push('# 도메인 루트 → /rcw (트레일링 슬래시까지 한 번에, 중간 홉 없음)');
+  lines.push('/         /rcw/              302');
   lines.push('');
   lines.push('# 옛 평면 경로(북마크·이메일에 남아 있을 수 있는 링크) → /rcw 아래로');
   lines.push('/help/*   /rcw/help/:splat  301');
   for (const name of pageNames) {
     const bare = name.replace(/\.html$/, '');
-    if (bare === 'index') continue; // '/' 가 이미 /rcw 로 보낸다 — '/index' 는 실제로 안 쓰인다
+    if (bare === 'index') continue; // '/' 가 이미 /rcw/ 로 보낸다 — '/index' 는 실제로 안 쓰인다
     lines.push(`/${bare}   /rcw/${bare}   301`);
-  }
-  lines.push('');
-  lines.push('# clean URL — 확장자 없이 부르면 실제 파일로 이어준다(페이지 목록에서 자동 생성)');
-  for (const name of pageNames) {
-    const bare = name.replace(/\.html$/, '');
-    if (bare === name) continue; // 이미 확장자 없는 이름이면 만들 규칙이 없다
-    lines.push(`/rcw/${bare}   /rcw/${name}   200`);
   }
   lines.push('');
   return lines.join('\n');
