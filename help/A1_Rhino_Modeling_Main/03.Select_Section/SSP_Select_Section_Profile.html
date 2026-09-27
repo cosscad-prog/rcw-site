@@ -63,6 +63,23 @@
   <tr><td>옵션</td><td><strong>Check_Error</strong> On일 때 Profile_ID, MnT_ID, Center1 Curve 등 오류를 검사합니다.</td></tr>
   <tr><td>오류 조건</td><td>Unit_No 또는 Center1 Curve가 없으면 명령창에 오류 메시지가 표시될 수 있습니다.</td></tr>
 </tbody></table>
+<h2>복사한 group 자동 수선</h2>
+<p>단면 group 을 복사하면 단면 data 도 그대로 따라와, 블록·Milling 곡선·합성 태그가 <b>원본 group 의 것</b>을 계속 가리킵니다. 그대로 모델링하면 복사본의 구멍·절삭이 원본 자리에 생깁니다. SSP 는 선택한 group 마다 이것을 찾아 <b>group 안의 짝으로 바꿉니다.</b> 바꾼 것은 명령창에 한 줄씩 남습니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>대상</th><th>짝을 찾는 기준</th></tr>
+  <tr><td>Block</td><td>같은 이름의 블록 중, 단면에서 <b>같은 방향·같은 거리</b>에 있는 것(단면 BBox 최소점 → 삽입점 벡터).</td></tr>
+  <tr><td>Milling 곡선</td><td>group 안의 닫힌 곡선 중 <b>길이가 같고</b> 단면 중심에서 <b>같은 방향·같은 거리</b>에 있는 것. 단면 양옆에 대칭으로 놓인 같은 곡선도 방향으로 갈립니다.</td></tr>
+  <tr><td>합성 태그</td><td>복사본에 새 합성 번호를 붙여 group 안에서 다시 묶습니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 기준 자리는 원본 블록·곡선이 원본 단면에서 떨어진 <b>지금 자리</b>를 먼저 씁니다. 원본을 지웠으면 Pname·SSP 가 저장해 둔 자리를 씁니다(한 번이라도 SSP 를 거친 group 이면 저장돼 있습니다). <b>회전해서 복사한 group</b> 은 방향이 달라지므로 거리만으로 한 번 더 찾고, 딱 하나일 때만 바꿉니다.</div>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>경고창 표시</th><th>뜻과 조치</th></tr>
+  <tr><td>누락</td><td>원본이 지워졌고 group 안에도 짝이 없습니다(또는 저장된 자리도 없습니다). Pname 에서 다시 고르십시오.</td></tr>
+  <tr><td>위치</td><td>이름·길이는 맞는 후보가 있지만 같은 자리에 있는 것이 없습니다. 크기를 바꿔 복사했거나 곡선·블록을 옮긴 경우입니다.</td></tr>
+  <tr><td>중복</td><td>같은 자리에 후보가 둘 이상이라 가릴 수 없습니다(예: 회전 복사 + 대칭 자리). Pname 에서 직접 고르십시오.</td></tr>
+</tbody></table>
 <h2>관련 명령어</h2>
 <table class="desc-table">
   <colgroup>

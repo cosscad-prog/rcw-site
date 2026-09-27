@@ -57,6 +57,23 @@
   <tr><td>Option</td><td>When <strong>Check_Error</strong> is On, errors such as Profile_ID, MnT_ID, and Center1 Curve are inspected.</td></tr>
   <tr><td>Error Condition</td><td>If Unit_No or Center1 Curve is missing, an error message may appear in the command line.</td></tr>
 </tbody></table>
+<h2>Automatic Repair of Copied Groups</h2>
+<p>When a section group is copied, its section data comes along unchanged, so blocks, milling curves and composite tags keep pointing at <b>the original group's objects</b>. Modeled as is, the copy's holes and cuts appear at the original's place. SSP finds these in every selected group and <b>switches them to the matching object inside the group.</b> Each switch is reported on the command line.</p>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Target</th><th>How the match is found</th></tr>
+  <tr><td>Block</td><td>A block with the same name at the <b>same direction and distance</b> from the section (vector from the section bounding-box minimum to the insertion point).</td></tr>
+  <tr><td>Milling curve</td><td>A closed curve in the group with the <b>same length</b> at the <b>same direction and distance</b> from the section center. Identical curves placed symmetrically on both sides are told apart by direction.</td></tr>
+  <tr><td>Composite tag</td><td>The copy gets a new composite number and is regrouped inside its own group.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> The reference position is taken from where the original block or curve <b>sits now</b> relative to its own section. If the original was deleted, the position saved by Pname/SSP is used (saved once the group has been through SSP). A group that was <b>copied with rotation</b> changes direction, so SSP tries once more by distance only and switches only when exactly one fits.</div>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Warning tag</th><th>Meaning and what to do</th></tr>
+  <tr><td>missing</td><td>The original is gone and the group has no match (or no position was saved). Pick it again in Pname.</td></tr>
+  <tr><td>position</td><td>There are candidates with the right name/length but none at the same place — the group was scaled, or the curve/block was moved.</td></tr>
+  <tr><td>ambiguous</td><td>More than one candidate sits at the same place (e.g. rotated copy + symmetric positions). Pick it yourself in Pname.</td></tr>
+</tbody></table>
 <h2>Related Commands</h2>
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
