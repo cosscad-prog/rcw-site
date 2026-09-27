@@ -107,9 +107,7 @@ body{display:flex;background:#fff}
 <body>
 
 <aside class="sidebar"><div class="brand"><div class="brand-head"><div class="brand-mark">RCW</div><div class="brand-title"><h1>RCW Help</h1><div class="brand-sub">Command Reference</div></div></div><a href="A0_Welcome/welcome.html" target="content" onclick="setActive(this);animateHome(this)"><span class="brand-home"><span class="brand-home-label">Welcome</span><span class="brand-home-desc">Help home</span></span></a><div class="lang-toggle"><button id="btn-ko" class="lang-btn" onclick="setLang('ko')">한국어</button><button id="btn-en" class="lang-btn lang-active" onclick="setLang('en')">English</button></div></div><nav class="nav">
-<a href="A0_Welcome/RcwHelp.html" target="content" style="padding-left:14px" onclick="setActive(this)">RcwHelp</a>
-<a href="A0_Welcome/RCWFolder.html" target="content" style="padding-left:14px" onclick="setActive(this)">RCWFolder</a>
-<button type="button" class="folder-toggle depth-0" style="padding-left:14px" onclick="toggleGroup('folder-1', this)"><span class="arrow">▼</span><span>Rhino Plugin</span></button>
+<button type="button" class="folder-toggle depth-0" style="padding-left:14px" data-index="A0_Welcome/Rhino_Plugin.html" onclick="toggleGroup('folder-1', this)"><span class="arrow">▼</span><span>Rhino Plugin</span></button>
     <div id="folder-1" class="folder-items">
     <button type="button" class="folder-toggle depth-1" style="padding-left:26px" data-index="A1_Rhino_Modeling_Main/index.html" onclick="toggleGroup('folder-2', this)"><span class="arrow">▼</span><span>A1 Rhino Modeling</span></button>
     <div id="folder-2" class="folder-items">
