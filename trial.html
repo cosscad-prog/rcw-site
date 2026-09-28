@@ -279,11 +279,11 @@
           <div class="dl">
             <div class="dl-group">
               <h4 data-en="Core Trial · 90 days">Core 트라이얼 · 90일</h4>
-              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Core_Trial_Rhino8.exe"><span data-en="Download for Rhino 8">Rhino 8 용 내려받기</span><em>95 MB</em></a>
+              <a class="dl-btn" data-edition="Core_Trial" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Core_Trial_Rhino8.exe"><span data-en="Download for Rhino 8">Rhino 8 용 내려받기</span><em>95 MB</em></a>
             </div>
             <div class="dl-group">
               <h4 data-en="Standard Trial · 30 days">Standard 트라이얼 · 30일</h4>
-              <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Standard_Trial_Rhino8.exe"><span data-en="Download for Rhino 8">Rhino 8 용 내려받기</span><em>95 MB</em></a>
+              <a class="dl-btn" data-edition="Standard_Trial" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Standard_Trial_Rhino8.exe"><span data-en="Download for Rhino 8">Rhino 8 용 내려받기</span><em>95 MB</em></a>
             </div>
           </div>
 
@@ -309,11 +309,11 @@
             <div class="dl">
               <div class="dl-group">
                 <h4 data-en="Core Trial · 90 days · Rhino 7">Core 트라이얼 · 90일 · Rhino 7</h4>
-                <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Core_Trial_Rhino7.exe"><span data-en="Download for Rhino 7">Rhino 7 용 내려받기</span><em>95 MB</em></a>
+                <a class="dl-btn" data-edition="Core_Trial" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Core_Trial_Rhino7.exe"><span data-en="Download for Rhino 7">Rhino 7 용 내려받기</span><em>95 MB</em></a>
               </div>
               <div class="dl-group">
                 <h4 data-en="Standard Trial · 30 days · Rhino 7">Standard 트라이얼 · 30일 · Rhino 7</h4>
-                <a class="dl-btn" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Standard_Trial_Rhino7.exe"><span data-en="Download for Rhino 7">Rhino 7 용 내려받기</span><em>95 MB</em></a>
+                <a class="dl-btn" data-edition="Standard_Trial" href="https://github.com/cosscad-prog/rcw-releases/releases/latest/download/RCW_V5_Standard_Trial_Rhino7.exe"><span data-en="Download for Rhino 7">Rhino 7 용 내려받기</span><em>95 MB</em></a>
               </div>
             </div>
             <p class="dl-note" data-en="New work is being moved to Rhino 8. Rhino 7 builds are still made, but Rhino 8 is the version we test first.">신규 작업은 Rhino 8 을 기준으로 옮겨가고 있습니다. Rhino 7 설치 파일도 계속 만들지만, 먼저 검증하는 쪽은 Rhino 8 입니다.</p>
@@ -494,7 +494,7 @@
     // 파일은 GitHub 에서 바로 내려받으므로 "완료"는 알 수 없다. 여기서 남기는 것은
     // "신청한 사람이 어떤 설치 파일을 눌렀는가" 이고, 관리자 페이지가 이것을 읽는다.
     // keepalive 를 켜 두면 페이지가 다운로드로 넘어가도 요청이 끊기지 않는다.
-    function recordDownload(fileName) {
+    function recordDownload(fileName, edition) {
       if (!submitted) return;                       // 신청 없이 눌렀다면 남기지 않는다
       /* ★ 기록은 서버가 남긴다(api/trial-download.js). 전에는 브라우저가 공개키로
          downloads 에 직접 넣었는데, RLS 정책이 빠져 있어 2026-07-26~08-24 한 달간
@@ -509,7 +509,8 @@
         /* version 은 이 페이지가 안내한 버전이다(publish-trial.ps1 이 TRIAL_VERSION 을 갱신한다).
            파일명에는 버전이 없으므로(2026-07-30 결정) 이 값이 없으면 "누가 어느 판을 받았나" 를
            날짜로 미루어 짐작할 수밖에 없다. 서버가 형식을 검사하고, 이상하면 비운 채 기록한다. */
-        body: JSON.stringify({ action: 'download', request_id: submitted.request_id, file_name: fileName, version: TRIAL_VERSION })
+        /* edition — 설치 파일 하나(RCW5)는 이름에 에디션이 없어 누른 버튼의 에디션을 함께 보낸다(옛 이름이면 서버가 이름에서 읽는다). */
+        body: JSON.stringify({ action: 'download', request_id: submitted.request_id, file_name: fileName, edition: edition || null, version: TRIAL_VERSION })
       }).then(function (res) {
         if (!res.ok) {
           res.text().then(function (t) {
@@ -615,9 +616,34 @@
     var dlLinks = document.querySelectorAll('.dl-btn');
     for (var i = 0; i < dlLinks.length; i++) {
       dlLinks[i].addEventListener('click', function () {
-        recordDownload(this.getAttribute('href').split('/').pop());
+        recordDownload(this.getAttribute('href').split('/').pop(), this.getAttribute('data-edition'));
       });
     }
+
+    /* ── 설치 파일 하나(RCW5, 5.4.0) ─────────────────────────────────────
+       releases.json 에 "installer" 항목이 생기면(발행 스크립트가 넣는다) 버튼이 모두 그 한 파일을 받는다.
+       Rhino 7/8·언어·평가판 에디션은 설치 화면에서 고른다 — 그래서 Rhino 7 칸은 숨긴다.
+       버튼은 에디션별로 둔다: 무엇을 원했는지를 기록으로 남기려는 것이다(계획 5.1절 ①).
+       항목이 없으면 아무것도 바꾸지 않는다 — 전환 스위치는 releases.json 하나다(플러그인 알림도 같은 값을 읽는다). */
+    fetch('/releases.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      var inst = d && d.installer;
+      if (!inst || !/^RCW5[A-Za-z0-9_.-]*\.exe$/.test(String(inst.file || ''))) return;
+      var repo = inst.repo === 'rcw-customer-releases' ? 'rcw-customer-releases' : 'rcw-releases';
+      var url = 'https://github.com/cosscad-prog/' + repo + '/releases/latest/download/' + inst.file;
+      var links = document.querySelectorAll('.dl-btn');
+      for (var j = 0; j < links.length; j++) {
+        links[j].setAttribute('href', url);
+        var label = links[j].querySelector('span');
+        if (label) {
+          label.setAttribute('data-ko', 'Rhino 7 · 8 용 내려받기');
+          label.setAttribute('data-en', 'Download for Rhino 7 / 8');
+          label.textContent = 'Rhino 7 · 8 용 내려받기';
+        }
+      }
+      var legacy = document.querySelector('.dl-legacy');
+      if (legacy) legacy.style.display = 'none';
+      if (window.rcwLang) window.rcwLang.refresh();
+    }).catch(function () { /* 못 읽으면 옛 링크 그대로 — 다운로드를 막지 않는다 */ });
   })();
   </script>
 

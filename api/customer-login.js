@@ -123,6 +123,30 @@ function fileList(edition) {
   return out;
 }
 
+/**
+ * 설치 파일 하나(RCW5, 5.4.0). releases.json 의 "installer" 항목이 전환 스위치다 — 발행 스크립트가 넣고,
+ * 플러그인 알림·평가판 페이지·여기가 같은 값을 읽는다. 항목이 없거나 못 읽으면 null(옛 목록 그대로).
+ * 파일은 한 개이고 Rhino 7/8·언어는 설치 화면에서, 에디션은 설치 중 고객 코드로 정해진다.
+ */
+async function singleInstaller() {
+  try {
+    const res = await fetch('https://www.beimptech.com/releases.json', {
+      headers: { 'User-Agent': 'rcw-site' }, signal: AbortSignal.timeout(3000)
+    });
+    if (!res.ok) return null;
+    const d = await res.json();
+    const inst = d && d.installer;
+    const file = inst && String(inst.file || '');
+    if (!file || !/^RCW5[A-Za-z0-9_.-]*\.exe$/.test(file)) return null;
+    const repo = inst.repo === 'rcw-customer-releases' ? 'rcw-customer-releases' : 'rcw-releases';
+    return [{ rhino: 'any', file_name: file,
+              url: `https://github.com/cosscad-prog/${repo}/releases/latest/download/${file}` }];
+  } catch (err) {
+    console.error('[customer] releases.json 을 못 읽었다(옛 목록으로):', err.message);
+    return null;
+  }
+}
+
 // 저장소에 package.json 이 없어 Vercel 은 이 파일을 CommonJS 로 읽는다.
 // export default 로 쓰면 배포 후 함수가 호출되지 않는다.
 module.exports = async function handler(req, res) {
@@ -200,7 +224,7 @@ module.exports = async function handler(req, res) {
       // 아직 정보를 확인한 적이 없으면 다운로드 전에 확인 화면을 한 번 거친다.
       // 두 번째 방문부터는 이 값이 false 라 곧바로 다운로드로 간다.
       needs_info: !customer.info_confirmed_at,
-      files: suspended ? [] : fileList(customer.edition),
+      files: suspended ? [] : ((await singleInstaller()) || fileList(customer.edition)),
       release
     });
   } catch (err) {

@@ -500,10 +500,20 @@
       if (window.rcwLang) window.rcwLang.refresh();
     }
 
-    fill('row-rhino8', data.files, '8');
-    fill('row-rhino7', data.files, '7');
-    document.getElementById('dl-rhino8').style.display = has(data.files,'8') ? '' : 'none';
-    document.getElementById('dl-rhino7').style.display = has(data.files,'7') ? '' : 'none';
+    if (has(data.files, 'any')) {
+      /* 설치 파일 하나(RCW5, 5.4.0) — Rhino 7/8 을 설치 화면에서 고른다. 한 칸에 두고 제목만 바꾼다.
+         에디션은 설치 중에 고객 코드로 정해진다(서버 api/customer-login.js singleInstaller). */
+      fill('row-rhino8', data.files, 'any');
+      var h = document.querySelector('#dl-rhino8 h3');
+      if (h) h.textContent = 'Rhino 7 / 8';
+      document.getElementById('dl-rhino8').style.display = '';
+      document.getElementById('dl-rhino7').style.display = 'none';
+    } else {
+      fill('row-rhino8', data.files, '8');
+      fill('row-rhino7', data.files, '7');
+      document.getElementById('dl-rhino8').style.display = has(data.files,'8') ? '' : 'none';
+      document.getElementById('dl-rhino7').style.display = has(data.files,'7') ? '' : 'none';
+    }
 
     show(dlView);
     loadLicenses();
