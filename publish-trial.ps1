@@ -108,41 +108,9 @@ if (($span.Maximum - $span.Minimum).TotalHours -gt 24) {
   "설치가 안 된다" 는 문의로만 알게 된다.
 #>
 function Show-TrialShelfLife {
-    $buildDateFile = $null
-    foreach ($root in @($env:RCW_REPO, 'C:\std\RCW_V4_13.3')) {
-        if (-not $root) { continue }
-        $candidate = Join-Path $root 'BuildDate.cs'
-        if (Test-Path -LiteralPath $candidate) { $buildDateFile = $candidate; break }
-    }
-
-    if (-not $buildDateFile) {
-        Write-Warning "BuildDate.cs 를 찾지 못해 신규 설치 기한을 계산하지 못했습니다."
-        Write-Host   "  플러그인 저장소 경로를 RCW_REPO 환경변수로 알려 주면 계산합니다." -ForegroundColor DarkGray
-        return
-    }
-
-    $text = Get-Content -LiteralPath $buildDateFile -Raw
-    if ($text -notmatch 'new\s+System\.DateTime\(\s*(\d{4})\s*,\s*(\d{1,2})\s*,\s*(\d{1,2})\s*\)') {
-        Write-Warning "BuildDate.cs 에서 빌드일을 읽지 못했습니다: $buildDateFile"
-        return
-    }
-
-    $buildDate = Get-Date -Year $Matches[1] -Month $Matches[2] -Day $Matches[3] -Hour 0 -Minute 0 -Second 0
-    $deadline  = $buildDate.AddDays(30)
-    $left      = [int]($deadline - (Get-Date).Date).TotalDays
-
-    Write-Host "`n신규 사용자 설치 기한" -ForegroundColor Cyan
-    Write-Host ("  빌드일   {0:yyyy-MM-dd}" -f $buildDate)
-    Write-Host ("  기한     {0:yyyy-MM-dd}  (남은 {1}일)" -f $deadline, $left)
-    Write-Host "  이 날짜가 지나면 이 설치본은 **처음 설치하는 사람에게** 시작되지 않습니다." -ForegroundColor DarkGray
-    Write-Host "  이미 쓰고 있는 사람은 영향 없습니다 — 시작일이 이미 기록돼 있습니다." -ForegroundColor DarkGray
-
-    if ($left -le 0) {
-        Write-Warning "이미 기한이 지났습니다. 지금 받는 신규 사용자는 설치해도 시작되지 않습니다. 다시 빌드해서 발행하십시오."
-    }
-    elseif ($left -le 10) {
-        Write-Warning "기한이 $left 일 남았습니다. 빌드가 오래된 상태로 발행하는 중입니다 — 새로 빌드하는 편이 낫습니다."
-    }
+    # 2026-09-28: 없앴다. "빌드일 + 30일이 지나면 신규 사용자에게 시작되지 않는다" 규칙은 플러그인에서
+    # 2026-09-03(00e07e0)에 삭제되어 5.3.0 부터 나가지 않는데, 이 안내만 남아 5.3.2 발행 때도 없는 기한을 찍었다.
+    # 부르는 자리는 그대로 두어도 아무것도 하지 않는다.
 }
 
 $tag = "v$Version-trial"
