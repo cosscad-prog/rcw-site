@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What's New 5.3.2</title>
+<meta name="description" content="RCW V5.3.2 에서 달라진 것 — 분수 간격과 milling 의 규칙, 형상으로 매기는 FabNo, 모든 칸에 만드는 유리면을 한 장씩 봅니다.">
+<meta property="og:title" content="What's New 5.3.2">
+<meta property="og:description" content="같은 설정은 같은 결과로, 조용히 빠지던 것은 만들어지거나 알려지게.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>:root{color-scheme:light}html,body{margin:0;padding:0}img,video{max-width:100%}</style>
+</head>
+<body>
+
+
+
+<style>
+  :root {
+    --ground: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E9EEF3;
+    --ink: #101820;
+    --ink-2: #3B4956;
+    --muted: #67757F;
+    --rule: #D6DEE6;
+    --rule-strong: #B2BFCB;
+    --accent: #0A6494;
+    --accent-soft: #E1EDF5;
+    --new: #0F6B4A;
+    --new-soft: #E0F0E8;
+    --warn: #8A6612;
+    --warn-soft: #F7EFDA;
+    --crit: #A82F1D;
+    --crit-soft: #F8E7E3;
+    --shot-bg: #FFFFFF;
+
+    --f-body: "IBM Plex Sans KR", "Malgun Gothic", system-ui, sans-serif;
+    --f-disp: "IBM Plex Sans Condensed", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
+    --f-mono: "IBM Plex Mono", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0C1116; --surface: #141C23; --surface-2: #1B252E;
+      --ink: #E6EDF3; --ink-2: #BDC9D4; --muted: #87949F;
+      --rule: #26313B; --rule-strong: #394753;
+      --accent: #5DB0E0; --accent-soft: #142E3D;
+      --new: #62C79A; --new-soft: #122E24;
+      --warn: #D9AE55; --warn-soft: #2C2616;
+      --crit: #EE8A76; --crit-soft: #33201C;
+      --shot-bg: #EDF1F4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0C1116; --surface: #141C23; --surface-2: #1B252E;
+    --ink: #E6EDF3; --ink-2: #BDC9D4; --muted: #87949F;
+    --rule: #26313B; --rule-strong: #394753;
+    --accent: #5DB0E0; --accent-soft: #142E3D;
+    --new: #62C79A; --new-soft: #122E24;
+    --warn: #D9AE55; --warn-soft: #2C2616;
+    --crit: #EE8A76; --crit-soft: #33201C;
+    --shot-bg: #EDF1F4;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .deck { height: 100dvh; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; }
+  .deck::-webkit-scrollbar { display: none; }
+
+  .slide {
+    min-height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    padding: 68px 3.4vw 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .slide-inner { width: 100%; max-width: 1520px; margin: 0 auto; }
+
+  /* ---- bar ---- */
+  .bar {
+    position: fixed; inset: 0 0 auto 0; height: 48px;
+    display: flex; align-items: center; gap: 14px; padding: 0 3.4vw;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    z-index: 40;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+  }
+  .bar .brand { font-weight: 600; color: var(--ink-2); letter-spacing: 0.12em; }
+  .bar .spacer { flex: 1; }
+  .bar button {
+    font: inherit; letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid var(--rule-strong); color: var(--ink-2);
+    padding: 4px 10px; border-radius: 3px; cursor: pointer;
+  }
+  .bar button:hover { background: var(--surface); }
+  .bar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #counter { font-variant-numeric: tabular-nums; color: var(--ink-2); font-weight: 600; }
+  .progress { position: fixed; inset: 47px 0 auto 0; height: 2px; z-index: 41; }
+  .progress span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .18s linear; }
+
+  /* ---- title ---- */
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 16px;
+  }
+  .title-slide h1 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(38px, 6.4vw, 76px); line-height: 1.02;
+    letter-spacing: -0.02em; margin: 0 0 20px; text-wrap: balance;
+  }
+  .title-slide .sub { font-size: clamp(16px, 1.8vw, 20px); color: var(--ink-2); max-width: 58ch; margin: 0 0 32px; }
+
+  .agenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .agenda div { background: var(--surface); padding: 15px 17px 17px; }
+  .agenda .n { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--accent); margin: 0 0 5px; }
+  .agenda .t { font-family: var(--f-disp); font-size: 19px; font-weight: 700; margin: 0 0 4px; }
+  .agenda p { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+
+  /* ---- head ---- */
+  .head {
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    padding-bottom: 11px; border-bottom: 2px solid var(--rule-strong); margin-bottom: 18px;
+  }
+  .head .no {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(26px, 2.6vw, 36px); line-height: 1; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .head h2 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(24px, 2.7vw, 38px); line-height: 1.06;
+    letter-spacing: -0.015em; margin: 0; text-wrap: balance;
+  }
+  .head .cmds { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+  .pill {
+    display: inline-block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px; vertical-align: 3px;
+  }
+  .p-new { background: var(--new-soft); color: var(--new); }
+  .p-chg { background: var(--accent-soft); color: var(--accent); }
+  .p-std { background: var(--warn-soft); color: var(--warn); }
+  .p-name { background: var(--crit-soft); color: var(--crit); }
+
+  .lede { font-size: clamp(15.5px, 1.45vw, 18px); color: var(--ink-2); max-width: 92ch; margin: 0 0 18px; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  /* ---- image + text layout ---- */
+  .stage { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+  .stage.wide-img { grid-template-columns: 1.55fr 1fr; }
+  .stage.even { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 1080px) { .stage, .stage.wide-img, .stage.even { grid-template-columns: 1fr; } }
+
+  figure.shot { margin: 0; }
+  figure.shot img,
+  figure.shot video {
+    display: block; width: 100%; height: auto;
+    max-height: calc(100dvh - 330px);
+    object-fit: contain; object-position: center top;
+    background: var(--shot-bg);
+    border: 1px solid var(--rule-strong);
+    cursor: zoom-in;
+  }
+  figure.shot figcaption {
+    font-family: var(--f-mono); font-size: 11px; color: var(--muted);
+    margin-top: 6px; letter-spacing: 0.02em;
+  }
+  .shots { display: grid; gap: 14px; }
+  .shots.two { grid-template-columns: 1fr 1fr; }
+  .shots.two figure.shot img,
+  .shots.two figure.shot video { max-height: calc(100dvh - 360px); }
+  .shots.grid4 { grid-template-columns: 1fr 1fr; }
+  .shots.grid4 figure.shot img,
+  .shots.grid4 figure.shot video { max-height: calc(50dvh - 190px); }
+  .shots.grid5 { grid-template-columns: repeat(3, 1fr); }
+  .shots.grid5 figure.shot img,
+  .shots.grid5 figure.shot video { max-height: calc(50dvh - 190px); }
+  @media (max-width: 700px) { .shots.two, .shots.grid4, .shots.grid5 { grid-template-columns: 1fr; } }
+
+  .col { display: flex; flex-direction: column; gap: 12px; }
+
+  .card { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--accent); padding: 13px 16px 16px; }
+  .card.is-new { border-top-color: var(--new); }
+  .card.is-demo { border-top-color: var(--muted); }
+  .card.is-warn { border-top-color: var(--warn); }
+  .card > h3 {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-weight: 500;
+  }
+  .card.is-new > h3 { color: var(--new); }
+  .card.is-warn > h3 { color: var(--warn); }
+
+  .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .card ul li { padding-left: 14px; position: relative; font-size: 14.5px; line-height: 1.55; }
+  .card ul li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 6px; height: 2px; background: var(--rule-strong); }
+  .card ul li span.sub { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+
+  .card ol { margin: 0; padding-left: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 8px; }
+  .card ol li { counter-increment: s; padding-left: 24px; position: relative; font-size: 14.5px; line-height: 1.5; }
+  .card ol li::before {
+    content: counter(s); position: absolute; left: 0; top: 0;
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--accent); font-weight: 600;
+    width: 16px; text-align: right;
+  }
+
+  .say {
+    background: var(--accent-soft); border-left: 3px solid var(--accent);
+    padding: 11px 16px; margin-top: 16px;
+    font-size: clamp(14.5px, 1.3vw, 17px); line-height: 1.5; color: var(--ink);
+  }
+  .say .lbl {
+    display: block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px;
+  }
+
+  code { font-family: var(--f-mono); font-size: 0.87em; background: var(--surface-2); padding: 0.1em 0.36em; border-radius: 2px; color: var(--ink-2); }
+  .card ul li code, .say code, .card ol li code { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+
+  table.mini { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.mini th, table.mini td { text-align: left; padding: 5px 9px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  table.mini th { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  table.mini td:first-child { font-family: var(--f-mono); font-size: 12.5px; white-space: nowrap; color: var(--accent); }
+
+  /* ---- divider ---- */
+  .divider { background: var(--surface); }
+  .divider .kicker { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+  .divider h2 { font-family: var(--f-disp); font-weight: 700; font-size: clamp(32px, 4.8vw, 58px); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 16px; text-wrap: balance; }
+  .divider p { font-size: clamp(16px, 1.6vw, 19px); color: var(--ink-2); max-width: 62ch; margin: 0; }
+  .divider .items { margin-top: 26px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 7px 18px; }
+
+  /* ---- overlays ---- */
+  .overlay { position: fixed; inset: 0; background: color-mix(in srgb, var(--ground) 96%, transparent); z-index: 60; padding: 64px 3.4vw 36px; overflow-y: auto; display: none; }
+  .overlay.open { display: block; }
+  .overlay h2 { font-family: var(--f-disp); font-size: 24px; margin: 0 0 18px; font-weight: 700; }
+  .idx { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 9px; max-width: 1520px; margin: 0 auto; }
+  .idx a { display: block; background: var(--surface); border: 1px solid var(--rule); padding: 10px 13px; text-decoration: none; color: var(--ink); }
+  .idx a:hover, .idx a:focus-visible { border-color: var(--accent); outline: none; }
+  .idx a .n { font-family: var(--f-mono); font-size: 10.5px; color: var(--accent); letter-spacing: 0.08em; }
+  .idx a .t { font-weight: 600; font-size: 14.5px; display: block; margin-top: 2px; }
+  .idx a .d { font-size: 12.5px; color: var(--muted); display: block; }
+  .keys { max-width: 1520px; margin: 22px auto 0; font-family: var(--f-mono); font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 20px; }
+  .keys kbd { font-family: inherit; background: var(--surface-2); border: 1px solid var(--rule); border-radius: 3px; padding: 1px 6px; color: var(--ink-2); }
+
+  #zoom {
+    position: fixed; inset: 0; z-index: 80; display: none;
+    background: color-mix(in srgb, #000 82%, transparent);
+    align-items: center; justify-content: center; padding: 2vh 2vw; cursor: zoom-out;
+  }
+  #zoom.open { display: flex; }
+  #zoom img,
+  #zoom video { max-width: 100%; max-height: 96vh; object-fit: contain; background: #fff; border: 1px solid rgba(255,255,255,.3); }
+  #zoom img[hidden], #zoom video[hidden] { display: none; }
+
+  @media print {
+    .bar, .progress, .overlay, #zoom { display: none !important; }
+    .deck { height: auto; overflow: visible; }
+    .slide { min-height: 0; page-break-after: always; padding: 20px 0; border: none; }
+    figure.shot img,
+    figure.shot video { max-height: 420px; }
+  }
+
+  /* 그림이 칸을 억지로 채우지 않게 한다.
+     width:100% + object-fit:contain 이면 비율이 안 맞는 그림은 좌우에 흰 띠가 생긴다
+     (그 띠는 img 자신의 배경색이다). 자기 비율대로 놓고 칸을 넘지 않게만 막는다.
+     작은 그림을 늘려 흐려지게 하지도 않는다.
+     ⚠️ 선택자를 위 규칙과 <b>같은 명시도</b>로 쓸 것 — 전에 video 만 `.shot video` (0,1,1) 로
+     적어 두었더니, 위 `figure.shot video` (0,1,2) 가 이겨 흰 띠가 되살아났다(2026-08-28). */
+  figure.shot img,
+  figure.shot video { width: auto; max-width: 100%; margin-inline: auto; display: block; }
+</style>
+
+<div class="bar">
+  <span class="brand">RCW · What's New 5.3.2</span>
+  <span id="counter">1 / 8</span>
+  <span class="spacer"></span>
+  <button id="btn-index" type="button">목차 · G</button>
+</div>
+<div class="progress"><span id="bar-fill" style="width: 12.5%;"></span></div>
+
+<div class="overlay" id="overlay">
+  <h2>목차</h2>
+  <div class="idx" id="idx"></div>
+  <div class="keys">
+    <span><kbd>→</kbd> <kbd>Space</kbd> 다음</span>
+    <span><kbd>←</kbd> 이전</span>
+    <span><kbd>G</kbd> 목차</span>
+    <span><kbd>Home</kbd> 처음</span>
+    <span>그림 클릭 = 크게 보기</span>
+    <span><kbd>Esc</kbd> 닫기</span>
+  </div>
+</div>
+
+<div id="zoom"><img alt="" hidden><video muted loop playsinline hidden></video></div>
+
+<div class="deck" id="deck">
+
+  <!-- 표지 -->
+  <section class="slide title-slide" data-title="표지" data-desc="5.3.2 개요" id="slide-0">
+    <div class="slide-inner">
+      <p class="eyebrow">RCW for Rhino · 5.3.2 에서 달라진 것</p>
+      <h1>What's New 5.3.2</h1>
+      <p class="sub">
+        새 명령은 없습니다. 대신 <b>같은 설정이 같은 결과를 내도록</b> 규칙을 맞추고,
+        <b>조용히 빠지던 것</b>들이 이제는 만들어지거나 알려지게 했습니다.
+      </p>
+      <div class="agenda">
+        <div><p class="n">결과가 바뀝니다</p><p class="t">분수 간격 · milling</p><p>1/4 은 어디서나 <b>양 끝에서 2개</b>, milling 은 <b>완성 부재</b> 위에</p></div>
+        <div><p class="n">번호가 바뀔 수 있습니다</p><p class="t">FabNo</p><p>선을 그린 방향이 아니라 <b>형상</b>으로 같은 부재를 찾습니다</p></div>
+        <div><p class="n">풀렸습니다</p><p class="t">Gmd · GS · SSP</p><p>모든 칸에 유리 · 복사한 group 의 milling 연결 · 저장 뒤 수량</p></div>
+      </div>
+      <div class="say">
+        <span class="lbl">먼저 보실 것</span>
+        이전 버전으로 만든 도면을 다시 모델링하시면 <b>분수 간격 · milling 자리 · FabNo 번호</b>가 달라질 수 있습니다.
+        다음 장부터 무엇이 왜 바뀌었는지 한 장씩 설명합니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 분수 간격 -->
+  <section class="slide" data-title="분수 간격" data-desc="값이 정한다" id="slide-1">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">01</span>
+        <h2>분수 간격은 값이 정합니다 <span class="pill p-chg">동작 변경</span></h2>
+        <span class="cmds">Pname · UMD</span>
+      </div>
+      <p class="lede">
+        같은 <b>1/4</b> 이 단면 길이 · 블록 · milling 에서 서로 다르게 읽혔습니다.
+        이제 <b>세 기능이 같은 규칙</b>을 씁니다 — 대칭 체크가 아니라 <b>값</b>이 개수를 정합니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>이제의 규칙</h3>
+          <table class="mini">
+            <tbody>
+              <tr><th>0.5</th><td><b>가운데 1개</b></td></tr>
+              <tr><th>0 &lt; 값 &lt; 1</th><td>1/4 · 1/3 · 0.2 … <b>양 끝에서 1개씩, 2개</b></td></tr>
+              <tr><th>음수</th><td>끝에서의 <b>거리(mm)</b> — 대칭 체크를 따릅니다. 한쪽에만 1개가 필요하면 이것을 쓰십시오</td></tr>
+              <tr><th>1 이상</th><td>그 간격의 배열 — 전과 같습니다(간격이 정확히 1 인 경우도 이제 만들어집니다)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card is-warn">
+          <h3>전에는 이랬습니다</h3>
+          <ul>
+            <li>단면 길이 — 대칭을 켜지 않으면 분수여도 <b>한쪽 1개</b>만.</li>
+            <li>블록 — <b>0.5 · 1/4 · 1/6 · 1/8</b> 네 값만 분수. 1/3 은 <b>0.33mm 간격 배열</b>로 읽혔습니다.</li>
+            <li>대칭을 <b>한쪽만</b> 켜면 반대쪽 줄이 경고 없이 사라졌습니다.</li>
+            <li>간격 1 + 대칭이면 하나도 생기지 않았습니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">옛 도면</span>
+        "대칭 없음 + 분수" 로 <b>한쪽에 1개</b>만 두셨던 단면은 이제 <b>2개</b>가 됩니다.
+        그 자리를 그대로 두시려면 간격을 <b>음수 거리</b>로 바꿔 주십시오.
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 칸마다 · milling -->
+  <section class="slide" data-title="칸마다 · milling" data-desc="중간 mullion 과 완성 부재" id="slide-2">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">02</span>
+        <h2>중간 mullion 이 있으면 칸마다 <span class="pill p-chg">동작 변경</span></h2>
+        <span class="cmds">UMD</span>
+      </div>
+      <p class="lede">
+        transom 한 줄이 가운데 mullion 을 지나가면, 분수 간격을 <b>칸마다 따로</b> 적용합니다.
+        그리고 milling 은 블록처럼 <b>mullion 을 빼낸 뒤의 실제 부재</b> 위에 만듭니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>칸마다 적용</h3>
+          <ul>
+            <li>칸 둘인 transom 에 1/4 이면 <b>4개</b> — 전에는 줄 전체 기준으로 2개였습니다.</li>
+            <li>Dummy 점이 <b>필요 없습니다.</b></li>
+            <li>중간 mullion 은 <b>모델링할 때마다 다시 잽니다</b> — WVector 를 다시 돌리지 않으셔도 됩니다.</li>
+            <li>블록 · milling 의 분수도 같은 규칙입니다.</li>
+          </ul>
+        </div>
+        <div class="card is-warn">
+          <h3>milling 자리가 옮겨집니다</h3>
+          <ul>
+            <li>By Brep 의 기준이 mullion 중심선이 아니라 <b>실제 부재 끝</b>이 됩니다.</li>
+            <li>중간 mullion 으로 나뉜 <b>둘째 칸에도</b> milling 이 납니다 — 전에는 첫 칸에만 났습니다.</li>
+            <li>By Line 블록 · milling 은 그 자리가 속한 <b>부재 하나에만</b> — 나뉜 수만큼 겹쳐 놓이던 것이 없어졌습니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        같은 By Brep 설정이 블록과 milling 에서 <b>같은 자리</b>를 냅니다. 둘 다 완성된 부재를 기준으로 삼기 때문입니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 FabNo · 수량 -->
+  <section class="slide" data-title="FabNo · 수량" data-desc="형상으로 판정, 저장 뒤 수량" id="slide-3">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">03</span>
+        <h2>FabNo 는 형상으로 <span class="pill p-chg">번호가 바뀔 수 있음</span></h2>
+        <span class="cmds">FabNo · FabTable · FDwg</span>
+      </div>
+      <p class="lede">
+        같은 부재를 중심선을 <b>반대로</b> 그려 두면 다른 번호가 나왔습니다. 이제 부재를 뒤집어 놓아
+        <b>형상이 같으면 같은 번호</b>입니다. 가공 위치가 다른 부재는 여전히 다른 번호입니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>FabNo</h3>
+          <ul>
+            <li>Group · NBlock · Mixed <b>세 모드가 같은 판정</b>을 씁니다.</li>
+            <li>번호를 다시 매겨도 앞 단계의 <b>유닛 번호가 남습니다.</b></li>
+            <li>직전 실행과의 <b>대조</b>가 제대로 나옵니다(같음 · 바뀜 개수).</li>
+            <li>반대로 그린 부재가 있던 도면은 번호가 합쳐질 수 있습니다 — <b>FabNo 를 다시</b> 돌려 확인하십시오.</li>
+          </ul>
+        </div>
+        <div class="card is-warn">
+          <h3>저장 뒤 수량 0</h3>
+          <ul>
+            <li>도면을 <b>저장하고 다시 열면</b> 가공도 라벨이 <b>Qnt-0</b> 이 되던 것을 고쳤습니다.</li>
+            <li><b>이전 버전으로 저장한 도면</b>에는 이미 틀린 값이 들어 있습니다.</li>
+            <li>그런 도면은 <code>FabNo</code> → <code>FabTable</code> 을 <b>한 번 다시</b> — 맞는 수량이 나옵니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        번호는 <b>모델만 보고</b> 정합니다. 선을 어느 쪽으로 그렸는지는 더 이상 번호에 끼어들지 않습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 단면 -->
+  <section class="slide" data-title="단면 점검" data-desc="복사한 group · 열린 곡선" id="slide-4">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>단면 단계에서 잡습니다 <span class="pill p-new">개선</span></h2>
+        <span class="cmds">SSP · Pname</span>
+      </div>
+      <p class="lede">
+        모델링이 성공으로 끝났는데 자르개 · milling 이 <b>엉뚱한 자리에 있거나 아예 없던</b> 두 가지를,
+        이제 <b>단면 단계</b>에서 고치거나 알려 드립니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>복사한 단면 group — SSP</h3>
+          <ul>
+            <li>group 을 복사하면 <b>milling 곡선이 원본 group 의 곡선을 계속 가리켜</b>, 복사본이 원본 자리에서 깎였습니다.</li>
+            <li>이제 SSP 가 새 group 안의 짝으로 <b>바꿔 드립니다</b> — 블록과 같이.</li>
+            <li>짝은 원본 단면에서의 <b>방향과 거리</b>로 찾습니다. 좌우 대칭 자리 · 원본을 지운 뒤 · 돌려서 복사한 group 도 찾습니다.</li>
+          </ul>
+        </div>
+        <div class="card is-warn">
+          <h3>열린 단면 곡선</h3>
+          <ul>
+            <li>조금이라도 열린 곡선은 모델링에서 <b>조용히 빠졌습니다.</b></li>
+            <li><code>Pname</code> — 곡선을 고르면 이름 옆에 <b>빨간 글씨로 벌어진 거리(mm)</b>. 저장하지 않습니다.</li>
+            <li><code>SSP</code> — 열린 곡선을 목록으로 보여 주고 멈춥니다. 옛 도면도 여기서 잡힙니다.</li>
+            <li>모델링 — 건너뛴 곡선을 명령창에 적고 계속합니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <b>SSP 를 먼저</b> 돌리십시오. 복사 연결을 고치고, 열린 곡선을 모델링 전에 보여 줍니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 유리 -->
+  <section class="slide" data-title="Gmd · GS" data-desc="모든 칸에 유리" id="slide-5">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">05</span>
+        <h2>모든 칸에 유리 <span class="pill p-new">개선</span></h2>
+        <span class="cmds">Gmd · GS1~GS9</span>
+      </div>
+      <p class="lede">
+        옆 칸과 transom 높이가 어긋나면 가운데 mullion 이 중간에서 나뉘어 칸의 테두리가 <b>5변 이상</b>이 됩니다.
+        <code>Gmd</code> 는 그런 칸을 <b>조용히 건너뛰었습니다</b> — 한 예시 도면에서 14칸 중 6칸만 나왔습니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>Gmd</h3>
+          <ul>
+            <li>선이 닫는 <b>칸을 전부</b> 찾습니다 — 테두리 변의 개수와 상관없이.</li>
+            <li>두 면이 만나는 <b>코너 유닛</b>도 면마다 따로 찾습니다.</li>
+            <li>stick 의 <b>sleeve 틈(20mm 이하)</b>은 전처럼 이어서 한 칸으로 봅니다.</li>
+            <li>명령창에 찾은 칸 수와, 만들지 못한 것이 있으면 그 이유를 적습니다.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>GS 두께</h3>
+          <ul>
+            <li>5변 이상인 칸에도 두께가 들어갑니다.</li>
+            <li>mullion · transom 중심선 위에 <b>다른 선이 겹쳐</b> 그려진 도면에서도 됩니다.</li>
+            <li>한 칸이 실패해도 <b>나머지 칸은 계속</b>하고, 실패한 칸의 조각을 남기지 않습니다.</li>
+            <li>유리선이 없는 단면에 붙은 칸은 전처럼 두께가 들어가지 않습니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        <code>Gmd</code> 를 다시 돌리시기 전에는 <code>Gmdc</code> 로 옛 유리면을 먼저 지우십시오 — 겹쳐 만들어집니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 설치 -->
+  <section class="slide" data-title="업데이트" data-desc="알림에서 바로 설치" id="slide-6">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">06</span>
+        <h2>알림에서 바로 설치 <span class="pill p-new">다음 판부터</span></h2>
+        <span class="cmds">RCWUpdate</span>
+      </div>
+      <p class="lede">
+        새 버전 알림을 누르면 다운로드 페이지가 열리고, 받은 파일을 열 때 <b>브라우저 위험 경고</b>와
+        <b>Windows SmartScreen</b> 이 차례로 떴습니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>이제</h3>
+          <ul>
+            <li>RCW 가 <b>쓰고 계신 에디션과 Rhino 버전</b>에 맞는 설치 파일을 직접 받아 실행합니다.</li>
+            <li>두 경고가 뜨지 않습니다.</li>
+            <li>설치가 끝나면 보통 <b>Rhino 가 다시 열립니다.</b></li>
+            <li>이번 버전을 설치하신 뒤, <b>다음 새 버전이 나올 때</b>부터 쓰입니다.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>새 주소</h3>
+          <ul>
+            <li>사이트가 <b>www.beimptech.com</b> 으로 옮겼습니다.</li>
+            <li>평가판 · 고객 페이지 · 도움말이 모두 새 주소를 씁니다.</li>
+            <li>옛 주소도 계속 열립니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        알림은 <b>하루 한 번</b> 새 버전이 있는지만 봅니다. 도면이나 라이선스 정보는 보내지 않습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 정리 -->
+  <section class="slide" data-title="정리" data-desc="세 문장으로" id="slide-7">
+    <div class="slide-inner">
+      <p class="kicker">정리</p>
+      <h2>세 문장으로</h2>
+      <div class="agenda">
+        <div><p class="n">하나</p><p class="t">같은 설정, 같은 결과</p><p>분수 간격은 <b>값</b>이, milling 과 블록은 <b>완성된 부재</b>가 기준입니다.</p></div>
+        <div><p class="n">둘</p><p class="t">형상으로 번호</p><p><b>FabNo</b> 는 선의 방향이 아니라 형상으로 같은 부재를 찾습니다.</p></div>
+        <div><p class="n">셋</p><p class="t">빠지던 것이 나온다</p><p>모든 칸에 유리, 복사한 group 의 milling, 저장 뒤 수량 — <b>조용히 빠지지 않습니다.</b></p></div>
+      </div>
+      <div class="say">
+        <span class="lbl">맺는 말</span>
+        이전 도면을 다시 모델링하실 때는 <b>SSP → UMD → FabNo → FabTable</b> 순서로 한 번 돌려 확인해 주십시오.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var counter = document.getElementById('counter');
+  var fill = document.getElementById('bar-fill');
+  var overlay = document.getElementById('overlay');
+  var idx = document.getElementById('idx');
+  var btn = document.getElementById('btn-index');
+  var zoom = document.getElementById('zoom');
+  var zoomImg = zoom.querySelector('img');
+  var zoomVideo = zoom.querySelector('video');
+  var current = 0;
+
+  idx.innerHTML = '';
+  slides.forEach(function (s, i) {
+    s.id = 'slide-' + i;
+    var a = document.createElement('a');
+    a.href = '#slide-' + i;
+    a.innerHTML = '<span class="n">' + (i + 1).toString().padStart(2, '0') + '</span>' +
+      '<span class="t"></span><span class="d"></span>';
+    a.querySelector('.t').textContent = s.dataset.title || ('슬라이드 ' + (i + 1));
+    a.querySelector('.d').textContent = s.dataset.desc || '';
+    a.addEventListener('click', function () { closeOverlay(); });
+    idx.appendChild(a);
+  });
+
+  function render() {
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    fill.style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+  function go(n) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    current = n;
+    slides[n].scrollIntoView({ block: 'start' });
+    render();
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var i = slides.indexOf(e.target);
+        if (i >= 0) { current = i; render(); }
+      }
+    });
+  }, { root: deck, threshold: 0.5 });
+  slides.forEach(function (s) { io.observe(s); });
+
+  function openOverlay() { overlay.classList.add('open'); }
+  function closeOverlay() { overlay.classList.remove('open'); }
+  function toggleOverlay() { overlay.classList.toggle('open'); }
+  btn.addEventListener('click', toggleOverlay);
+
+  /* 그림이든 영상이든 눌러 크게 본다. GIF 를 영상으로 옮기면서(2026-08-28) 영상도 받게 했다 —
+     전에는 img 만 봐서 영상 슬라이드는 눌러도 아무 일도 일어나지 않았다. */
+  function closeZoom() {
+    zoom.classList.remove('open');
+    zoomImg.src = ''; zoomImg.hidden = true;
+    zoomVideo.pause(); zoomVideo.removeAttribute('src'); zoomVideo.load(); zoomVideo.hidden = true;
+  }
+
+  deck.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target.closest('figure.shot img, figure.shot video') : null;
+    if (!el) return;
+    if (el.tagName === 'VIDEO') {
+      zoomImg.hidden = true;
+      zoomVideo.src = el.getAttribute('src');
+      zoomVideo.setAttribute('aria-label', el.getAttribute('aria-label') || '');
+      zoomVideo.hidden = false;
+      zoomVideo.play();
+    } else {
+      zoomVideo.hidden = true;
+      zoomImg.src = el.src;
+      zoomImg.alt = el.alt;
+      zoomImg.hidden = false;
+    }
+    zoom.classList.add('open');
+  });
+  zoom.addEventListener('click', closeZoom);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') {
+      if (zoom.classList.contains('open')) { closeZoom(); }
+      else closeOverlay();
+      return;
+    }
+    if (zoom.classList.contains('open')) return;
+    if (k === 'g' || k === 'G' || k === 'ㅎ') { e.preventDefault(); toggleOverlay(); return; }
+    if (overlay.classList.contains('open')) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ') { e.preventDefault(); go(current + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(current - 1); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

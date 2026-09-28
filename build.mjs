@@ -32,7 +32,7 @@ const ROOT_PAGES = [
   'admin.html', 'cad.html', 'contact.html', 'customer.html',
   'guide-en.html', 'guide-ko.html', 'index.html', 'modeling.html',
   'output.html', 'todo.html', 'trial.html',
-  'whatsnew-5.3.1.html', 'whatsnew.html'
+  'whatsnew-5.3.1.html', 'whatsnew-5.3.2.html', 'whatsnew.html'
 ];
 const ROOT_ASSETS = ['changes.js'];
 
