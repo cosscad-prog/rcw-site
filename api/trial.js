@@ -26,7 +26,7 @@
 ------------------------------------------------------------------ */
 
 const crypto = require('crypto');
-const { db, readBody, pluginDownload } = require('./_rcw');
+const { db, readBody, pluginDownload, RCW5_FILE_RE, parseEdition } = require('./_rcw');
 const { notifyTrialRequest } = require('./_notify');
 
 // DB 의 check 제약과 같은 한도. 여기서 잘라야 초과 입력이 500 이 아니라 정상 접수가 된다.
@@ -91,8 +91,12 @@ async function handleReturn(body, res) {
      다시 받으러 온 사람처럼 자기 이름을 모르는 경우에도 기록이 온전하다. */
 async function handleDownload(body, res) {
   const id = String(body.request_id || '').trim().toLowerCase();
-  const m  = FILE_RE.exec(String(body.file_name || '').trim());
-  if (!UUID_RE.test(id) || !m) return res.status(400).json({ error: 'bad_request' });
+  const fileName = String(body.file_name || '').trim();
+  const m  = FILE_RE.exec(fileName);
+  // RCW5(설치 파일 하나)는 이름에 에디션이 없다 — 누른 버튼의 에디션을 화면이 보낸다(body.edition).
+  const rcw5 = RCW5_FILE_RE.test(fileName);
+  const ed = rcw5 ? parseEdition(body.edition) : null;
+  if (!UUID_RE.test(id) || (!m && !rcw5)) return res.status(400).json({ error: 'bad_request' });
   // 버전은 있으면 좋은 값이지 필수가 아니다 — 캐시된 옛 페이지는 안 보낸다.
   const rawVer = String(body.version || '').trim();
   const ver    = VERSION_RE.test(rawVer) ? rawVer : null;
@@ -114,11 +118,11 @@ async function handleDownload(body, res) {
         company:    r.company,
         phone:      r.phone,
         email:      r.email,
-        edition:    m[1],
-        rhino:      m[2],
-        lang:       m[3] || null,   // 설치할 때 고르므로 파일명으로는 알 수 없다
+        edition:    m ? m[1] : (ed ? ed.edition : null),
+        rhino:      m ? m[2] : null,          // RCW5 는 설치할 때 고른다 — 체크인(plugin_checkins)이 실제 값을 안다
+        lang:       m ? (m[3] || null) : null, // 설치할 때 고르므로 파일명으로는 알 수 없다
         version:    ver,            // 파일명에 버전이 없으므로(2026-07-30) 화면이 알려 준 값을 남긴다
-        file_name:  String(body.file_name).trim()
+        file_name:  fileName
       })
     });
   } catch (err) {

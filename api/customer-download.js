@@ -23,7 +23,7 @@ function clientIp(req) {
   return (req.socket && req.socket.remoteAddress ? req.socket.remoteAddress : '').slice(0, 60);
 }
 
-const { pluginDownload } = require('./_rcw');
+const { pluginDownload, RCW5_FILE_RE } = require('./_rcw');
 
 module.exports = async function handler(req, res) {
   // 플러그인이 스스로 받으러 온 것. 기록하고 GitHub 으로 넘긴다(_rcw.js 의 pluginDownload).
@@ -47,7 +47,8 @@ module.exports = async function handler(req, res) {
     // 버전은 2026-07-29 에 들어왔고 언어는 2026-07-30 에 빠졌다. 둘 다 선택으로 두어
     // 캐시된 옛 페이지에서 눌러도 기록이 남게 한다(예전 형태만 받다가 그 사이 기록이
     // 통째로 빠졌었다).
-    const ok = /^RCW_V5_(Core|Standard)_Rhino[78](?:_(?:ko-KR|en-US))?(?:_\d+\.\d+\.\d+)?\.exe$/.test(fileName);
+    const ok = /^RCW_V5_(Core|Standard)_Rhino[78](?:_(?:ko-KR|en-US))?(?:_\d+\.\d+\.\d+)?\.exe$/.test(fileName)
+      || RCW5_FILE_RE.test(fileName);   // 설치 파일 하나(RCW5) — 에디션은 명부에 있다
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(customerId || ''));
 
     // 버전은 화면이 알려 준다. 있으면 좋은 값이지 필수가 아니다 — 형식이 어긋나거나

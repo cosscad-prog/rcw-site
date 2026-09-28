@@ -117,6 +117,17 @@ async function findCustomerByCode(rawCode, select) {
 ──────────────────────────────────────────────────────────────────── */
 const PLUGIN_FILE_RE = /^RCW_V5_(Core|Standard)(_Trial)?_Rhino([78])\.exe$/;
 
+// 설치 파일 하나(RCW5, 5.4.0 예정 — docs/development/SINGLE_INSTALLER_PLAN 참조). 이름에 에디션·Rhino 가 없다.
+// 에디션은 요청이 알려 준다(플러그인 ?ed= · 평가판 버튼 edition). 믿지 않고 형식만 본다.
+const RCW5_FILE_RE = /^RCW5(?:_\d+\.\d+\.\d+)?\.exe$/;
+// 에디션 값 → { edition: 'Core'|'Standard', trial } . 모르는 값이면 null(기록 칸을 비운다).
+function parseEdition(raw) {
+  const m = /^(Core|Standard)(_Trial)?$/.exec(String(raw || '').trim());
+  return m ? { edition: m[1], trial: Boolean(m[2]) } : null;
+}
+// RCW5 는 한 저장소에만 올린다(계획 8절 2번 — 두 저장소 모두 공개라 나눌 이유가 없다).
+const RCW5_REPO = 'https://github.com/cosscad-prog/rcw-releases';
+
 const RELEASE_REPO = {
   customer: 'https://github.com/cosscad-prog/rcw-customer-releases',
   trial:    'https://github.com/cosscad-prog/rcw-releases'
@@ -126,13 +137,19 @@ async function pluginDownload(req, res, kind) {
   const query = req.query || {};
   const fileName = String(query.file || '').trim();
   const match = PLUGIN_FILE_RE.exec(fileName);
+  const isRcw5 = RCW5_FILE_RE.test(fileName);
 
   // 평가판 파일은 _Trial 이 있고 유료판 파일은 없다. 엇갈리면 엉뚱한 저장소를
-  // 가리키게 되므로 여기서 끊는다.
+  // 가리키게 되므로 여기서 끊는다. RCW5 는 한 파일이 둘 다 담아 가를 것이 없다.
   const isTrialFile = Boolean(match && match[2]);
-  if (!match || isTrialFile !== (kind === 'trial')) {
+  if (!isRcw5 && (!match || isTrialFile !== (kind === 'trial'))) {
     return res.status(400).json({ error: 'bad_file' });
   }
+  // 에디션·Rhino — 옛 이름은 파일 이름에서, RCW5 는 플러그인이 붙인 ?ed=·?rh= 에서(5.4.0 부터).
+  // 5.3.2 는 RCW5 를 받을 때 이 둘을 안 붙인다 — 그때는 칸이 빈다(기록 자체는 남는다).
+  const ed = isRcw5 ? parseEdition(query.ed) : null;
+  const edition = isRcw5 ? (ed ? ed.edition : null) : match[1];
+  const rhino = isRcw5 ? (/^[78]$/.test(String(query.rh || '')) ? String(query.rh) : null) : match[3];
 
   const installId = /^[0-9a-f]{8,64}$/i.test(String(query.id || '')) ? String(query.id) : null;
   const version   = /^\d+\.\d+\.\d+$/.test(String(query.v || '')) ? String(query.v) : null;
@@ -144,8 +161,8 @@ async function pluginDownload(req, res, kind) {
       body: JSON.stringify({
         kind,
         install_id: installId,
-        edition: match[1],
-        rhino: match[3],
+        edition,
+        rhino,
         version,
         file_name: fileName,
         ip: clientIp(req),
@@ -156,7 +173,7 @@ async function pluginDownload(req, res, kind) {
     console.error('[plugin] 다운로드 기록 실패:', err.message);
   }
 
-  const target = RELEASE_REPO[kind] + '/releases/latest/download/' + fileName;
+  const target = (isRcw5 ? RCW5_REPO : RELEASE_REPO[kind]) + '/releases/latest/download/' + fileName;
 
   // 받는 주소는 판마다 달라진다. 중간에 끼는 것들이 옛 주소를 물고 있으면
   // 새 판이 나와도 옛 설치본이 내려간다.
@@ -177,5 +194,7 @@ module.exports = {
   adminTokenMatches,
   readBody,
   findCustomerByCode,
-  pluginDownload
+  pluginDownload,
+  RCW5_FILE_RE,
+  parseEdition
 };
