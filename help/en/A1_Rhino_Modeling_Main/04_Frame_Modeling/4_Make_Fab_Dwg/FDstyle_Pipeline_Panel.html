@@ -26,17 +26,17 @@
 <h1>FDstyle &nbsp;—&nbsp; Fabrication Drawing Record / Playback Panel</h1>
 <p><span class="cmd-box">FDstyle</span></p>
 <p>
-  <strong>FDstyle</strong> opens and closes the <strong>FDwg Pipeline panel</strong>. In this panel, you can switch between <strong>Recording (ON)</strong> and <strong>Playback (OFF, default)</strong> modes for fabrication drawing (FDwg) work,
+  <strong>FDstyle</strong> opens and closes the <strong>FDwg Pipeline panel</strong>. In this panel, you can turn <strong>Recording</strong> or <strong>Playback</strong> on and off (with both off, drawings use the <code>DdOpt</code> panel values) for fabrication drawing (FDwg) work,
   and manage drawing template registration/insertion and per-Profile progress tracking all in one place.
 </p>
-<div class="note"><strong>Note:</strong> Entering the same command again closes the panel (toggle). Recording/Playback mode switching is done via the <strong>banner button at the top of the panel</strong>, not via command. (Legacy commands <code>FDP</code> and <code>FDwgStyle</code> have been consolidated into <code>FDstyle</code>.)</div>
+<div class="note"><strong>Note:</strong> Entering the same command again closes the panel (toggle). Recording/Playback mode switching is done with the <strong>[Start Replay] / [Start Recording] buttons at the top of the panel</strong>, not via command. <code>FDwg</code> <strong>does not open this panel automatically</strong> — open it when you record, with the <strong>[FDstyle]</strong> button at the top of the <code>DdOpt</code> panel or with this command. (Legacy commands <code>FDP</code> and <code>FDwgStyle</code> have been consolidated into <code>FDstyle</code>.)</div>
 <h2>Purpose</h2>
 <p>Frequently-used Profile drawing operations (options, NC table, compression, annotations, accessory table, detail views, templates) can be recorded once, then automatically reproduced when creating drawings for the same Profile in Playback mode. Use this to maintain consistent standard fabrication drawing templates across users and projects.</p>
 <h2>Panel Composition</h2>
 <table class="desc-table">
   <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
   <tbody><tr><th>Component</th><th>Description</th></tr>
-  <tr><td>Top Banner (Toggle)</td><td>Displays the current mode and can be clicked to switch: <strong>● Recording Mode ON</strong> (red) ↔ <strong>■ Playback Mode</strong> (gray, default).</td></tr>
+  <tr><td>[Start Replay] · [Start Recording]</td><td>Each button <strong>turns its mode on and off</strong>. Clicking starts the mode and fills the button (<strong>replay = blue</strong>, <strong>recording = red</strong>); clicking the lit button again ends it. Clicking the other button while one is on switches over (recording is ended properly first). Status on the right: <strong>▶ Replaying</strong> / <strong>● Recording</strong> / <strong>○ Panel values</strong> (both off — when Rhino starts).</td></tr>
   <tr><td>[Refresh]</td><td>Re-reads and updates the per-Profile work status table.</td></tr>
   <tr><td>[Form Template]</td><td>Registers an external <strong>3dm template file</strong> as a drawing template. (Same role as <code>SFB</code>)</td></tr>
   <tr><td>[Insert Form]</td><td>Inserts the registered template into the selected Profile's fabrication drawing (drawing unit). Scale is automatically calculated to fit the drawing size.</td></tr>
@@ -47,22 +47,23 @@
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>Mode</th><th>Behavior</th></tr>
-  <tr><td><strong>Record (ON)</strong></td><td>When <code>FDwg</code> runs, the current options and additional work — NC table, FSC compression, annotations/leaders, accessory table, detail views (F3D), templates — are saved per Profile. Additional leaders, text, and label moves made during recording are also automatically recorded together.</td></tr>
-  <tr><td><strong>Playback (OFF, default)</strong></td><td>When creating a drawing for the same Profile, reads and <strong>automatically reproduces</strong> the recorded content. If no recorded data exists, uses the current <code>DdOpt</code> panel settings.</td></tr>
+  <tr><td><strong>Record</strong> ([Start Recording], red)</td><td>When <code>FDwg</code> runs, the current options and additional work — NC table, FSC compression, annotations/leaders, accessory table, detail views (F3D), templates — are saved per Profile. Additional leaders, text, and label moves made during recording are also automatically recorded together.</td></tr>
+  <tr><td><strong>Playback</strong> ([Start Replay], blue)</td><td>When creating a drawing for the same Profile, reads and <strong>automatically reproduces</strong> the recorded content. Profiles without recorded data use the current <code>DdOpt</code> panel settings.</td></tr>
+  <tr><td><strong>Both off</strong> (start)</td><td>Recorded content is not used and nothing is recorded. Drawings use the current <code>DdOpt</code> panel settings.</td></tr>
 </tbody></table>
 <div class="note"><strong>Note:</strong> File data application is handled by this <strong>Playback Mode</strong>. If no recorded data exists, the current DdOpt panel values are used. Default values can be saved in advance using the <strong>Save Current Selection as Default</strong> feature in DdOpt.</div>
 <h2>Basic Usage</h2>
 <h3>① Recording Standard Fabrication Drawings</h3>
 <ol class="step-list">
   <li>Type <code>FDstyle</code> to open the panel.</li>
-  <li>Click the top banner to switch to <strong>Record Mode (ON)</strong>.</li>
+  <li>Click <strong>[Start Recording]</strong>.</li>
   <li>Adjust desired options in <code>DdOpt</code>, then create a drawing with <code>FDwg</code>.</li>
   <li>If needed, add NC table, accessory table, detail views, template insertion, and annotations. (Recording mode saves them together.)</li>
-  <li>When done, click the banner again to end recording.</li>
+  <li>When done, click <strong>[Start Recording]</strong> again to end recording (or go straight to [Start Replay]). The final state of tables and leaders you moved by hand is saved at this point.</li>
 </ol>
 <h3>② Playback (Automatic Reproduction)</h3>
 <ol class="step-list">
-  <li>Verify the banner is in <strong>Playback Mode (OFF)</strong> (default).</li>
+  <li>Click <strong>[Start Replay]</strong> so it lights up blue (status <strong>▶ Replaying</strong>). Once on, replay stays on even if you close the panel.</li>
   <li>Select a group for the same Profile and run <code>FDwg</code>.</li>
   <li>Recorded NC, compression, annotations, accessories, detail views, and templates are automatically reproduced.</li>
 

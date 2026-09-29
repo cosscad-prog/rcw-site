@@ -27,10 +27,10 @@
 <p><span class="cmd-box">FDstyle</span></p>
 <p>
   <strong>FDstyle</strong>은 <strong>FDwg Pipeline 패널</strong>을 열고 닫는 명령입니다. 이 패널에서
-  가공도(FDwg) 작업을 <strong>기록(ON)</strong> 하거나 <strong>재생(OFF, 기본)</strong> 하는 모드를 전환하고,
+  가공도(FDwg) 작업을 <strong>기록</strong> 하거나 <strong>재생</strong> 하는 모드를 켜고 끄며(둘 다 꺼져 있으면 <code>DdOpt</code> 패널값으로 그림),
   도면 <strong>양식 등록·삽입</strong>과 Profile별 작업 상태 확인을 한곳에서 처리합니다.
 </p>
-<div class="note"><strong>참고:</strong> 같은 명령을 다시 입력하면 패널이 닫힙니다(토글). 기록/재생 전환은 명령이 아니라 <strong>패널 상단의 배너 버튼</strong>으로 합니다. (구 <code>FDP</code>·<code>FDwgStyle</code> 명령은 <code>FDstyle</code>로 통합되었습니다.)</div>
+<div class="note"><strong>참고:</strong> 같은 명령을 다시 입력하면 패널이 닫힙니다(토글). 기록/재생 전환은 명령이 아니라 <strong>패널 맨 위의 [재생모드 시작]·[기록모드 시작] 버튼</strong>으로 합니다. <code>FDwg</code> 는 이 패널을 <strong>저절로 열지 않습니다</strong> — 기록할 때 <code>DdOpt</code> 패널 맨 위의 <strong>[FDstyle]</strong> 버튼이나 이 명령으로 여세요. (구 <code>FDP</code>·<code>FDwgStyle</code> 명령은 <code>FDstyle</code>로 통합되었습니다.)</div>
 <h2>사용 목적</h2>
 <p>
   자주 쓰는 Profile의 가공도 작업(옵션·NC 테이블·압축·주석·부속자재 표·부분확대·도면 양식)을 한 번 <strong>기록</strong>해 두면,
@@ -41,7 +41,7 @@
 <table class="desc-table">
   <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
   <tbody><tr><th>구성 요소</th><th>설명</th></tr>
-  <tr><td>상단 배너(토글)</td><td>현재 모드를 표시하고 클릭으로 전환합니다. <strong>● 기록 모드 ON</strong>(빨강) ↔ <strong>■ 재생 모드</strong>(회색, 기본).</td></tr>
+  <tr><td>[재생모드 시작] · [기록모드 시작]</td><td>버튼마다 <strong>켜고 끕니다</strong>. 누르면 그 모드가 시작되고 버튼이 칠해집니다(<strong>재생 = 파랑</strong>, <strong>기록 = 빨강</strong>). 켜진 버튼을 다시 누르면 그 모드가 끝납니다. 한쪽이 켜진 채 다른 쪽을 누르면 넘어갑니다(기록은 제대로 끝낸 뒤). 오른쪽 상태: <strong>▶ 재생 중</strong> / <strong>● 기록 중</strong> / <strong>○ 패널값</strong>(둘 다 꺼짐 — Rhino 를 켰을 때).</td></tr>
   <tr><td>[새로고침]</td><td>Profile별 작업 상태 표를 다시 읽어 갱신합니다.</td></tr>
   <tr><td>[도면양식]</td><td>외부 <strong>3dm 양식 파일</strong>을 도면 양식으로 등록합니다. (<code>SFB</code>와 동일 역할)</td></tr>
   <tr><td>[양식삽입]</td><td>등록된 양식을 선택 Profile의 가공도(도면 단위)에 삽입합니다.</td></tr>
@@ -52,22 +52,23 @@
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>모드</th><th>동작</th></tr>
-  <tr><td><strong>기록 (ON)</strong></td><td><code>FDwg</code> 를 실행하면 현재 옵션과 추가 작업 — NC 테이블, FSC 압축, 주석/지시선, 부속자재 표, 부분확대(F3D), 도면 양식 — 을 Profile별로 저장합니다. 기록 중 직접 추가한 지시선·텍스트·라벨 이동도 자동으로 함께 기록됩니다.</td></tr>
-  <tr><td><strong>재생 (OFF, 기본)</strong></td><td>같은 Profile의 가공도를 만들 때 기록된 내용을 읽어 <strong>자동으로 재현</strong>합니다. 기록된 데이터가 없으면 현재 <code>DdOpt</code> 패널 설정값을 사용합니다.</td></tr>
+  <tr><td><strong>기록</strong> ([기록모드 시작] 빨강)</td><td><code>FDwg</code> 를 실행하면 현재 옵션과 추가 작업 — NC 테이블, FSC 압축, 주석/지시선, 부속자재 표, 부분확대(F3D), 도면 양식 — 을 Profile별로 저장합니다. 기록 중 직접 추가한 지시선·텍스트·라벨 이동도 자동으로 함께 기록됩니다.</td></tr>
+  <tr><td><strong>재생</strong> ([재생모드 시작] 파랑)</td><td>같은 Profile의 가공도를 만들 때 기록된 내용을 읽어 <strong>자동으로 재현</strong>합니다. 기록된 데이터가 없는 Profile 은 현재 <code>DdOpt</code> 패널 설정값을 사용합니다.</td></tr>
+  <tr><td><strong>둘 다 꺼짐</strong> (처음)</td><td>기록된 내용은 쓰지 않고, 기록도 하지 않습니다. 현재 <code>DdOpt</code> 패널 설정값으로 그립니다.</td></tr>
 </tbody></table>
 <div class="note"><strong>참고:</strong> 파일 데이터 적용은 이 <strong>재생 모드</strong>가 담당합니다. 기록된 데이터가 없으면 DdOpt 패널의 현재 설정값을 사용하며, DdOpt의 <strong>현재 선택을 기본값으로 저장</strong> 기능으로 기본값을 미리 저장해 둘 수 있습니다.</div>
 <h2>기본 사용 방법</h2>
 <h3>① 표준 가공도 기록</h3>
 <ol class="step-list">
   <li><code>FDstyle</code>을 입력해 패널을 엽니다.</li>
-  <li>상단 배너를 클릭해 <strong>기록 모드(ON)</strong>로 전환합니다.</li>
+  <li><strong>[기록모드 시작]</strong> 을 누릅니다.</li>
   <li><code>DdOpt</code>에서 원하는 옵션을 맞춘 뒤 <code>FDwg</code>로 가공도를 만듭니다.</li>
   <li>필요하면 NC 테이블·부속자재 표·부분확대·양식 삽입·주석을 추가합니다. (기록 모드라 함께 저장됩니다)</li>
-  <li>작업이 끝나면 배너를 다시 눌러 기록을 종료합니다.</li>
+  <li>작업이 끝나면 <strong>[기록모드 시작]</strong> 을 다시 눌러 기록을 끝냅니다(또는 바로 [재생모드 시작]). 이때 손으로 옮긴 표·지시선 등의 최종 상태가 저장됩니다.</li>
 </ol>
 <h3>② 재생(자동 재현)</h3>
 <ol class="step-list">
-  <li>배너가 <strong>재생 모드(OFF)</strong>인지 확인합니다(기본값).</li>
+  <li><strong>[재생모드 시작]</strong> 을 눌러 파랗게 켭니다(오른쪽 <strong>▶ 재생 중</strong>). 켠 뒤에는 패널을 닫아도 재생 모드가 유지됩니다.</li>
   <li>같은 Profile의 그룹을 선택해 <code>FDwg</code>를 실행합니다.</li>
   <li>기록해 둔 NC·압축·주석·부속자재·부분확대·양식이 자동으로 재현됩니다.</li>
 

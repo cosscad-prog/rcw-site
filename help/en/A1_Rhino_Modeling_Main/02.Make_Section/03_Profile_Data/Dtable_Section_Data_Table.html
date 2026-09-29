@@ -61,6 +61,7 @@ Instead of opening each profile separately with <strong>Pname</strong>, you can 
     <col style="width: 75%;">
   </colgroup>
   <tbody><tr><th>Column</th><th>Description</th></tr>
+  <tr><td>Section</td><td>First column. The <strong>section group</strong> the profile belongs to - the text written in the section group (e.g. <code>MC6</code>), or else the layer of the group's center line in short form (<code>M_Center1</code> → <code>MC1</code>, <code>T_Center3</code> → <code>TC3</code>). <code>-</code> if neither exists. Use it to tell <strong>which section group</strong> a profile with the same name comes from. View only; not saved.</td></tr>
   <tr><td>Profile Name</td><td>Profile name. Used as the shape name in drawings and lists.</td></tr>
   <tr><td>Description</td><td>Profile description.</td></tr>
   <tr><td>Unit Weight</td><td>Unit weight per meter. Used to calculate weight in material lists.</td></tr>
@@ -84,7 +85,7 @@ for example <code>Pasted 3 cell(s)</code>.</p>
 <div class="warning">Note: <b>locked cells</b> (a member row's Profile ID, Fab ID, Group ID, Additional Length and Extrusion) and
 <b>values that are not in the list</b> are left alone. Those counts are shown too, so when the number is not what you expected you can see what was left out.
 Pasting into a shared cell of a composite row writes it to every member of that composite.</div>
-<p>Clicking the <strong>Profile Name</strong> header sorts the rows by name. Saving matches each row to its section through a <strong>hidden object identifier</strong> rather than the displayed row order, so sorting before saving does not mix up the values.</p>
+<p>Clicking the <strong>Profile Name</strong> header sorts the rows by name. Clicking the <strong>Section</strong> header sorts by section group (MC1, MC2, MC10 ...), then by Profile Name within the same section. Rows without a section (<code>-</code>) go last in ascending order. Saving matches each row to its section through a <strong>hidden object identifier</strong> rather than the displayed row order, so sorting before saving does not mix up the values.</p>
 <h2>Tables Containing a Composite Profile</h2>
 <p>A <strong>composite profile</strong> tied with <code>ComP</code> appears as <strong>one block</strong> in the table:
 a <b>composite row</b> first, followed by its <b>indented member rows</b>.</p>
@@ -148,7 +149,7 @@ Pressing a button expands (<code>▼</code>) or collapses (<code>▶</code>) tha
     <col style="width: 75%;">
   </colgroup>
   <tbody><tr><th>Item</th><th>Description</th></tr>
-  <tr><td>Saving</td><td><strong>Save All</strong> writes every row back to its section. Each section that actually changed is reported in the command line as <code>Saved data for [profile name].</code></td></tr>
+  <tr><td>Saving</td><td><strong>Save All</strong> writes <strong>only the cells you edited in the table</strong> onto each section's current data. You can keep the Dtable window open while working in Rhino; values changed meanwhile (e.g. with Pname) are not reverted (if the same cell was changed in both places, the Dtable value is saved). The table shows the values from when it was opened - reopen Dtable to see changes made elsewhere. Each section that actually changed is reported in the command line as <code>Saved data for [profile name].</code></td></tr>
   <tr><td>Dimension style</td><td>The dimension style in use before the command is restored when the command ends, including when the window is closed without saving.</td></tr>
   <tr><td>Model geometry</td><td>Unchanged. Only the data stored on the sections is updated.</td></tr>
 </tbody></table>

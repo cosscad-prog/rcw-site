@@ -61,6 +61,7 @@
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>Item</th><th>Description</th></tr>
   <tr><td>Main Command</td><td>Specifies View, distance, dimension, and auxiliary model display options when creating <code>FDwg</code> fabrication drawings.</td></tr>
+  <tr><td>[FDstyle] button</td><td>Top left of the panel. Opens and closes the <strong>FDstyle panel</strong> (record / replay fabrication drawing settings). <code>FDwg</code> does not open that panel automatically, so open it here when you record.</td></tr>
   <tr><td>Save Current Selection as Default</td><td>The small <b>D</b> button at the top of the panel. Saves the current panel settings as the default to <code>System_Default.dat</code>.</td></tr>
   <tr><td>Panel Behavior</td><td>Running <code>DdOpt</code> opens the Drawing Option Dockable Panel. On open, saved defaults are automatically loaded.</td></tr>
 </tbody></table>
@@ -74,7 +75,7 @@
   <tr><td>On panel open</td><td>If saved defaults exist, they are automatically loaded and applied to each item.</td></tr>
   <tr><td>Save file</td><td><code>System_Default.dat</code> is a per-installation file stored alongside other feature settings such as FabList (values do not overwrite each other).</td></tr>
 </tbody></table>
-<div class="note"><strong>Note:</strong> The former <code>Apply File Data</code> checkbox is no longer used. File data application is now handled by <strong>FDstyle (Record/Playback)</strong>; if no recorded data exists, the current panel values are used.</div>
+<div class="note"><strong>Note:</strong> The <strong>[FDstyle]</strong> button replaces the former <code>Apply File Data</code> checkbox. To draw with recorded data, turn on <strong>[Start Replay]</strong> in the FDstyle panel (the same meaning as the old check). Otherwise (the starting state) drawings use the current panel values.</div>
 <h2>Group 1 — View / Max Only / Side Dim</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 40%; min-width:220px; max-width:40%;">

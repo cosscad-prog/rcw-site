@@ -62,7 +62,8 @@
   <li>Save the downloaded <code>.lic</code> file somewhere safe.</li>
   <li>Run <code>RCWLicense</code> in Rhino and select that <code>.lic</code> file.</li>
   <li>Confirm the success message and <b>restart Rhino</b>.</li>
-  <li>After the import, Rhino <b>asks whether to save your customer code</b>. Paste in the code you signed in
+  <li>If you entered your customer code during setup, it is already saved on this PC. Only when none is saved does Rhino,
+      after the import, <b>ask whether to save your customer code</b>. Paste in the code you signed in
       with at step 2 — you can then find it again even if the e-mail is lost. To do it later: <code>RCWCustomerCode</code>.</li>
 </ol>
 <div class="warn">
@@ -130,7 +131,8 @@
   that e-mail is often gone. <b>Save the code once</b>, the way you import the license file once.
 </p>
 <p>
-  <b>The first place to save it is <code>RCWLicense</code></b>, which asks for it right after importing the licence.
+  <b>The first place to save it is setup</b> — the customer code you enter when installing the full version with <code>RCW5.exe</code> is saved as it is.
+  If you installed an earlier version, <code>RCWLicense</code> asks for it right after importing the licence.
   This command is for saving it <b>later</b>, or changing or removing it.
 </p>
 <ol class="step-list">
@@ -181,12 +183,12 @@ Customer code: RCW-1A2B-3C4D-5E6F</div>
 <div class="note">The same line is printed <b>once when Rhino starts</b>, so you can scroll up to it without running the command.</div>
 
 <h2>RCWUpdate — check for a new version</h2>
-<p>It <b>only tells you</b>. It never downloads or installs anything.</p>
+<p>It tells you when a newer version exists, and when you answer <b>Yes</b> it downloads the installer and starts it. Setup opens with your current Rhino version and edition and the saved customer code already filled in.</p>
 <table class="desc-table">
   <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
   <tbody><tr><th>Action</th><th>Result</th></tr>
   <tr><td><b>Enter</b></td><td>Checks now. If you are current it says so; if a newer version exists it names both versions and asks
-      whether to <b>open the download page</b>.</td></tr>
+      whether to <b>download and start the installer now</b>. If the download fails it opens the download page.</td></tr>
   <tr><td><b>AutoCheck</b></td><td>Turns the <b>startup check</b> on or off. With it off, nothing is checked at all.</td></tr>
 </tbody></table>
 <p>The automatic check behaves like this:</p>
@@ -194,8 +196,10 @@ Customer code: RCW-1A2B-3C4D-5E6F</div>
   <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
   <tbody><tr><th>Item</th><th>Description</th></tr>
   <tr><td>How often</td><td><b>Once a day</b>, quietly, after Rhino has finished starting. It never holds up startup.</td></tr>
-  <tr><td>What is sent</td><td><b>Nothing.</b> It reads one version list file from the web site. Machine code, license and drawings
-      are <b>never sent anywhere</b>.</td></tr>
+  <tr><td>What is sent</td><td>The version check only <b>reads</b> one version list file from the web site.
+      After it, once a day, RCW sends <b>a randomly generated install number, the RCW version, edition, Rhino version and language</b> (from 5.4.0) — no name or customer code.
+      This also stops when <b>AutoCheck</b> is off. Machine code, license and drawings are <b>never sent anywhere</b>.</td></tr>
+  <tr><td>At setup</td><td>When setup finishes it sends <b>the installed version, Rhino version and edition</b> once, and for the full version the <b>customer code</b> too — so we can see which customer installed which version and support you.</td></tr>
   <tr><td>On failure</td><td><b>It says nothing</b> — no warnings behind a firewall or on an isolated network.
       Run <code>RCWUpdate</code> yourself if you want the reason; asked directly, it always answers.</td></tr>
   <tr><td>Repeat prompts</td><td>The dialog is <b>not shown twice for the same version</b>. The command-line note stays.</td></tr>
@@ -206,8 +210,9 @@ Customer code: RCW-1A2B-3C4D-5E6F</div>
 <table class="desc-table">
   <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
   <tbody><tr><th>Situation</th><th>What to do</th></tr>
-  <tr><td>Reinstalling on the same computer</td><td>The machine code is unchanged, so <b>import your existing <code>.lic</code> again with <code>RCWLicense</code></b>.</td></tr>
-  <tr><td>Reinstalling to change the help language</td><td>Install again from the same file with the other language, then <b>import the same <code>.lic</code> again</b>.</td></tr>
+  <tr><td>Reinstalling on the same computer</td><td>Your license and customer code <b>stay</b> even after uninstalling, so just install again.
+      If Rhino says there is no license, the machine code is unchanged, so <b>import your existing <code>.lic</code> again with <code>RCWLicense</code></b>.</td></tr>
+  <tr><td>Reinstalling to change the help language</td><td>Run <code>RCW5.exe</code> again with the other language. Your license and customer code stay as they are.</td></tr>
   <tr><td>New computer / changed machine code</td><td>A <b>new license is required</b>. Request it on the customer page; it is issued after a check.</td></tr>
   <tr><td>A colleague at the same company</td><td>A license covers <b>one computer</b>. Each person needs their own.</td></tr>
 </tbody></table>
