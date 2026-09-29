@@ -282,16 +282,16 @@
     <input id="kq" type="search" placeholder="회사 · 담당자 · 이메일 · 코드 · 메모로 검색">
   </div>
 
-  <!-- 열이 11개라 좁은 화면에서는 표가 넘친다. 페이지를 흔들지 말고 표 안에서 밀리게 한다 -->
+  <!-- 열이 12개라 좁은 화면에서는 표가 넘친다. 페이지를 흔들지 말고 표 안에서 밀리게 한다 -->
   <div class="tscroll">
     <table>
       <thead>
         <tr>
-          <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th><th>영구/구독</th><th>내려받음</th>
+          <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th><th>영구/구독</th><th>내려받음</th><th>마지막 설치</th>
           <th>연락처</th><th>이메일</th><th>정보확인</th><th>코드</th><th></th>
         </tr>
       </thead>
-      <tbody id="krows"><tr><td colspan="11" class="empty">불러오는 중…</td></tr></tbody>
+      <tbody id="krows"><tr><td colspan="12" class="empty">불러오는 중…</td></tr></tbody>
     </table>
   </div>
 
@@ -492,6 +492,12 @@
   <table class="list"><thead><tr><th>에디션</th><th>Rhino 8</th><th>Rhino 7</th><th>합계</th></tr></thead><tbody id="u-matrix"></tbody></table>
   <h3 style="margin:18px 0 6px">최근 30일 — 버전</h3>
   <table class="list"><thead><tr><th>버전</th><th>사용자</th></tr></thead><tbody id="u-versions"></tbody></table>
+  <h3 style="margin:18px 0 6px">설치 기록 — 설치기가 설치를 마친 뒤 보낸 것 (200줄)</h3>
+  <p class="note">
+    5.4.0 설치기부터 옵니다. 처음 설치·새 버전 알림·조용한 설치 모두 남고, 정식판은 고객 코드로 회사를 찾아 붙입니다(코드 원문은 저장하지 않음).
+    평가판은 코드 없이 익명으로 남습니다. <b>"설치했다" 까지만</b> 압니다 — 지웠는지·쓰는지는 모르고, 방화벽·오프라인이면 기록이 없습니다.
+  </p>
+  <table class="list"><thead><tr><th>설치한 때</th><th>회사</th><th>담당자</th><th>버전</th><th>Rhino</th><th>에디션</th></tr></thead><tbody id="u-installs"><tr><td colspan="6" class="empty">불러오는 중…</td></tr></tbody></table>
   <h3 style="margin:18px 0 6px">최근 체크인 (200줄)</h3>
   <table class="list"><thead><tr><th>설치 id</th><th>Rhino</th><th>에디션</th><th>처음 에디션</th><th>버전</th><th>언어</th><th>처음</th><th>마지막</th><th>횟수</th></tr></thead><tbody id="u-rows"><tr><td colspan="9" class="empty">불러오는 중…</td></tr></tbody></table>
 </div>
@@ -693,8 +699,37 @@
      이름만 보면 알 수 있다. 플러그인은 서버로 아무것도 보내지 않으므로
      "정말 설치했는지"는 어차피 알 수 없고, 받아 간 기록이 우리가 가진 전부다. */
   var installs = {};                       // customer_id → { r7: 시각, r8: 시각 }
+  /* 설치기(RCW5, 5.4.0~)가 설치를 마친 뒤 보낸 기록 — customer_access 'installer_installed'.
+     처음 설치·새 버전 알림·조용한 설치 모두 온다. "설치했다" 까지만 안다(지웠는지·쓰는지는 모른다).
+     방화벽·오프라인이면 안 오므로 없으면 "기록 없음" 이지 "설치 안 함" 이 아니다. */
+  var installed = {};                      // customer_id → [{ version, rhino, edition, created_at }, …] 최신순
+  var installedRows = [];                  // 평가판(익명)까지 전부 — 사용 현황 탭
 
   function loadInstalls() {
+    return Promise.all([loadDownloads(), loadInstalled()]);
+  }
+
+  function loadInstalled() {
+    return api('/rest/v1/customer_access' +
+               '?select=customer_id,company,name,version,rhino,edition,created_at&action=eq.installer_installed' +
+               '&order=created_at.desc&limit=5000')
+      .then(function (data) {
+        var map = {};
+        installedRows = data || [];
+        installedRows.forEach(function (a) {
+          if (!a.customer_id) return;
+          (map[a.customer_id] || (map[a.customer_id] = [])).push(a);
+        });
+        installed = map;
+        renderInstalledLog();
+      })
+      .catch(function (err) {
+        console.error(err);            // 이 칸만 비운다 — 고객 목록은 나와야 한다
+        installed = {}; installedRows = [];
+      });
+  }
+
+  function loadDownloads() {
     return api('/rest/v1/customer_access' +
                '?select=customer_id,file_name,created_at&action=eq.download' +
                '&order=created_at.desc&limit=5000')
@@ -764,7 +799,7 @@
   }
 
   function loadCustomers() {
-    kRowsEl.innerHTML = '<tr><td colspan="11" class="empty">불러오는 중…</td></tr>';
+    kRowsEl.innerHTML = '<tr><td colspan="12" class="empty">불러오는 중…</td></tr>';
     Promise.all([
       api('/rest/v1/customers?select=*&order=company.asc&limit=2000'),
       loadInstalls()
@@ -777,7 +812,7 @@
       })
       .catch(function (err) {
         console.error(err);
-        kRowsEl.innerHTML = '<tr><td colspan="11" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
+        kRowsEl.innerHTML = '<tr><td colspan="12" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
       });
   }
 
@@ -799,6 +834,36 @@
       return '<span class="tag r' + g.rhino + '" title="마지막 내려받음 ' +
              esc(fmt(g.at, true)) + '">' + (g.rhino === 'RCW5' ? 'RCW5' : 'Rhino ' + g.rhino) + '</span>';
     }).join('');
+  }
+
+  function renderInstalledLog() {
+    var el = document.getElementById('u-installs');
+    if (!el) return;
+    el.innerHTML = installedRows.length
+      ? installedRows.slice(0, 200).map(function (a) {
+          return '<tr><td>' + esc(fmt(a.created_at, true)) + '</td>' +
+                 '<td>' + (a.customer_id ? esc(a.company || '') : '<span class="none">' + (/_Trial$/.test(a.edition || '') ? '평가판' : '(코드 없음)') + '</span>') + '</td>' +
+                 '<td>' + esc(a.name || '') + '</td><td>' + esc(a.version || '') + '</td>' +
+                 '<td>' + esc(a.rhino || '') + '</td><td>' + esc(String(a.edition || '').replace('_', ' ')) + '</td></tr>';
+        }).join('')
+      : '<tr><td colspan="6" class="empty">아직 설치 기록이 없습니다 — 5.4.0 설치기부터 옵니다.</td></tr>';
+  }
+
+  function installedLabel(a) {
+    return (a.version || '?') + ' · R' + (a.rhino || '?') + ' · ' + String(a.edition || '').replace('_', ' ');
+  }
+
+  function lastInstallCell(c) {
+    var got = installed[c.id];
+    if (!got || !got.length) return '<span class="none" title="기록 없음 — 5.4.0 전 설치이거나, 방화벽·오프라인으로 알림이 안 왔을 수 있습니다">—</span>';
+    var hist = got.slice(0, 10).map(function (a) { return fmt(a.created_at, true) + '  ' + installedLabel(a); }).join('\n');
+    return '<span title="' + esc('설치 기록 ' + got.length + '건 (최근 10건)\n' + hist) + '">' +
+           esc(installedLabel(got[0])) + ' <span class="dim">' + esc(fmt(got[0].created_at)) + '</span></span>';
+  }
+
+  function lastInstallText(c) {
+    var got = installed[c.id];
+    return got && got.length ? installedLabel(got[0]) + ' ' + fmt(got[0].created_at) : '';
   }
 
   /** CSV·검색에 쓰는 글자 표현. 'Rhino 8' / 'Rhino 8·7' / '' */
@@ -873,7 +938,7 @@
     var html = '';
     list.forEach(function (c) {
       var hay = [c.company, c.name, c.email, c.phone, c.license_id, c.note,
-                 installText(c), planText(c)].join(' ').toLowerCase();
+                 installText(c), lastInstallText(c), planText(c)].join(' ').toLowerCase();
       if (q && hay.indexOf(q) === -1) return;
 
       var s = statusOf(c);
@@ -888,6 +953,7 @@
         '<td>' + ed + '</td>' +
         '<td class="nw">' + planCell(c) + '</td>' +
         '<td class="inst">' + installCell(c) + '</td>' +
+        '<td class="nw">' + lastInstallCell(c) + '</td>' +
         '<td class="nw">' + esc(c.phone) + '</td>' +
         '<td>' + esc(c.email) + '</td>' +
         // 시각까지 넣으면 열이 넓어져 오른쪽 끝이 밀린다. 날짜만 보이고 시각은 hover 로.
@@ -898,7 +964,7 @@
         '</tr>';
     });
 
-    kRowsEl.innerHTML = html || '<tr><td colspan="11" class="empty">' +
+    kRowsEl.innerHTML = html || '<tr><td colspan="12" class="empty">' +
       (customers.length ? '검색 결과가 없습니다.' : '아직 등록된 고객이 없습니다.') + '</td></tr>';
   }
 
@@ -1668,13 +1734,13 @@
     }
 
     if (view === 'cust') {
-      var kHead = ['상태', '회사', '담당자', '에디션', '구분', '청구만료', '내려받음',
+      var kHead = ['상태', '회사', '담당자', '에디션', '구분', '청구만료', '내려받음', '마지막 설치',
                    '전화번호', '이메일', '정보확인', '코드', '기기코드', '메모'];
       var kLines = [kHead.join(',')];
       customers.forEach(function (c) {
         kLines.push([
           statusOf(c).label, c.company, c.name, c.edition,
-          planOf(c).label, c.paid_through || '', installText(c), c.phone, c.email,
+          planOf(c).label, c.paid_through || '', installText(c), lastInstallText(c), c.phone, c.email,
           c.info_confirmed_at ? fmt(c.info_confirmed_at, true) : '', c.license_id, c.machine_code,
           c.note || ''
         ].map(csvCell).join(','));
