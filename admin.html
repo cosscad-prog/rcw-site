@@ -858,7 +858,8 @@
     if (!got || !got.length) return '<span class="none" title="기록 없음 — 5.4.0 전 설치이거나, 방화벽·오프라인으로 알림이 안 왔을 수 있습니다">—</span>';
     var hist = got.slice(0, 10).map(function (a) { return fmt(a.created_at, true) + '  ' + installedLabel(a); }).join('\n');
     return '<span title="' + esc('설치 기록 ' + got.length + '건 (최근 10건)\n' + hist) + '">' +
-           esc(installedLabel(got[0])) + ' <span class="dim">' + esc(fmt(got[0].created_at)) + '</span></span>';
+           // 설치 날짜는 안 적는다 — 아랫줄 정보확인 날짜와 겹쳐 보인다. 날짜는 hover 에 있다.
+           esc(installedLabel(got[0])) + '</span>';
   }
 
   function lastInstallText(c) {
