@@ -862,6 +862,20 @@
            esc(installedLabel(got[0])) + '</span>';
   }
 
+  /* 설치 날짜와 정보확인 날짜(고객 포털에서 정보를 확인·저장한 날) 중 나중 것 하나만.
+     날짜 둘이 나란히 있으면 중복처럼 읽힌다. 무슨 날짜인지는 앞 글자로, 둘 다는 hover 로. */
+  function latestDateLine(c) {
+    var got = installed[c.id];
+    var inst = got && got.length ? got[0].created_at : null;
+    var conf = c.info_confirmed_at || null;
+    if (!inst && !conf) return '<span class="sub">—</span>';
+    var useInst = inst && (!conf || new Date(inst) >= new Date(conf));
+    var tip = (inst ? '설치 ' + fmt(inst, true) : '설치 기록 없음') + '\n' +
+              (conf ? '정보확인 ' + fmt(conf, true) : '정보확인 안 함');
+    return '<span class="sub" title="' + esc(tip) + '">' +
+           (useInst ? '설치 ' + esc(fmt(inst)) : '확인 ' + esc(fmt(conf))) + '</span>';
+  }
+
   function lastInstallText(c) {
     var got = installed[c.id];
     return got && got.length ? installedLabel(got[0]) + ' ' + fmt(got[0].created_at) : '';
@@ -957,10 +971,8 @@
         '<td class="nw">' + esc(c.phone) + '</td>' +
         '<td>' + esc(c.email) + '</td>' +
         // 마지막 설치 + 정보확인을 한 칸에 — 두 칸이던 때 표가 틀보다 넓어져 [코드] 가 잘렸다.
-        // 윗줄 설치, 아랫줄 정보확인 날짜. 시각은 hover 로.
-        '<td class="nw">' + lastInstallCell(c) +
-          '<span class="sub"' + (c.info_confirmed_at ? ' title="정보확인 ' + esc(fmt(c.info_confirmed_at, true)) + '"' : '') +
-          '>확인 ' + (c.info_confirmed_at ? esc(fmt(c.info_confirmed_at)) : '—') + '</span></td>' +
+        // 윗줄 설치 버전, 아랫줄 날짜 하나(설치·정보확인 중 나중 것). 둘 다는 hover 로.
+        '<td class="nw">' + lastInstallCell(c) + latestDateLine(c) + '</td>' +
         '<td class="mono">' + esc(c.license_id) + '</td>' +
         '<td><button class="btn mini" type="button" data-edit="' + esc(c.id) + '">고치기</button></td>' +
         '</tr>';
