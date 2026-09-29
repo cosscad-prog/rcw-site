@@ -287,11 +287,11 @@
     <table>
       <thead>
         <tr>
-          <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th><th>영구/구독</th><th>내려받음</th><th>마지막 설치</th>
-          <th>연락처</th><th>이메일</th><th>정보확인</th><th>코드</th><th></th>
+          <th>상태</th><th>회사</th><th>담당자</th><th>에디션</th><th>영구/구독</th><th>내려받음</th>
+          <th>연락처</th><th>이메일</th><th>설치 · 정보확인</th><th>코드</th><th></th>
         </tr>
       </thead>
-      <tbody id="krows"><tr><td colspan="12" class="empty">불러오는 중…</td></tr></tbody>
+      <tbody id="krows"><tr><td colspan="11" class="empty">불러오는 중…</td></tr></tbody>
     </table>
   </div>
 
@@ -799,7 +799,7 @@
   }
 
   function loadCustomers() {
-    kRowsEl.innerHTML = '<tr><td colspan="12" class="empty">불러오는 중…</td></tr>';
+    kRowsEl.innerHTML = '<tr><td colspan="11" class="empty">불러오는 중…</td></tr>';
     Promise.all([
       api('/rest/v1/customers?select=*&order=company.asc&limit=2000'),
       loadInstalls()
@@ -812,7 +812,7 @@
       })
       .catch(function (err) {
         console.error(err);
-        kRowsEl.innerHTML = '<tr><td colspan="12" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
+        kRowsEl.innerHTML = '<tr><td colspan="11" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
       });
   }
 
@@ -953,18 +953,19 @@
         '<td>' + ed + '</td>' +
         '<td class="nw">' + planCell(c) + '</td>' +
         '<td class="inst">' + installCell(c) + '</td>' +
-        '<td class="nw">' + lastInstallCell(c) + '</td>' +
         '<td class="nw">' + esc(c.phone) + '</td>' +
         '<td>' + esc(c.email) + '</td>' +
-        // 시각까지 넣으면 열이 넓어져 오른쪽 끝이 밀린다. 날짜만 보이고 시각은 hover 로.
-        '<td class="when"' + (c.info_confirmed_at ? ' title="' + esc(fmt(c.info_confirmed_at, true)) + '"' : '') +
-          '>' + (c.info_confirmed_at ? fmt(c.info_confirmed_at) : '—') + '</td>' +
+        // 마지막 설치 + 정보확인을 한 칸에 — 두 칸이던 때 표가 틀보다 넓어져 [코드] 가 잘렸다.
+        // 윗줄 설치, 아랫줄 정보확인 날짜. 시각은 hover 로.
+        '<td class="nw">' + lastInstallCell(c) +
+          '<span class="sub"' + (c.info_confirmed_at ? ' title="정보확인 ' + esc(fmt(c.info_confirmed_at, true)) + '"' : '') +
+          '>확인 ' + (c.info_confirmed_at ? esc(fmt(c.info_confirmed_at)) : '—') + '</span></td>' +
         '<td class="mono">' + esc(c.license_id) + '</td>' +
         '<td><button class="btn mini" type="button" data-edit="' + esc(c.id) + '">고치기</button></td>' +
         '</tr>';
     });
 
-    kRowsEl.innerHTML = html || '<tr><td colspan="12" class="empty">' +
+    kRowsEl.innerHTML = html || '<tr><td colspan="11" class="empty">' +
       (customers.length ? '검색 결과가 없습니다.' : '아직 등록된 고객이 없습니다.') + '</td></tr>';
   }
 
