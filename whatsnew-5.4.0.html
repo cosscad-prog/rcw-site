@@ -319,13 +319,15 @@
       <p class="eyebrow">RCW for Rhino · 5.4.0 에서 달라진 것</p>
       <h1>What's New 5.4.0</h1>
       <p class="sub">
-        명령과 모델링은 5.3.2 와 같습니다. 바뀐 것은 <b>설치하는 방법</b>과,
-        RCW 가 <b>처음으로 보내는 몇 가지 정보</b>입니다.
+        가장 큰 변화는 <b>설치하는 방법</b>과 RCW 가 <b>처음으로 보내는 몇 가지 정보</b>입니다.
+        함께 <b>유리(GsOpt · GsList)</b> 와 <b>가공도 기록 창(FDstyle)</b> 을 쓰기 편하게 다듬었습니다.
       </p>
       <div class="agenda">
         <div><p class="n">설치</p><p class="t">파일 하나</p><p><b>RCW5.exe</b> 하나로 Rhino 와 에디션을 설치할 때 고릅니다</p></div>
         <div><p class="n">업데이트</p><p class="t">알림에서 [예]</p><p>쓰던 Rhino · 에디션 · 고객 코드가 <b>미리 채워집니다</b></p></div>
         <div><p class="n">알려 드립니다</p><p class="t">보내는 정보</p><p>무엇을 보내고 <b>무엇을 보내지 않는지</b> 한 장에 적었습니다</p></div>
+        <div><p class="n">유리</p><p class="t">0.76 접합유리 · NBlock</p><p>GsOpt 새 두께 · Description · Del 키, GsList 가 <b>NBlock 도 셉니다</b></p></div>
+        <div><p class="n">가공도</p><p class="t">FDstyle 은 필요할 때</p><p>FDwg 가 창을 띄우지 않습니다 · <b>재생/기록 버튼</b></p></div>
       </div>
       <div class="say">
         <span class="lbl">먼저 보실 것</span>
@@ -456,19 +458,97 @@
     </div>
   </section>
 
-  <!-- 4 정리 -->
-  <section class="slide" data-title="정리" data-desc="세 문장으로" id="slide-4">
+  <!-- 4 유리 -->
+  <section class="slide" data-title="유리 (GsOpt · GsList)" data-desc="0.76 접합유리 · NBlock 집계" id="slide-4">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>유리 종류와 유리 목록 <span class="pill p-new">새 두께</span></h2>
+        <span class="cmds">GsOpt · GsList</span>
+      </div>
+      <p class="lede">
+        GsOpt 에 <b>PVB 0.76 접합유리</b>가 들어왔고, 유리 종류를 만들고 고치는 창을 쓰기 편하게 바꿨습니다.
+        GsList 는 <b>NBlock</b> 으로 만든 unit 의 유리도 셉니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>GsOpt</h3>
+          <ul>
+            <li>1st · 3rd Pane 에 <b>8.76 (4+0.76+4) · 10.76 (5+0.76+5) · 12.76 (6+0.76+6)</b>. 가공도에서 판 두 장으로 그립니다.</li>
+            <li><b>강도(Hardness)를 고르지 않아도</b> Description 이 만들어집니다. 고르면 <code>/CL</code> 등이 붙습니다.</li>
+            <li>목록에서 줄을 고르고 <b>Del 키</b>로 지웁니다(여러 줄 한 번에). 버튼은 <b>SAVE 가운데 · Add List 오른쪽</b>.</li>
+            <li>맨 아래 안내 글이 잘리지 않습니다. 3rd Pane 을 다시 열면 2nd Pane 값이 들어가던 것 · 삼복층 가공도의 가운데 유리가 6mm 뒤에 그려지던 것을 고쳤습니다.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>GsList — NBlock 도</h3>
+          <ul>
+            <li>유리 group 을 포함해 만든 <b>NBlock</b> 을 골라도 유리 목록이 나옵니다. 수량은 <b>배치한 NBlock 수</b>만큼 곱해집니다.</li>
+            <li>유리 solid 와 NBlock 을 <b>함께</b> 고르면 한 표로 합칩니다 — Molist 와 같습니다.</li>
+            <li>NBlock 에 담긴 유리 정보는 <b>NBlock 을 만든 때</b>의 것입니다. GsNo 뒤에 NBlock 을 만드시고, 유리를 바꿨으면 NBlock 을 다시 실행하십시오.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">주의</span>
+        NBlock 은 원본을 지우지 않습니다. <b>원본 유리와 그것으로 만든 NBlock 을 함께 고르면 두 번 셉니다.</b>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 FDstyle -->
+  <section class="slide" data-title="가공도 기록 창 (FDstyle)" data-desc="필요할 때 열기 · 재생/기록 버튼" id="slide-5">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">05</span>
+        <h2>FDstyle 은 필요할 때 <span class="pill p-chg">바뀜</span></h2>
+        <span class="cmds">FDwg · DDOpt · FDstyle</span>
+      </div>
+      <p class="lede">
+        <code>FDwg</code> 를 실행해도 FDstyle 창이 <b>저절로 뜨지 않습니다</b>. 가공도 설정을 기록할 때만 여십시오.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>여는 곳</h3>
+          <ul>
+            <li><code>DDOpt</code> 패널 맨 왼쪽 위의 <b>[FDstyle]</b> 버튼 — 옛 <b>Apply File Data</b> 체크박스 자리입니다.</li>
+            <li>또는 <code>FDstyle</code> 명령.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>재생 · 기록 버튼</h3>
+          <table class="mini">
+            <tbody>
+              <tr><th>둘 다 꺼짐<br>(처음)</th><td><code>DDOpt</code> 패널값으로 그립니다</td></tr>
+              <tr><th>[재생모드 시작]<br>파랑</th><td><b>기록된 설정</b>으로 그립니다 — 옛 Apply File Data 체크와 같습니다</td></tr>
+              <tr><th>[기록모드 시작]<br>빨강</th><td>패널값으로 그리면서 기록합니다. 다시 누르면 끝나고, 손으로 옮긴 표·지시선까지 저장합니다</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        버튼마다 <b>켜고 끕니다</b>. 켜진 버튼을 다시 누르면 꺼지고, 다른 쪽을 누르면 넘어갑니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 정리 -->
+  <section class="slide" data-title="정리" data-desc="다섯 줄로" id="slide-6">
     <div class="slide-inner">
       <p class="kicker">정리</p>
-      <h2>세 문장으로</h2>
+      <h2>다섯 줄로</h2>
       <div class="agenda">
         <div><p class="n">하나</p><p class="t">파일 하나</p><p><b>RCW5.exe</b> 하나로 Rhino 와 에디션을 설치할 때 고릅니다.</p></div>
         <div><p class="n">둘</p><p class="t">알림에서 [예] → [다음]</p><p>쓰던 설정과 고객 코드가 채워져 있고, 옛 설치는 정리됩니다.</p></div>
         <div><p class="n">셋</p><p class="t">보내는 것은 몇 가지뿐</p><p>설치 기록과 하루 한 번의 사용 신호 — <b>도면 · 머신코드 · 라이선스는 보내지 않습니다.</b></p></div>
+        <div><p class="n">넷</p><p class="t">유리</p><p>0.76 접합유리 · 강도 없이 Description · Del 키 · GsList 가 NBlock 도 셉니다.</p></div>
+        <div><p class="n">다섯</p><p class="t">FDstyle</p><p>DDOpt [FDstyle] 로 열고, <b>[재생모드 시작]</b> 을 켜야 기록된 설정으로 그립니다.</p></div>
       </div>
       <div class="say">
         <span class="lbl">맺는 말</span>
-        명령과 모델링 결과는 5.3.2 와 같습니다. 설치 뒤 <code>RCWVersion</code> 으로 <b>5.4.0</b> 과 에디션이 맞는지만 확인해 주십시오.
+        설치 뒤 <code>RCWVersion</code> 으로 <b>5.4.0</b> 과 에디션이 맞는지 확인해 주십시오.
+        전에 Apply File Data 를 체크해 쓰셨다면, 이제는 FDstyle 의 <b>[재생모드 시작]</b> 을 켜십시오.
       </div>
     </div>
   </section>
