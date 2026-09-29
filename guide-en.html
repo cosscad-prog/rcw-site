@@ -20,25 +20,42 @@
   <p class="eyebrow">RCW V5 · CUSTOMER QUICK START</p>
   <h1>Installation & Activation Guide</h1>
   <p class="lead">Core · Standard · Trial | From installation to local help</p>
-  <div class="box"><strong>Before you begin:</strong> Choose one installer that matches your edition (Core or Standard) and Rhino version (7 or 8). Language is not a separate file — Korean and English are both inside, and <strong>Setup asks which one to use.</strong> Close Rhino before installation. This guide opens automatically when installation finishes.</div>
+  <div class="box"><strong>Before you begin:</strong> There is <strong>one installer, <code>RCW5.exe</code></strong>. You choose the Rhino version (7 or 8) and the edition <strong>during setup</strong>. For the full version (Core or Standard) keep the <strong>customer code</strong> from your welcome email (it starts with <code>RCW-</code>) at hand. The language is chosen during setup too; Korean and English are both in the one file. Close Rhino before installation. For the full version this guide opens automatically when installation finishes.</div>
   <h2>1. Install</h2>
   <div class="box warning"><strong>A warning may appear during installation — this is expected.</strong><br>
     <strong>&ldquo;Windows protected your PC&rdquo;</strong> (blue screen) &rarr; click <strong>More info</strong>, then <strong>Run anyway</strong><br>
     <strong>Antivirus scan dialog</strong> &rarr; wait for the scan to finish, then choose the option that allows the file to run (the button name differs by product: Allow / Run anyway / Add to exceptions / Trust this program)<br>
     The installer does not yet carry a code-signing certificate, which is why these appear. It does not indicate a problem with the file. If it still will not install, contact us with the name of your antivirus.</div>
-  <ol><li>Run the supplied RCW V5 installer (<code>.exe</code>).</li><li>Approve Windows administrator access if requested and complete installation.</li><li>Start Rhino. The trial period is counted from this first successful load.</li></ol>
+  <ol>
+    <li>Run <code>RCW5.exe</code> and approve Windows administrator access if requested.</li>
+    <li>Choose the <strong>Rhino version</strong> — Rhino 7 or Rhino 8. A version not installed on this PC cannot be chosen. RCW is installed into <strong>one Rhino</strong> at a time.</li>
+    <li>Choose the <strong>edition</strong>.
+      <ul>
+        <li>Full version — enter your <strong>customer code</strong>; it decides Core or Standard. Hyphens, spaces and lower case do not matter.</li>
+        <li>Trial — choose Core Trial or Standard Trial. No code is needed.</li>
+      </ul>
+    </li>
+    <li>Finish setup. If Rhino is open, setup asks to close it and reopens it afterwards.</li>
+    <li>Start Rhino. The trial period is counted from this first successful load.</li>
+  </ol>
   <table><tr><th>Core</th><td>Perpetual commercial edition with the Core command scope</td></tr><tr><th>Standard</th><td>Perpetual commercial edition with the full general command scope</td></tr><tr><th>Core Trial</th><td><strong>90-day</strong> evaluation using the Core command scope; no license file is required.</td></tr><tr><th>Standard Trial</th><td><strong>30-day</strong> evaluation using the full command scope; no license file is required.</td></tr></table>
+  <div class="box">
+    <strong>If something comes up</strong><br>
+    <strong>&ldquo;This customer code could not be confirmed&rdquo;</strong> — check the code. If you enter the machine code (<code>RCW5-</code>) by mistake, setup tells you so.<br>
+    <strong>No internet connection</strong> — if this PC already has a license, setup installs that edition. On a PC installing for the first time, connect to the internet and run setup again. Trials install without internet.<br>
+    <strong>An earlier RCW is installed</strong> — the new setup takes it over and cleans it up, so only <strong>RCW5</strong> remains in the Control Panel. Your license, customer code and settings stay as they are.
+  </div>
   <h2>2. Activate Core / Standard</h2>
-  <p>Get your license <strong>yourself on the customer page</strong> — no need to contact us.</p>
+  <p>Get your license <strong>yourself on the customer page</strong> — no need to contact us. If this PC already has a license (reinstall or update), you can skip this.</p>
   <ol><li>When Rhino first starts without a license file, it automatically displays and copies the machine code, then opens this guide. You can also run <code>RCWMachineCode</code> manually.</li><li>Go to <code>www.beimptech.com/rcw/customer</code> and enter the <strong>customer code</strong> you were sent (it starts with <code>RCW-</code>).</li><li>In the <strong>License</strong> section further down the page, paste the machine code from step 1 into the <strong>Machine code</strong> field and press <strong>[Request license]</strong>.</li><li>A <strong>[Download license]</strong> button appears in the same place, usually within a minute. The page updates by itself — no need to refresh.</li><li>Save the downloaded license file (<code>.lic</code>) in a safe location.</li><li>Run <code>RCWLicense</code> in Rhino and select that <code>.lic</code> file.</li><li>Confirm the success message and restart Rhino.</li></ol>
   <div class="box"><strong>Two codes — do not mix them up.</strong><br>
-    <strong>Customer code</strong> — <code>RCW-...</code> · sent to you by email. Use it to <em>sign in</em> to the customer page. It does not expire, so the same code stays with you even after you change PCs.<br>
-    <strong>Machine code</strong> — <code>RCW5-CO-...</code> or <code>RCW5-ST-...</code> · shown by Rhino. Use it to <em>request the license</em> once signed in.<br></div>
+    <strong>Customer code</strong> — <code>RCW-...</code> · sent to you by email. Use it <em>during setup</em> and to <em>sign in</em> to the customer page. It does not expire, so the same code stays with you even after you change PCs. The code you enter during setup is saved, and <code>RCWVersion</code> shows it at any time.<br>
+    <strong>Machine code</strong> — <code>RCW5-CO-...</code> or <code>RCW5-ST-...</code> · shown by Rhino. Use it to <em>request the license</em> once signed in.</div>
   <div class="box warning"><strong>Important:</strong> Do not manually copy a license file into Program Files. Always import it with <code>RCWLicense</code>. One license is issued <strong>per PC</strong>. A new license must be issued after replacing the PC or changing the machine code; request it on the customer page and we will confirm it with you.</div>
   <h2>3. Trial</h2>
-  <ul><li>Core Trial runs for <strong>90 days</strong> with the Core command scope; Standard Trial runs for <strong>30 days</strong> with the full command scope.</li><li>The period begins at the first successful load and keeps that start date when reinstalled under the same Windows user account.</li><li>After Trial, purchase Core or Standard and follow the activation procedure above.</li></ul>
+  <ul><li>Core Trial runs for <strong>90 days</strong> with the Core command scope; Standard Trial runs for <strong>30 days</strong> with the full command scope.</li><li>The period begins at the first successful load and keeps that start date when reinstalled under the same Windows user account.</li><li>The two periods are counted separately — using up the 90 days of Core Trial leaves the 30 days of Standard Trial untouched.</li><li>After Trial, purchase Core or Standard and follow the activation procedure above.</li></ul>
   <h2>4. Help and support</h2>
-  <ul><li>Run <code>RcwHelp</code> in Rhino to open the installed local help.</li><li>To change the help language, run the same installer again and pick the other language; then import the same <code>.lic</code> file again with <code>RCWLicense</code>.</li><li>For support, include the installer filename, Rhino version, Windows user name, error text, and a screenshot when available.</li></ul>
+  <ul><li>Run <code>RcwHelp</code> in Rhino to open the installed local help.</li><li>To change the help language, run <code>RCW5.exe</code> again and pick the other language. Your license and customer code stay as they are.</li><li>RCW sends information once when setup finishes (installed version, Rhino version, edition, and the customer code for the full version) and once a day when RCW starts (a random install number, version, edition, Rhino version and language). It does not send the machine code, the license file or drawing content. The daily report stops when you turn off the update notice with <code>RCWUpdate</code>.</li><li>For support, include the <code>RCWVersion</code> output, Rhino version, Windows user name, error text, and a screenshot when available.</li></ul>
   <p class="footer">RCW V5 Installation & Activation Guide | Beimptech</p>
 </body>
 </html>
