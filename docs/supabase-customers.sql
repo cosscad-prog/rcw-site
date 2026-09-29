@@ -96,6 +96,19 @@ alter table public.customer_access drop constraint if exists customer_access_act
 alter table public.customer_access add constraint customer_access_action_check
   check (action in ('login', 'login_failed', 'download', 'profile'));
 
+-- 설치기(RCW5, 5.4.0~): 고객 코드 확인 기록 installer_check(_failed) 와
+-- 설치 완료 알림 installer_installed(버전·Rhino·에디션). 2026-09-29 마이그레이션
+-- customer_access_installer_actions · customer_access_installer_installed 로 적용됨.
+alter table public.customer_access add column if not exists version text;
+alter table public.customer_access add column if not exists company text;
+alter table public.customer_access add column if not exists name    text;
+alter table public.customer_access add column if not exists rhino   text check (rhino in ('7', '8'));
+alter table public.customer_access add column if not exists edition text check (char_length(edition) <= 40);
+alter table public.customer_access drop constraint if exists customer_access_action_check;
+alter table public.customer_access add constraint customer_access_action_check
+  check (action in ('login', 'login_failed', 'download', 'profile',
+                    'installer_check', 'installer_check_failed', 'installer_installed'));
+
 create index if not exists customer_access_created_at_idx on public.customer_access (created_at desc);
 create index if not exists customer_access_customer_idx   on public.customer_access (customer_id, created_at desc);
 -- 무차별 대입 판정: 같은 IP 의 최근 실패만 빠르게 센다
