@@ -2,24 +2,6 @@
   "_comment": "버전별 변경 안내. 평가판(trial)·고객(customer) 두 다운로드 페이지가 이 파일 하나를 읽어 그린다(changes.js). 발행할 때 맨 앞에 새 항목을 넣을 것 — 안 넣으면 publish 스크립트가 막는다. 화면에는 여기 있는 것이 전부 나온다(2026-08-14): 맨 앞 하나는 펼쳐지고, 이전 버전은 버전마다 한 줄로 접혀 눌러야 내용이 보인다. 그래서 계속 쌓아 둘 것 — 언제 무엇을 고쳤는지 되짚는 기록이다. 고친 문제 중심으로, 내부 구현·파일명·함수명은 넣지 않는다. 캐시는 vercel.json 이 /releases.json 에 max-age=60 으로 잡는다(발행마다 바뀌므로).",
   "releases": [
     {
-      "version": "5.4.0",
-      "date": "2026-09-29",
-      "items": [
-        {
-          "ko": "<b>설치 파일이 하나로 바뀌었습니다.</b> 전에는 에디션과 Rhino 버전마다 설치 파일이 따로 있어(8가지) 맞는 것을 골라 받아야 했고, 제어판에도 설치한 만큼 항목이 생겼습니다.<br><br>이제 <b>RCW5.exe 하나</b>를 받아 설치할 때 <b>Rhino 7 / Rhino 8</b> 과 에디션을 고릅니다. 정식판은 안내 메일의 <b>고객 코드(RCW-로 시작)</b>를 넣으면 에디션이 정해지고, 평가판은 Core·Standard 중에서 고릅니다. 전에 설치한 RCW 는 새 설치가 넘겨받아 정리하므로 <b>제어판에는 RCW5 하나</b>만 남습니다. RCW 는 한 번에 <b>하나의 Rhino</b> 에만 설치됩니다. 인터넷에 연결되어 있지 않으면 이 PC 의 라이선스에 적힌 에디션으로 설치합니다.",
-          "en": "<b>There is now a single installer.</b> There used to be a separate installer for each edition and Rhino version (eight in all), you had to pick the right one, and each install added its own entry to the Control Panel.<br><br>Download <b>RCW5.exe</b> and choose <b>Rhino 7 or Rhino 8</b> and the edition while installing. For the full version, enter the <b>customer code (starting with RCW-)</b> from your welcome email and the edition is set from it; for a trial, choose Core or Standard. An earlier RCW install is taken over and cleaned up, so <b>only RCW5 appears in the Control Panel</b>. RCW is installed into <b>one Rhino</b> at a time. Without an internet connection, setup installs the edition written in this PC's license."
-        },
-        {
-          "ko": "<b>새 버전 알림이 새 설치 파일로 이어집니다.</b> 5.3.2 에서 새 버전 알림에 <b>[예]</b> 를 누르시면 새 설치 파일을 받아 실행합니다. 설치 화면에는 <b>쓰고 계신 Rhino 버전과 에디션</b>이 미리 골라져 있고, 정식판은 <b>저장된 고객 코드</b>가 채워져 있어 [다음] 만 누르시면 됩니다. 고객 코드가 비어 있으면 안내 메일의 코드(RCW-로 시작)를 한 번 넣어 주십시오.",
-          "en": "<b>The update notice now leads to the new installer.</b> In 5.3.2, answer <b>Yes</b> to the update notice and RCW downloads and starts the new installer. Setup opens with <b>your current Rhino version and edition</b> already chosen, and for the full version the <b>saved customer code</b> filled in - just click Next. If the customer code is empty, enter the one from your welcome email (starting with RCW-) once."
-        },
-        {
-          "ko": "<b>RCW 가 보내는 정보를 알려 드립니다.</b> 이 버전부터 RCW 는 설치와 사용 현황을 파악하기 위해 아래 정보만 보냅니다.<br><br>&bull; <b>설치를 마칠 때 한 번</b> — 설치한 버전, Rhino 버전, 에디션. 정식판은 <b>고객 코드</b>도 함께 보냅니다(어느 고객이 어느 버전을 설치했는지 확인하고 지원하기 위해서입니다). 평가판은 고객 코드 없이 보냅니다.<br>&bull; <b>하루 한 번 RCW 를 켤 때</b> — 무작위로 만든 설치 번호, RCW 버전, 에디션, Rhino 버전, 화면 언어. 이름이나 고객 코드는 들어 있지 않습니다.<br><br><b>보내지 않는 것</b>: 머신코드, 라이선스 파일, 도면과 파일의 내용, 사용하시는 명령. 하루 한 번 보내기는 <b>RCWUpdate</b> 명령에서 새 버전 알림을 끄시면 함께 꺼집니다. 회사 방화벽 등으로 보내지 못해도 RCW 는 그대로 동작합니다.",
-          "en": "<b>What RCW sends.</b> From this version RCW sends only the following, to keep track of installs and use.<br><br>&bull; <b>Once, when setup finishes</b> - the installed version, the Rhino version and the edition. The full version also sends the <b>customer code</b>, so we can see which customer installed which version and support you. Trials send no customer code.<br>&bull; <b>Once a day, when RCW starts</b> - a randomly generated install number, the RCW version, the edition, the Rhino version and the display language. No name or customer code is included.<br><br><b>Not sent</b>: the machine code, the license file, the content of drawings and files, or the commands you use. The daily report stops when you turn off the update notice with the <b>RCWUpdate</b> command. If a company firewall blocks it, RCW keeps working as before."
-        }
-      ]
-    },
-    {
       "version": "5.3.2",
       "date": "2026-09-28",
       "items": [
