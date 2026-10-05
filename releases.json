@@ -3,6 +3,52 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.5.0",
+      "date": "2026-10-06",
+      "items": [
+        {
+          "ko": "<b>판재(Sheet) 명령이 새로 들어왔습니다.</b> 유리 자리에 들어가는 접힌 금속 판재를 만들고, 번호 · 목록 · 가공도까지 냅니다. Core 와 Standard 모두에 들어 있습니다.<br><br>&bull; <b>ShMD</b> — 판재가 들어갈 칸의 면을 만듭니다.<br>&bull; <b>Sht</b> — 판재를 만듭니다. 두께, 가장자리 모양(평판 · 접힘 · 안쪽/바깥쪽 되접기), 변마다의 깊이, 붙이는 프로파일(전체 길이 45° 맞댐 · 전체 길이 직각 · 조각)과 스크류 구멍을 창에서 정합니다.<br>&bull; <b>ShNo</b> · <b>ShList</b> · <b>ShTable</b> · <b>ShFd</b> — 번호 매기기, 수량 목록(Excel), 가공 표, 가공도(정면 · 단면 · ISO · 전개도 · 붙인 프로파일 표).<br><br>판재가 붙는 단면에는 <code>S_Center1</code> 레이어의 선이 있어야 합니다. 그리는 방법은 도움말 <b>09 Sheet Modeling &rarr; Making Sheet Section</b> 에 그림과 함께 있습니다.",
+          "en": "<b>Sheet commands are new.</b> They make the folded metal sheet that takes the place of glass, and carry it through numbering, lists and fabrication drawings. They are in both Core and Standard.<br><br>&bull; <b>ShMD</b> - makes the face of each bay that takes a sheet.<br>&bull; <b>Sht</b> - makes the sheet. Thickness, edge type (flat, fold, inside or outside return), the depth of each side, the attached profile (full length with mitered corners, full length with square ends, or pieces) and screw holes are set in one window.<br>&bull; <b>ShNo</b>, <b>ShList</b>, <b>ShTable</b>, <b>ShFd</b> - numbering, the quantity list (Excel), the fabrication table and the fabrication drawing (front, sections, ISO, unfold and a table of attached profiles).<br><br>The section a sheet attaches to needs a line on the <code>S_Center1</code> layer. How to draw it is in the help under <b>09 Sheet Modeling &rarr; Making Sheet Section</b>, with pictures."
+        },
+        {
+          "ko": "<b>멀리언 이음이 칸 안에 있으면 유리 · 백패널이 빠지던 것을 고쳤습니다.</b> 유리 칸의 한 변에 선이 둘로 나뉘어 있으면(위아래 유닛의 멀리언이 만나는 자리 등) 그 칸의 유리나 백패널이 만들어지지 않는 경우가 있었습니다. 이제 변마다 그 변을 가장 많이 덮는 선 하나를 골라 만듭니다.",
+          "en": "<b>Glass and BackPanels are no longer dropped when a mullion joint falls inside a bay.</b> When one side of a glass bay was covered by two lines (for example where the mullions of two stacked units meet), the glass or BackPanel of that bay was sometimes not made. Each side now takes the one line that covers it most."
+        },
+        {
+          "ko": "<b>유리 · 백패널이 단면의 선을 고르는 방식을 바로잡았습니다.</b> 단면의 유리선(<code>G_Center1</code>) · 백패널 선(<code>BP_Center1</code>)이 <b>중심선의 어느 쪽에 있는지</b>를 보고, 칸이 있는 쪽의 선을 씁니다.<br><br>&bull; 폭이 아주 좁은 칸(약 110mm 미만)에서 선이 있는데도 못 찾던 것을 고쳤습니다.<br>&bull; 칸 쪽에 선이 <b>둘 이상</b>이면 중심선에 가장 가까운 것을 쓰고, 명령창에 선의 수와 거리를 알립니다. 전에는 알림 없이 먼 쪽을 썼습니다 — 한쪽에 선을 둘 그려 둔 단면이 있다면 결과가 달라지니 확인해 주십시오.<br>&bull; 칸 쪽에 선이 <b>없어</b> 만들 수 없는 칸은, 어느 선(레이어)이 없는지 알리고 만들다 만 면을 남기지 않습니다. 전에는 Error 한 줄만 나왔습니다.",
+          "en": "<b>How glass and BackPanels pick the line in a section has been corrected.</b> RCW now looks at <b>which side of the center line</b> the glass line (<code>G_Center1</code>) or BackPanel line (<code>BP_Center1</code>) is on, and uses the one on the bay's side.<br><br>&bull; In very narrow bays (under about 110 mm) the line was not found although it was there - fixed.<br>&bull; With <b>two or more</b> lines on the bay's side, the one nearest the center line is used and the command line reports how many there are and their distances. It used to take the farther one without notice - if a section has two lines on one side, the result changes, so please check it.<br>&bull; A bay that cannot be made because there is <b>no line</b> on its side now says which line (layer) is missing and leaves no half-made faces behind. It used to print a single Error line."
+        },
+        {
+          "ko": "<b>BpFd · GsFd 가 예전 버전으로 만든 백패널 · 유리도 그립니다.</b> 오래전 버전으로 만든 백패널에 BpFd 를 돌리면 정면 선만 그리고 아무 말 없이 끝났습니다. 이제 판의 면에서 꼭짓점을 구해 치수 · 단면 · 전개도까지 그리고, 그렇게 했다고 명령창에 알립니다. GsFd 도 같습니다.<br><br>한 장을 그리다 멈추면 <b>어느 판에서 왜 멈췄는지</b> 알리고 다음 장으로 넘어갑니다. GsFd 의 진행 표시에 유리 번호가 늘 0 으로 나오던 것도 고쳤습니다.",
+          "en": "<b>BpFd and GsFd now draw BackPanels and glass made by older versions.</b> Running BpFd on a BackPanel made by a much older version drew only the front lines and ended without a word. It now takes the corners from the panel face, draws the dimensions, sections and unfold, and says so on the command line. GsFd does the same.<br><br>If one sheet cannot be drawn, RCW says <b>which one and why</b> and goes on to the next. The glass number in the GsFd progress text, which always showed 0, is fixed too."
+        },
+        {
+          "ko": "<b>RBB(블록 다시 잇기)가 단면의 블록 등록을 망가뜨리던 것을 고쳤습니다.</b> RBB 를 돌리면 블록의 등록 값이 서로 뒤바뀌어 저장되고, 그 단면의 합성 · FabG · 밀링 값이 지워졌습니다. 그 뒤로는 SSP 가 블록을 검사하지 않아 문제가 숨었고, 그런 단면을 PPI 로 열면 Profile Manager 창이 닫혀 버렸습니다.<br><br>&bull; RBB 는 이제 블록 등록만 고치고 나머지 값은 그대로 둡니다. 블록 하나에 슬롯 하나만 잇고, 같은 거리의 블록은 기준점으로 가립니다.<br>&bull; 예전 RBB 가 뒤바꿔 놓은 단면은 Pname · PPI 가 바로잡아 읽고, SSP 가 경고로 알립니다 — <b>RBB 를 한 번 다시 돌리면</b> 고쳐집니다.<br>&bull; 블록 복사 · 삭제 명령(BC12 · DBB · BBC4 등)과 PPlist 도 단면의 다른 값을 지우지 않습니다.<br>&bull; 블록이 없는 새 단면에 BBC4 로 값만 복사한 경우: Pname 이 슬롯을 그대로 보여 주고, SSP · RBB 가 블록을 다시 잇거나 못 찾은 슬롯을 알립니다.",
+          "en": "<b>RBB (relink blocks) no longer damages the block registration of a section.</b> Running RBB saved the block's registration values swapped and erased the section's composite, FabG and milling values. After that SSP stopped checking those blocks, which hid the problem, and opening such a section with PPI closed the Profile Manager window.<br><br>&bull; RBB now repairs only the block registration and leaves everything else alone. It links one slot per block and tells blocks at the same distance apart by their anchor point.<br>&bull; A section swapped by the old RBB is read correctly by Pname and PPI, and SSP warns about it - <b>run RBB once more</b> to repair it.<br>&bull; The block copy and delete commands (BC12, DBB, BBC4 and others) and PPlist no longer erase the other values of the section.<br>&bull; After copying only the data onto a new section without blocks using BBC4: Pname keeps showing the slots, and SSP and RBB relink the blocks or report the slots they could not match."
+        },
+        {
+          "ko": "<b>SSP 가 단면 평면에서 벗어난 블록을 바로잡습니다.</b> 블록의 삽입점이 단면의 평면 밖에 있으면(옆에서 보면 떠 있는 블록) 모델링에서 블록이 엉뚱한 자리에 놓였습니다. SSP 가 이런 블록을 단면 평면 위로 옮기고 <b>'평면 밖 &rarr; 고침'</b> 으로 목록에 알립니다.",
+          "en": "<b>SSP puts a block that is off the section plane back on it.</b> When a block's insertion point was off the plane of the section (a block floating when seen from the side), the block landed in the wrong place in the model. SSP now moves such a block onto the section plane and lists it as <b>'off plane &rarr; fixed'</b>."
+        },
+        {
+          "ko": "<b>단면을 여는 길을 하나로 맞췄습니다.</b> PPI, Profile Manager 의 그림 클릭, RCW Section 탭의 More details 가 Pname 과 똑같이 단면을 엽니다. 그림을 누른 뒤 단면을 클릭해도 골라지지 않던 것, 복사한 합성 단면이 합성 이름이 아니라 각자 이름으로 보이던 것이 이것으로 고쳐졌습니다.<br><br><b>합성 프로파일(ComP)</b>: ComP 가 <code>ComP_이름</code> group 을 만들어 합성을 통째로 고르고 복사할 수 있습니다. 복사한 합성은 Pname 으로 여는 순간 새 합성으로 등록되고, 미리보기에 원본이 섞여 보이지 않습니다.",
+          "en": "<b>There is now one way to open a section.</b> PPI, the picture click in Profile Manager and More details on the RCW Section tab open a section exactly as Pname does. This fixes a section not being picked after clicking the picture, and a copied composite section showing its own name instead of the composite name.<br><br><b>Composite profiles (ComP)</b>: ComP now makes a <code>ComP_name</code> group, so a composite can be selected and copied as a whole. A copied composite is registered as a new composite the moment Pname opens it, and the preview no longer mixes in the original."
+        },
+        {
+          "ko": "<b>RCW Section 탭에서 글자 칸이 저장되지 않던 것을 고쳤습니다.</b> Rhino 의 Properties 창에 있는 RCW Section 탭에서 Name · Description · Additional Length 칸을 고쳐도 값이 그대로였습니다. 이제 칸을 벗어나거나 Enter 를 누르면 저장됩니다.",
+          "en": "<b>Text boxes on the RCW Section tab now save.</b> On the RCW Section tab of Rhino's Properties window, changes to Name, Description and the Additional Length boxes were not kept. They are now saved when you leave the box or press Enter."
+        },
+        {
+          "ko": "<b>FabTable · Dtable.</b> FabTable 의 칸 높이를 폭의 0.8배로 맞추고, 긴 Profile Name 은 글자를 줄여 칸 안에 넣습니다. Dtable 을 Profile Name 으로 정렬하면 같은 이름의 합성끼리 구성원이 뒤섞이던 것을 고쳤습니다 — 합성마다 자기 구성원이 바로 아래에 모입니다.",
+          "en": "<b>FabTable and Dtable.</b> FabTable cells are now 0.8 times as high as they are wide, and a long Profile Name is shrunk to fit its cell. Sorting Dtable by Profile Name mixed up the members of composites that share a name - each composite now keeps its own members right below it."
+        },
+        {
+          "ko": "<b>도움말.</b> <b>08 BackPanel Modeling</b> 에 <b>Making BackPanel Section</b> 이 새로 들어왔습니다 — 단면의 <code>BP_Center1</code> 선이 무엇을 정하고 BpOpt 가 무엇을 정하는지를 그림으로 설명합니다. 판재 도움말은 <b>09 Sheet Modeling</b> 에 있고, Xtract Modeling 은 13 번으로 옮겼습니다.",
+          "en": "<b>Help.</b> <b>08 BackPanel Modeling</b> has a new page, <b>Making BackPanel Section</b>, showing in pictures what the <code>BP_Center1</code> line in a section sets and what BpOpt sets. The sheet help is under <b>09 Sheet Modeling</b>, and Xtract Modeling has moved to number 13."
+        }
+      ]
+    },
+    {
       "version": "5.4.0",
       "date": "2026-09-30",
       "items": [

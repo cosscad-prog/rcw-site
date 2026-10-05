@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What's New 5.5.0</title>
+<meta name="description" content="RCW V5.5.0 에서 달라진 것 — 판재(Sheet) 명령, 유리 · 백패널의 선 고르기, BpFd · GsFd, 블록(RBB · SSP), 단면 패널을 한 장씩 봅니다.">
+<meta property="og:title" content="What's New 5.5.0">
+<meta property="og:description" content="판재 명령 여섯 개가 새로 들어왔고, 유리 · 백패널 · 블록의 여러 문제를 고쳤습니다.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>:root{color-scheme:light}html,body{margin:0;padding:0}img,video{max-width:100%}</style>
+</head>
+<body>
+
+
+
+<style>
+  :root {
+    --ground: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E9EEF3;
+    --ink: #101820;
+    --ink-2: #3B4956;
+    --muted: #67757F;
+    --rule: #D6DEE6;
+    --rule-strong: #B2BFCB;
+    --accent: #0A6494;
+    --accent-soft: #E1EDF5;
+    --new: #0F6B4A;
+    --new-soft: #E0F0E8;
+    --warn: #8A6612;
+    --warn-soft: #F7EFDA;
+    --crit: #A82F1D;
+    --crit-soft: #F8E7E3;
+    --shot-bg: #FFFFFF;
+
+    --f-body: "IBM Plex Sans KR", "Malgun Gothic", system-ui, sans-serif;
+    --f-disp: "IBM Plex Sans Condensed", "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
+    --f-mono: "IBM Plex Mono", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0C1116; --surface: #141C23; --surface-2: #1B252E;
+      --ink: #E6EDF3; --ink-2: #BDC9D4; --muted: #87949F;
+      --rule: #26313B; --rule-strong: #394753;
+      --accent: #5DB0E0; --accent-soft: #142E3D;
+      --new: #62C79A; --new-soft: #122E24;
+      --warn: #D9AE55; --warn-soft: #2C2616;
+      --crit: #EE8A76; --crit-soft: #33201C;
+      --shot-bg: #EDF1F4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0C1116; --surface: #141C23; --surface-2: #1B252E;
+    --ink: #E6EDF3; --ink-2: #BDC9D4; --muted: #87949F;
+    --rule: #26313B; --rule-strong: #394753;
+    --accent: #5DB0E0; --accent-soft: #142E3D;
+    --new: #62C79A; --new-soft: #122E24;
+    --warn: #D9AE55; --warn-soft: #2C2616;
+    --crit: #EE8A76; --crit-soft: #33201C;
+    --shot-bg: #EDF1F4;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .deck { height: 100dvh; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; }
+  .deck::-webkit-scrollbar { display: none; }
+
+  .slide {
+    min-height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    padding: 68px 3.4vw 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .slide-inner { width: 100%; max-width: 1520px; margin: 0 auto; }
+
+  /* ---- bar ---- */
+  .bar {
+    position: fixed; inset: 0 0 auto 0; height: 48px;
+    display: flex; align-items: center; gap: 14px; padding: 0 3.4vw;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    z-index: 40;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+  }
+  .bar .brand { font-weight: 600; color: var(--ink-2); letter-spacing: 0.12em; }
+  .bar .spacer { flex: 1; }
+  .bar button {
+    font: inherit; letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: 1px solid var(--rule-strong); color: var(--ink-2);
+    padding: 4px 10px; border-radius: 3px; cursor: pointer;
+  }
+  .bar button:hover { background: var(--surface); }
+  .bar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #counter { font-variant-numeric: tabular-nums; color: var(--ink-2); font-weight: 600; }
+  .progress { position: fixed; inset: 47px 0 auto 0; height: 2px; z-index: 41; }
+  .progress span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .18s linear; }
+
+  /* ---- title ---- */
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 16px;
+  }
+  .title-slide h1 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(38px, 6.4vw, 76px); line-height: 1.02;
+    letter-spacing: -0.02em; margin: 0 0 20px; text-wrap: balance;
+  }
+  .title-slide .sub { font-size: clamp(16px, 1.8vw, 20px); color: var(--ink-2); max-width: 58ch; margin: 0 0 32px; }
+
+  .agenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .agenda div { background: var(--surface); padding: 15px 17px 17px; }
+  .agenda .n { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--accent); margin: 0 0 5px; }
+  .agenda .t { font-family: var(--f-disp); font-size: 19px; font-weight: 700; margin: 0 0 4px; }
+  .agenda p { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+
+  /* ---- head ---- */
+  .head {
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    padding-bottom: 11px; border-bottom: 2px solid var(--rule-strong); margin-bottom: 18px;
+  }
+  .head .no {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(26px, 2.6vw, 36px); line-height: 1; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .head h2 {
+    font-family: var(--f-disp); font-weight: 700;
+    font-size: clamp(24px, 2.7vw, 38px); line-height: 1.06;
+    letter-spacing: -0.015em; margin: 0; text-wrap: balance;
+  }
+  .head .cmds { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+  .pill {
+    display: inline-block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px; vertical-align: 3px;
+  }
+  .p-new { background: var(--new-soft); color: var(--new); }
+  .p-chg { background: var(--accent-soft); color: var(--accent); }
+  .p-std { background: var(--warn-soft); color: var(--warn); }
+  .p-name { background: var(--crit-soft); color: var(--crit); }
+
+  .lede { font-size: clamp(15.5px, 1.45vw, 18px); color: var(--ink-2); max-width: 92ch; margin: 0 0 18px; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  /* ---- image + text layout ---- */
+  .stage { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+  .stage.wide-img { grid-template-columns: 1.55fr 1fr; }
+  .stage.even { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 1080px) { .stage, .stage.wide-img, .stage.even { grid-template-columns: 1fr; } }
+
+  figure.shot { margin: 0; }
+  figure.shot img,
+  figure.shot video {
+    display: block; width: 100%; height: auto;
+    max-height: calc(100dvh - 330px);
+    object-fit: contain; object-position: center top;
+    background: var(--shot-bg);
+    border: 1px solid var(--rule-strong);
+    cursor: zoom-in;
+  }
+  figure.shot figcaption {
+    font-family: var(--f-mono); font-size: 11px; color: var(--muted);
+    margin-top: 6px; letter-spacing: 0.02em;
+  }
+  .shots { display: grid; gap: 14px; }
+  .shots.two { grid-template-columns: 1fr 1fr; }
+  .shots.two figure.shot img,
+  .shots.two figure.shot video { max-height: calc(100dvh - 360px); }
+  .shots.grid4 { grid-template-columns: 1fr 1fr; }
+  .shots.grid4 figure.shot img,
+  .shots.grid4 figure.shot video { max-height: calc(50dvh - 190px); }
+  .shots.grid5 { grid-template-columns: repeat(3, 1fr); }
+  .shots.grid5 figure.shot img,
+  .shots.grid5 figure.shot video { max-height: calc(50dvh - 190px); }
+  @media (max-width: 700px) { .shots.two, .shots.grid4, .shots.grid5 { grid-template-columns: 1fr; } }
+
+  .col { display: flex; flex-direction: column; gap: 12px; }
+
+  .card { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--accent); padding: 13px 16px 16px; }
+  .card.is-new { border-top-color: var(--new); }
+  .card.is-demo { border-top-color: var(--muted); }
+  .card.is-warn { border-top-color: var(--warn); }
+  .card > h3 {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-weight: 500;
+  }
+  .card.is-new > h3 { color: var(--new); }
+  .card.is-warn > h3 { color: var(--warn); }
+
+  .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .card ul li { padding-left: 14px; position: relative; font-size: 14.5px; line-height: 1.55; }
+  .card ul li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 6px; height: 2px; background: var(--rule-strong); }
+  .card ul li span.sub { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+
+  .card ol { margin: 0; padding-left: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 8px; }
+  .card ol li { counter-increment: s; padding-left: 24px; position: relative; font-size: 14.5px; line-height: 1.5; }
+  .card ol li::before {
+    content: counter(s); position: absolute; left: 0; top: 0;
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--accent); font-weight: 600;
+    width: 16px; text-align: right;
+  }
+
+  .say {
+    background: var(--accent-soft); border-left: 3px solid var(--accent);
+    padding: 11px 16px; margin-top: 16px;
+    font-size: clamp(14.5px, 1.3vw, 17px); line-height: 1.5; color: var(--ink);
+  }
+  .say .lbl {
+    display: block; font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px;
+  }
+
+  code { font-family: var(--f-mono); font-size: 0.87em; background: var(--surface-2); padding: 0.1em 0.36em; border-radius: 2px; color: var(--ink-2); }
+  .card ul li code, .say code, .card ol li code { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+
+  table.mini { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.mini th, table.mini td { text-align: left; padding: 5px 9px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+  table.mini th { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  table.mini td:first-child { font-family: var(--f-mono); font-size: 12.5px; white-space: nowrap; color: var(--accent); }
+
+  /* ---- divider ---- */
+  .divider { background: var(--surface); }
+  .divider .kicker { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+  .divider h2 { font-family: var(--f-disp); font-weight: 700; font-size: clamp(32px, 4.8vw, 58px); line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 16px; text-wrap: balance; }
+  .divider p { font-size: clamp(16px, 1.6vw, 19px); color: var(--ink-2); max-width: 62ch; margin: 0; }
+  .divider .items { margin-top: 26px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 7px 18px; }
+
+  /* ---- overlays ---- */
+  .overlay { position: fixed; inset: 0; background: color-mix(in srgb, var(--ground) 96%, transparent); z-index: 60; padding: 64px 3.4vw 36px; overflow-y: auto; display: none; }
+  .overlay.open { display: block; }
+  .overlay h2 { font-family: var(--f-disp); font-size: 24px; margin: 0 0 18px; font-weight: 700; }
+  .idx { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 9px; max-width: 1520px; margin: 0 auto; }
+  .idx a { display: block; background: var(--surface); border: 1px solid var(--rule); padding: 10px 13px; text-decoration: none; color: var(--ink); }
+  .idx a:hover, .idx a:focus-visible { border-color: var(--accent); outline: none; }
+  .idx a .n { font-family: var(--f-mono); font-size: 10.5px; color: var(--accent); letter-spacing: 0.08em; }
+  .idx a .t { font-weight: 600; font-size: 14.5px; display: block; margin-top: 2px; }
+  .idx a .d { font-size: 12.5px; color: var(--muted); display: block; }
+  .keys { max-width: 1520px; margin: 22px auto 0; font-family: var(--f-mono); font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 20px; }
+  .keys kbd { font-family: inherit; background: var(--surface-2); border: 1px solid var(--rule); border-radius: 3px; padding: 1px 6px; color: var(--ink-2); }
+
+  #zoom {
+    position: fixed; inset: 0; z-index: 80; display: none;
+    background: color-mix(in srgb, #000 82%, transparent);
+    align-items: center; justify-content: center; padding: 2vh 2vw; cursor: zoom-out;
+  }
+  #zoom.open { display: flex; }
+  #zoom img,
+  #zoom video { max-width: 100%; max-height: 96vh; object-fit: contain; background: #fff; border: 1px solid rgba(255,255,255,.3); }
+  #zoom img[hidden], #zoom video[hidden] { display: none; }
+
+  @media print {
+    .bar, .progress, .overlay, #zoom { display: none !important; }
+    .deck { height: auto; overflow: visible; }
+    .slide { min-height: 0; page-break-after: always; padding: 20px 0; border: none; }
+    figure.shot img,
+    figure.shot video { max-height: 420px; }
+  }
+
+  /* 그림이 칸을 억지로 채우지 않게 한다.
+     width:100% + object-fit:contain 이면 비율이 안 맞는 그림은 좌우에 흰 띠가 생긴다
+     (그 띠는 img 자신의 배경색이다). 자기 비율대로 놓고 칸을 넘지 않게만 막는다.
+     작은 그림을 늘려 흐려지게 하지도 않는다.
+     ⚠️ 선택자를 위 규칙과 <b>같은 명시도</b>로 쓸 것 — 전에 video 만 `.shot video` (0,1,1) 로
+     적어 두었더니, 위 `figure.shot video` (0,1,2) 가 이겨 흰 띠가 되살아났다(2026-08-28). */
+  figure.shot img,
+  figure.shot video { width: auto; max-width: 100%; margin-inline: auto; display: block; }
+</style>
+
+<div class="bar">
+  <span class="brand">RCW · What's New 5.5.0</span>
+  <span id="counter">1 / 5</span>
+  <span class="spacer"></span>
+  <button id="btn-index" type="button">목차 · G</button>
+</div>
+<div class="progress"><span id="bar-fill" style="width: 20%;"></span></div>
+
+<div class="overlay" id="overlay">
+  <h2>목차</h2>
+  <div class="idx" id="idx"></div>
+  <div class="keys">
+    <span><kbd>→</kbd> <kbd>Space</kbd> 다음</span>
+    <span><kbd>←</kbd> 이전</span>
+    <span><kbd>G</kbd> 목차</span>
+    <span><kbd>Home</kbd> 처음</span>
+    <span>그림 클릭 = 크게 보기</span>
+    <span><kbd>Esc</kbd> 닫기</span>
+  </div>
+</div>
+
+<div id="zoom"><img alt="" hidden><video muted loop playsinline hidden></video></div>
+
+<div class="deck" id="deck">
+
+  <!-- 표지 -->
+  <section class="slide title-slide" data-title="표지" data-desc="5.5.0 개요" id="slide-0">
+    <div class="slide-inner">
+      <p class="eyebrow">RCW for Rhino · 5.5.0 에서 달라진 것</p>
+      <h1>What's New 5.5.0</h1>
+      <p class="sub">
+        가장 큰 변화는 <b>판재(Sheet) 명령</b>입니다. 유리 자리에 들어가는 접힌 금속 판재를 만들고 가공도까지 냅니다.
+        함께 <b>유리 · 백패널</b>, <b>블록(RBB · SSP)</b>, <b>단면 패널</b>의 여러 문제를 고쳤습니다.
+      </p>
+      <div class="agenda">
+        <div><p class="n">새 명령</p><p class="t">판재 6개</p><p><b>ShMD · Sht</b> 로 만들고 <b>ShNo · ShList · ShTable · ShFd</b> 로 냅니다</p></div>
+        <div><p class="n">유리 · 백패널</p><p class="t">선 고르기</p><p>중심선의 <b>어느 쪽</b>인지로 고릅니다 · 선이 둘이면 알립니다</p></div>
+        <div><p class="n">가공도</p><p class="t">BpFd · GsFd</p><p>예전 버전으로 만든 판 · 유리도 그리고, <b>멈추면 이유를</b> 알립니다</p></div>
+        <div><p class="n">블록</p><p class="t">RBB · SSP</p><p>RBB 가 등록을 망가뜨리던 것 · <b>평면 밖 블록</b>을 SSP 가 고칩니다</p></div>
+        <div><p class="n">단면</p><p class="t">여는 길 하나</p><p>PPI · 그림 클릭 · More details 가 <b>Pname 과 같게</b> 엽니다</p></div>
+        <div><p class="n">표</p><p class="t">FabTable · Dtable</p><p>칸 크기 · 긴 이름 · <b>합성 정렬</b></p></div>
+      </div>
+      <div class="say">
+        <span class="lbl">먼저 보실 것</span>
+        판재 명령은 <b>Core 와 Standard 모두</b>에 들어 있습니다. 판재가 붙는 단면에는 <code>S_Center1</code> 레이어의 선이 필요합니다 —
+        도움말 <b>09 Sheet Modeling → Making Sheet Section</b> 에 그림과 함께 있습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 판재 만들기 -->
+  <section class="slide" data-title="판재 만들기" data-desc="ShMD · Sht" id="slide-1">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">01</span>
+        <h2>판재 만들기 <span class="pill p-new">새 명령</span></h2>
+        <span class="cmds">ShMD · Sht</span>
+      </div>
+      <p class="lede">
+        유리 자리에 들어가는 <b>접힌 금속 판재</b>를 만듭니다. 단면에 그려 둔 <code>S_Center1</code> 선이 판재의 가장자리 자리를 정합니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>순서</h3>
+          <table class="mini">
+            <tbody>
+              <tr><th>준비</th><td>단면 group 에 <code>S_Center1</code> 선 → <b>SSP</b> → <b>WVector</b></td></tr>
+              <tr><th>1. ShMD</th><td>유닛을 고르면 판재가 들어갈 칸에만 <b>칸 면</b>이 생깁니다</td></tr>
+              <tr><th>2. Sht</th><td>칸 면을 고르고 창에서 모양을 정하면 <b>판재와 붙는 프로파일</b>이 만들어집니다</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Sht 창에서 정하는 것</h3>
+          <ul>
+            <li><b>두께</b>(1.2 · 2 · 3 · 4 …)와 <b>가장자리 모양</b> — 평판 · 접힘 · 안쪽 되접기 · 바깥쪽 되접기.</li>
+            <li><b>변마다의 깊이</b>(위 · 아래 · 왼쪽 · 오른쪽)와 되접는 길이.</li>
+            <li><b>붙이는 프로파일</b> — 전체 길이 45° 맞댐 · 전체 길이 직각 · 조각(여유 · 간격 · 개수).</li>
+            <li><b>스크류 구멍</b> — 지름과 개수 · 간격 · 끝 여유.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        창은 <b>열어 둔 채</b> Rhino 에서 치수를 잴 수 있습니다. OK 를 누르면 접고, 닫으면 칸 면이 그대로 돌아옵니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 판재 내기 -->
+  <section class="slide" data-title="판재 번호 · 목록 · 가공도" data-desc="ShNo · ShList · ShTable · ShFd" id="slide-2">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">02</span>
+        <h2>번호 · 목록 · 가공도 <span class="pill p-new">새 명령</span></h2>
+        <span class="cmds">ShNo · ShList · ShTable · ShFd</span>
+      </div>
+      <p class="lede">
+        유리 · 백패널과 같은 흐름입니다 — <b>번호 → 목록 → 가공 표 → 가공도</b>.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>명령</h3>
+          <table class="mini">
+            <tbody>
+              <tr><th>ShNo</th><td>같은 판재에 같은 번호를 매깁니다</td></tr>
+              <tr><th>ShList</th><td>수량 목록 — 폭 · 높이 · 면적 · 두께 · 가장자리 · 깊이 · 구멍, 붙인 프로파일은 이름 · 길이별로. Excel 로도 냅니다</td></tr>
+              <tr><th>ShTable</th><td>두께마다 한 줄, 번호마다 한 칸에 판재를 정면으로 놓습니다</td></tr>
+              <tr><th>ShFd</th><td>표의 판재를 골라 가공도를 그립니다</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>ShFd 가 그리는 것</h3>
+          <ul>
+            <li><b>정면도</b> — 판의 크기, 붙인 프로파일과 구멍의 연속 치수. 기운 변은 실제 길이로.</li>
+            <li><b>단면</b>(가운데 높이 · 가운데 폭)과 <b>ISO</b>.</li>
+            <li><b>전개도</b> — 모델을 그대로 펴서 그립니다. 접는 선은 따로 표시합니다.</li>
+            <li><b>붙인 프로파일 표</b> — 이름 · 가공 모양(절단 각도) · 길이 · 수량.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">알아 두실 것</span>
+        전개도는 <b>굽힘 여유를 넣지 않은</b> 치수입니다. 프로파일의 길이는 <b>가장 긴 변</b> 기준입니다(45° 절단 포함).
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 유리 · 백패널 선 고르기 -->
+  <section class="slide" data-title="유리 · 백패널의 선 고르기" data-desc="중심선 기준 · 2개 알림" id="slide-3">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">03</span>
+        <h2>유리 · 백패널이 선을 고르는 방식 <span class="pill p-chg">바뀜</span></h2>
+        <span class="cmds">GS1~ · BP1~BP5</span>
+      </div>
+      <p class="lede">
+        단면의 유리선(<code>G_Center1</code>) · 백패널 선(<code>BP_Center1</code>)이 <b>중심선의 어느 쪽에 있는지</b>를 보고,
+        칸이 있는 쪽의 선을 씁니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>달라진 것</h3>
+          <ul>
+            <li><b>아주 좁은 칸</b>(약 110mm 미만)에서 선이 있는데도 못 찾던 것을 고쳤습니다.</li>
+            <li>칸 쪽에 선이 <b>둘 이상</b>이면 <b>중심선에 가장 가까운 것</b>을 쓰고, 선의 수와 거리를 명령창에 알립니다.</li>
+            <li>칸 쪽에 선이 <b>없으면</b> 어느 선(레이어)이 없는지 알리고, 만들다 만 면을 남기지 않습니다.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>함께 고친 것</h3>
+          <ul>
+            <li><b>멀리언 이음이 칸 안에 있을 때</b>(위아래 유닛이 만나는 자리 등) 유리 · 백패널이 빠지던 것.</li>
+            <li>도움말 <b>08 BackPanel Modeling → Making BackPanel Section</b> — <code>BP_Center1</code> 선이 정하는 것과 BpOpt 가 정하는 것을 그림으로.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">주의</span>
+        한쪽에 선을 <b>둘</b> 그려 둔 단면은 전과 다른 선을 씁니다(전에는 알림 없이 먼 쪽). 알림이 뜨면 단면을 확인해 주십시오.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 BpFd · GsFd -->
+  <section class="slide" data-title="백패널 · 유리 가공도" data-desc="BpFd · GsFd" id="slide-4">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">04</span>
+        <h2>BpFd · GsFd <span class="pill p-chg">고침</span></h2>
+        <span class="cmds">BpFd · GsFd</span>
+      </div>
+      <p class="lede">
+        예전 버전으로 만든 백패널에 BpFd 를 돌리면 <b>정면 선만 그리고 아무 말 없이</b> 끝났습니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>이제</h3>
+          <ul>
+            <li>판의 면에서 꼭짓점을 구해 <b>치수 · 단면 · 전개도까지</b> 그립니다. 그렇게 했다고 명령창에 알립니다.</li>
+            <li>GsFd(유리 가공도)도 같습니다.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>멈추면 알립니다</h3>
+          <ul>
+            <li>한 장을 그리다 멈추면 <b>어느 판에서 왜</b> 멈췄는지 알리고 다음 장으로 넘어갑니다.</li>
+            <li>그 판의 3D 복사본은 지우지 않으므로 다시 돌릴 수 있습니다.</li>
+            <li>GsFd 진행 표시의 유리 번호가 늘 0 이던 것을 고쳤습니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        지금 버전으로 만든 판 · 유리는 전과 똑같이 그려집니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 블록 -->
+  <section class="slide" data-title="블록 (RBB · SSP)" data-desc="등록 고치기 · 평면 밖 블록" id="slide-5">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">05</span>
+        <h2>블록 다시 잇기와 단면 등록 <span class="pill p-chg">고침</span></h2>
+        <span class="cmds">RBB · SSP · BBC4 · BC12 · DBB · PPlist</span>
+      </div>
+      <p class="lede">
+        <b>RBB 가 블록 등록을 고치는 것이 아니라 망가뜨리고 있었습니다.</b> 등록 값이 뒤바뀌어 저장되고, 합성 · FabG · 밀링 값이 지워졌습니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>RBB</h3>
+          <ul>
+            <li>이제 <b>블록 등록만</b> 고치고 나머지 값은 그대로 둡니다.</li>
+            <li>블록 하나에 슬롯 하나만 잇고, 같은 거리의 블록은 기준점으로 가립니다.</li>
+            <li>블록 복사 · 삭제 명령(BC12 · DBB · BBC4 등)과 PPlist 도 단면의 다른 값을 지우지 않습니다.</li>
+            <li>블록 없는 새 단면에 BBC4 로 값만 복사한 뒤에는 SSP · RBB 가 블록을 다시 잇거나 못 찾은 슬롯을 알립니다.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>SSP</h3>
+          <ul>
+            <li>예전 RBB 가 뒤바꿔 놓은 단면을 <b>경고로</b> 알립니다. Pname · PPI 는 그런 단면도 바로잡아 읽습니다.</li>
+            <li>삽입점이 <b>단면 평면 밖</b>에 있는 블록을 평면 위로 옮기고 <b>'평면 밖 → 고침'</b> 으로 알립니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">하실 일</span>
+        전에 RBB 를 돌린 단면이 있다면, SSP 가 경고할 때 <b>RBB 를 한 번 다시</b> 돌려 주십시오. 그것으로 고쳐집니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 단면 · 표 -->
+  <section class="slide" data-title="단면 패널 · 표" data-desc="PPI · ComP · RCW Section · FabTable · Dtable" id="slide-6">
+    <div class="slide-inner">
+      <div class="head">
+        <span class="no">06</span>
+        <h2>단면 패널과 표 <span class="pill p-chg">고침</span></h2>
+        <span class="cmds">Pname · PPI · ComP · FabTable · Dtable</span>
+      </div>
+      <p class="lede">
+        단면을 여는 길을 <b>하나로</b> 맞췄습니다 — PPI, Profile Manager 의 그림 클릭, RCW Section 탭의 More details 가 Pname 과 똑같이 엽니다.
+      </p>
+      <div class="stage even">
+        <div class="card is-new">
+          <h3>단면 · 합성</h3>
+          <ul>
+            <li>그림을 누른 뒤 단면을 클릭해도 <b>골라지지 않던 것</b>을 고쳤습니다.</li>
+            <li>ComP 가 <code>ComP_이름</code> <b>group</b> 을 만듭니다 — 합성을 통째로 고르고 복사할 수 있습니다.</li>
+            <li>복사한 합성은 Pname 으로 여는 순간 <b>새 합성</b>으로 등록되고, 미리보기에 원본이 섞이지 않습니다.</li>
+            <li>RCW Section 탭의 <b>Name · Description · Additional Length</b> 칸이 저장됩니다(칸을 벗어나거나 Enter).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>표</h3>
+          <ul>
+            <li><b>FabTable</b> — 칸 높이를 폭의 0.8배로, 긴 Profile Name 은 글자를 줄여 칸 안에.</li>
+            <li><b>Dtable</b> — Profile Name 으로 정렬해도 합성마다 자기 구성원이 바로 아래에 모입니다.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="say">
+        <span class="lbl">한 마디</span>
+        도움말의 판재는 <b>09 Sheet Modeling</b>, Xtract Modeling 은 <b>13</b> 번으로 옮겼습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 정리 -->
+  <section class="slide" data-title="정리" data-desc="여섯 줄로" id="slide-7">
+    <div class="slide-inner">
+      <p class="kicker">정리</p>
+      <h2>여섯 줄로</h2>
+      <div class="agenda">
+        <div><p class="n">하나</p><p class="t">판재 만들기</p><p>단면에 <code>S_Center1</code> 선 → <b>ShMD → Sht</b>. Core · Standard 모두.</p></div>
+        <div><p class="n">둘</p><p class="t">판재 내기</p><p><b>ShNo → ShList → ShTable → ShFd</b> — 번호 · 목록 · 가공도 · 전개도.</p></div>
+        <div><p class="n">셋</p><p class="t">유리 · 백패널의 선</p><p>중심선의 어느 쪽인지로 고릅니다. <b>한쪽에 둘이면 가까운 것 + 알림.</b></p></div>
+        <div><p class="n">넷</p><p class="t">BpFd · GsFd</p><p>예전 판 · 유리도 그리고, 멈추면 어느 판에서 왜인지 알립니다.</p></div>
+        <div><p class="n">다섯</p><p class="t">RBB · SSP</p><p>RBB 는 등록만 고칩니다. SSP 가 경고하면 <b>RBB 한 번 다시</b>.</p></div>
+        <div><p class="n">여섯</p><p class="t">단면 · 표</p><p>여는 길 하나 · 합성 group · RCW Section 저장 · FabTable · Dtable.</p></div>
+      </div>
+      <div class="say">
+        <span class="lbl">맺는 말</span>
+        설치 뒤 <code>RCWVersion</code> 으로 <b>5.5.0</b> 과 에디션이 맞는지 확인해 주십시오.
+        판재 명령의 자세한 사용법은 도움말 <b>09 Sheet Modeling</b> 에 있습니다.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var counter = document.getElementById('counter');
+  var fill = document.getElementById('bar-fill');
+  var overlay = document.getElementById('overlay');
+  var idx = document.getElementById('idx');
+  var btn = document.getElementById('btn-index');
+  var zoom = document.getElementById('zoom');
+  var zoomImg = zoom.querySelector('img');
+  var zoomVideo = zoom.querySelector('video');
+  var current = 0;
+
+  idx.innerHTML = '';
+  slides.forEach(function (s, i) {
+    s.id = 'slide-' + i;
+    var a = document.createElement('a');
+    a.href = '#slide-' + i;
+    a.innerHTML = '<span class="n">' + (i + 1).toString().padStart(2, '0') + '</span>' +
+      '<span class="t"></span><span class="d"></span>';
+    a.querySelector('.t').textContent = s.dataset.title || ('슬라이드 ' + (i + 1));
+    a.querySelector('.d').textContent = s.dataset.desc || '';
+    a.addEventListener('click', function () { closeOverlay(); });
+    idx.appendChild(a);
+  });
+
+  function render() {
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    fill.style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+  function go(n) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    current = n;
+    slides[n].scrollIntoView({ block: 'start' });
+    render();
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var i = slides.indexOf(e.target);
+        if (i >= 0) { current = i; render(); }
+      }
+    });
+  }, { root: deck, threshold: 0.5 });
+  slides.forEach(function (s) { io.observe(s); });
+
+  function openOverlay() { overlay.classList.add('open'); }
+  function closeOverlay() { overlay.classList.remove('open'); }
+  function toggleOverlay() { overlay.classList.toggle('open'); }
+  btn.addEventListener('click', toggleOverlay);
+
+  /* 그림이든 영상이든 눌러 크게 본다. GIF 를 영상으로 옮기면서(2026-08-28) 영상도 받게 했다 —
+     전에는 img 만 봐서 영상 슬라이드는 눌러도 아무 일도 일어나지 않았다. */
+  function closeZoom() {
+    zoom.classList.remove('open');
+    zoomImg.src = ''; zoomImg.hidden = true;
+    zoomVideo.pause(); zoomVideo.removeAttribute('src'); zoomVideo.load(); zoomVideo.hidden = true;
+  }
+
+  deck.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target.closest('figure.shot img, figure.shot video') : null;
+    if (!el) return;
+    if (el.tagName === 'VIDEO') {
+      zoomImg.hidden = true;
+      zoomVideo.src = el.getAttribute('src');
+      zoomVideo.setAttribute('aria-label', el.getAttribute('aria-label') || '');
+      zoomVideo.hidden = false;
+      zoomVideo.play();
+    } else {
+      zoomVideo.hidden = true;
+      zoomImg.src = el.src;
+      zoomImg.alt = el.alt;
+      zoomImg.hidden = false;
+    }
+    zoom.classList.add('open');
+  });
+  zoom.addEventListener('click', closeZoom);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Escape') {
+      if (zoom.classList.contains('open')) { closeZoom(); }
+      else closeOverlay();
+      return;
+    }
+    if (zoom.classList.contains('open')) return;
+    if (k === 'g' || k === 'G' || k === 'ㅎ') { e.preventDefault(); toggleOverlay(); return; }
+    if (overlay.classList.contains('open')) return;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ') { e.preventDefault(); go(current + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); go(current - 1); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
