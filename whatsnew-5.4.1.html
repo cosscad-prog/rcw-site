@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>What's New 5.5.0</title>
-<meta name="description" content="RCW V5.5.0 에서 달라진 것 — 판재(Sheet) 명령, 유리 · 백패널의 선 고르기, BpFd · GsFd, 블록(RBB · SSP), 단면 패널을 한 장씩 봅니다.">
-<meta property="og:title" content="What's New 5.5.0">
+<title>What's New 5.4.1</title>
+<meta name="description" content="RCW V5.4.1 에서 달라진 것 — 판재(Sheet) 명령, 유리 · 백패널의 선 고르기, BpFd · GsFd, 블록(RBB · SSP), 단면 패널을 한 장씩 봅니다.">
+<meta property="og:title" content="What's New 5.4.1">
 <meta property="og:description" content="판재 명령 여섯 개가 새로 들어왔고, 유리 · 백패널 · 블록의 여러 문제를 고쳤습니다.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -289,7 +289,7 @@
 </style>
 
 <div class="bar">
-  <span class="brand">RCW · What's New 5.5.0</span>
+  <span class="brand">RCW · What's New 5.4.1</span>
   <span id="counter">1 / 5</span>
   <span class="spacer"></span>
   <button id="btn-index" type="button">목차 · G</button>
@@ -314,10 +314,10 @@
 <div class="deck" id="deck">
 
   <!-- 표지 -->
-  <section class="slide title-slide" data-title="표지" data-desc="5.5.0 개요" id="slide-0">
+  <section class="slide title-slide" data-title="표지" data-desc="5.4.1 개요" id="slide-0">
     <div class="slide-inner">
-      <p class="eyebrow">RCW for Rhino · 5.5.0 에서 달라진 것</p>
-      <h1>What's New 5.5.0</h1>
+      <p class="eyebrow">RCW for Rhino · 5.4.1 에서 달라진 것</p>
+      <h1>What's New 5.4.1</h1>
       <p class="sub">
         가장 큰 변화는 <b>판재(Sheet) 명령</b>입니다. 유리 자리에 들어가는 접힌 금속 판재를 만들고 가공도까지 냅니다.
         함께 <b>유리 · 백패널</b>, <b>블록(RBB · SSP)</b>, <b>단면 패널</b>의 여러 문제를 고쳤습니다.
@@ -349,25 +349,31 @@
       <p class="lede">
         유리 자리에 들어가는 <b>접힌 금속 판재</b>를 만듭니다. 단면에 그려 둔 <code>S_Center1</code> 선이 판재의 가장자리 자리를 정합니다.
       </p>
-      <div class="stage even">
-        <div class="card is-new">
-          <h3>순서</h3>
-          <table class="mini">
-            <tbody>
-              <tr><th>준비</th><td>단면 group 에 <code>S_Center1</code> 선 → <b>SSP</b> → <b>WVector</b></td></tr>
-              <tr><th>1. ShMD</th><td>유닛을 고르면 판재가 들어갈 칸에만 <b>칸 면</b>이 생깁니다</td></tr>
-              <tr><th>2. Sht</th><td>칸 면을 고르고 창에서 모양을 정하면 <b>판재와 붙는 프로파일</b>이 만들어집니다</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card">
-          <h3>Sht 창에서 정하는 것</h3>
-          <ul>
-            <li><b>두께</b>(1.2 · 2 · 3 · 4 …)와 <b>가장자리 모양</b> — 평판 · 접힘 · 안쪽 되접기 · 바깥쪽 되접기.</li>
-            <li><b>변마다의 깊이</b>(위 · 아래 · 왼쪽 · 오른쪽)와 되접는 길이.</li>
-            <li><b>붙이는 프로파일</b> — 전체 길이 45° 맞댐 · 전체 길이 직각 · 조각(여유 · 간격 · 개수).</li>
-            <li><b>스크류 구멍</b> — 지름과 개수 · 간격 · 끝 여유.</li>
-          </ul>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <img src="img/deck/Sht_profile_3d.png" alt="칸마다 다른 모양으로 만든 판재와 가장자리에 붙인 프로파일">
+          <figcaption>칸마다 다른 옵션으로 만든 <b>판재</b>와 가장자리에 <b>붙인 프로파일</b> (그림 클릭 = 크게)</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>순서</h3>
+            <table class="mini">
+              <tbody>
+                <tr><th>준비</th><td>단면 group 에 <code>S_Center1</code> 선 → <b>SSP</b> → <b>WVector</b></td></tr>
+                <tr><th>1. ShMD</th><td>유닛을 고르면 판재가 들어갈 칸에만 <b>칸 면</b>이 생깁니다</td></tr>
+                <tr><th>2. Sht</th><td>칸 면을 고르고 창에서 모양을 정하면 <b>판재와 붙는 프로파일</b>이 만들어집니다</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h3>Sht 창에서 정하는 것</h3>
+            <ul>
+              <li><b>두께</b>(1.2 · 2 · 3 · 4 …)와 <b>가장자리 모양</b> — 평판 · 접힘 · 안쪽 되접기 · 바깥쪽 되접기.</li>
+              <li><b>변마다의 깊이</b>(위 · 아래 · 왼쪽 · 오른쪽)와 되접는 길이.</li>
+              <li><b>붙이는 프로파일</b> — 전체 길이 45° 맞댐 · 전체 길이 직각 · 조각(여유 · 간격 · 개수).</li>
+              <li><b>스크류 구멍</b> — 지름과 개수 · 간격 · 끝 여유.</li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="say">
@@ -388,26 +394,32 @@
       <p class="lede">
         유리 · 백패널과 같은 흐름입니다 — <b>번호 → 목록 → 가공 표 → 가공도</b>.
       </p>
-      <div class="stage even">
-        <div class="card is-new">
-          <h3>명령</h3>
-          <table class="mini">
-            <tbody>
-              <tr><th>ShNo</th><td>같은 판재에 같은 번호를 매깁니다</td></tr>
-              <tr><th>ShList</th><td>수량 목록 — 폭 · 높이 · 면적 · 두께 · 가장자리 · 깊이 · 구멍, 붙인 프로파일은 이름 · 길이별로. Excel 로도 냅니다</td></tr>
-              <tr><th>ShTable</th><td>두께마다 한 줄, 번호마다 한 칸에 판재를 정면으로 놓습니다</td></tr>
-              <tr><th>ShFd</th><td>표의 판재를 골라 가공도를 그립니다</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card">
-          <h3>ShFd 가 그리는 것</h3>
-          <ul>
-            <li><b>정면도</b> — 판의 크기, 붙인 프로파일과 구멍의 연속 치수. 기운 변은 실제 길이로.</li>
-            <li><b>단면</b>(가운데 높이 · 가운데 폭)과 <b>ISO</b>.</li>
-            <li><b>전개도</b> — 모델을 그대로 펴서 그립니다. 접는 선은 따로 표시합니다.</li>
-            <li><b>붙인 프로파일 표</b> — 이름 · 가공 모양(절단 각도) · 길이 · 수량.</li>
-          </ul>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <img src="img/deck/ShFd_demo.png" alt="ShFd 가 그린 판재 가공도 - 정면도, 단면, ISO, 전개도">
+          <figcaption><b>ShFd</b> — 가운데 정면도, 위 · 오른쪽 단면, 왼쪽 ISO, 아래 전개도 (그림 클릭 = 크게)</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>명령</h3>
+            <table class="mini">
+              <tbody>
+                <tr><th>ShNo</th><td>같은 판재에 같은 번호를 매깁니다</td></tr>
+                <tr><th>ShList</th><td>수량 목록 — 폭 · 높이 · 면적 · 두께 · 가장자리 · 깊이 · 구멍, 붙인 프로파일은 이름 · 길이별로. Excel 로도 냅니다</td></tr>
+                <tr><th>ShTable</th><td>두께마다 한 줄, 번호마다 한 칸에 판재를 정면으로 놓습니다</td></tr>
+                <tr><th>ShFd</th><td>표의 판재를 골라 가공도를 그립니다</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h3>ShFd 가 그리는 것</h3>
+            <ul>
+              <li><b>정면도</b> — 판의 크기, 붙인 프로파일과 구멍의 연속 치수. 기운 변은 실제 길이로.</li>
+              <li><b>단면</b>(가운데 높이 · 가운데 폭)과 <b>ISO</b>.</li>
+              <li><b>전개도</b> — 모델을 그대로 펴서 그립니다. 접는 선은 따로 표시합니다.</li>
+              <li><b>붙인 프로파일 표</b> — 이름 · 가공 모양(절단 각도) · 길이 · 수량.</li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="say">
@@ -429,21 +441,27 @@
         단면의 유리선(<code>G_Center1</code>) · 백패널 선(<code>BP_Center1</code>)이 <b>중심선의 어느 쪽에 있는지</b>를 보고,
         칸이 있는 쪽의 선을 씁니다.
       </p>
-      <div class="stage even">
-        <div class="card is-new">
-          <h3>달라진 것</h3>
-          <ul>
-            <li><b>아주 좁은 칸</b>(약 110mm 미만)에서 선이 있는데도 못 찾던 것을 고쳤습니다.</li>
-            <li>칸 쪽에 선이 <b>둘 이상</b>이면 <b>중심선에 가장 가까운 것</b>을 쓰고, 선의 수와 거리를 명령창에 알립니다.</li>
-            <li>칸 쪽에 선이 <b>없으면</b> 어느 선(레이어)이 없는지 알리고, 만들다 만 면을 남기지 않습니다.</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>함께 고친 것</h3>
-          <ul>
-            <li><b>멀리언 이음이 칸 안에 있을 때</b>(위아래 유닛이 만나는 자리 등) 유리 · 백패널이 빠지던 것.</li>
-            <li>도움말 <b>08 BackPanel Modeling → Making BackPanel Section</b> — <code>BP_Center1</code> 선이 정하는 것과 BpOpt 가 정하는 것을 그림으로.</li>
-          </ul>
+      <div class="stage wide-img">
+        <figure class="shot">
+          <img src="img/deck/BackPanel_section_rule.svg" alt="단면의 BP_Center1 선이 백패널의 가장자리를 정한다" style="background:#fff">
+          <figcaption>단면의 <b>BP_Center1</b> 선(빨강)이 백패널의 가장자리를 정합니다 — 유리는 포켓에, 백패널은 그 뒤 몸체 옆에</figcaption>
+        </figure>
+        <div class="col">
+          <div class="card is-new">
+            <h3>달라진 것</h3>
+            <ul>
+              <li><b>아주 좁은 칸</b>(약 110mm 미만)에서 선이 있는데도 못 찾던 것을 고쳤습니다.</li>
+              <li>칸 쪽에 선이 <b>둘 이상</b>이면 <b>중심선에 가장 가까운 것</b>을 쓰고, 선의 수와 거리를 명령창에 알립니다.</li>
+              <li>칸 쪽에 선이 <b>없으면</b> 어느 선(레이어)이 없는지 알리고, 만들다 만 면을 남기지 않습니다.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>함께 고친 것</h3>
+            <ul>
+              <li><b>멀리언 이음이 칸 안에 있을 때</b>(위아래 유닛이 만나는 자리 등) 유리 · 백패널이 빠지던 것.</li>
+              <li>도움말 <b>08 BackPanel Modeling → Making BackPanel Section</b> — <code>BP_Center1</code> 선이 정하는 것과 BpOpt 가 정하는 것을 그림으로.</li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="say">
@@ -575,7 +593,7 @@
       </div>
       <div class="say">
         <span class="lbl">맺는 말</span>
-        설치 뒤 <code>RCWVersion</code> 으로 <b>5.5.0</b> 과 에디션이 맞는지 확인해 주십시오.
+        설치 뒤 <code>RCWVersion</code> 으로 <b>5.4.1</b> 과 에디션이 맞는지 확인해 주십시오.
         판재 명령의 자세한 사용법은 도움말 <b>09 Sheet Modeling</b> 에 있습니다.
       </div>
     </div>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+<rect width="480" height="300" fill="#ffffff"/>
+<rect x="45" y="44" width="60" height="128" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="51" y="50" width="48" height="116" fill="#ffffff" stroke="#7b8494"/>
+<rect x="68" y="172" width="14" height="71" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="45" y="243" width="60" height="10" fill="#c9ced6" stroke="#7b8494"/>
+<text x="75" y="112" fill="#555" text-anchor="middle" font-size="11">section</text>
+<line x1="20" y1="240" x2="440" y2="240" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="440" y="270" fill="#777" text-anchor="end" font-size="11">outside</text>
+<text x="440" y="16" fill="#777" text-anchor="end" font-size="11">inside</text>
+<rect x="82" y="231" width="348" height="9" fill="#8fd3e8" stroke="#5fa8c0"/>
+<text x="300" y="226" fill="#3b8aa3" text-anchor="middle" font-size="11">glass</text>
+<rect x="117" y="127" width="313" height="5" fill="#8a5a44" stroke="none"/>
+<rect x="117" y="80" width="5" height="52" fill="#8a5a44" stroke="none"/>
+<rect x="425" y="80" width="5" height="52" fill="#8a5a44" stroke="none"/>
+<rect x="117" y="80" width="22" height="5" fill="#8a5a44" stroke="none"/>
+<rect x="408" y="80" width="22" height="5" fill="#8a5a44" stroke="none"/>
+<text x="290" y="110" fill="#8a5a44" text-anchor="middle" font-size="12">back panel</text>
+<line x1="117" y1="164" x2="117" y2="57" stroke="#d62828" stroke-width="2.5"/>
+<polygon points="117,48 111.5,59 122.5,59" fill="#d62828"/>
+<circle cx="117" cy="164" r="4" fill="#d62828"/>
+<text x="129" y="64" fill="#d62828" text-anchor="start" font-size="12" font-weight="bold">BP_Center1</text>
+<line x1="117" y1="170" x2="117" y2="274" stroke="#0066cc" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="117" cy="284" r="9" fill="#0066cc"/>
+<text x="117" y="288" fill="#fff" text-anchor="middle" font-size="11" font-weight="bold">1</text>
+<line x1="452" y1="132" x2="452" y2="231" stroke="#0066cc" stroke-width="1"/>
+<line x1="448" y1="132" x2="456" y2="132" stroke="#0066cc" stroke-width="1"/>
+<line x1="448" y1="231" x2="456" y2="231" stroke="#0066cc" stroke-width="1"/>
+<text x="459" y="185.5" fill="#0066cc" text-anchor="start" font-size="11"></text>
+<circle cx="452" cy="181.5" r="9" fill="#0066cc"/>
+<text x="452" y="185.5" fill="#fff" text-anchor="middle" font-size="11" font-weight="bold">2</text>
+<line x1="452" y1="80" x2="452" y2="132" stroke="#0066cc" stroke-width="1"/>
+<line x1="448" y1="80" x2="456" y2="80" stroke="#0066cc" stroke-width="1"/>
+<line x1="448" y1="132" x2="456" y2="132" stroke="#0066cc" stroke-width="1"/>
+<text x="459" y="110.0" fill="#0066cc" text-anchor="start" font-size="11"></text>
+<circle cx="452" cy="106.0" r="9" fill="#0066cc"/>
+<text x="452" y="110.0" fill="#fff" text-anchor="middle" font-size="11" font-weight="bold">3</text>
+</svg>

@@ -3,7 +3,7 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
-      "version": "5.5.0",
+      "version": "5.4.1",
       "date": "2026-10-06",
       "items": [
         {
