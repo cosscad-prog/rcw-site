@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="140" viewBox="0 0 260 140" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+<rect width="260" height="140" fill="#ffffff"/>
+<rect x="14" y="12" width="50" height="54" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="20" y="18" width="38" height="42" fill="#ffffff" stroke="#7b8494"/>
+<rect x="35" y="66" width="8" height="59" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="14" y="125" width="50" height="7" fill="#c9ced6" stroke="#7b8494"/>
+<line x1="8" y1="122" x2="252" y2="122" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="58" y="116" width="192" height="6" fill="#2f6fd0" stroke="none"/>
+<rect x="58" y="70" width="6" height="52" fill="#2f6fd0" stroke="none"/>
+<rect x="45" y="70" width="19" height="6" fill="#2f6fd0" stroke="none"/>
+<circle cx="51" cy="73" r="1.8" fill="#fff"/>
+<line x1="58" y1="122" x2="58" y2="79" stroke="#d62828" stroke-width="2.5"/>
+<polygon points="58,70 52.5,81 63.5,81" fill="#d62828"/>
+<circle cx="58" cy="122" r="4" fill="#d62828"/>
+</svg>

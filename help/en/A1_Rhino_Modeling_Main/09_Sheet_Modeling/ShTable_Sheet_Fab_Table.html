@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>ShTable - Sheet Fabrication Table</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>ShTable &nbsp;—&nbsp; Sheet Fabrication Table</h1>
+<p><span class="cmd-box">ShTable</span></p>
+<p>Lays out one <strong>representative sheet</strong> per number as a table on the drawing plane. One row is made per thickness and one cell per number, and a copy of the sheet (with its attached profiles) is placed face-on in the cell. The table is the base for the fabrication drawing (<strong>ShFd</strong>).</p>
+<h2>Purpose</h2>
+<p>Use it to prepare the area where the sheet fabrication drawings are drawn. It works by the same rules as BpTable.</p>
+<div class="note">Workflow: WVector → SSP → ShMD → Sht → ShNo → ShList → <strong>ShTable</strong> → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Number the sheets with <strong>ShNo</strong> first.</li>
+  <li>Type <strong>ShTable</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the sheets to include and press Enter. Press Enter without selecting anything to include every sheet in the document.</li>
+  <li>Click the <strong>top-left corner of the table</strong> on screen. The table grows to the right and downward from that point.</li>
+  <li>Run <strong>ShFd</strong> next to draw the fabrication drawing in each cell.</li>
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../../img/ShTable_demo.png" alt="Table by thickness with one representative sheet per number made by ShTable" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>One row per thickness, one cell per number</figcaption>
+  </figure>
+</div>
+<h2>Table Layout</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Row</td><td>One row per thickness. The first cell shows the thickness, such as <code>Sheet 3T</code>.</td></tr>
+  <tr><td>Cell</td><td>One cell per number. The top-left shows the number, quantity (<code>Qnt-</code>), size, thickness, edge type, and area.</td></tr>
+  <tr><td>Representative sheet</td><td>One sheet of that number and its attached profiles are copied and laid face-on. The front face lies on the drawing plane.</td></tr>
+  <tr><td>Cell size</td><td>Six times the largest width and height among the selected sheets, leaving room for the views of the fabrication drawing.</td></tr>
+  <tr><td>Layers</td><td>Cell text is placed on the <code>Text</code> and <code>Profile_No_Qnt</code> layers.</td></tr>
+</tbody></table>
+<div class="note">The copies in the table are not counted as sheets of the document. Running ShNo or ShList again does not increase the quantities.</div>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>ShNo</strong></td><td>Sheet numbering — run it before making the table.</td></tr>
+  <tr><td><strong>ShFd</strong></td><td>Sheet fabrication drawing — drawn around each representative sheet of the table.</td></tr>
+  <tr><td><strong>BpTable</strong></td><td>BackPanel fabrication table — the same rules.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

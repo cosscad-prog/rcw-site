@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>ShFd - 판재 가공도</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>ShFd &nbsp;—&nbsp; 판재 가공도</h1>
+<p><span class="cmd-box">ShFd</span></p>
+<p><strong>ShTable</strong> 이 놓은 대표 판재마다 <strong>가공도</strong>를 그립니다. 정면도와 치수, 위 · 오른쪽 단면, ISO 그림, 전개도, 그리고 붙인 profile 표가 한 칸에 그려집니다.</p>
+<h2>사용 목적</h2>
+<p>판재의 제작 도면을 만들 때 사용합니다. 그림과 치수는 모델에서 직접 뽑으므로, 모델의 모양(코너 맞댐 · 구멍 · 기운 변)이 도면에 그대로 나옵니다.</p>
+<div class="note">작업 순서: WVector → SSP → ShMD → Sht → ShNo → ShList → ShTable → <strong>ShFd</strong><br>판재 명령은 단면에 그려 둔 <code>S_Center1</code> 선과 등록된 단면(SSP), 방향이 기록된 와이어프레임(WVector)을 바탕으로 동작합니다.</div>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>먼저 <strong>ShNo</strong> → <strong>ShTable</strong> 을 실행해 표를 만듭니다.</li>
+  <li>Rhino 명령창에 <strong>ShFd</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>필요하면 명령창의 옵션(<code>Section_On</code> · <code>ISO_On</code> · <code>Unfold_On</code>)으로 그릴 그림을 고릅니다.</li>
+  <li>표의 대표 판재를 선택하고 Enter 를 누릅니다. 아무것도 고르지 않고 Enter 를 누르면 표의 판재 전체가 대상입니다.</li>
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../img/ShFd_demo.png" alt="바깥쪽 되접기 판재의 가공도 — 정면도, 단면, ISO, 전개도" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>바깥쪽 되접기 + 스크류 구멍 판재의 가공도</figcaption>
+  </figure>
+</div>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../img/ShFd_profile_demo.png" alt="profile 을 붙인 판재의 가공도와 profile 표" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>profile 을 붙인 판재 — 전개도 아래에 profile 표</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../img/ShFd_sloped_demo.png" alt="기운 판재의 가공도" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>기운 판재(사다리꼴)</figcaption>
+  </figure>
+</div>
+<h2>그려지는 그림</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 16%;">
+    <col style="width: 18%;">
+    <col style="width: 66%;">
+  </colgroup>
+  <tbody><tr><th>그림</th><th>자리</th><th>내용</th></tr>
+  <tr><td>정면도</td><td>대표 판재 자리</td><td>판재를 앞에서 본 2D 선(보이는 선 + 숨은선). 3D 복사본은 그린 뒤 지워집니다.</td></tr>
+  <tr><td>가로 단면</td><td>정면도 위</td><td>판의 중간 높이에서 자른 모양. 전체 길이 · 깊이 · 두께 · 되접는 길이 치수.</td></tr>
+  <tr><td>세로 단면</td><td>정면도 오른쪽</td><td>판의 중간 폭에서 자른 모양. 같은 치수.</td></tr>
+  <tr><td>ISO</td><td>정면도 왼쪽</td><td>숨은선을 포함한 입체 그림.</td></tr>
+  <tr><td>전개도</td><td>정면도 아래</td><td>모델을 접는 선에서 펴 놓은 모양. 접는 선과 구멍이 표시되고 전체 크기가 <code>UNFOLD 폭 x 높이</code> 로 적힙니다.</td></tr>
+  <tr><td>profile 표</td><td>전개도 아래</td><td>붙인 profile 의 이름 · 가공 모양 · 길이 · 수량. profile 이 없으면 그리지 않습니다.</td></tr>
+</tbody></table>
+<h2>정면도의 치수</h2>
+<p>정면도는 <strong>판넬의 크기</strong>를 보여 주는 것이 먼저이고, 붙인 profile 과 구멍의 치수가 보조로 들어갑니다. 줄의 차례는 판넬 쪽에서부터 다음과 같습니다.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>줄</th><th>설명</th></tr>
+  <tr><td>① 막대 · 구멍</td><td>변마다 꼭짓점 · 막대(또는 구멍) · … · 꼭짓점을 잇는 연속 치수. 기운 변에서는 변을 따라 잽니다.</td></tr>
+  <tr><td>② 판넬 꼭짓점</td><td>기운 판넬에서 변이 끝나는 꼭짓점의 자리. 직사각형이면 전체 치수와 같아 생략됩니다.</td></tr>
+  <tr><td>③ 전체</td><td>판 면의 전체 폭과 높이. 바깥쪽 되접기는 날개까지 포함한 치수가 한 줄 더 나옵니다.</td></tr>
+  <tr><td>기운 변</td><td>아무것도 붙지 않은 기운 변에는 그 변의 실제 길이가 나옵니다.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../img/ShFd_pieces_front.png" alt="조각 profile 의 위치 치수가 들어간 정면도" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>조각으로 붙인 profile 의 연속 치수</figcaption>
+  </figure>
+</div>
+<h2>전개도</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../img/ShFd_unfold.png" alt="바깥쪽 되접기 판재의 전개도" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>접는 선은 숨은선 레이어, 구멍은 원으로 표시됩니다.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>펴는 방법</td><td>모델을 판 · 변마다의 접힌 날 · 되접힌 부분으로 나누어 접는 선에서 펴 놓습니다. 모델의 코너 모양과 구멍이 그대로 나옵니다.</td></tr>
+  <tr><td>길이</td><td><strong>벤딩 여유를 넣지 않습니다.</strong> 접힌 날 = 깊이 − 두께, 되접힌 부분 = 되접는 길이 − 두께.</td></tr>
+  <tr><td>선의 종류</td><td>앞면 쪽 선은 실선, 뒷면 쪽 선과 접는 선은 숨은선 레이어. 두 선이 겹치면 보이는 선만 남습니다.</td></tr>
+  <tr><td>치수</td><td>전체 폭 · 높이. 직사각 판재는 접힌 날 · 판 면의 연속 치수가 더 나옵니다.</td></tr>
+  <tr><td>기운 판재</td><td>사다리꼴 · 평행사변형도 전개도가 그려집니다.</td></tr>
+</tbody></table>
+<h2>붙인 profile 표</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../img/ShFd_profile_table.png" alt="가공도의 붙인 profile 표" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>이름 · 가공 모양(단면 + 약도) · 길이 · 수량</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>표</td><td>profile 이름마다 표 하나. 길이 · 끝 모양 · 구멍이 같은 막대끼리 한 줄.</td></tr>
+  <tr><td>가공 모양</td><td>단면 모양과 막대 약도. 약도는 길이대로 그리지 않습니다 — 끝을 45°로 자르는지, 구멍이 있는지를 보여 줍니다.</td></tr>
+  <tr><td>길이</td><td>막대의 가장 긴 쪽(mm).</td></tr>
+  <tr><td>수량</td><td>그 판재 한 장에 붙는 개수.</td></tr>
+</tbody></table>
+<h2>레이어 및 동작 특이사항</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어</td><td>보이는 선 <code>Sheet_Fab</code>, 숨은선 · 접는 선 <code>Sheet_Fab_Hidden</code>, 치수 · 글자 <code>Dims</code>.</td></tr>
+  <tr><td>글자 크기</td><td>현재 치수 스타일의 글자 크기를 따릅니다.</td></tr>
+  <tr><td>다시 그리기</td><td>가공도를 그리면 표의 3D 복사본이 지워집니다. 다시 그리려면 <strong>ShTable</strong> 부터 다시 실행합니다.</td></tr>
+  <tr><td>도면 평면</td><td>가공도는 Front 뷰에서 보는 도면 평면에 그려집니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>ShTable</strong></td><td>판재 가공도 표 — ShFd 를 실행하기 전에 표를 만듭니다.</td></tr>
+  <tr><td><strong>ShList</strong></td><td>판재 수량표 — 가공도와 함께 사용합니다.</td></tr>
+  <tr><td><strong>BpFd</strong></td><td>백패널 가공도 — 같은 배치입니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

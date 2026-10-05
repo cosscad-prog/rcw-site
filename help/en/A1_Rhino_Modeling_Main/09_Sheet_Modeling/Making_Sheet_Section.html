@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Making Sheet Section</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Making Sheet Section</h1>
+<p>To make a sheet panel, the <strong>section group that holds the sheet must contain a line on the <code>S_Center1</code> layer</strong>. That single line sets the position of the sheet, its front face, and the fold depth. This page explains how to draw the line and which sheets can be made from it.</p>
+<div class="note">Workflow: draw the <code>S_Center1</code> line in the section → SSP (register sections) → ShMD → Sht → ShNo → ShList → ShTable → ShFd</div>
+<h2>What One Line Defines</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../../img/Sheet_section_rule.svg" alt="The S_Center1 line in the section sets the position, front face, and fold depth of the sheet" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Gray = member section, red = S_Center1 line (dot = start point, arrow = end point), blue = resulting sheet. The bottom is the visible face (outside) of the sheet.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 10%;">
+    <col style="width: 22%;">
+    <col style="width: 68%;">
+  </colgroup>
+  <tbody><tr><th>No.</th><th>Of the line</th><th>Of the sheet</th></tr>
+  <tr><td>1</td><td><strong>Position</strong> of the line</td><td>Edge of the sheet — the outer face of the folded leg lies on this line. It sets how far from the member the sheet ends.</td></tr>
+  <tr><td>2</td><td><strong>Start point</strong> of the line</td><td>Front (visible) face of the sheet. The panel face lies in the plane through the start point.</td></tr>
+  <tr><td>3</td><td><strong>Length</strong> of the line</td><td>Fold depth (outer dimension). With Depth set to <strong>From surface</strong> in Sht, the sheet is folded by this length.</td></tr>
+</tbody></table>
+<h2>Rules for Drawing the Line</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer</td><td>Must be the <code>S_Center1</code> layer. Draw it the same way as the <code>G_Center1</code> line for glass.</td></tr>
+  <tr><td>Section group</td><td>Add the line to the group of that section. Lines outside the group are not read.</td></tr>
+  <tr><td>Direction</td><td>The line has a direction. Draw it <strong>from the front (outside) toward the inside</strong>, straight and perpendicular to the panel face (the same direction as the glass line). The start point is the front face, and the length to the end point is the depth.</td></tr>
+  <tr><td>One line per bay</td><td>If the section has a sheet on both sides, draw <strong>two lines, one for each bay</strong>. An end member with a sheet on one side needs one line. Do the same for a transom with bays above and below.</td></tr>
+  <tr><td>Front face of the four sides</td><td>The lines of the four sections around a bay must have their <strong>start points in one plane</strong>. If they differ by more than 0.5 mm, no panel face is made and a message is shown.</td></tr>
+  <tr><td>Section registration</td><td>After adding or changing a line, run <strong>SSP</strong> again.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../../img/Sheet_section_both.svg" alt="A middle member gets two lines, one for each bay" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Section with a sheet on both sides — one line per bay</figcaption>
+  </figure>
+</div>
+<h2>When a Bay Becomes a Sheet Bay</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 40%;">
+    <col style="width: 60%;">
+  </colgroup>
+  <tbody><tr><th>Case</th><th>Result</th></tr>
+  <tr><td>Every side of the bay has an <code>S_Center1</code> line on that bay side</td><td>Sheet bay — ShMD creates the panel face (<code>Sheet_XX</code>).</td></tr>
+  <tr><td>No line at all</td><td>Treated as a glass bay and skipped.</td></tr>
+  <tr><td>Line on some sides only</td><td>Nothing is made and the missing sides are reported by name. Add the line to those sections.</td></tr>
+</tbody></table>
+<h2>Shapes You Can Make</h2>
+<p>From the same line, the options of Sht produce the sheets below. The position and start point of the line are used by every shape. In every figure the bottom is the visible face.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../../img/Sheet_section_flat.svg" alt="Flat plate with no fold" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Flat — flat plate (only the front position is used)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../../img/Sheet_section_fold.svg" alt="Sheet folded by the length of the line" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fold — folded by the length of the line</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../../img/Sheet_section_inside.svg" alt="Sheet with an inside return" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Inside — folded and returned inward</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../../img/Sheet_section_outside.svg" alt="Sheet with an outside return and a screw hole" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Outside — folded and returned outward (screw holes)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../../img/Sheet_section_profile.svg" alt="Profile attached inside a folded sheet" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fold + attached profile (green)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../../img/Sheet_section_depth.svg" alt="Deeper fold from a longer line" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>A longer line gives a deeper fold</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Different depth per side</td><td>Draw the lines with different lengths in each section and the sheet gets a different depth on each side (From surface).</td></tr>
+  <tr><td>Typing the depth</td><td>With <strong>Enter values</strong> in Sht, the typed values are used instead of the line length. The position and front face of the line are still used.</td></tr>
+  <tr><td>Sloped bays</td><td>Bays with a sloped transom or mullion (trapezoid, parallelogram) are made the same way.</td></tr>
+  <tr><td>Return length, holes, profile</td><td>Set in the option window of Sht, independent of the line.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>SSP</strong></td><td>Section registration — run it after adding the line.</td></tr>
+  <tr><td><strong>ShMD</strong></td><td>Sheet bay surface — creates panel faces in the bays that have the line.</td></tr>
+  <tr><td><strong>Sht</strong></td><td>Sheet modeling — creates folded sheets from the panel faces.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

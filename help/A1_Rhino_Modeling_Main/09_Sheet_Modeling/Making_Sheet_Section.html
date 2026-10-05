@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Making Sheet Section - 판재용 단면 만들기</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Making Sheet Section &nbsp;—&nbsp; 판재용 단면 만들기</h1>
+<p>판재를 만들려면 판재가 붙는 <strong>단면(Section) group 안에 <code>S_Center1</code> 레이어의 선</strong>이 있어야 합니다. 이 선 하나가 판재의 자리와 앞면, 접는 깊이를 정합니다. 이 문서는 선을 어떻게 그어야 하는지와, 그렇게 그으면 어떤 판재를 만들 수 있는지를 설명합니다.</p>
+<div class="note">작업 순서: 단면에 <code>S_Center1</code> 선 긋기 → SSP(단면 등록) → ShMD → Sht → ShNo → ShList → ShTable → ShFd</div>
+<h2>선 하나가 정하는 것</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../img/Sheet_section_rule.svg" alt="단면의 S_Center1 선이 판재의 자리, 앞면, 접는 깊이를 정한다" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>회색 = 부재 단면, 빨강 = S_Center1 선(점 = 시작점, 화살표 = 끝점), 파랑 = 만들어지는 판재. 아래쪽이 판재의 보이는 면(바깥)입니다.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 10%;">
+    <col style="width: 22%;">
+    <col style="width: 68%;">
+  </colgroup>
+  <tbody><tr><th>번호</th><th>선의 무엇</th><th>판재의 무엇</th></tr>
+  <tr><td>①</td><td>선의 <strong>자리</strong></td><td>판재의 변 — 접힌 날의 바깥면이 이 선 위에 옵니다. 부재에서 얼마나 떨어져 판재가 끝나는지가 여기서 정해집니다.</td></tr>
+  <tr><td>②</td><td>선의 <strong>시작점</strong></td><td>판재의 앞면(보이는 면). 판 면이 시작점을 지나는 평면에 놓입니다.</td></tr>
+  <tr><td>③</td><td>선의 <strong>길이</strong></td><td>접는 깊이(바깥 치수). Sht 의 Depth 를 <strong>From surface</strong> 로 두면 이 길이만큼 접습니다.</td></tr>
+</tbody></table>
+<h2>선을 긋는 규칙</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어</td><td>반드시 <code>S_Center1</code> 레이어. 유리용 <code>G_Center1</code> 선과 같은 방식으로 긋습니다.</td></tr>
+  <tr><td>단면 group</td><td>선을 그 단면의 group 에 넣습니다. group 밖의 선은 읽지 않습니다.</td></tr>
+  <tr><td>방향</td><td>선에는 방향이 있습니다. <strong>앞면(바깥)에서 시작해 안쪽으로</strong>, 판 면에 직각인 방향(유리선과 같은 방향)으로 곧게 긋습니다. 시작점이 앞면이고, 끝점까지의 길이가 깊이입니다.</td></tr>
+  <tr><td>칸마다 한 줄</td><td>단면 양쪽 칸에 판재가 붙으면 <strong>칸마다 한 줄씩 두 줄</strong>을 긋습니다. 한쪽 칸에만 붙는 끝 부재는 한 줄입니다. 트랜섬도 위 칸 · 아래 칸에 각각 긋습니다.</td></tr>
+  <tr><td>네 변의 앞면</td><td>한 칸을 둘러싼 네 단면의 선은 <strong>시작점이 같은 평면</strong>에 있어야 합니다. 0.5mm 넘게 어긋나면 판 면을 만들지 않고 알립니다.</td></tr>
+  <tr><td>단면 등록</td><td>선을 넣거나 고친 뒤에는 <strong>SSP</strong> 를 다시 실행합니다.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../img/Sheet_section_both.svg" alt="가운데 부재에는 양쪽 칸용으로 선을 두 줄 긋는다" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>양쪽 칸에 판재가 붙는 단면 — 칸마다 한 줄</figcaption>
+  </figure>
+</div>
+<h2>판재 칸이 되는 조건</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 40%;">
+    <col style="width: 60%;">
+  </colgroup>
+  <tbody><tr><th>경우</th><th>결과</th></tr>
+  <tr><td>칸의 모든 변에 그 칸 쪽 <code>S_Center1</code> 선이 있다</td><td>판재 칸 — ShMD 가 판 면(<code>Sheet_XX</code>)을 만듭니다.</td></tr>
+  <tr><td>선이 하나도 없다</td><td>유리 칸으로 보고 건너뜁니다.</td></tr>
+  <tr><td>일부 변에만 있다</td><td>만들지 않고 빠진 변을 이름으로 알립니다. 그 단면에 선을 더 긋습니다.</td></tr>
+</tbody></table>
+<h2>만들 수 있는 형상</h2>
+<p>같은 선에서 Sht 의 옵션에 따라 아래와 같은 판재를 만들 수 있습니다. 선의 자리와 시작점은 모든 형상에 공통으로 쓰입니다. 그림은 모두 아래쪽이 보이는 면입니다.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../img/Sheet_section_flat.svg" alt="평판 — 접지 않은 판" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Flat — 평판(앞면 자리만 씁니다)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../img/Sheet_section_fold.svg" alt="접기 — 선의 길이만큼 접은 판" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fold — 선의 길이만큼 접기</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../img/Sheet_section_inside.svg" alt="안쪽 되접기" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Inside — 접은 뒤 안쪽으로 되접기</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../img/Sheet_section_outside.svg" alt="바깥쪽 되접기와 스크류 구멍" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Outside — 접은 뒤 바깥쪽으로 되접기(스크류 구멍)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../img/Sheet_section_profile.svg" alt="접은 판 안쪽에 붙인 profile" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fold + 붙인 profile(초록)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 30%; min-width:220px; max-width:30%;">
+    <img src="../../img/Sheet_section_depth.svg" alt="선을 길게 그어 깊게 접은 판" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>선을 길게 그으면 그만큼 깊게 접힙니다</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>깊이를 변마다 다르게</td><td>단면마다 선의 길이를 다르게 그으면 변마다 깊이가 다른 판재가 됩니다(From surface).</td></tr>
+  <tr><td>깊이를 직접 넣기</td><td>Sht 에서 <strong>Enter values</strong> 를 고르면 선의 길이 대신 넣은 값으로 접습니다. 이때도 선의 자리와 앞면은 그대로 씁니다.</td></tr>
+  <tr><td>기운 칸</td><td>트랜섬이나 멀리언이 기운 칸(사다리꼴 · 평행사변형)도 같은 방식으로 만들어집니다.</td></tr>
+  <tr><td>되접는 길이 · 구멍 · profile</td><td>선과 무관하게 Sht 의 옵션 창에서 정합니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>SSP</strong></td><td>단면 등록 — 선을 넣은 뒤 실행합니다.</td></tr>
+  <tr><td><strong>ShMD</strong></td><td>판재 칸 면 만들기 — 선이 있는 칸에 판 면을 만듭니다.</td></tr>
+  <tr><td><strong>Sht</strong></td><td>판재 모델링 — 판 면에서 접힌 판재를 만듭니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

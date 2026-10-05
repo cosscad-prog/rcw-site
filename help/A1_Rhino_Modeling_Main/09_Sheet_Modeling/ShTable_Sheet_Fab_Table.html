@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>ShTable - 판재 가공도 표</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>ShTable &nbsp;—&nbsp; 판재 가공도 표</h1>
+<p><span class="cmd-box">ShTable</span></p>
+<p>번호별 <strong>대표 판재</strong>를 도면 평면에 표로 늘어놓습니다. 두께마다 한 줄, 번호마다 한 칸이 만들어지고, 칸 안에 판재(와 붙인 profile)의 복사본이 정면으로 놓입니다. 이 표가 가공도(<strong>ShFd</strong>)를 그리는 바탕입니다.</p>
+<h2>사용 목적</h2>
+<p>판재 가공도를 그릴 자리를 만들 때 사용합니다. BpTable 과 같은 규칙으로 동작합니다.</p>
+<div class="note">작업 순서: WVector → SSP → ShMD → Sht → ShNo → ShList → <strong>ShTable</strong> → ShFd<br>판재 명령은 단면에 그려 둔 <code>S_Center1</code> 선과 등록된 단면(SSP), 방향이 기록된 와이어프레임(WVector)을 바탕으로 동작합니다.</div>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>먼저 <strong>ShNo</strong> 로 번호를 붙입니다.</li>
+  <li>Rhino 명령창에 <strong>ShTable</strong> 을 입력하고 Enter 를 누릅니다.</li>
+  <li>표에 넣을 판재를 선택하고 Enter 를 누릅니다. 아무것도 고르지 않고 Enter 를 누르면 문서의 판재 전체가 대상입니다.</li>
+  <li><strong>표의 왼쪽 위 자리</strong>를 화면에서 클릭합니다. 표는 그 자리에서 오른쪽 · 아래로 만들어집니다.</li>
+  <li>이어서 <strong>ShFd</strong> 를 실행하면 칸마다 가공도가 그려집니다.</li>
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../img/ShTable_demo.png" alt="ShTable 이 만든 두께별 표와 번호별 대표 판재" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>두께마다 한 줄, 번호마다 한 칸</figcaption>
+  </figure>
+</div>
+<h2>표의 구성</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>줄</td><td>두께마다 한 줄. 첫 칸에 <code>Sheet 3T</code> 처럼 두께가 적힙니다.</td></tr>
+  <tr><td>칸</td><td>번호마다 한 칸. 왼쪽 위에 번호, 수량(<code>Qnt-</code>), 크기 · 두께 · 끝 모양, 면적이 적힙니다.</td></tr>
+  <tr><td>대표 판재</td><td>그 번호의 판재 하나와 붙인 profile 을 복사해 정면으로 눕힙니다. 판 앞면이 도면 평면에 놓입니다.</td></tr>
+  <tr><td>칸 크기</td><td>고른 판재 중 가장 큰 폭 · 높이의 6배. 가공도의 여러 그림이 들어갈 자리입니다.</td></tr>
+  <tr><td>레이어</td><td>칸의 글자는 <code>Text</code> · <code>Profile_No_Qnt</code> 레이어에 놓입니다.</td></tr>
+</tbody></table>
+<div class="note">표의 복사본은 문서의 판재로 세지 않습니다. ShNo · ShList 를 다시 실행해도 수량이 늘지 않습니다.</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>ShNo</strong></td><td>판재 번호 — 표를 만들기 전에 실행합니다.</td></tr>
+  <tr><td><strong>ShFd</strong></td><td>판재 가공도 — 표의 대표 판재 둘레에 가공도를 그립니다.</td></tr>
+  <tr><td><strong>BpTable</strong></td><td>백패널 가공도 표 — 같은 규칙입니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

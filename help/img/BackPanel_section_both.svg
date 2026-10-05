@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="254" viewBox="0 0 480 254" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+<rect width="480" height="254" fill="#ffffff"/>
+<rect x="210" y="30" width="60" height="126" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="216" y="36" width="48" height="114" fill="#ffffff" stroke="#7b8494"/>
+<rect x="233" y="156" width="14" height="69" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="210" y="225" width="60" height="10" fill="#c9ced6" stroke="#7b8494"/>
+<text x="240" y="97" fill="#555" text-anchor="middle" font-size="11">section</text>
+<line x1="10" y1="222" x2="470" y2="222" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="20" y="213" width="213" height="9" fill="#8fd3e8" stroke="#5fa8c0"/>
+<rect x="247" y="213" width="213" height="9" fill="#8fd3e8" stroke="#5fa8c0"/>
+<rect x="20" y="117" width="178" height="5" fill="#8a5a44" stroke="none"/>
+<rect x="20" y="74" width="5" height="48" fill="#8a5a44" stroke="none"/>
+<rect x="193" y="74" width="5" height="48" fill="#8a5a44" stroke="none"/>
+<rect x="20" y="74" width="22" height="5" fill="#8a5a44" stroke="none"/>
+<rect x="176" y="74" width="22" height="5" fill="#8a5a44" stroke="none"/>
+<rect x="282" y="117" width="178" height="5" fill="#8a5a44" stroke="none"/>
+<rect x="282" y="74" width="5" height="48" fill="#8a5a44" stroke="none"/>
+<rect x="455" y="74" width="5" height="48" fill="#8a5a44" stroke="none"/>
+<rect x="282" y="74" width="22" height="5" fill="#8a5a44" stroke="none"/>
+<rect x="438" y="74" width="22" height="5" fill="#8a5a44" stroke="none"/>
+<line x1="198" y1="148" x2="198" y2="43" stroke="#d62828" stroke-width="2.5"/>
+<polygon points="198,34 192.5,45 203.5,45" fill="#d62828"/>
+<circle cx="198" cy="148" r="4" fill="#d62828"/>
+<line x1="282" y1="148" x2="282" y2="43" stroke="#d62828" stroke-width="2.5"/>
+<polygon points="282,34 276.5,45 287.5,45" fill="#d62828"/>
+<circle cx="282" cy="148" r="4" fill="#d62828"/>
+<text x="186" y="52" fill="#d62828" text-anchor="end" font-size="12" font-weight="bold">BP_Center1</text>
+<text x="294" y="52" fill="#d62828" text-anchor="start" font-size="12" font-weight="bold">BP_Center1</text>
+</svg>

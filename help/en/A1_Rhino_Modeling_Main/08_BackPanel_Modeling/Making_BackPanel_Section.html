@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Making BackPanel Section</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Making BackPanel Section</h1>
+<p>To make a BackPanel by the <strong>Section</strong> method, the <strong>section group that holds the BackPanel must contain a line on the <code>BP_Center1</code> layer</strong>. The line sets the <strong>side edge</strong> of the BackPanel. The distance from the glass and the thickness are set by the values in <strong>BpOpt</strong>, not by the line.</p>
+<div class="note">Workflow: draw the <code>BP_Center1</code> line in the section → SSP (register sections) → BpOpt (type settings) → GMD (glass face) → BP1 to BP5 → BpNo → BpList → BpTable → BpFd</div>
+<h2>What Sets the Position of the BackPanel</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
+    <img src="../../../img/BackPanel_section_rule.svg" alt="The BP_Center1 line in the section sets the edge of the BackPanel, and the BpOpt values set its depth and thickness" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Gray = member section, light blue = glass, red = BP_Center1 line (dot = start point, arrow = end point), brown = BackPanel. The bottom is the outside (glass side).</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 10%;">
+    <col style="width: 24%;">
+    <col style="width: 66%;">
+  </colgroup>
+  <tbody><tr><th>No.</th><th>What is set</th><th>Where it is set</th></tr>
+  <tr><td>1</td><td><strong>Side edge</strong> of the BackPanel</td><td>Position of the <code>BP_Center1</code> line in the section. It sets how far from the member the BackPanel ends.</td></tr>
+  <tr><td>2</td><td><strong>Distance</strong> from the glass</td><td><code>Dist from Glass</code> in <strong>BpOpt</strong>: the distance from the glass face to the front face of the BackPanel.</td></tr>
+  <tr><td>3</td><td><strong>Thickness</strong> of the BackPanel</td><td>The <code>Panel</code> thickness in <strong>BpOpt</strong> (with the <code>Sheet</code> and <code>Insulation</code> thicknesses).</td></tr>
+</tbody></table>
+<h2>Rules for Drawing the Line</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer</td><td>Must be the <code>BP_Center1</code> layer. The <strong>BpC1</strong> command creates this layer.</td></tr>
+  <tr><td>Section group</td><td>Add the line to the group of that section. Lines outside the group are not read.</td></tr>
+  <tr><td>Direction</td><td>Draw it straight, perpendicular to the glass face (the same direction as the glass line <code>G_Center1</code>), starting at the outside (glass side) and going inward.</td></tr>
+  <tr><td>Length</td><td>Draw it <strong>long enough to pass through the whole depth</strong> occupied by the BackPanel and its insulation. If the line is too short to reach the front or back face of the BackPanel, the edge cannot be cut.</td></tr>
+  <tr><td>One line per bay</td><td>If the section has a BackPanel on both sides, draw <strong>two lines, one for each bay</strong>. Do the same for a transom with bays above and below.</td></tr>
+  <tr><td>Section registration</td><td>After adding or changing a line, run <strong>SSP</strong> again.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
+    <img src="../../../img/BackPanel_section_both.svg" alt="A middle member gets two lines, one for each bay" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Section with a BackPanel on both sides — one line per bay</figcaption>
+  </figure>
+</div>
+<h2>Shapes You Can Make</h2>
+<p>From the same line, the type defined in <strong>BpOpt</strong> produces the BackPanels below. In every figure the bottom is the outside (glass side).</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../../img/BackPanel_section_typeA.svg" alt="Type A - BackPanel with flanges turned inward" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Type A (Inside) — the folded ends turn inward</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../../img/BackPanel_section_typeB.svg" alt="Type B - BackPanel with flanges turned outward" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Type B (Outside) — the folded ends turn outward</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../../img/BackPanel_section_insulation.svg" alt="BackPanel with insulation" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>BackPanel with insulation (yellow)</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Type and flange length</td><td>Set by <code>Type A</code> (Inside) or <code>Type B</code> (Outside) and its length in BpOpt.</td></tr>
+  <tr><td>Thickness</td><td>Set by the <code>Sheet</code>, <code>Panel</code>, and <code>Insulation</code> thicknesses in BpOpt.</td></tr>
+  <tr><td>Distance from the glass</td><td><code>Dist from Glass</code> in BpOpt. It does not depend on where the line starts.</td></tr>
+  <tr><td>Type number</td><td>Types 1 to 5 in BpOpt correspond to the commands <strong>BP1 to BP5</strong>.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>BpC1</strong></td><td>Creates the <code>BP_Center1</code> layer.</td></tr>
+  <tr><td><strong>SSP</strong></td><td>Section registration — run it after adding the line.</td></tr>
+  <tr><td><strong>BpOpt</strong></td><td>BackPanel type options — thickness, distance from the glass, and type.</td></tr>
+  <tr><td><strong>BP1 to BP5</strong></td><td>BackPanel modeling — pick a glass face and create the BackPanel (Section method).</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

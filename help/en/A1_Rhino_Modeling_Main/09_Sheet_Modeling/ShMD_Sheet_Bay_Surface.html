@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>ShMD - Sheet Bay Surface</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>ShMD &nbsp;—&nbsp; Sheet Bay Surface</h1>
+<p><span class="cmd-box">ShMD</span></p>
+<p>Finds only the <strong>bays that take a sheet panel</strong> in a wireframe unit and creates a panel face (<code>Sheet_XX</code>) in each of them.<br>Glass bays are skipped, so you can select the whole unit and still get faces only where sheets belong.</p>
+<h2>Purpose</h2>
+<p>Use it to prepare the front faces before running <strong>Sht</strong>. Bays are found the same way as GMD finds glass bays; the difference is that faces are created only in sheet bays.</p>
+<div class="note">Workflow: WVector → SSP → <strong>ShMD</strong> → Sht → ShNo → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<h2>Preparation</h2>
+<p>For how to draw the line and which shapes can be made, see <a href="Making_Sheet_Section.html">Making Sheet Section</a>.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td><code>S_Center1</code> line in the section</td><td>In every section (mullion or transom) that holds a sheet, draw a line on the <code>S_Center1</code> layer and add it to the section group. The rule is the same as the <code>G_Center1</code> line for glass.<br>Line position = edge of the sheet (outer face of the fold), start point = front face of the sheet, line length = fold depth.</td></tr>
+  <tr><td>Sections with a sheet on both sides</td><td>For a middle mullion with sheets on both sides, draw two lines, one for each bay. Do the same for a transom with sheets above and below.</td></tr>
+  <tr><td>Section registration</td><td>After adding the lines, register the sections again with <strong>SSP</strong>.</td></tr>
+  <tr><td>Wireframe</td><td>The mullion and transom lines must be one group and <strong>WVector</strong> must have been run.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>ShMD</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the wireframe unit (mullion and transom lines) and press Enter.</li>
+  <li>A panel face is created on the <code>Sheet_XX</code> layer in every bay whose sides all have an <code>S_Center1</code> line on that bay side.</li>
+  <li>Run <strong>Sht</strong> next and pick the faces.</li>
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../../img/ShMD_demo.png" alt="Sheet_XX faces created by ShMD in the sheet bays" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Select the unit and a panel face (Sheet_XX) is created in each sheet bay.</figcaption>
+  </figure>
+</div>
+<h2>Rules</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Condition for a sheet bay</td><td>Every section around the bay must have an <code>S_Center1</code> line on that bay side.</td></tr>
+  <tr><td>Bays without the line</td><td>Treated as glass bays and skipped. The number of skipped bays is reported in the command line.</td></tr>
+  <tr><td>Bays with the line on some sides only</td><td>No face is created, and the sides without a line are reported by name (for example, bottom transom).</td></tr>
+  <tr><td>Running again</td><td>Bays that already have a <code>Sheet_XX</code> face are not duplicated.</td></tr>
+  <tr><td>Sloped bays</td><td>Bays with a sloped transom or mullion (trapezoid, parallelogram) are supported.</td></tr>
+  <tr><td>Using glass faces</td><td>A <code>Glass_XX</code> face made by GMD can be picked directly in <strong>Sht</strong>. ShMD is not needed in that case.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>Sht</strong></td><td>Sheet modeling — pick the faces made by ShMD and create folded sheets.</td></tr>
+  <tr><td><strong>SSP</strong></td><td>Section registration — run it after adding the <code>S_Center1</code> lines.</td></tr>
+  <tr><td><strong>GMD</strong></td><td>Glass surface — creates the faces of glass bays the same way.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

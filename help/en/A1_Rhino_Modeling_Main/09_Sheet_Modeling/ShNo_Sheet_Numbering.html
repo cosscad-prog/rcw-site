@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>ShNo - Sheet Numbering</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>ShNo &nbsp;—&nbsp; Sheet Numbering</h1>
+<p><span class="cmd-box">ShNo</span></p>
+<p>Numbers the sheets made by <strong>Sht</strong> (<code>SH-001</code>, <code>SH-002</code>, …). <strong>Identical sheets get the same number</strong>, and the number is shown as text on each sheet.</p>
+<h2>Purpose</h2>
+<p>Use it to group identical sheets under one number for counting, and as the basis of the quantity list (ShList) and the fabrication drawings (ShTable, ShFd).</p>
+<div class="note">Workflow: WVector → SSP → ShMD → Sht → <strong>ShNo</strong> → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>ShNo</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the sheets to number and press Enter. <strong>Press Enter without selecting anything</strong> to number every sheet in the document.</li>
+  <li>A number is recorded on each sheet and the number text is placed at the middle of the panel face.</li>
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../../img/ShNo_demo.png" alt="Sheet unit numbered by ShNo" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Sheets of the same kind and size receive the same number.</figcaption>
+  </figure>
+</div>
+<h2>What Makes Sheets Identical</h2>
+<p>Two sheets get the same number only when <strong>all</strong> of the following match. If any one differs, the numbers differ.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Thickness</td><td>Sheet thickness.</td></tr>
+  <tr><td>Edge type</td><td>Flat, Fold, Inside, or Outside, and the return length.</td></tr>
+  <tr><td>Fold depth</td><td>Depth of the top, bottom, left, and right sides.</td></tr>
+  <tr><td>Shape of the panel face</td><td>Width, height, and corner positions. Mirrored trapezoids get different numbers.</td></tr>
+  <tr><td>Holes in the return</td><td>Diameter, position, spacing, and count.</td></tr>
+  <tr><td>Attached profile</td><td>Profile type, sides, placement (mitred, square, pieces) with the piece layout, and screw holes.</td></tr>
+</tbody></table>
+<h2>Rules</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Order</td><td>Numbers are assigned by thickness, then width, then height, smallest first.</td></tr>
+  <tr><td>Format</td><td>Continuous from <code>SH-001</code>. The sequence continues across thicknesses.</td></tr>
+  <tr><td>Number text</td><td>Placed on the <code>Sheet_No</code> layer and added to the group of the sheet.</td></tr>
+  <tr><td>Running again</td><td>After adding or deleting sheets, run the command again to renumber. Existing number text is updated.</td></tr>
+  <tr><td>Table copies</td><td>Copies placed in the drawing by ShTable are not counted as sheets.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>Sht</strong></td><td>Sheet modeling — run it before numbering.</td></tr>
+  <tr><td><strong>ShList</strong></td><td>Sheet quantity list — tabulates the quantity per number.</td></tr>
+  <tr><td><strong>ShTable</strong></td><td>Sheet fabrication table — lays out one sheet per number in the drawing.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

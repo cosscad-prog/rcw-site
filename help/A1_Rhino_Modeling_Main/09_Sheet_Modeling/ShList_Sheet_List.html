@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>ShList - 판재 수량표</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>ShList &nbsp;—&nbsp; 판재 수량표</h1>
+<p><span class="cmd-box">ShList</span></p>
+<p>번호가 붙은 판재를 번호별로 모아 <strong>수량표</strong>를 만듭니다. 판재 표 아래에는 붙인 profile 을 <strong>이름 · 길이별 수량</strong>으로 모은 표가 이어집니다. 화면에 표를 그리고, 원하면 Excel 파일로도 저장합니다.</p>
+<h2>사용 목적</h2>
+<p>판재와 붙이는 profile 의 발주 · 생산 수량을 정리할 때 사용합니다. 표의 양식은 BpList · GsList 와 같은 열 순서를 따릅니다.</p>
+<div class="note">작업 순서: WVector → SSP → ShMD → Sht → ShNo → <strong>ShList</strong> → ShTable → ShFd<br>판재 명령은 단면에 그려 둔 <code>S_Center1</code> 선과 등록된 단면(SSP), 방향이 기록된 와이어프레임(WVector)을 바탕으로 동작합니다.</div>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>먼저 <strong>ShNo</strong> 로 번호를 붙입니다.</li>
+  <li>Rhino 명령창에 <strong>ShList</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>Excel 파일이 필요하면 명령창의 <code>Excel_File_On</code> 옵션을 On 으로 바꿉니다.</li>
+  <li>목록에 넣을 판재를 선택하고 Enter 를 누릅니다. 아무것도 고르지 않고 Enter 를 누르면 문서의 판재 전체가 대상입니다.</li>
+  <li>표를 놓을 자리를 화면에서 클릭합니다.</li>
+</ol>
+<h2>실행 예시</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../img/ShList_demo.png" alt="ShList 가 그린 판재 수량표와 profile 수량표" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>위 = 판재 표, 아래 = 붙인 profile 표</figcaption>
+  </figure>
+</div>
+<h2>판재 표의 열</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>열</th><th>설명</th></tr>
+  <tr><td>NO</td><td>줄 번호.</td></tr>
+  <tr><td>Unit_No · Code</td><td>다른 수량표와 열 자리를 맞추기 위한 칸입니다. 판재에는 해당 기록이 없어 <code>-</code> 로 나옵니다.</td></tr>
+  <tr><td>Fab_No</td><td>판재 번호(예: <code>SH-003</code>).</td></tr>
+  <tr><td>Quantity</td><td>그 번호의 판재 수량.</td></tr>
+  <tr><td>Width · Height</td><td>판 면의 폭과 높이(mm).</td></tr>
+  <tr><td>Area</td><td>폭 × 높이 × 수량(㎡). 접힌 부분은 포함하지 않습니다. 합계 줄에 전체 면적이 나옵니다.</td></tr>
+  <tr><td>Thickness</td><td>판 두께(mm).</td></tr>
+  <tr><td>Edge</td><td>끝 모양(Flat · Fold · Inside · Outside).</td></tr>
+  <tr><td>Depth T/B/L/R</td><td>위 · 아래 · 왼쪽 · 오른쪽 접는 깊이.</td></tr>
+  <tr><td>Return · Holes</td><td>되접는 길이와 되접힌 부분의 구멍 수.</td></tr>
+  <tr><td>Profile</td><td>붙인 profile 이름.</td></tr>
+</tbody></table>
+<h2>profile 표의 열</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>열</th><th>설명</th></tr>
+  <tr><td>Profile · Material</td><td>profile 이름과 재질 번호.</td></tr>
+  <tr><td>Quantity</td><td>같은 이름 · 길이 · 구멍 수인 막대의 수량(고른 판재 전체의 합).</td></tr>
+  <tr><td>Length</td><td>막대 길이(mm). <strong>가장 긴 쪽</strong> 기준입니다 — 45°로 자른 막대는 바깥쪽 길이입니다.</td></tr>
+  <tr><td>Holes</td><td>막대 하나의 스크류 구멍 수.</td></tr>
+</tbody></table>
+<div class="note">번호가 없는 판재는 목록에서 빠지고, 빠진 수를 명령창에 알립니다. Excel 파일은 문서를 저장한 폴더에 만들어지므로 문서를 먼저 저장해야 합니다.</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>ShNo</strong></td><td>판재 번호 — 수량표를 만들기 전에 실행합니다.</td></tr>
+  <tr><td><strong>ShTable</strong> · <strong>ShFd</strong></td><td>판재 가공도 표와 가공도.</td></tr>
+  <tr><td><strong>BpList</strong> · <strong>GsList</strong></td><td>백패널 · 유리 수량표 — 같은 양식입니다.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Sht - 판재 모델링</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Sht &nbsp;—&nbsp; 판재 모델링</h1>
+<p><span class="cmd-box">Sht</span></p>
+<p>판 면(<code>Sheet_XX</code> 또는 <code>Glass_XX</code>)을 골라 <strong>접힌 판재</strong>를 만듭니다. 두께, 접는 깊이, 끝 모양(평판 · 접기 · 안쪽 되접기 · 바깥쪽 되접기)을 정하고, 판 뒷면에 <strong>profile 을 붙이거나 스크류 구멍</strong>을 낼 수 있습니다.</p>
+<h2>사용 목적</h2>
+<p>유리 자리에 들어가는 금속 판재(백판 · 스팬드럴 판 등)를 모델링할 때 사용합니다. 만든 판재에는 크기와 가공 정보가 기록되어 번호(ShNo) · 수량표(ShList) · 가공도(ShFd)가 그 기록으로 만들어집니다.</p>
+<div class="note">작업 순서: WVector → SSP → ShMD → <strong>Sht</strong> → ShNo → ShList → ShTable → ShFd<br>판재 명령은 단면에 그려 둔 <code>S_Center1</code> 선과 등록된 단면(SSP), 방향이 기록된 와이어프레임(WVector)을 바탕으로 동작합니다.</div>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <strong>Sht</strong> 를 입력하고 Enter 를 누릅니다.</li>
+  <li>판 면(<code>Sheet_XX</code> · <code>Glass_XX</code>)을 하나 이상 선택하고 Enter 를 누릅니다.</li>
+  <li>옵션 창에서 두께 · 깊이 · 끝 모양 · 붙일 profile 을 정합니다. <strong>창이 떠 있는 동안에도 Rhino 화면을 움직이거나 치수를 잴 수 있습니다.</strong></li>
+  <li><strong>OK</strong> 를 누르면 판재가 만들어집니다. 창을 닫거나 Cancel 을 누르면 아무것도 바뀌지 않습니다.</li>
+</ol>
+<h2>옵션 창</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../img/Sht_option_window.png" alt="Sht 옵션 창" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 16%;">
+    <col style="width: 24%;">
+    <col style="width: 60%;">
+  </colgroup>
+  <tbody><tr><th>구역</th><th>항목</th><th>설명</th></tr>
+  <tr><td>Profile</td><td>목록 · 미리보기</td><td>붙일 profile 을 고릅니다. <code>(none)</code> 을 고르면 붙이지 않습니다. 아래 그림은 판과 profile 의 단면 모양입니다.</td></tr>
+  <tr><td>Sheet</td><td>Thickness</td><td>판 두께(mm). 1.2 · 2 · 3 · 4 등 필요한 값을 넣습니다.</td></tr>
+  <tr><td>Sheet</td><td>Depth</td><td>접는 깊이(바깥 치수). <strong>From surface</strong> = 단면의 <code>S_Center1</code> 선 길이를 변마다 그대로 씁니다. <strong>Enter values</strong> = Top · Bottom · Left · Right 를 직접 넣습니다.</td></tr>
+  <tr><td>Sheet</td><td>Edge</td><td>끝 모양. <strong>Flat</strong> = 접지 않는 평판, <strong>Fold</strong> = 한 번 접기, <strong>Inside</strong> = 접은 뒤 안쪽으로 되접기, <strong>Outside</strong> = 접은 뒤 바깥쪽으로 되접기.</td></tr>
+  <tr><td>Sheet</td><td>Return length</td><td>되접는 길이(바깥 치수, 두께 포함). Inside · Outside 일 때 씁니다.</td></tr>
+  <tr><td>Sheet</td><td>Hole Dist</td><td>바깥쪽 되접기의 스크류 구멍이 되접힌 끝에서 떨어진 거리. Outside 일 때만 씁니다.</td></tr>
+  <tr><td>Attach profile</td><td>Sides</td><td>profile 을 붙일 변(Top · Bottom · Left · Right). <strong>All</strong> 은 네 변 모두.</td></tr>
+  <tr><td>Attach profile</td><td>Placement</td><td><strong>Full length, mitred corners</strong> = 변 전체 길이로 붙이고 코너에서 45°로 맞댑니다.<br><strong>Full length, square ends</strong> = 변 전체 길이로 붙이고 양 끝을 직각으로 자릅니다. 세로 막대(왼쪽 · 오른쪽)가 통으로 가고 가로 막대(위 · 아래)가 그 사이에 들어갑니다.<br><strong>Pieces</strong> = 짧은 조각을 여러 개 붙입니다.</td></tr>
+  <tr><td>Pieces</td><td>Length · Top · Pitch · Bottom · Count</td><td>조각 길이와 배치. 여유(Top · Bottom · Left · Right)는 꼭짓점에서 조각 끝까지, Pitch 는 조각 중심에서 중심까지입니다.<br>Pitch 가 0 보다 크면 Top(또는 Left)에서부터 Pitch 간격으로 Count 개, Pitch 가 0 이면 두 여유 사이에 Count 개를 고르게 놓습니다.</td></tr>
+  <tr><td>Screw holes</td><td>Make screw holes</td><td>profile 에 스크류 구멍을 냅니다. 바깥쪽 되접기(Outside)에서는 되접힌 부분에 냅니다.</td></tr>
+  <tr><td>Screw holes</td><td>Diameter · Margin · Count / Pitch</td><td>구멍 지름, 끝에서의 여유, 그리고 개수(Count) 또는 간격(Pitch) 중 하나.</td></tr>
+</tbody></table>
+<h2>끝 모양 (Edge)</h2>
+<p>아래 그림은 끝 모양마다의 단면 약도입니다. 모양이 잘 보이도록 <strong>두께를 크게, 폭을 짧게</strong> 그렸습니다(실제 비율이 아닙니다). 아래쪽이 판재의 보이는 면입니다.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../img/Sht_edge_flat.svg" alt="Flat — 평판의 단면" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Flat — 접지 않는 평판</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../img/Sht_edge_fold.svg" alt="Fold — 한 번 접은 판재의 단면" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fold — 한 번 접기</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../img/Sht_edge_inside.svg" alt="Inside — 안쪽으로 되접은 판재의 단면" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Inside — 안쪽 되접기</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../img/Sht_edge_outside.svg" alt="Outside — 바깥쪽으로 되접은 판재의 단면" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Outside — 바깥쪽 되접기(스크류 구멍)</figcaption>
+  </figure>
+</div>
+<div class="note">되접기(Inside · Outside)를 고르면 profile 은 붙이지 않습니다. 바깥쪽 되접기의 날개는 코너에서 직각으로 끝나고, 안쪽 되접기의 날개는 코너에서 45°로 맞닿습니다.</div>
+<h2>붙이는 profile</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../img/Sht_profile_3d.png" alt="profile 을 붙인 판재를 뒤에서 본 모습" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>판 뒷면에 profile 을 통으로(위 줄) · 조각으로(아래 줄) 붙인 모습</figcaption>
+  </figure>
+</div>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../img/Sht_profile_corner_mitred.png" alt="코너에서 45도로 맞댄 profile" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Full length, mitred corners — 코너에서 45°</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../img/Sht_profile_corner_square.png" alt="양 끝을 직각으로 자른 profile" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Full length, square ends — 세로 막대가 통, 가로 막대가 그 사이</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>profile 라이브러리</td><td><code>%LOCALAPPDATA%\RCW_V5\5.0\Templates\SheetProfiles</code> 폴더의 3dm 파일에서 읽습니다. 파일 안의 group 하나가 profile 하나입니다. 파일을 고쳐 저장하면 다음 실행부터 목록에 반영됩니다.</td></tr>
+  <tr><td>스크류 구멍 자리</td><td>라이브러리 group 안에 <code>Hole</code>(또는 <code>Hole_Center</code>) 레이어로 그은 선이 구멍의 축입니다.</td></tr>
+  <tr><td>평판에 붙이기</td><td>Flat 에도 profile 을 붙일 수 있습니다. 자리는 접힌 판재와 같습니다(판 가장자리에서 두께만큼 안쪽).</td></tr>
+  <tr><td>길이</td><td>막대의 길이는 <strong>가장 긴 쪽</strong>으로 기록됩니다(45°로 자른 막대는 바깥쪽이 더 깁니다).</td></tr>
+</tbody></table>
+<h2>생성 결과</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>판재</td><td>닫힌 solid. <code>Sheet_&lt;두께&gt;T</code> 레이어(예: <code>Sheet_3T</code>).</td></tr>
+  <tr><td>profile 막대</td><td><code>Sheet_&lt;두께&gt;T_Profile</code> 레이어. 판재와 같은 group 입니다.</td></tr>
+  <tr><td>판 면</td><td>고른 <code>Sheet_XX</code> 면은 판재로 바뀌어 남지 않습니다.</td></tr>
+  <tr><td>되돌리기</td><td>Undo 한 번으로 만들기 전 상태로 돌아갑니다.</td></tr>
+</tbody></table>
+<div class="note">명령줄에서 옵션을 직접 주려면 <code>-Sht</code> 를 사용합니다(예: Thickness · Depth · Edge · ProfileNo · Ends · Pieces · Holes).</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>ShMD</strong></td><td>판재 칸 면 만들기 — Sht 에서 고를 면을 만듭니다.</td></tr>
+  <tr><td><strong>ShNo</strong></td><td>판재 번호 — 같은 판재에 같은 번호를 붙입니다.</td></tr>
+  <tr><td><strong>ShList</strong></td><td>판재 수량표.</td></tr>
+  <tr><td><strong>ShTable</strong> · <strong>ShFd</strong></td><td>판재 가공도 표와 가공도.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

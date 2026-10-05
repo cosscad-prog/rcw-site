@@ -49,6 +49,20 @@ drawings and order sheets &mdash; the command line says it is provisional, so ch
 The shapes are merged once, during modelling, at the solid stage &mdash; which is why each member section can still be
 edited separately after tying.</div>
 
+<h2>Composite group &nbsp;&mdash;&nbsp; pick and copy it as one</h2>
+<p><code>ComP</code> puts the members into a <b><code>ComP_name</code> group</b> (e.g. <code>ComP_M23</code>). One click picks every member,
+and copying it brings <b>the whole composite</b>. Renaming the composite in <code>Pname</code> renames the group too.</p>
+<ol class="step-list">
+  <li>Keep the composite group, add polylines, blocks and so on, and make the <b>section group</b> (MC5 etc.). The composite group sits <b>inside</b> it;
+      <code>SSP</code> and <code>UMD</code> still read it as one section group.</li>
+  <li>To copy only the composite out of a section group, pick <code>ComP_name</code> with <strong>SelGroup</strong>
+      (a plain click picks the outermost group).</li>
+  <li>Open a section of the copied composite group with <code>Pname</code>: it gets a <b>fresh composite tag</b> on the spot and shows as a composite straight away; the name stays
+      (grouping it into a section group and running <code>SSP</code> does the same).</li>
+</ol>
+<div class="note">The composite group is a handle for picking. Whether sections form a composite is decided by their <b>tag</b>,
+so ungrouping does not undo the composite. Put any other line into the composite group and it is treated as an ordinary group.</div>
+
 <h2>What becomes one</h2>
 <table class="desc-table">
   <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
@@ -103,13 +117,14 @@ Use it to compare and edit several composites on one screen. See the <b>Dtable</
       has already been set to the same value.</td></tr>
   <tr><td>Layer and color</td><td><b>Do not come back.</b> <code>ComP</code> moves the members onto one layer and writes the
       color onto the objects themselves.</td></tr>
+  <tr><td>Composite group (<code>ComP_name</code>)</td><td><b>Left.</b> A group left empty is deleted. The section group (MC etc.) is untouched.</td></tr>
 </tbody></table>
 <div class="note"><b>If you tied the wrong sections, release before saving in composite mode.</b> Release before that point and nothing is lost.</div>
 <div class="note"><code>XcomP</code> releases <b>only what you select</b>. If other sections of the same group are still in the drawing,
 it reports how many are left. Select the whole group so the composite is not left half registered.</div>
 
 <h2>Cautions</h2>
-<div class="warning"><b>Run <code>SSP</code> first if you copied a section group.</b>
+<div class="warning"><b>If you copied the sections without their composite group, group them into a section group and run <code>SSP</code> first.</b>
 Copying a section copies its composite tag as well, so two different units end up carrying the same tag.
 Opened in that state, <code>Pname</code> will not open it as a composite and says so instead. <code>SSP</code> issues a fresh tag to the copy.</div>
 <div class="warning">If even one selected section cannot be tied, <b>nothing is written at all</b> &mdash; a half-tied composite

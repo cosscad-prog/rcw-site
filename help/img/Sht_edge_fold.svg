@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="180" viewBox="0 0 400 180" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+<rect width="400" height="180" fill="#ffffff"/>
+<line x1="20" y1="150" x2="380" y2="150" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="380" y="166" fill="#777" text-anchor="end" font-size="10">outside (visible face)</text>
+<rect x="110" y="140" width="180" height="10" fill="#2f6fd0" stroke="none"/>
+<rect x="110" y="80" width="10" height="70" fill="#2f6fd0" stroke="none"/>
+<rect x="280" y="80" width="10" height="70" fill="#2f6fd0" stroke="none"/>
+<line x1="306" y1="80" x2="306" y2="150" stroke="#0066cc" stroke-width="1"/>
+<line x1="302" y1="80" x2="310" y2="80" stroke="#0066cc" stroke-width="1"/>
+<line x1="302" y1="150" x2="310" y2="150" stroke="#0066cc" stroke-width="1"/>
+<text x="313" y="119.0" fill="#0066cc" text-anchor="start" font-size="11">Depth</text>
+<line x1="200.0" y1="140" x2="200.0" y2="150" stroke="#ffffff" stroke-width="1.5"/>
+<line x1="196.0" y1="141" x2="204.0" y2="141" stroke="#ffffff" stroke-width="1.5"/>
+<line x1="196.0" y1="149" x2="204.0" y2="149" stroke="#ffffff" stroke-width="1.5"/>
+<text x="200.0" y="132" fill="#0066cc" text-anchor="middle" font-size="11">Thickness</text>
+</svg>

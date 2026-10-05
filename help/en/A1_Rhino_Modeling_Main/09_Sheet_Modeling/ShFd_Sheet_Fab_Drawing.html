@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>ShFd - Sheet Fabrication Drawing</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>ShFd &nbsp;—&nbsp; Sheet Fabrication Drawing</h1>
+<p><span class="cmd-box">ShFd</span></p>
+<p>Draws a <strong>fabrication drawing</strong> for each representative sheet placed by <strong>ShTable</strong>. A front view with dimensions, top and right sections, an isometric view, an unfolded view, and a table of the attached profiles are drawn in one cell.</p>
+<h2>Purpose</h2>
+<p>Use it to produce the shop drawings of the sheets. The views and dimensions are taken directly from the model, so the shape of the model (corner joints, holes, sloped sides) appears in the drawing as it is.</p>
+<div class="note">Workflow: WVector → SSP → ShMD → Sht → ShNo → ShList → ShTable → <strong>ShFd</strong><br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Run <strong>ShNo</strong> and then <strong>ShTable</strong> to create the table.</li>
+  <li>Type <strong>ShFd</strong> in the Rhino command line and press Enter.</li>
+  <li>If needed, choose the views with the command-line options (<code>Section_On</code>, <code>ISO_On</code>, <code>Unfold_On</code>).</li>
+  <li>Select the representative sheets in the table and press Enter. Press Enter without selecting anything to draw every sheet in the table.</li>
+</ol>
+<h2>Example</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
+    <img src="../../../img/ShFd_demo.png" alt="Fabrication drawing of a sheet with an outside return - front view, sections, isometric view, unfolded view" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fabrication drawing of a sheet with an outside return and screw holes</figcaption>
+  </figure>
+</div>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/ShFd_profile_demo.png" alt="Fabrication drawing of a sheet with attached profiles and the profile table" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Sheet with attached profiles — profile table below the unfolded view</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/ShFd_sloped_demo.png" alt="Fabrication drawing of a sloped sheet" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Sloped sheet (trapezoid)</figcaption>
+  </figure>
+</div>
+<h2>Views</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 16%;">
+    <col style="width: 18%;">
+    <col style="width: 66%;">
+  </colgroup>
+  <tbody><tr><th>View</th><th>Position</th><th>Content</th></tr>
+  <tr><td>Front view</td><td>At the representative sheet</td><td>2D lines of the sheet seen from the front (visible and hidden lines). The 3D copy is removed after drawing.</td></tr>
+  <tr><td>Horizontal section</td><td>Above the front view</td><td>Cut at mid height. Dimensions of overall length, depth, thickness, and return length.</td></tr>
+  <tr><td>Vertical section</td><td>Right of the front view</td><td>Cut at mid width. The same dimensions.</td></tr>
+  <tr><td>Isometric view</td><td>Left of the front view</td><td>3D view including hidden lines.</td></tr>
+  <tr><td>Unfolded view</td><td>Below the front view</td><td>The model unfolded at its bend lines. Bend lines and holes are shown and the overall size is written as <code>UNFOLD width x height</code>.</td></tr>
+  <tr><td>Profile table</td><td>Below the unfolded view</td><td>Name, fabrication shape, length, and quantity of the attached profiles. Not drawn when there is no profile.</td></tr>
+</tbody></table>
+<h2>Front View Dimensions</h2>
+<p>The front view shows the <strong>size of the panel</strong> first; dimensions of the attached profiles and holes are secondary. The dimension rows, from the panel outward, are as follows.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Row</th><th>Description</th></tr>
+  <tr><td>1. Bars and holes</td><td>On each side, a chain from corner to bar (or hole) to corner. On a sloped side it is measured along the side.</td></tr>
+  <tr><td>2. Panel corners</td><td>Position of the corner where a side ends on a sloped panel. Omitted for a rectangle because it equals the overall dimension.</td></tr>
+  <tr><td>3. Overall</td><td>Overall width and height of the panel face. With an outside return, one more row gives the size including the wings.</td></tr>
+  <tr><td>Sloped side</td><td>A sloped side with nothing attached gets its true length.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../../img/ShFd_pieces_front.png" alt="Front view with position dimensions of profile pieces" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Chain dimensions of profiles attached as pieces</figcaption>
+  </figure>
+</div>
+<h2>Unfolded View</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../../img/ShFd_unfold.png" alt="Unfolded view of a sheet with an outside return" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Bend lines are on the hidden-line layer and holes are shown as circles.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Method</td><td>The model is split into the panel, the folded leg of each side, and the returns, and laid flat at the bend lines. Corner shapes and holes of the model appear as they are.</td></tr>
+  <tr><td>Lengths</td><td><strong>No bend allowance is applied.</strong> Folded leg = depth − thickness, return = return length − thickness.</td></tr>
+  <tr><td>Line types</td><td>Lines on the front side are solid; lines on the back side and bend lines are on the hidden-line layer. Where two lines overlap, only the visible one is kept.</td></tr>
+  <tr><td>Dimensions</td><td>Overall width and height. A rectangular sheet also gets chain dimensions of the legs and the panel face.</td></tr>
+  <tr><td>Sloped sheets</td><td>Trapezoids and parallelograms are unfolded as well.</td></tr>
+</tbody></table>
+<h2>Attached Profile Table</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../../img/ShFd_profile_table.png" alt="Attached profile table in the fabrication drawing" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Name, fabrication shape (section and sketch), length, quantity</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Table</td><td>One table per profile name. Bars with the same length, end shape, and holes share a row.</td></tr>
+  <tr><td>Fabrication shape</td><td>Section shape and a sketch of the bar. The sketch is not drawn to length — it shows whether the ends are cut at 45° and whether there are holes.</td></tr>
+  <tr><td>Length</td><td>Longest side of the bar (mm).</td></tr>
+  <tr><td>Quantity</td><td>Number of bars attached to one sheet.</td></tr>
+</tbody></table>
+<h2>Layers and Notes</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layers</td><td>Visible lines <code>Sheet_Fab</code>, hidden and bend lines <code>Sheet_Fab_Hidden</code>, dimensions and text <code>Dims</code>.</td></tr>
+  <tr><td>Text size</td><td>Follows the text size of the current dimension style.</td></tr>
+  <tr><td>Drawing again</td><td>Drawing removes the 3D copy from the table. To draw again, run <strong>ShTable</strong> first.</td></tr>
+  <tr><td>Drawing plane</td><td>The drawing lies on the drawing plane seen in the Front view.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>ShTable</strong></td><td>Sheet fabrication table — create the table before running ShFd.</td></tr>
+  <tr><td><strong>ShList</strong></td><td>Sheet quantity list — use it together with the drawing.</td></tr>
+  <tr><td><strong>BpFd</strong></td><td>BackPanel fabrication drawing — the same arrangement.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

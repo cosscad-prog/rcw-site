@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Sht - Sheet Modeling</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Sht &nbsp;—&nbsp; Sheet Modeling</h1>
+<p><span class="cmd-box">Sht</span></p>
+<p>Pick panel faces (<code>Sheet_XX</code> or <code>Glass_XX</code>) and create <strong>folded sheet panels</strong>. Set the thickness, fold depth, and edge type (flat, fold, inside return, outside return), and optionally <strong>attach a profile or make screw holes</strong> on the back of the panel.</p>
+<h2>Purpose</h2>
+<p>Use it to model metal sheet panels (back pans, spandrel panels, and so on) that sit in a glass position. Size and fabrication data are recorded on each sheet, and numbering (ShNo), the quantity list (ShList), and the fabrication drawing (ShFd) are produced from those records.</p>
+<div class="note">Workflow: WVector → SSP → ShMD → <strong>Sht</strong> → ShNo → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>Sht</strong> in the Rhino command line and press Enter.</li>
+  <li>Select one or more panel faces (<code>Sheet_XX</code>, <code>Glass_XX</code>) and press Enter.</li>
+  <li>Set the thickness, depth, edge type, and attached profile in the option window. <strong>You can still navigate the Rhino view and measure while the window is open.</strong></li>
+  <li>Click <strong>OK</strong> to create the sheets. Closing the window or clicking Cancel changes nothing.</li>
+</ol>
+<h2>Option Window</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../../img/Sht_option_window.png" alt="Sht option window" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption></figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 16%;">
+    <col style="width: 24%;">
+    <col style="width: 60%;">
+  </colgroup>
+  <tbody><tr><th>Area</th><th>Item</th><th>Description</th></tr>
+  <tr><td>Profile</td><td>List and preview</td><td>Choose the profile to attach. <code>(none)</code> attaches nothing. The preview shows the section of the sheet and the profile.</td></tr>
+  <tr><td>Sheet</td><td>Thickness</td><td>Sheet thickness in mm. Enter the value you need, such as 1.2, 2, 3, or 4.</td></tr>
+  <tr><td>Sheet</td><td>Depth</td><td>Fold depth (outer dimension). <strong>From surface</strong> uses the length of the <code>S_Center1</code> line of each side. <strong>Enter values</strong> lets you type Top, Bottom, Left, and Right.</td></tr>
+  <tr><td>Sheet</td><td>Edge</td><td>Edge type. <strong>Flat</strong> = flat plate with no fold, <strong>Fold</strong> = single fold, <strong>Inside</strong> = fold and return inward, <strong>Outside</strong> = fold and return outward.</td></tr>
+  <tr><td>Sheet</td><td>Return length</td><td>Length of the return (outer dimension, thickness included). Used with Inside and Outside.</td></tr>
+  <tr><td>Sheet</td><td>Hole Dist</td><td>Distance of the screw holes from the free end of the outside return. Used with Outside only.</td></tr>
+  <tr><td>Attach profile</td><td>Sides</td><td>Sides that receive a profile (Top, Bottom, Left, Right). <strong>All</strong> selects all four.</td></tr>
+  <tr><td>Attach profile</td><td>Placement</td><td><strong>Full length, mitred corners</strong> = full-length bars that meet at 45° in the corners.<br><strong>Full length, square ends</strong> = full-length bars cut square at both ends. The vertical bars (left, right) run through and the horizontal bars (top, bottom) fit between them.<br><strong>Pieces</strong> = several short pieces.</td></tr>
+  <tr><td>Pieces</td><td>Length, Top, Pitch, Bottom, Count</td><td>Piece length and layout. A margin (Top, Bottom, Left, Right) is measured from the corner to the end of the piece; Pitch is measured between piece centers.<br>With Pitch greater than 0, Count pieces are placed from Top (or Left) at that pitch. With Pitch 0, Count pieces are spread evenly between the two margins.</td></tr>
+  <tr><td>Screw holes</td><td>Make screw holes</td><td>Makes screw holes in the profile. With an outside return, the holes are made in the return.</td></tr>
+  <tr><td>Screw holes</td><td>Diameter, Margin, Count / Pitch</td><td>Hole diameter, margin from the end, and either the number of holes (Count) or the spacing (Pitch).</td></tr>
+</tbody></table>
+<h2>Edge Types</h2>
+<p>The figures below are section sketches of each edge type. To make the shape readable, the <strong>thickness is exaggerated and the width shortened</strong> (not to scale). The bottom is the visible face of the sheet.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/Sht_edge_flat.svg" alt="Flat - section of a flat plate" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Flat — plate with no fold</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/Sht_edge_fold.svg" alt="Fold - section of a sheet with a single fold" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Fold — single fold</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/Sht_edge_inside.svg" alt="Inside - section of a sheet returned inward" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Inside — inside return</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/Sht_edge_outside.svg" alt="Outside - section of a sheet returned outward" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Outside — outside return (screw holes)</figcaption>
+  </figure>
+</div>
+<div class="note">With a return (Inside or Outside) no profile is attached. The wings of an outside return end square at the corners; the wings of an inside return meet at 45° in the corners.</div>
+<h2>Attached Profile</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
+    <img src="../../../img/Sht_profile_3d.png" alt="Sheets with attached profiles seen from the back" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Profiles attached to the back of the panel: full length (top row) and pieces (bottom row)</figcaption>
+  </figure>
+</div>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/Sht_profile_corner_mitred.png" alt="Profile bars meeting at 45 degrees in the corner" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Full length, mitred corners — 45° in the corner</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 46%; min-width:220px; max-width:46%;">
+    <img src="../../../img/Sht_profile_corner_square.png" alt="Profile bars cut square at both ends" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Full length, square ends — vertical bar runs through, horizontal bar fits between</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Profile library</td><td>Read from the 3dm files in <code>%LOCALAPPDATA%\RCW_V5\5.0\Templates\SheetProfiles</code>. One group in a file is one profile. Edit and save the file and the list is updated the next time the command runs.</td></tr>
+  <tr><td>Screw hole position</td><td>A line drawn on the <code>Hole</code> (or <code>Hole_Center</code>) layer inside the library group is the axis of the hole.</td></tr>
+  <tr><td>Attaching to a flat plate</td><td>A profile can be attached to a Flat sheet as well. The position is the same as on a folded sheet (one thickness in from the edge).</td></tr>
+  <tr><td>Length</td><td>The length of a bar is recorded as its <strong>longest side</strong> (a bar cut at 45° is longer on the outside).</td></tr>
+</tbody></table>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Sheet</td><td>Closed solid on the <code>Sheet_&lt;thickness&gt;T</code> layer (for example, <code>Sheet_3T</code>).</td></tr>
+  <tr><td>Profile bars</td><td>On the <code>Sheet_&lt;thickness&gt;T_Profile</code> layer, in the same group as the sheet.</td></tr>
+  <tr><td>Panel face</td><td>The selected <code>Sheet_XX</code> face is replaced by the sheet and does not remain.</td></tr>
+  <tr><td>Undo</td><td>A single Undo restores the state before the sheets were made.</td></tr>
+</tbody></table>
+<div class="note">To give the options in the command line, use <code>-Sht</code> (for example Thickness, Depth, Edge, ProfileNo, Ends, Pieces, Holes).</div>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>ShMD</strong></td><td>Sheet bay surface — creates the faces to pick in Sht.</td></tr>
+  <tr><td><strong>ShNo</strong></td><td>Sheet numbering — gives the same number to identical sheets.</td></tr>
+  <tr><td><strong>ShList</strong></td><td>Sheet quantity list.</td></tr>
+  <tr><td><strong>ShTable</strong>, <strong>ShFd</strong></td><td>Sheet fabrication table and fabrication drawing.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>
