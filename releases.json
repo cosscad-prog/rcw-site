@@ -43,8 +43,8 @@
           "en": "<b>FabTable and Dtable.</b> FabTable cells are now 0.8 times as high as they are wide, and a long Profile Name is shrunk to fit its cell. Sorting Dtable by Profile Name mixed up the members of composites that share a name - each composite now keeps its own members right below it."
         },
         {
-          "ko": "<b>도움말.</b> <b>08 BackPanel Modeling</b> 에 <b>Making BackPanel Section</b> 이 새로 들어왔습니다 — 단면의 <code>BP_Center1</code> 선이 무엇을 정하고 BpOpt 가 무엇을 정하는지를 그림으로 설명합니다. 판재 도움말은 <b>09 Sheet Modeling</b> 에 있고, Xtract Modeling 은 13 번으로 옮겼습니다.",
-          "en": "<b>Help.</b> <b>08 BackPanel Modeling</b> has a new page, <b>Making BackPanel Section</b>, showing in pictures what the <code>BP_Center1</code> line in a section sets and what BpOpt sets. The sheet help is under <b>09 Sheet Modeling</b>, and Xtract Modeling has moved to number 13."
+          "ko": "<b>도움말.</b> <b>08 BackPanel Modeling</b> 에 <b>Making BackPanel Section</b> 이 새로 들어왔습니다 — 단면의 <code>BP_Center1</code> 선이 무엇을 정하고 BpOpt 가 무엇을 정하는지를 그림으로 설명합니다. 판재 도움말은 <b>09 Sheet Modeling</b> 에 있고, Xtract Modeling 은 13 번으로 옮겼습니다.<br><br><b>WhatsNew 명령</b>: 설치를 마칠 때 열리는 What's New 문서를 Rhino 명령창에서 <code>WhatsNew</code> 로 언제든 다시 열 수 있습니다.",
+          "en": "<b>Help.</b> <b>08 BackPanel Modeling</b> has a new page, <b>Making BackPanel Section</b>, showing in pictures what the <code>BP_Center1</code> line in a section sets and what BpOpt sets. The sheet help is under <b>09 Sheet Modeling</b>, and Xtract Modeling has moved to number 13.<br><br><b>WhatsNew command</b>: the What's New document that opens when setup finishes can be reopened at any time by typing <code>WhatsNew</code> in the Rhino command line."
         }
       ]
     },
