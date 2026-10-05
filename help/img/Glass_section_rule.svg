@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="292" viewBox="0 0 480 292" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+<rect width="480" height="292" fill="#ffffff"/>
+<rect x="51" y="40" width="68" height="110" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="57" y="46" width="56" height="98" fill="#ffffff" stroke="#7b8494"/>
+<rect x="77" y="150" width="16" height="85" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="51" y="235" width="68" height="10" fill="#c9ced6" stroke="#7b8494"/>
+<text x="85" y="100" fill="#555" text-anchor="middle" font-size="11">section</text>
+<line x1="20" y1="232" x2="440" y2="232" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="440" y="262" fill="#777" text-anchor="end" font-size="11">outside</text>
+<text x="440" y="16" fill="#777" text-anchor="end" font-size="11">inside</text>
+<rect x="111" y="202" width="319" height="30" fill="#8fd3e8" stroke="#5fa8c0"/>
+<text x="290" y="194" fill="#3b8aa3" text-anchor="middle" font-size="12">glass</text>
+<line x1="111" y1="232" x2="111" y2="165" stroke="#d62828" stroke-width="2.5"/>
+<polygon points="111,156 105.5,167 116.5,167" fill="#d62828"/>
+<circle cx="111" cy="232" r="4" fill="#d62828"/>
+<text x="123" y="172" fill="#d62828" text-anchor="start" font-size="12" font-weight="bold">G_Center1</text>
+<line x1="111" y1="238" x2="111" y2="266" stroke="#0066cc" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="111" cy="276" r="9" fill="#0066cc"/>
+<text x="111" y="280" fill="#fff" text-anchor="middle" font-size="11" font-weight="bold">1</text>
+<line x1="85" y1="238" x2="85" y2="266" stroke="#2a9d5c" stroke-width="1" stroke-dasharray="6 3 2 3"/>
+<text x="79" y="280" fill="#2a9d5c" text-anchor="end" font-size="10">center line</text>
+<line x1="300" y1="232" x2="300" y2="254" stroke="#0066cc" stroke-width="1" stroke-dasharray="3 3"/>
+<circle cx="300" cy="264" r="9" fill="#0066cc"/>
+<text x="300" y="268" fill="#fff" text-anchor="middle" font-size="11" font-weight="bold">2</text>
+<line x1="452" y1="202" x2="452" y2="232" stroke="#0066cc" stroke-width="1"/>
+<line x1="448" y1="202" x2="456" y2="202" stroke="#0066cc" stroke-width="1"/>
+<line x1="448" y1="232" x2="456" y2="232" stroke="#0066cc" stroke-width="1"/>
+<text x="459" y="221.0" fill="#0066cc" text-anchor="start" font-size="11"></text>
+<circle cx="452" cy="217.0" r="9" fill="#0066cc"/>
+<text x="452" y="221.0" fill="#fff" text-anchor="middle" font-size="11" font-weight="bold">3</text>
+</svg>

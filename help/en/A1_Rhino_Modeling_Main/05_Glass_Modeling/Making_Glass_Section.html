@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Making Glass Section</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Making Glass Section</h1>
+<p>To make glass by the <strong>Section</strong> method, the <strong>section group that holds the glass must contain a line on the <code>G_Center1</code> layer</strong>. The line sets the <strong>side edge</strong> of the glass (how far the glass goes into the member). The thickness of the glass is set by the glass type in <strong>GsOpt</strong>, not by the line.</p>
+<div class="note">Workflow: draw the <code>G_Center1</code> line in the section → SSP (register sections) → GsOpt (glass type settings) → GMD (glass face) → GS1 to GS9 → GsNo → GsList → GsTable → GsFd</div>
+<h2>What Sets the Position of the Glass</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
+    <img src="../../../img/Glass_section_rule.svg" alt="The G_Center1 line in the section sets the edge of the glass, the wireframe face sets its outer face, and GsOpt sets its thickness" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Gray = member section, light blue = glass, red = G_Center1 line (dot = start point, arrow = end point), green = center line of the member. The bottom is the outside.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 10%;">
+    <col style="width: 24%;">
+    <col style="width: 66%;">
+  </colgroup>
+  <tbody><tr><th>No.</th><th>What is set</th><th>Where it is set</th></tr>
+  <tr><td>①</td><td><strong>Side edge</strong> of the glass</td><td>The position of the <code>G_Center1</code> line in the section. The glass ends at the distance of the line from the center line of the member.</td></tr>
+  <tr><td>②</td><td><strong>Outer face</strong> of the glass</td><td>The <strong>wireframe face</strong> (the glass face made by GMD). In the section this is the start point of the center line (<code>Center1</code>).</td></tr>
+  <tr><td>③</td><td><strong>Thickness</strong> of the glass</td><td>The glass type in <strong>GsOpt</strong> (the sum of the panes and spacers). The glass is made <strong>inward</strong> from the outer face by this thickness.</td></tr>
+</tbody></table>
+<h2>Rules for Drawing the Line</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Layer</td><td>It must be on the <code>G_Center1</code> layer. The <strong>GC1</strong> command creates this layer.</td></tr>
+  <tr><td>Section group</td><td>Put the line in the group of that section. Lines outside the group are not read.</td></tr>
+  <tr><td>Position</td><td>Draw it where the glass ends, inside the glass pocket. Its <strong>distance from the center line of the member</strong> is the position of the glass edge.</td></tr>
+  <tr><td>Direction and length</td><td>Draw it straight, perpendicular to the glass face. The drawing direction does not matter. Start at the outer face of the glass and make it <strong>long enough to pass through the whole glass thickness</strong>.</td></tr>
+  <tr><td>One line per bay</td><td>When glass goes into the bays on both sides of a member, draw <strong>two lines, one for each bay</strong> (one on each side of the center line). A transom also gets one line for the bay above and one for the bay below.</td></tr>
+  <tr><td>Register sections</td><td>Run <strong>SSP</strong> again after adding or changing the line.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
+    <img src="../../../img/Glass_section_both.svg" alt="A middle member gets two lines, one for each bay" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Section with glass on both sides — one line on each side of the center line</figcaption>
+  </figure>
+</div>
+<h2>Lines and Bays</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 24%;">
+    <col style="width: 76%;">
+  </colgroup>
+  <tbody><tr><th>Case</th><th>Result</th></tr>
+  <tr><td>One line on the bay side</td><td>The glass ends at that line.</td></tr>
+  <tr><td>No line on the bay side</td><td>The glass of that bay cannot be made. The command line says <strong>which line (layer) has no strip on the bay side</strong>. Check which side of the center line the line is drawn on in the section.</td></tr>
+  <tr><td>Two or more lines on the bay side</td><td>The <strong>line nearest the center line</strong> is used, and the command line reports the number of lines and their distances. Keeping one line per side is recommended.</td></tr>
+</tbody></table>
+<div class="note">The "bay side" is judged <strong>from the center line of the member</strong> — left or right for a mullion, above or below for a transom.</div>
+<h2>Shapes You Can Make</h2>
+<p>From the same line, the thickness and makeup of the glass follow the glass type set in <strong>GsOpt</strong>. The bottom of each picture is the outside.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../../img/Glass_section_single.svg" alt="Single glass" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Single glass</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../../img/Glass_section_double.svg" alt="Double glazing - two panes and a spacer" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Double glazing (glass + spacer + glass)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../../img/Glass_section_triple.svg" alt="Triple glazing - three panes and two spacers" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>Triple glazing</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Thickness and makeup</td><td>Set by the 1st, 2nd and 3rd Pane and the spacer thickness in GsOpt. The glass in the model is one solid of the total thickness; the panes appear in the glass fabrication drawing (GsFd).</td></tr>
+  <tr><td>Position of the outer face</td><td>It follows the wireframe face. It does not depend on the start point of the line.</td></tr>
+  <tr><td>Type number</td><td>Types 1 to 9 in GsOpt correspond to the commands <strong>GS1 to GS9</strong>.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GC1</strong></td><td>Creates the <code>G_Center1</code> layer.</td></tr>
+  <tr><td><strong>SSP</strong></td><td>Register sections — run it after adding the line.</td></tr>
+  <tr><td><strong>GsOpt</strong></td><td>Glass type option — sets the thickness and makeup.</td></tr>
+  <tr><td><strong>GMD</strong></td><td>Glass face — makes a face in each bay of the wireframe.</td></tr>
+  <tr><td><strong>GS1 to GS9</strong></td><td>Glass modeling — pick glass faces and make the glass (Section method).</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

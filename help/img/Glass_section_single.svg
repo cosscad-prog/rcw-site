@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="170" viewBox="0 0 300 170" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+<rect width="300" height="170" fill="#ffffff"/>
+<rect x="18" y="16" width="36" height="68" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="24" y="22" width="24" height="56" fill="#ffffff" stroke="#7b8494"/>
+<rect x="32" y="84" width="8" height="69" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="18" y="153" width="36" height="7" fill="#c9ced6" stroke="#7b8494"/>
+<line x1="8" y1="150" x2="292" y2="150" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="50" y="132.0" width="236" height="18.0" fill="#8fd3e8" stroke="#5fa8c0"/>
+<line x1="50" y1="150" x2="50" y2="97" stroke="#d62828" stroke-width="2.5"/>
+<polygon points="50,88 44.5,99 55.5,99" fill="#d62828"/>
+<circle cx="50" cy="150" r="4" fill="#d62828"/>
+</svg>

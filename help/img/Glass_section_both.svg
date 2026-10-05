@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="232" viewBox="0 0 480 232" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+<rect width="480" height="232" fill="#ffffff"/>
+<rect x="206" y="30" width="68" height="92" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="212" y="36" width="56" height="80" fill="#ffffff" stroke="#7b8494"/>
+<rect x="232" y="122" width="16" height="81" fill="#c9ced6" stroke="#7b8494"/>
+<rect x="206" y="203" width="68" height="10" fill="#c9ced6" stroke="#7b8494"/>
+<text x="240" y="80" fill="#555" text-anchor="middle" font-size="11">section</text>
+<line x1="10" y1="200" x2="470" y2="200" stroke="#999" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="20" y="172" width="194" height="28" fill="#8fd3e8" stroke="#5fa8c0"/>
+<rect x="266" y="172" width="194" height="28" fill="#8fd3e8" stroke="#5fa8c0"/>
+<line x1="214" y1="200" x2="214" y2="137" stroke="#d62828" stroke-width="2.5"/>
+<polygon points="214,128 208.5,139 219.5,139" fill="#d62828"/>
+<circle cx="214" cy="200" r="4" fill="#d62828"/>
+<line x1="266" y1="200" x2="266" y2="137" stroke="#d62828" stroke-width="2.5"/>
+<polygon points="266,128 260.5,139 271.5,139" fill="#d62828"/>
+<circle cx="266" cy="200" r="4" fill="#d62828"/>
+<text x="202" y="144" fill="#d62828" text-anchor="end" font-size="12" font-weight="bold">G_Center1</text>
+<text x="278" y="144" fill="#d62828" text-anchor="start" font-size="12" font-weight="bold">G_Center1</text>
+</svg>

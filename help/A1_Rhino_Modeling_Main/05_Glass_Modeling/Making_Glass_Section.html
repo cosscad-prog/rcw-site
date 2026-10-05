@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>Making Glass Section - 유리용 단면 만들기</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>Making Glass Section &nbsp;—&nbsp; 유리용 단면 만들기</h1>
+<p>유리를 <strong>Section</strong> 방식으로 만들려면 유리가 끼워지는 <strong>단면(Section) group 안에 <code>G_Center1</code> 레이어의 선</strong>이 있어야 합니다. 이 선이 유리의 <strong>옆 가장자리 자리</strong>(유리가 부재 안으로 얼마나 들어가는지)를 정합니다. 유리의 두께는 선이 아니라 <strong>GsOpt</strong> 의 유리 타입이 정합니다.</p>
+<div class="note">작업 순서: 단면에 <code>G_Center1</code> 선 긋기 → SSP(단면 등록) → GsOpt(유리 타입 설정) → GMD(유리 면) → GS1 ~ GS9 → GsNo → GsList → GsTable → GsFd</div>
+<h2>무엇이 유리의 자리를 정하는가</h2>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
+    <img src="../../img/Glass_section_rule.svg" alt="단면의 G_Center1 선이 유리의 가장자리를 정하고, 와이어프레임 면이 유리의 바깥 면을, GsOpt 가 두께를 정한다" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>회색 = 부재 단면, 하늘색 = 유리, 빨강 = G_Center1 선(점 = 시작점, 화살표 = 끝점), 초록 = 부재의 중심선. 아래쪽이 바깥입니다.</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 10%;">
+    <col style="width: 24%;">
+    <col style="width: 66%;">
+  </colgroup>
+  <tbody><tr><th>번호</th><th>정하는 것</th><th>어디서 정하나</th></tr>
+  <tr><td>①</td><td>유리의 <strong>옆 가장자리</strong></td><td>단면의 <code>G_Center1</code> 선의 자리. 부재의 중심선에서 선까지의 거리만큼 떨어진 곳에서 유리가 끝납니다.</td></tr>
+  <tr><td>②</td><td>유리의 <strong>바깥 면</strong></td><td><strong>와이어프레임의 면</strong>(GMD 가 만든 유리 면). 단면에서는 중심선(<code>Center1</code>)의 시작점 자리입니다.</td></tr>
+  <tr><td>③</td><td>유리의 <strong>두께</strong></td><td><strong>GsOpt</strong> 의 유리 타입(판 두께와 간봉의 합). 바깥 면에서 <strong>안쪽으로</strong> 이 두께만큼 만들어집니다.</td></tr>
+</tbody></table>
+<h2>선을 긋는 규칙</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어</td><td>반드시 <code>G_Center1</code> 레이어. <strong>GC1</strong> 명령으로 이 레이어를 만들 수 있습니다.</td></tr>
+  <tr><td>단면 group</td><td>선을 그 단면의 group 에 넣습니다. group 밖의 선은 읽지 않습니다.</td></tr>
+  <tr><td>자리</td><td>유리가 끝나는 자리(유리 포켓 안)에 긋습니다. <strong>부재의 중심선에서 떨어진 거리</strong>가 곧 유리 가장자리의 자리입니다.</td></tr>
+  <tr><td>방향 · 길이</td><td>유리 면에 직각으로 곧게 긋습니다. 긋는 방향은 상관없습니다. 유리의 바깥 면에서 시작해 <strong>유리 두께를 모두 지나도록 넉넉히</strong> 긋습니다.</td></tr>
+  <tr><td>칸마다 한 줄</td><td>부재 양쪽 칸에 유리가 끼워지면 <strong>칸마다 한 줄씩 두 줄</strong>을 긋습니다(중심선 양쪽에 하나씩). 트랜섬도 위 칸 · 아래 칸에 각각 긋습니다.</td></tr>
+  <tr><td>단면 등록</td><td>선을 넣거나 고친 뒤에는 <strong>SSP</strong> 를 다시 실행합니다.</td></tr>
+</tbody></table>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
+    <img src="../../img/Glass_section_both.svg" alt="가운데 부재에는 양쪽 칸용으로 선을 두 줄 긋는다" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>양쪽 칸에 유리가 끼워지는 단면 — 중심선 양쪽에 한 줄씩</figcaption>
+  </figure>
+</div>
+<h2>선과 칸의 관계</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 24%;">
+    <col style="width: 76%;">
+  </colgroup>
+  <tbody><tr><th>경우</th><th>결과</th></tr>
+  <tr><td>칸 쪽에 선이 하나</td><td>그 선의 자리에서 유리가 끝납니다.</td></tr>
+  <tr><td>칸 쪽에 선이 없음</td><td>그 칸의 유리는 만들 수 없습니다. 명령창에 <strong>어느 선(레이어)의 띠가 칸 쪽에 없는지</strong> 알려 줍니다. 단면에서 선이 중심선의 어느 쪽에 그려져 있는지 확인하십시오.</td></tr>
+  <tr><td>칸 쪽에 선이 둘 이상</td><td><strong>중심선에 가장 가까운 선</strong>을 쓰고, 선의 수와 거리를 명령창에 알려 줍니다. 한쪽에는 한 줄만 두는 것이 좋습니다.</td></tr>
+</tbody></table>
+<div class="note">어느 쪽이 "칸 쪽" 인지는 부재의 <strong>중심선을 기준으로</strong> 봅니다 — 멀리언은 왼쪽 / 오른쪽, 트랜섬은 위 / 아래입니다.</div>
+<h2>만들 수 있는 형상</h2>
+<p>같은 선에서 <strong>GsOpt</strong> 에 정해 둔 유리 타입에 따라 두께와 구성이 달라집니다. 그림은 모두 아래쪽이 바깥입니다.</p>
+<div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../img/Glass_section_single.svg" alt="단판 유리" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>단판 유리</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../img/Glass_section_double.svg" alt="복층 유리 - 유리 두 장과 간봉" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>복층 유리 (유리 + 간봉 + 유리)</figcaption>
+  </figure>
+  <figure style="margin:0; flex:0 1 31%; min-width:220px; max-width:31%;">
+    <img src="../../img/Glass_section_triple.svg" alt="삼복층 유리 - 유리 세 장과 간봉 두 개" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <figcaption>삼복층 유리</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>두께 · 구성</td><td>GsOpt 의 1st · 2nd · 3rd Pane 과 간봉(Spacer) 두께로 정합니다. 모델의 유리는 전체 두께의 솔리드 하나이고, 판의 구성은 유리 가공도(GsFd)에 나옵니다.</td></tr>
+  <tr><td>바깥 면의 자리</td><td>와이어프레임 면에 맞춥니다. 선의 시작점 자리와는 무관합니다.</td></tr>
+  <tr><td>타입 번호</td><td>GsOpt 의 타입 1 ~ 9 가 명령 <strong>GS1 ~ GS9</strong> 에 대응합니다.</td></tr>
+</tbody></table>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>GC1</strong></td><td><code>G_Center1</code> 레이어를 만듭니다.</td></tr>
+  <tr><td><strong>SSP</strong></td><td>단면 등록 — 선을 넣은 뒤 실행합니다.</td></tr>
+  <tr><td><strong>GsOpt</strong></td><td>유리 타입 옵션 — 두께와 구성을 정합니다.</td></tr>
+  <tr><td><strong>GMD</strong></td><td>유리 면 만들기 — 와이어프레임의 칸마다 면을 만듭니다.</td></tr>
+  <tr><td><strong>GS1 ~ GS9</strong></td><td>유리 모델링 — 유리 면을 골라 유리를 만듭니다(Section 방식).</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>
