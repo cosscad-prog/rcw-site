@@ -3,6 +3,48 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.4.2",
+      "date": "2026-10-07",
+      "items": [
+        {
+          "ko": "<b>수량 목록과 가공 표 명령이 NBlock 을 받습니다.</b> 유닛을 NBlock 으로 만들어 배치한 도면에서도 블록을 풀지 않고 수량과 표를 낼 수 있습니다. 유리의 GsList 와 같은 방식입니다.<br><br>&bull; <b>BpList</b> · <b>VtList</b> · <b>GrList</b> · <b>ShList</b> — 수량 목록.<br>&bull; <b>BpTable</b> · <b>GsTable</b> · <b>ShTable</b> · <b>VtTable</b> · <b>GrTable</b> — 가공 표.<br><br>group 만 골라도, NBlock 만 골라도, 둘을 함께 골라도 한 표로 합쳐집니다. NBlock 안의 것은 배치한 개수만큼 셉니다.<br><br>&bull; 원본과 그것으로 만든 NBlock 을 <b>함께 고르면 두 번 셉니다.</b><br>&bull; 이 버전 전에 만든 NBlock 에는 백패널 정보가 들어 있지 않습니다. 그런 NBlock 은 목록에 나오지 않고 알림이 뜹니다 — <b>NBlock 을 한 번 다시 실행</b>하면 됩니다.",
+          "en": "<b>The quantity list and fabrication table commands now take NBlocks.</b> In a drawing where units are placed as NBlocks, quantities and tables can be produced without exploding the blocks. It works the same way as GsList does for glass.<br><br>&bull; <b>BpList</b>, <b>VtList</b>, <b>GrList</b>, <b>ShList</b> - quantity lists.<br>&bull; <b>BpTable</b>, <b>GsTable</b>, <b>ShTable</b>, <b>VtTable</b>, <b>GrTable</b> - fabrication tables.<br><br>Select groups only, NBlocks only, or both together - the result is one table. Items inside an NBlock are counted once per placed instance.<br><br>&bull; Selecting the original <b>together with</b> the NBlock made from it counts it twice.<br>&bull; An NBlock made before this version carries no BackPanel information. It is left out of the list and a notice is shown - <b>run NBlock once more</b> on it."
+        },
+        {
+          "ko": "<b>부재의 양 끝을 나란한 경사로 자르는 Fab ID <code>6. R-Dist</code> 가 새로 들어왔습니다.</b> sleeve 처럼 위 · 아래 끝이 같은 방향으로 조금 기울어야 하는 부재에 씁니다. 경사는 각도가 아니라 <b>거리값</b>(부재 깊이의 한쪽 끝과 다른 쪽 끝 사이의 높이 차이, mm)으로 정합니다.<br><br>&bull; Pname 창에서 Fab ID 를 <code>6. R-Dist</code> 로 고르고, 바로 오른쪽 칸에 거리값을 넣습니다. RCW Section 탭에서도 같은 자리에서 고칠 수 있습니다.<br>&bull; 전체 길이는 그대로입니다. 음수를 넣으면 반대로 기웁니다. <code>5+5</code> 같은 식도 됩니다.<br>&bull; 6번인데 거리값이 비었거나 0 이면 Pname 이 저장을 막고, 모델링은 자르지 않고 알립니다.<br><br>그림과 함께 도움말 <b>Rhino Modeling Learning &rarr; R-Dist Processing</b> 에 있습니다.",
+          "en": "<b>A new Fab ID, <code>6. R-Dist</code>, cuts both ends of a member with parallel slopes.</b> It is for members such as sleeves whose top and bottom ends lean slightly the same way. The slope is set not by an angle but by a <b>distance value</b> (the height difference, in mm, between one edge of the member's depth and the other).<br><br>&bull; In the Pname window choose <code>6. R-Dist</code> for Fab ID and enter the distance in the box just to its right. The RCW Section tab has the same box in the same place.<br>&bull; The overall length does not change. A negative value leans the other way. An expression such as <code>5+5</code> is accepted.<br>&bull; With Fab ID 6 and an empty or zero distance, Pname refuses to save, and modeling reports it instead of cutting.<br><br>See <b>Rhino Modeling Learning &rarr; R-Dist Processing</b> in the help, with drawings."
+        },
+        {
+          "ko": "<b>BpNo · GsNo 가 번호를 매길 때 형상을 직접 대 봅니다.</b><br><br>&bull; <b>거울상인 백패널</b>이 같은 번호를 받던 것을 고쳤습니다. 옮기거나 돌려서 겹치면 같은 번호, 뒤집어야만 겹치면 다른 번호입니다. 유리도 같습니다.<br>&bull; <b>Rhino 의 Copy · Mirror 로 복사한 유리 · 백패널</b>이 번호를 받지 못하던 것을 고쳤습니다. 번호가 원본의 글자에만 쓰이고 복사본은 옛 번호 그대로였습니다.<br><br>같은 형상이 이웃하도록 차례를 다시 세우므로, 이미 번호를 매긴 도면에서 번호를 다시 매기면 <b>번호가 전과 달라질 수 있습니다.</b> 번호를 다시 매긴 뒤에는 목록 · 표 · 가공도도 다시 만들어 주십시오.",
+          "en": "<b>BpNo and GsNo now compare the actual shapes when numbering.</b><br><br>&bull; <b>Mirrored BackPanels</b> used to get the same number - fixed. Pieces that coincide after moving or rotating share a number; pieces that coincide only after flipping get different numbers. Glass follows the same rule.<br>&bull; <b>Glass and BackPanels copied with Rhino's Copy or Mirror</b> were not numbered - fixed. The number was written only on the original's text and the copies kept their old number.<br><br>Pieces are re-ordered so that equal shapes are neighbours, so numbering a drawing again <b>may give different numbers than before.</b> After renumbering, please make the lists, tables and fabrication drawings again."
+        },
+        {
+          "ko": "<b>Rhino 로 복사 · 회전 · 뒤집은 유리 · 백패널 · 벤트 · 그릴의 표와 가공도를 바로잡았습니다.</b> 판의 원점과 방향은 만든 자리의 값으로 기록돼 있어, Rhino 명령으로 옮기면 표에 옆으로 눕거나, 가공도의 치수가 빠지거나 틀리거나, BpFd 가 그리다 멈췄습니다.<br><br>&bull; 번호 · 목록 · 표 명령이 판을 읽을 때 <b>기록을 지금 형상에 맞춥니다.</b> 맞춘 수는 명령창에 알립니다.<br>&bull; 만든 뒤 형상을 손으로 고친 판은 맞출 수 없어 알림만 냅니다 — 다시 만들어 주십시오.<br>&bull; 벤트 · 그릴은 <b>이 버전부터 만든 것</b>에 적용됩니다. 전에 만든 벤트 · 그릴을 복사해 옮긴 경우와 뒤집은 벤트 · 그릴은 알림만 뜹니다.",
+          "en": "<b>Tables and fabrication drawings of glass, BackPanels, vents and grills that were copied, rotated or mirrored in Rhino are corrected.</b> A panel's origin and direction are recorded where it was made, so after moving it with a Rhino command it lay sideways in the table, the fabrication drawing lost or mis-stated dimensions, or BpFd stopped while drawing.<br><br>&bull; The numbering, list and table commands now <b>fit the record to the present shape</b> when they read a panel, and report how many they fitted.<br>&bull; A panel whose shape was edited by hand after it was made cannot be fitted; a notice is shown - please make it again.<br>&bull; For vents and grills this applies to <b>those made from this version on</b>. Copies of older vents and grills, and mirrored ones, only get a notice."
+        },
+        {
+          "ko": "<b>백패널 종류 명령 BP6 · BP7 · BP8 · BP9 를 더했습니다.</b> BpOpt 패널에서는 종류를 BP1 ~ BP9 까지 만들어 저장할 수 있었는데 명령은 BP5 까지만 있어, 6 ~ 9 번 종류로는 백패널을 만들 수 없었습니다.",
+          "en": "<b>BackPanel type commands BP6, BP7, BP8 and BP9 are added.</b> The BpOpt panel let you define and save types BP1 to BP9, but the commands stopped at BP5, so types 6 to 9 could not be used to make a BackPanel."
+        },
+        {
+          "ko": "<b>단이 진 홀과 접시머리 홀이 C/S 홀로 나옵니다.</b> 같은 축에 지름이 다른 홀이 겹친 자리(예: Ø4.5 와 Ø8.0)에서 가공도는 큰 지름만 표기했고, 그래서 NC3 표에 C/S 홀로 나오지 않았습니다. 이제 FDwg 가 지름을 모두 표기하고, NC3 가 <code>CS1</code>, <code>CS2</code> &hellip; 번호와 <code>Ø4.5-8.0</code> 로 묶습니다. 원뿔 면으로만 된 접시머리 홀도 입구 지름을 큰 지름으로 삼아 같이 나옵니다. 홀의 수는 늘지 않습니다.",
+          "en": "<b>Stepped holes and countersunk holes are now reported as C/S holes.</b> Where holes of different diameters share one axis (for example Ø4.5 and Ø8.0), the fabrication drawing marked only the larger diameter, so the NC3 table did not show a C/S hole. FDwg now marks every diameter and NC3 groups them under <code>CS1</code>, <code>CS2</code> &hellip; with <code>Ø4.5-8.0</code>. A countersunk hole made of a cone alone is reported the same way, taking the cone's mouth as the larger diameter. The number of holes does not change."
+        },
+        {
+          "ko": "<b>GsTable · BpTable 뒤에 표를 옮겨도 가공도가 제자리에 그려집니다.</b> 표를 만든 뒤 표 전체를 옮기고 GsFd 나 BpFd 를 실행하면 치수가 옮기기 전 자리에 그려졌습니다. 이제 옮긴 표를 따라갑니다.",
+          "en": "<b>Fabrication drawings stay with a table that was moved after GsTable or BpTable.</b> If you moved the whole table and then ran GsFd or BpFd, the dimensions were drawn where the table used to be. They now follow the moved table."
+        },
+        {
+          "ko": "<b>큰 도면에서 객체를 고르는 것이 느리던 문제를 고쳤습니다.</b> 객체가 많은 도면에서 명령 중에 여러 개를 한꺼번에 고르면 수 초에서 수십 초가 걸렸습니다. RCW Section 탭이 단면과 무관한 선택에도 반응하고 있었습니다.<br><br><b>GsOpt · BpOpt 패널</b>을 낮게 띄우면 맨 위의 탭 머리(Glass Panel · Back Panel)가 밀려 올라가 안 보이던 것도 고쳤습니다.",
+          "en": "<b>Selecting objects in large drawings is no longer slow.</b> In a drawing with many objects, picking many of them at once inside a command took seconds to tens of seconds. The RCW Section tab was reacting to selections that had nothing to do with sections.<br><br>Also fixed: with the <b>GsOpt / BpOpt panel</b> docked short, the tab headers at the top (Glass Panel, Back Panel) scrolled out of view."
+        },
+        {
+          "ko": "<b>알림과 도움말을 바로잡았습니다.</b><br><br>&bull; <b>같은 이름을 다른 단면이 쓰는 경우</b> — FDwg 가 \"저장단면이 실제 부재와 맞지 않습니다\" 로 멈출 때 저장된 단면과 그 부재의 단면 크기를 함께 알려 줍니다. SSP 도 같은 이름을 모양이 다른 단면들이 쓰고 있으면 알립니다. 이 경우 단면에 서로 다른 이름을 주고(Pname) SSP 를 다시 돌린 뒤 부재를 다시 만들어 주십시오.<br>&bull; <b>해치 패턴이 없을 때의 안내</b>가 예전 파일(acad.pat)을 가리키던 것을 고쳤습니다. 해치는 FDwg 가 스스로 읽어 오며, 파일이 없으면 <code>RCWFolder</code> 의 Restore &rarr; Hatch 로 되돌립니다.<br>&bull; <b>도움말</b> — 유리용 단면 그리기(Making Glass Section)를 새로 넣었고, FDwg · GsNo · BpNo 등 실제 동작과 다르게 적혀 있던 곳을 고쳤습니다.",
+          "en": "<b>Notices and help are corrected.</b><br><br>&bull; <b>One name used by different sections</b> - when FDwg stops with \"the stored section does not match the member\", it now states the size of the stored section and of that member's section. SSP also reports when sections of different shapes share a name. In that case give the sections different names (Pname), run SSP again and make the members again.<br>&bull; <b>The notice for a missing hatch pattern</b> pointed at an old file (acad.pat) - fixed. FDwg loads the hatch patterns itself; if the file is missing, restore it with <code>RCWFolder</code>, Restore &rarr; Hatch.<br>&bull; <b>Help</b> - a new page on drawing the section line for glass (Making Glass Section), and corrections where FDwg, GsNo, BpNo and other pages described behavior the commands no longer have."
+        }
+      ]
+    },
+    {
       "version": "5.4.1",
       "date": "2026-10-06",
       "items": [
