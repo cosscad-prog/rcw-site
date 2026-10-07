@@ -94,9 +94,9 @@
 
 <h1>GsNo &nbsp;—&nbsp; Glass Numbering</h1>
 <p><span class="cmd-box">GsNo</span></p>
-<p>Automatically places number text on glass surfaces created by the <strong>Gmd</strong> command. A sequential number is assigned at the center point of each glass face and used for drawing annotations and quantity tallying.</p>
+<p>Assigns fabrication numbers to the <strong>glass solids</strong> created by the <strong>GS1 ~ GS9</strong> commands. Glass of the same shape gets the same number, and that number is the reference for the quantity list, the fabrication table and the fabrication drawings.</p>
 <h2>Purpose</h2>
-<p>Used to assign sequential numbers automatically to the glass faces created by <code>Gmd</code>, giving drawing annotation and quantity tallying a common reference. A number is written at the center of each glass face so the lists and the fabrication drawings carry the same numbering.</p>
+<p>Used to number glass solids so drawing annotation and quantity tallying share one reference. The text written on each glass changes to its number, so <code>GsList</code>, <code>GsTable</code> and <code>GsFd</code> carry the same numbering.</p>
 <h2>How to Use</h2>
 <ol class="step-list">
   
@@ -104,10 +104,11 @@
   
   
   
-  <li>Glass surfaces must already be created with the <strong>Gmd</strong> command.</li>
+  <li>Glass solids must already be created with the <strong>GS1 ~ GS9</strong> commands. (The glass faces made by <code>Gmd</code> alone cannot be numbered.)</li>
   <li>Type <strong>GsNo</strong> in the Rhino command line and press Enter.</li>
-  <li>Executes immediately without any selection.</li>
-  <li>Number text is automatically placed at the center of each glass surface.</li>
+  <li>At the <em>Select Solid objects</em> prompt, select the glass solids to number and press Enter. Only closed polysurfaces can be selected.</li>
+  <li>Enter the <strong>fabrication text</strong> to put in front of the number. You can also just press Enter.</li>
+  <li>The text on each glass changes to its number.</li>
 
 
 
@@ -133,15 +134,15 @@
   </tr>
   <tr>
     <td>Number Position</td>
-    <td>Text is placed at the center point of each glass surface.</td>
+    <td>The text created together with the glass solid changes to the number.</td>
   </tr>
   <tr>
     <td>Number Format</td>
-    <td>Auto-generated as glass type code + sequential number.</td>
+    <td>Glass type name + fabrication text + sequential number.</td>
   </tr>
   <tr>
-    <td>Layer</td>
-    <td>Number text is placed on a dedicated number layer.</td>
+    <td>Same Number</td>
+    <td>Glass of the same type is compared by shape. If two pieces coincide after moving or rotating, they get the same number; if they coincide only after flipping (mirror images), they get different numbers.</td>
   </tr>
 </tbody></table>
 <h2>Related Commands</h2>
@@ -155,12 +156,12 @@
     <th>Description</th>
   </tr>
   <tr>
-    <td><strong>Gmd</strong></td>
-    <td>Glass surface modeling — run first before numbering.</td>
+    <td><strong>GS1 ~ GS9</strong></td>
+    <td>Glass modeling — run first before numbering.</td>
   </tr>
   <tr>
-    <td><strong>GMDC</strong></td>
-    <td>Clear glass surfaces — deletes all glass surfaces and numbers to restart.</td>
+    <td><strong>GsList</strong></td>
+    <td>Glass quantity list — linked to the numbers.</td>
   </tr>
   <tr>
     <td><strong>GRV</strong></td>

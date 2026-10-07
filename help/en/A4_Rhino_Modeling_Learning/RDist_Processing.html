@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>R-Dist - Parallel Slope Cut</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .demo-images { margin:14px 0 8px; }
+    .demo-images figure { margin:0 0 16px; }
+    .demo-images img { max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff; }
+    .demo-images figcaption { margin-top:6px; font-size:12px; color:#555; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>R-Dist &nbsp;—&nbsp; Parallel Slope Cut at Both Ends</h1>
+<p><span class="cmd-box">Fab_ID = 6.R-Dist</span></p>
+<p>Fab ID setting that cuts the top end and the bottom end of a member with <b>parallel slopes</b>. The slope is set by a <b>distance</b> (height difference, mm), not by an angle.</p>
+<h2>Purpose</h2>
+<p>Use it for members such as sleeves whose top and bottom ends lean slightly in the same direction. <code>5.R45</code> cuts the two ends with facing 45-degree slopes (a trapezoid); <code>6.R-Dist</code> cuts them with parallel slopes (a parallelogram).</p>
+<h2>Meaning of the Distance</h2>
+<div class="demo-images">
+  <figure>
+    <svg viewBox="0 0 420 330" width="420" style="max-width:100%; height:auto; border:1px solid #c8d8ec; background:#fff;" role="img">
+  <line x1="60" y1="40" x2="330" y2="40" stroke="#999" stroke-dasharray="6 4"/>
+  <line x1="60" y1="290" x2="330" y2="290" stroke="#999" stroke-dasharray="6 4"/>
+  <polygon points="120,70 270,40 270,260 120,290" fill="#eaf2ff" stroke="#003d80" stroke-width="2"/>
+  <line x1="90" y1="40" x2="90" y2="70" stroke="#c0392b" stroke-width="1.5"/>
+  <line x1="84" y1="40" x2="96" y2="40" stroke="#c0392b" stroke-width="1.5"/><line x1="84" y1="70" x2="96" y2="70" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="80" y="60" font-size="13" fill="#c0392b" text-anchor="end">distance</text>
+  <line x1="300" y1="260" x2="300" y2="290" stroke="#c0392b" stroke-width="1.5"/>
+  <line x1="294" y1="260" x2="306" y2="260" stroke="#c0392b" stroke-width="1.5"/><line x1="294" y1="290" x2="306" y2="290" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="310" y="280" font-size="13" fill="#c0392b">distance</text>
+  <line x1="120" y1="312" x2="270" y2="312" stroke="#555"/><line x1="120" y1="306" x2="120" y2="318" stroke="#555"/><line x1="270" y1="306" x2="270" y2="318" stroke="#555"/>
+  <text x="195" y="327" font-size="12" fill="#555" text-anchor="middle">depth of the member</text>
+  <text x="195" y="170" font-size="12" fill="#003d80" text-anchor="middle">overall length unchanged</text>
+  <circle cx="120" cy="290" r="4" fill="#003d80"/><circle cx="270" cy="40" r="4" fill="#003d80"/>
+  <text x="112" y="286" font-size="11" fill="#003d80" text-anchor="end">start corner</text>
+</svg>
+    <figcaption>Distance = height difference between one side of the member depth and the other side</figcaption>
+  </figure>
+</div>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Bottom end</td><td>Starts at the lowest corner on one side of the depth and rises by the distance at the other side.</td></tr>
+  <tr><td>Top end</td><td>Parallel to the bottom end: starts at the highest corner on the other side and drops by the distance.</td></tr>
+  <tr><td>Overall length</td><td>Unchanged. Only one edge on each end becomes shorter by the distance.</td></tr>
+  <tr><td>Depth</td><td>Measured on the member itself (its width along the direction recorded on the centerline). The same distance gives a different angle on members of different depth — 10 over a depth of 100 is about 5.7 degrees, 10 over a depth of 50 is about 11.3 degrees.</td></tr>
+  <tr><td>Negative value</td><td>A value such as <code>-10</code> slopes the other way.</td></tr>
+  <tr><td>Formula</td><td>A formula such as <code>5+5</code> is accepted.</td></tr>
+</tbody></table>
+<h2>Application Criteria</h2>
+<ol class="step-list">
+  <li>In the <code>Pname</code> window, set the Fab ID of the section to <code>6. R-Dist</code>.</li>
+  <li>Enter the distance in the box <b>immediately to the right</b> of the Fab ID list. The box is enabled only for number 6.</li>
+  <li>Save, then model with <code>UMD</code>.</li>
+  <li>If the slope leans the wrong way, change the sign of the distance.</li>
+</ol>
+<p>The same value can be edited on the <b>RCW Section</b> tab of the Rhino Properties panel, in the same position (the box to the right of Fab_ID).</p>
+<div class="note"><strong>Note:</strong> Changing the Fab ID to another number does not erase the distance; the box is only disabled. When you return to number 6 the value is still there.</div>
+<div class="warning"><strong>Caution:</strong>
+  <ul>
+    <li>With number 6, <code>Pname</code> does not save while the distance is empty or 0. If a section became number 6 another way (for example in Dtable) and has no distance, modeling leaves the member uncut and reports <i>"Fab_ID 6 (R-Dist): could not cut the ends of …"</i>.</li>
+    <li>Ends that overlap other members are trimmed again by later modeling steps. If the overlap is larger than the distance, no slope remains on the final member.</li>
+    <li>Applies only to members extruded from the section group. <b>Accessories inserted as blocks</b> do not read the Fab ID.</li>
+  </ul>
+</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

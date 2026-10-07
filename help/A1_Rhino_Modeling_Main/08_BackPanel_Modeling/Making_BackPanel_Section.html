@@ -26,7 +26,7 @@
 
 <h1>Making BackPanel Section &nbsp;—&nbsp; 백패널용 단면 만들기</h1>
 <p>백패널을 <strong>Section</strong> 방식으로 만들려면 백패널이 붙는 <strong>단면(Section) group 안에 <code>BP_Center1</code> 레이어의 선</strong>이 있어야 합니다. 이 선이 백패널의 <strong>옆 가장자리 자리</strong>를 정합니다. 유리에서 떨어진 거리와 두께는 선이 아니라 <strong>BpOpt</strong> 의 값이 정합니다.</p>
-<div class="note">작업 순서: 단면에 <code>BP_Center1</code> 선 긋기 → SSP(단면 등록) → BpOpt(타입 설정) → GMD(유리 면) → BP1 ~ BP5 → BpNo → BpList → BpTable → BpFd</div>
+<div class="note">작업 순서: 단면에 <code>BP_Center1</code> 선 긋기 → SSP(단면 등록) → BpOpt(타입 설정) → GMD(유리 면) → BP1 ~ BP9 → BpNo → BpList → BpTable → BpFd</div>
 <h2>무엇이 백패널의 자리를 정하는가</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
@@ -90,7 +90,7 @@
   <tr><td>타입 · 플랜지 길이</td><td>BpOpt 의 <code>Type A</code>(Inside) · <code>Type B</code>(Outside)와 그 길이로 정합니다.</td></tr>
   <tr><td>두께</td><td>BpOpt 의 <code>Sheet</code> · <code>Panel</code> · <code>Insulation</code> 두께로 정합니다.</td></tr>
   <tr><td>유리와의 거리</td><td>BpOpt 의 <code>Dist from Glass</code>. 선의 시작점 자리와는 무관합니다.</td></tr>
-  <tr><td>타입 번호</td><td>BpOpt 의 타입 1 ~ 5 가 명령 <strong>BP1 ~ BP5</strong> 에 대응합니다.</td></tr>
+  <tr><td>타입 번호</td><td>BpOpt 의 타입 1 ~ 9 가 명령 <strong>BP1 ~ BP9</strong> 에 대응합니다.</td></tr>
 </tbody></table>
 <h2>관련 명령어</h2>
 <table class="desc-table">
@@ -102,7 +102,7 @@
   <tr><td><strong>BpC1</strong></td><td><code>BP_Center1</code> 레이어를 만듭니다.</td></tr>
   <tr><td><strong>SSP</strong></td><td>단면 등록 — 선을 넣은 뒤 실행합니다.</td></tr>
   <tr><td><strong>BpOpt</strong></td><td>백패널 타입 옵션 — 두께 · 유리와의 거리 · 타입을 정합니다.</td></tr>
-  <tr><td><strong>BP1 ~ BP5</strong></td><td>백패널 모델링 — 유리 면을 골라 백패널을 만듭니다(Section 방식).</td></tr>
+  <tr><td><strong>BP1 ~ BP9</strong></td><td>백패널 모델링 — 유리 면을 골라 백패널을 만듭니다(Section 방식).</td></tr>
 </tbody></table>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 

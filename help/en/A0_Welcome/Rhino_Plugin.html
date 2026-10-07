@@ -50,7 +50,7 @@ blocks, your drawing forms and the hatch pattern. You never need to know or type
   <tbody><tr><th>Item</th><th>What it is</th></tr>
   <tr><td><code>Blocks\*.3dm</code></td><td>The blocks offered by the BlockOpt panel. Add your own 3dm files here and they appear in the list.</td></tr>
   <tr><td><code>Forms\*.3dm</code></td><td>Frame form templates you select with SFB or the Form button on the FDstyle panel.</td></tr>
-  <tr><td><code>Forms\*.dwg</code></td><td>Drawing form sheets used by FDwgStyle.</td></tr>
+  <tr><td><code>Forms\*.dwg</code></td><td>Sample drawing forms in DWG. The Rhino commands in this version do not read these files — the forms Rhino uses are the <code>Forms\*.3dm</code> files above.</td></tr>
   <tr><td><code>RCW_Hatch.pat</code></td><td>The hatch pattern used by the fabrication drawings.</td></tr>
   <tr><td><code>*.dat</code>, <code>*.txt</code></td><td>Data tables: glass types, vent types, grill types, back panel types, die data, system defaults and the bar list.</td></tr>
 </tbody></table>
@@ -112,7 +112,7 @@ read from.</div>
   <tbody><tr><th>Command</th><th>Description</th></tr>
   <tr><td><strong>BlockOpt</strong></td><td>Inserts a block from the <code>Blocks</code> folder.</td></tr>
   <tr><td><strong>SFB</strong></td><td>Selects a frame form, either on screen or from a file in the <code>Forms</code> folder.</td></tr>
-  <tr><td><strong>FDwgStyle</strong></td><td>Builds a layout sheet from a drawing form DWG in the <code>Forms</code> folder.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>Registers a 3dm form from the <code>Forms</code> folder and inserts it into a fabrication drawing, with the panel's [Drawing Form] and [Insert Form] buttons.</td></tr>
 </tbody></table>
 
 <div class="warn">Caution: a block or form already inserted into a model keeps the definition stored

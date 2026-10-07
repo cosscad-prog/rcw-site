@@ -27,7 +27,7 @@
 
 <h1>BpNo &nbsp;—&nbsp; BackPanel Numbering</h1>
 <p><span class="cmd-box">BpNo</span></p>
-<p>Automatically places <strong>number text</strong> on BackPanel solids created by BP1 ~ BP5. A sequential number is assigned at the center point of each BackPanel and used for drawing annotations and quantity tallying.</p>
+<p>Automatically places <strong>number text</strong> on BackPanel solids created by BP1 ~ BP9. A sequential number is assigned at the center point of each BackPanel and used for drawing annotations and quantity tallying.</p>
 <h2>Purpose</h2>
 <p>Used to automatically place sequential number text at the center of each BackPanel solid for identification and reference. Numbers are used in drawing annotations and quantity tallying, and follow the BackPanel type code + sequential number format.</p>
 <h2>How to Use</h2>
@@ -35,9 +35,11 @@
   
   
   
-  <li>BackPanel solids must already be created with BP1 ~ BP5 commands.</li>
+  <li>BackPanel solids must already be created with BP1 ~ BP9 commands.</li>
   <li>Type <strong>BpNo</strong> in the Rhino command line and press Enter.</li>
-  <li>Executes immediately without any selection — number text is automatically placed at the center of each BackPanel.</li>
+  <li>At the <em>Select BackPanel Group objects</em> prompt, select the BackPanels to number and press Enter.</li>
+  <li>Enter the <strong>fabrication text</strong> to put in front of the number. You can also just press Enter.</li>
+  <li>Each BackPanel is numbered.</li>
 
 
 
@@ -67,7 +69,7 @@
     <col style="width: 80%;">
   </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>BP1 ~ BP5</strong></td><td>BackPanel modeling — run first before numbering.</td></tr>
+  <tr><td><strong>BP1 ~ BP9</strong></td><td>BackPanel modeling — run first before numbering.</td></tr>
   <tr><td><strong>BpList</strong></td><td>BackPanel quantity list — linked to the numbers.</td></tr>
   <tr><td><strong>BpTable</strong></td><td>BackPanel fabrication drawing table — create after verifying numbers.</td></tr>
 </tbody></table>

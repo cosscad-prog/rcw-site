@@ -51,8 +51,8 @@
     <li>Shape Curve 레이어를 OutLine Layer 로 표현합니다.&nbsp;</li>
   </ul>
 </div>
-<div class="note"><strong>참고:</strong> 이때 DimStyle 은 [DsOpt] 에 적용된 DimStyle 을 따른다. Profile 별 자동화를 위해 Fdds.dat 이 필요하며,&nbsp; Fdds.dat 에 Profile Name 및 해당 필요정보가 있어야 한다. Fdds.dat 해당 정보가 없다면 DdOpt 패널의 Drawing 옵션을 따른다.</div>
-<div class="note"><strong>FDstyle 기록/재생:</strong> FDwg 는 <strong>FDstyle 패널</strong>의 모드를 따릅니다 — <strong>기록(ON)</strong> 모드에서 옵션·NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 Profile별로 기록하고, <strong>재생(OFF, 기본)</strong> 모드에서 이를 자동 재현합니다. 자세한 내용은 <code>FDstyle</code> 도움말을 참고하세요.</div>
+<div class="note"><strong>참고:</strong> 이때 DimStyle 은 [DsOpt] 에 적용된 DimStyle 을 따른다. Profile 별 설정은 따로 준비할 파일이 없습니다 — <code>FDstyle</code> 패널의 <strong>기록 모드</strong>로 가공도를 만들면 그 Profile 의 설정이 <code>FDDS_Data.dat</code> 에 저절로 저장되고, <strong>재생 모드</strong>에서 다시 쓰입니다. 기록된 Profile 이 아니거나 재생 모드가 꺼져 있으면 DdOpt 패널의 Drawing 옵션을 따릅니다.</div>
+<div class="note"><strong>FDstyle 기록/재생:</strong> FDwg 는 <strong>FDstyle 패널</strong>의 모드를 따릅니다 — <strong>기록 모드</strong>에서 옵션·NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 Profile별로 기록하고, <strong>재생 모드</strong>에서 이를 자동 재현합니다. Rhino 를 켠 직후에는 <strong>둘 다 꺼져</strong> 있어, 기록도 재생도 하지 않고 DdOpt 패널 값으로 그립니다. 자세한 내용은 <code>FDstyle</code> 도움말을 참고하세요.</div>
 <h2>사용 목적</h2>
 <p>FDwg 는 선택한 프레임 그룹 객체를 분석하여 제작 가공도(Fab Drawing)를 자동 생성하고, 입면도에서도 홀 위치와 가공 깊이를 한눈에 확인할 수 있게 하는 명령입니다.</p>
 <h2>기본 사용 방법</h2>
@@ -101,7 +101,7 @@
   </colgroup>
   <tbody><tr><th>단계</th><th>설명</th></tr>
   <tr><td>1. 그룹 선택</td><td>GroupSelect 모드로 프레임 그룹을 선택합니다. 하위 객체 단독 선택이 아니라 그룹 단위 처리를 전제로 합니다.</td></tr>
-  <tr><td>2. 해치 패턴 확인</td><td><code>RCWFolder</code> 폴더의 <code>Hatch\acad.pat</code>에서 해치 패턴을 읽고 <code>ANGLE</code>, <code>ANSI31~ANSI38</code> 패턴이 있는지 확인합니다.</td></tr>
+  <tr><td>2. 해치 패턴 확인</td><td><code>RCWFolder</code> 폴더의 <code>RCW_Hatch.pat</code>에서 해치 패턴을 읽어 문서에 넣고 <code>RCW_ANGLE</code>, <code>RCW_SECTION_01~08</code>, <code>RCW_TRANS</code> 패턴이 있는지 확인합니다.</td></tr>
   <tr><td>3. 레이어 준비</td><td><code>DIMS</code>, <code>Section_Curve</code>, <code>Dim_Point</code>, <code>Hole_Dia</code>, <code>Hole_Points</code>, <code>DimBox</code>, <code>Shape_Hidden</code> 등 레이어를 사용합니다.</td></tr>
   <tr><td>4. 모델 정렬</td><td>선택 그룹에서 Shape 모델, DimBox 모델, 절단면 정보를 찾고 가공도 위치로 복사·정렬합니다.</td></tr>
   <tr><td>5. View 생성</td><td>DdOpt에서 켜진 View만 생성합니다. Top Back, Top, Front, Bottom, Bottom Back을 개별적으로 만들 수 있습니다.</td></tr>
@@ -173,7 +173,7 @@
 </div>
 <h2>주의할 점</h2>
 <div class="warning">
-  <strong>해치 패턴:</strong> <code>RCWFolder</code> 폴더의 <code>Hatch\acad.pat</code>와 필수 해치 패턴이 없으면 FDwg가 중단되고 안내 메시지가 표시됩니다. Rhino의 Hatch 설정에서 acad.pat를 import해야 합니다.
+  <strong>해치 패턴:</strong> 해치 패턴은 FDwg 가 <code>RCWFolder</code> 폴더의 <code>RCW_Hatch.pat</code> 에서 저절로 읽어 오므로 따로 준비할 것이 없습니다. 이 파일이 없거나 필수 패턴이 빠져 있으면 FDwg가 중단되고 안내 메시지가 표시됩니다 — 그때는 <code>RCWFolder</code> 의 <strong>Restore</strong> 에서 <strong>Hatch</strong> 를 골라 설치 당시의 파일을 되돌리십시오.
 </div>
 <div class="warning">
   <strong>그룹 데이터:</strong> FDwg는 선택 그룹에서 Profiles 레이어의 Shape 모델, ProfileData, Fab No, DimBox/DimBox1, 절단면 데이터를 찾습니다. FabNo 처리 전이거나 그룹 구조가 깨져 있으면 <code>Group Model Error</code>, <code>CutSurface Error</code> 같은 오류가 날 수 있습니다.
@@ -192,7 +192,7 @@
 </colgroup>
   <tbody><tr><th>명령어</th><th>설명</th></tr>
   <tr><td><strong>DdOpt</strong></td><td>FDwg에서 사용하는 Drawing 옵션 패널을 엽니다.</td></tr>
-  <tr><td><strong>FDstyle</strong></td><td>FDwg 의 <strong>기록(ON)·재생(OFF)</strong> 모드를 전환하는 패널입니다. 재생 시 NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 자동 재현합니다.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>FDwg 의 <strong>기록·재생</strong> 모드를 켜고 끄는 패널입니다. 재생 시 NC 테이블·FSC 압축·주석·부속자재 표·부분확대(F3D)·도면 양식을 자동 재현합니다.</td></tr>
   <tr><td><strong>FabNo</strong></td><td>프레임 객체에 제작 번호와 ProfileData를 부여합니다. FDwg 실행 전 선행 작업으로 필요합니다.</td></tr>
   <tr><td><strong>FabTable</strong></td><td>프레임 제작 번호/수량 테이블을 작성합니다. FDwg와 함께 제작 도면 세트를 구성합니다.</td></tr>
 </tbody></table>

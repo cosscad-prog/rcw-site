@@ -38,6 +38,7 @@
   <li>Once analysis is complete, click the <strong>table start position</strong> in the viewport.</li>
   <li>A per-glass-type fabrication drawing table is generated downward from the selected position.</li>
 </ol>
+<div class="note"><strong>NBlock</strong>: you can also select <strong>NBlocks</strong> made from glass groups. Select NBlocks only (Block Mode), or glass Solids and NBlocks together to get one table (Mixed Mode). Glass panes in an NBlock are <strong>taken out of the block</strong> and laid in the table, and the quantity counts once per placed NBlock. Where the NBlock is placed does not matter.<br>The fabrication drawing (<strong>GsFd</strong>) of an item taken out of an NBlock takes its corners from the glass face - the dimensions are the same.<br>⚠ Selecting the originals <strong>together with</strong> the NBlock made from them counts each one twice. The data is copied when NBlock runs, so make the NBlock <strong>after GsNo</strong>.</div>
 <h2>Example</h2>
 <video src="../../../img/GsTable_demo.mp4" autoplay muted loop playsinline aria-label="GsTable operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
 

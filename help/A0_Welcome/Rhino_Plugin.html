@@ -50,7 +50,7 @@
   <tbody><tr><th>항목</th><th>내용</th></tr>
   <tr><td><code>Blocks\*.3dm</code></td><td>BlockOpt 패널에 나오는 블록. 직접 만든 3dm 을 넣으면 목록에 함께 나옵니다.</td></tr>
   <tr><td><code>Forms\*.3dm</code></td><td>SFB 또는 FDstyle 패널의 [도면양식] 버튼으로 고르는 Frame Form 템플릿.</td></tr>
-  <tr><td><code>Forms\*.dwg</code></td><td>FDwgStyle 이 쓰는 도면 양식 시트.</td></tr>
+  <tr><td><code>Forms\*.dwg</code></td><td>DWG 로 된 도면 양식 견본. 지금 버전의 Rhino 명령은 이 파일을 읽지 않습니다 — Rhino 에서 쓰는 양식은 위의 <code>Forms\*.3dm</code> 입니다.</td></tr>
   <tr><td><code>RCW_Hatch.pat</code></td><td>가공도에 쓰는 해치 패턴.</td></tr>
   <tr><td><code>*.dat</code>, <code>*.txt</code></td><td>데이터 표: 유리·창호·그릴·백패널 타입, 금형 데이터, 시스템 기본값, 바 목록.</td></tr>
 </tbody></table>
@@ -111,7 +111,7 @@
   <tbody><tr><th>명령</th><th>설명</th></tr>
   <tr><td><strong>BlockOpt</strong></td><td><code>Blocks</code> 폴더의 블록을 삽입합니다.</td></tr>
   <tr><td><strong>SFB</strong></td><td>Frame Form 을 화면에서 고르거나 <code>Forms</code> 폴더의 파일에서 가져옵니다.</td></tr>
-  <tr><td><strong>FDwgStyle</strong></td><td><code>Forms</code> 폴더의 도면 양식 DWG 로 배치 시트를 만듭니다.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>패널의 [도면양식]·[양식삽입] 버튼으로 <code>Forms</code> 폴더의 3dm 양식을 등록하고 가공도에 삽입합니다.</td></tr>
 </tbody></table>
 
 <div class="warn">주의: 이미 모델에 삽입한 블록·양식은 그 정의가 모델 파일 안에 저장됩니다.

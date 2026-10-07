@@ -26,7 +26,7 @@
 
 <h1>Making BackPanel Section</h1>
 <p>To make a BackPanel by the <strong>Section</strong> method, the <strong>section group that holds the BackPanel must contain a line on the <code>BP_Center1</code> layer</strong>. The line sets the <strong>side edge</strong> of the BackPanel. The distance from the glass and the thickness are set by the values in <strong>BpOpt</strong>, not by the line.</p>
-<div class="note">Workflow: draw the <code>BP_Center1</code> line in the section → SSP (register sections) → BpOpt (type settings) → GMD (glass face) → BP1 to BP5 → BpNo → BpList → BpTable → BpFd</div>
+<div class="note">Workflow: draw the <code>BP_Center1</code> line in the section → SSP (register sections) → BpOpt (type settings) → GMD (glass face) → BP1 to BP9 → BpNo → BpList → BpTable → BpFd</div>
 <h2>What Sets the Position of the BackPanel</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
@@ -90,7 +90,7 @@
   <tr><td>Type and flange length</td><td>Set by <code>Type A</code> (Inside) or <code>Type B</code> (Outside) and its length in BpOpt.</td></tr>
   <tr><td>Thickness</td><td>Set by the <code>Sheet</code>, <code>Panel</code>, and <code>Insulation</code> thicknesses in BpOpt.</td></tr>
   <tr><td>Distance from the glass</td><td><code>Dist from Glass</code> in BpOpt. It does not depend on where the line starts.</td></tr>
-  <tr><td>Type number</td><td>Types 1 to 5 in BpOpt correspond to the commands <strong>BP1 to BP5</strong>.</td></tr>
+  <tr><td>Type number</td><td>Types 1 to 9 in BpOpt correspond to the commands <strong>BP1 to BP9</strong>.</td></tr>
 </tbody></table>
 <h2>Related Commands</h2>
 <table class="desc-table">
@@ -102,7 +102,7 @@
   <tr><td><strong>BpC1</strong></td><td>Creates the <code>BP_Center1</code> layer.</td></tr>
   <tr><td><strong>SSP</strong></td><td>Section registration — run it after adding the line.</td></tr>
   <tr><td><strong>BpOpt</strong></td><td>BackPanel type options — thickness, distance from the glass, and type.</td></tr>
-  <tr><td><strong>BP1 to BP5</strong></td><td>BackPanel modeling — pick a glass face and create the BackPanel (Section method).</td></tr>
+  <tr><td><strong>BP1 to BP9</strong></td><td>BackPanel modeling — pick a glass face and create the BackPanel (Section method).</td></tr>
 </tbody></table>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 

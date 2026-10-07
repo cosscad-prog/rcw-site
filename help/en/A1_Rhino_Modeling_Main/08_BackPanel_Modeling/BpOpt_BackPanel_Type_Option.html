@@ -29,9 +29,9 @@
 
 <h1>BpOpt &nbsp;—&nbsp; BackPanel Type Option Panel</h1>
 <p><span class="cmd-box">BpOpt</span></p>
-<p>Opens or closes the BackPanel Type Option Panel. The type information set in the panel is used for <strong>BP1 ~ BP5</strong> modeling, numbering, lists, and fabrication drawing creation.</p>
+<p>Opens or closes the BackPanel Type Option Panel. The type information set in the panel is used for <strong>BP1 ~ BP9</strong> modeling, numbering, lists, and fabrication drawing creation.</p>
 <h2>Purpose</h2>
-<p>Used to define and modify BackPanel types (thickness, offset distance, bend method, code, description) before BackPanel modeling. Types 1-5 configured here serve as the basis for BackPanel generation by BP1-BP5 commands, so type setup should precede modeling.</p>
+<p>Used to define and modify BackPanel types (thickness, offset distance, bend method, code, description) before BackPanel modeling. Types 1-9 configured here serve as the basis for BackPanel generation by BP1-BP9 commands, so type setup should precede modeling.</p>
 <h2>How to Use</h2>
 <ol class="step-list">
   
@@ -70,7 +70,7 @@
   <tr>
     <td>2</td>
     <td>Command</td>
-    <td>Specifies the BackPanel command to use in actual modeling. Generally linked to <strong>BP1 ~ BP5</strong> type commands.</td>
+    <td>Specifies the BackPanel command to use in actual modeling. Generally linked to <strong>BP1 ~ BP9</strong> type commands.</td>
   </tr>
   <tr>
     <td>3</td>
@@ -147,7 +147,7 @@
   </tr>
   <tr>
     <td>Apply to Modeling</td>
-    <td><strong>BP1 ~ BP5</strong> commands read the per-type thickness, color, code, and description values stored in this panel to create BackPanel models.</td>
+    <td><strong>BP1 ~ BP9</strong> commands read the per-type thickness, color, code, and description values stored in this panel to create BackPanel models.</td>
   </tr>
 </tbody></table>
 <h2>Related Commands</h2>
@@ -157,7 +157,7 @@
     <col style="width: 80%;">
   </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>BP1 ~ BP5</strong></td><td>Creates BackPanel solids using the configured BackPanel type.</td></tr>
+  <tr><td><strong>BP1 ~ BP9</strong></td><td>Creates BackPanel solids using the configured BackPanel type.</td></tr>
   <tr><td><strong>BpNo</strong></td><td>Assigns numbers to created BackPanels.</td></tr>
   <tr><td><strong>BpList</strong></td><td>Generates a BackPanel quantity list.</td></tr>
   <tr><td><strong>BpTable</strong></td><td>Generates a BackPanel fabrication drawing table.</td></tr>

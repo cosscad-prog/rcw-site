@@ -54,8 +54,8 @@
     <li>Shape Curve layer is represented as OutLine Layer.</li>
   </ul>
 </div>
-<div class="note"><strong>Note:</strong> The DimStyle follows the DimStyle applied in [DsOpt]. For per-profile automation, Fdds.dat is required and must contain the Profile Name and needed information. If that information is missing, the Drawing options in the DdOpt panel are used.</div>
-<div class="note"><strong>FDstyle Record/Playback:</strong> FDwg follows the mode of the <strong>FDstyle panel</strong> — in <strong>Record (ON)</strong> mode it records options, NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates per profile, and in <strong>Playback (OFF, default)</strong> mode it automatically reproduces them. For details, see the "FDstyle Record / Playback Mode" section in the the <code>FDstyle</code> page.</div>
+<div class="note"><strong>Note:</strong> The DimStyle follows the DimStyle applied in [DsOpt]. Per-profile settings need no file prepared in advance — when you create a drawing in the <strong>Record mode</strong> of the <code>FDstyle</code> panel, that profile's settings are saved to <code>FDDS_Data.dat</code> automatically and reused in <strong>Playback mode</strong>. For a profile that has not been recorded, or when Playback mode is off, the Drawing options in the DdOpt panel are used.</div>
+<div class="note"><strong>FDstyle Record/Playback:</strong> FDwg follows the mode of the <strong>FDstyle panel</strong> — in <strong>Record mode</strong> it records options, NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates per profile, and in <strong>Playback mode</strong> it automatically reproduces them. Right after Rhino starts, <strong>both are off</strong>: nothing is recorded or played back, and the drawing uses the DdOpt panel values. For details, see the "FDstyle Record / Playback Mode" section in the the <code>FDstyle</code> page.</div>
 <h2>Purpose</h2>
 <p>FDwg analyzes the selected frame group objects to auto-generate a fabrication drawing and lets you confirm hole position and penetration depth at a glance on the elevation view as well.</p>
 <h2>Basic Usage</h2>
@@ -104,7 +104,7 @@
   </colgroup>
   <tbody><tr><th>Step</th><th>Description</th></tr>
   <tr><td>1. Select group</td><td>Select the frame group in GroupSelect mode. Group-level processing is assumed, not single sub-object selection.</td></tr>
-  <tr><td>2. Check hatch patterns</td><td>Reads hatch patterns from <code>Hatch\acad.pat</code>, in the folder <code>RCWFolder</code> opens, and verifies <code>ANGLE</code>, <code>ANSI31~ANSI38</code> exist.</td></tr>
+  <tr><td>2. Check hatch patterns</td><td>Reads hatch patterns from <code>RCW_Hatch.pat</code>, in the folder <code>RCWFolder</code> opens, adds them to the document, and verifies <code>RCW_ANGLE</code>, <code>RCW_SECTION_01~08</code> and <code>RCW_TRANS</code> exist.</td></tr>
   <tr><td>3. Prepare layers</td><td>Uses layers such as <code>DIMS</code>, <code>Section_Curve</code>, <code>Dim_Point</code>, <code>Hole_Dia</code>, <code>Hole_Points</code>, <code>DimBox</code>, <code>Shape_Hidden</code>.</td></tr>
   <tr><td>4. Align model</td><td>Finds the Shape model, DimBox model, and cut-face data in the selected group and copies/aligns to the drawing position.</td></tr>
   <tr><td>5. Create views</td><td>Only the views enabled in DdOpt are created. Top Back, Top, Front, Bottom, Bottom Back can be created individually.</td></tr>
@@ -176,7 +176,7 @@
 </div>
 <h2>Cautions</h2>
 <div class="warning">
-  <strong>Hatch patterns:</strong> If <code>Hatch\acad.pat</code>, in the folder <code>RCWFolder</code> opens, and required patterns are missing, FDwg stops with a message. Import acad.pat in Rhino's Hatch settings.
+  <strong>Hatch patterns:</strong> FDwg loads the hatch patterns by itself from <code>RCW_Hatch.pat</code>, in the folder <code>RCWFolder</code> opens, so there is nothing to prepare. If that file or a required pattern is missing, FDwg stops with a message — in that case run <code>RCWFolder</code>, choose <strong>Restore</strong>, then <strong>Hatch</strong>, to bring back the installed file.
 </div>
 <div class="warning">
   <strong>Group data:</strong> FDwg looks for the Profiles-layer Shape model, ProfileData, Fab No, DimBox/DimBox1, and cut-face data in the selected group. If FabNo is not assigned or the group structure is broken, errors like <code>Group Model Error</code> or <code>CutSurface Error</code> may occur.
@@ -195,7 +195,7 @@
 </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
   <tr><td><strong>DdOpt</strong></td><td>Opens the Drawing option panel used by FDwg.</td></tr>
-  <tr><td><strong>FDstyle</strong></td><td>The panel that toggles <strong>Record (ON) / Playback (OFF)</strong> mode for FDwg. In Playback it automatically reproduces NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates.</td></tr>
+  <tr><td><strong>FDstyle</strong></td><td>The panel that turns <strong>Record</strong> and <strong>Playback</strong> mode on and off for FDwg. In Playback it automatically reproduces NC tables, FSC compression, annotations, supplementary material tables, partial enlargement (F3D), and drawing templates.</td></tr>
   <tr><td><strong>FabNo</strong></td><td>Assigns fab numbers and ProfileData to frame objects. Required before running FDwg.</td></tr>
   <tr><td><strong>FabTable</strong></td><td>Creates the frame fab number/quantity table to complete the drawing set with FDwg.</td></tr>
 </tbody></table>

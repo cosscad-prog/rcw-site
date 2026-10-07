@@ -43,6 +43,7 @@
 
 
 </ol>
+<div class="note"><strong>NBlock</strong>: you can also select <strong>NBlocks</strong> made from BackPanel groups. Select NBlocks only (Block Mode), or BackPanels and NBlocks together to get one table (Mixed Mode). BackPanels in an NBlock are <strong>taken out of the block</strong> and laid in the table, and the quantity counts once per placed NBlock. Where the NBlock is placed does not matter.<br>The fabrication drawing (<strong>BpFd</strong>) of an item taken out of an NBlock takes its corners from the panel face - the dimensions are the same.<br>⚠ Selecting the originals <strong>together with</strong> the NBlock made from them counts each one twice. The data is copied when NBlock runs, so make the NBlock <strong>after BpNo</strong>. NBlocks made with version 5.4.1 or earlier carry no BackPanel data - run NBlock again.</div>
 <h2>Example</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
@@ -85,7 +86,7 @@
     <col style="width: 80%;">
   </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>BP1 ~ BP5</strong></td><td>BackPanel modeling — run first before generating the table.</td></tr>
+  <tr><td><strong>BP1 ~ BP9</strong></td><td>BackPanel modeling — run first before generating the table.</td></tr>
   <tr><td><strong>BpNo</strong></td><td>BackPanel numbering — linked to the Fab_No in the table.</td></tr>
   <tr><td><strong>BpList</strong></td><td>BackPanel quantity list — use together with the table.</td></tr>
   <tr><td><strong>BpFd</strong></td><td>BackPanel fabrication drawing — complete the fabrication drawing set together with the table.</td></tr>

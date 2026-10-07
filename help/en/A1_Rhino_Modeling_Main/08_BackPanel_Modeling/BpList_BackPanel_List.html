@@ -52,6 +52,7 @@
 
 
 </ol>
+<div class="note"><strong>NBlock</strong>: you can also select <strong>NBlocks</strong> made from BackPanel groups. Select NBlocks only (Block Mode), or Solids and NBlocks together to get one list (Mixed Mode). BackPanels in an NBlock are counted <strong>once per placed NBlock</strong>, and the command line reports the mode and the counts.<br>⚠ NBlock keeps the original objects, so selecting the originals <strong>together with</strong> the NBlock made from them counts each one twice. The data is copied when NBlock runs, so make the NBlock <strong>after BpNo</strong>. If you renumber, run NBlock again under the same name. NBlocks made with version 5.4.1 or earlier carry no BackPanel data - run NBlock again.</div>
 <h2>Example</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 55%; min-width:220px; max-width:55%;">
@@ -101,7 +102,7 @@
     <col style="width: 80%;">
   </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>BP1 ~ BP5</strong></td><td>BackPanel modeling — create BackPanels before tallying the list.</td></tr>
+  <tr><td><strong>BP1 ~ BP9</strong></td><td>BackPanel modeling — create BackPanels before tallying the list.</td></tr>
   <tr><td><strong>BpNo</strong></td><td>BackPanel numbering — linked to the Fab_No in the list.</td></tr>
   <tr><td><strong>BpTable</strong></td><td>BackPanel fabrication drawing table — use together with the quantity list.</td></tr>
 </tbody></table>
