@@ -111,7 +111,7 @@
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
     <img src="../../img/ShFd_profile_table.png" alt="가공도의 붙인 profile 표" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
-    <figcaption>이름 · 가공 모양(단면 + 약도) · 길이 · 수량</figcaption>
+    <figcaption>이름 · 가공 모양(단면 + 약도) · Hole · 길이 · 수량</figcaption>
   </figure>
 </div>
 <table class="desc-table">
@@ -122,6 +122,7 @@
   <tbody><tr><th>항목</th><th>설명</th></tr>
   <tr><td>표</td><td>profile 이름마다 표 하나. 길이 · 끝 모양 · 구멍이 같은 막대끼리 한 줄.</td></tr>
   <tr><td>가공 모양</td><td>단면 모양과 막대 약도. 약도는 길이대로 그리지 않습니다 — 끝을 45°로 자르는지, 구멍이 있는지를 보여 줍니다.</td></tr>
+  <tr><td>Hole</td><td>구멍이 있는 막대가 있을 때만 생기는 칸. 세 줄로 적습니다 — <code>3-Ø3.5</code>(개수-지름), <code>20 / 5@178.4 / 20</code>(막대의 끝에서 첫 구멍 / 칸 수@간격 / 반대쪽 끝까지), <code>edge 5</code>(다리의 바깥쪽 끝에서 구멍 중심까지). 간격이 고르지 않으면 자리를 나열합니다. 값은 모델의 막대에서 읽습니다.</td></tr>
   <tr><td>길이</td><td>막대의 가장 긴 쪽(mm).</td></tr>
   <tr><td>수량</td><td>그 판재 한 장에 붙는 개수.</td></tr>
 </tbody></table>

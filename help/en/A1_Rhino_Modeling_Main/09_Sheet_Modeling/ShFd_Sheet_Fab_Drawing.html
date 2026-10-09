@@ -111,7 +111,7 @@
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
     <img src="../../../img/ShFd_profile_table.png" alt="Attached profile table in the fabrication drawing" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
-    <figcaption>Name, fabrication shape (section and sketch), length, quantity</figcaption>
+    <figcaption>Name, fabrication shape (section and sketch), Hole, length, quantity</figcaption>
   </figure>
 </div>
 <table class="desc-table">
@@ -122,6 +122,7 @@
   <tbody><tr><th>Item</th><th>Description</th></tr>
   <tr><td>Table</td><td>One table per profile name. Bars with the same length, end shape, and holes share a row.</td></tr>
   <tr><td>Fabrication shape</td><td>Section shape and a sketch of the bar. The sketch is not drawn to length — it shows whether the ends are cut at 45° and whether there are holes.</td></tr>
+  <tr><td>Hole</td><td>A column that appears only when a bar has holes. It has three lines: <code>3-Ø3.5</code> (count and diameter), <code>20 / 5@178.4 / 20</code> (from the end of the bar to the first hole / number of spaces at spacing / to the other end), and <code>edge 5</code> (from the outer end of the leg to the hole center). When the spacing is uneven the positions are listed. The values are read from the bar in the model.</td></tr>
   <tr><td>Length</td><td>Longest side of the bar (mm).</td></tr>
   <tr><td>Quantity</td><td>Number of bars attached to one sheet.</td></tr>
 </tbody></table>

@@ -51,17 +51,34 @@
     <col style="width: 60%;">
   </colgroup>
   <tbody><tr><th>구역</th><th>항목</th><th>설명</th></tr>
-  <tr><td>Profile</td><td>목록 · 미리보기</td><td>붙일 profile 을 고릅니다. <code>(none)</code> 을 고르면 붙이지 않습니다. 아래 그림은 판과 profile 의 단면 모양입니다.</td></tr>
+  <tr><td>Selected Surface</td><td></td><td>고른 면의 그림. 변마다 이름(Top · Bottom · Left · Right)과 지금 고른 끝 모양이 적힙니다 — 접기만 = 회색, 안쪽 되접기 = 파랑, 바깥쪽 되접기 = 주황, Flat = 옅은 점선. 면을 여러 개 골랐으면 첫 면을 보입니다. 면에 없는 변(예: 삼각형의 위쪽)의 칸은 꺼집니다.</td></tr>
+  <tr><td>Attach Profile(왼쪽)</td><td>목록 · 미리보기</td><td>붙일 profile 을 고릅니다. <code>(none)</code> 을 고르면 붙이지 않습니다. 아래 그림은 판과 profile 의 단면 모양이고, <strong>마지막으로 누른 칸의 변</strong>을 그립니다.</td></tr>
+  <tr><td>표의 열</td><td>All · Top · Bottom · Left · Right</td><td>값은 <strong>변마다</strong> 넣습니다. <strong>All</strong> 을 체크하면 Top 칸의 값이 네 변에 들어가고 나머지 세 칸은 꺼집니다. 체크를 풀면 변마다 따로 넣을 수 있습니다.</td></tr>
   <tr><td>Sheet</td><td>Thickness</td><td>판 두께(mm). 1.2 · 2 · 3 · 4 등 필요한 값을 넣습니다.</td></tr>
-  <tr><td>Sheet</td><td>Depth</td><td>접는 깊이(바깥 치수). <strong>From surface</strong> = 단면의 <code>S_Center1</code> 선 길이를 변마다 그대로 씁니다. <strong>Enter values</strong> = Top · Bottom · Left · Right 를 직접 넣습니다.</td></tr>
-  <tr><td>Sheet</td><td>Edge</td><td>끝 모양. <strong>Flat</strong> = 접지 않는 평판, <strong>Fold</strong> = 한 번 접기, <strong>Inside</strong> = 접은 뒤 안쪽으로 되접기, <strong>Outside</strong> = 접은 뒤 바깥쪽으로 되접기.</td></tr>
-  <tr><td>Sheet</td><td>Return length</td><td>되접는 길이(바깥 치수, 두께 포함). Inside · Outside 일 때 씁니다.</td></tr>
-  <tr><td>Sheet</td><td>Hole Dist</td><td>바깥쪽 되접기의 스크류 구멍이 되접힌 끝에서 떨어진 거리. Outside 일 때만 씁니다.</td></tr>
-  <tr><td>Attach profile</td><td>Sides</td><td>profile 을 붙일 변(Top · Bottom · Left · Right). <strong>All</strong> 은 네 변 모두.</td></tr>
-  <tr><td>Attach profile</td><td>Placement</td><td><strong>Full length, mitred corners</strong> = 변 전체 길이로 붙이고 코너에서 45°로 맞댑니다.<br><strong>Full length, square ends</strong> = 변 전체 길이로 붙이고 양 끝을 직각으로 자릅니다. 세로 막대(왼쪽 · 오른쪽)가 통으로 가고 가로 막대(위 · 아래)가 그 사이에 들어갑니다.<br><strong>Pieces</strong> = 짧은 조각을 여러 개 붙입니다.</td></tr>
-  <tr><td>Pieces</td><td>Length · Top · Pitch · Bottom · Count</td><td>조각 길이와 배치. 여유(Top · Bottom · Left · Right)는 꼭짓점에서 조각 끝까지, Pitch 는 조각 중심에서 중심까지입니다.<br>Pitch 가 0 보다 크면 Top(또는 Left)에서부터 Pitch 간격으로 Count 개, Pitch 가 0 이면 두 여유 사이에 Count 개를 고르게 놓습니다.</td></tr>
-  <tr><td>Screw holes</td><td>Make screw holes</td><td>profile 에 스크류 구멍을 냅니다. 바깥쪽 되접기(Outside)에서는 되접힌 부분에 냅니다.</td></tr>
-  <tr><td>Screw holes</td><td>Diameter · Margin · Count / Pitch</td><td>구멍 지름, 끝에서의 여유, 그리고 개수(Count) 또는 간격(Pitch) 중 하나.</td></tr>
+  <tr><td>Sheet</td><td>Depth</td><td>접는 깊이(바깥 치수). <strong>From Line Length</strong> = 단면의 <code>S_Center1</code> 선 길이를 변마다 그대로 씁니다(칸에 그 값이 꺼진 채 보입니다). <strong>Enter Values</strong> = 변마다 직접 넣습니다.</td></tr>
+  <tr><td>Sheet</td><td>Edge Type</td><td>변마다의 끝 모양. <strong>Flat</strong> = 그 변은 접지 않음, <strong>Fold</strong> = 한 번 접기, <strong>Inside</strong> = 접은 뒤 안쪽으로 되접기, <strong>Outside</strong> = 접은 뒤 바깥쪽으로 되접기. 네 변을 모두 Flat 으로 하면 평판입니다.</td></tr>
+  <tr><td>Sheet</td><td>Wing</td><td>되접는 길이(바깥 치수, 두께 포함). Inside · Outside 인 변에 씁니다.</td></tr>
+  <tr><td>Attach Profile</td><td>Attach Side</td><td>profile 을 붙일 변. <strong>All</strong> 은 네 변 모두. 접기만 한 변(Fold)과 Flat 인 변에만 붙일 수 있습니다.</td></tr>
+  <tr><td>Attach Profile</td><td>Placement</td><td><strong>Full, Mitred Corners</strong> = 변 전체 길이로 붙이고 코너에서 45°로 맞댑니다.<br><strong>Full, Square Corners</strong> = 변 전체 길이로 붙이고 양 끝을 직각으로 자릅니다. 세로 막대(왼쪽 · 오른쪽)가 통으로 가고 가로 막대(위 · 아래)가 그 사이에 들어갑니다.<br><strong>Pieces</strong> = 짧은 조각을 여러 개 붙입니다.</td></tr>
+  <tr><td>Pieces</td><td>Length</td><td>조각 하나의 길이.</td></tr>
+  <tr><td>Pieces</td><td>Fr. Start · Pitch · Fr. End · Count</td><td>조각의 배치(아래 "배치 규칙" 참조). 여유(Fr. Start · Fr. End)는 판 면의 꼭짓점에서 조각 끝까지, Pitch 는 조각 중심에서 중심까지입니다.</td></tr>
+  <tr><td>Screw Holes</td><td>Make Screw Holes</td><td>붙인 profile 에 스크류 구멍을 냅니다. 바깥쪽 되접기(Outside)인 변에서는 되접힌 부분에 냅니다.</td></tr>
+  <tr><td>Screw Holes</td><td>Diameter</td><td>구멍 지름.</td></tr>
+  <tr><td>Screw Holes</td><td>Hole Dist</td><td>폭 방향 자리 — <strong>바깥쪽 끝에서 구멍 중심까지</strong>. 바깥쪽 되접기(Outside)인 변, 그리고 <strong>Hole 선이 없는 profile</strong> 을 붙이는 변에서 씁니다. Hole 선이 있는 profile 은 그 선이 자리를 정하므로 이 칸이 꺼집니다.</td></tr>
+  <tr><td>Screw Holes</td><td>Fr. Start · Pitch · Fr. End · Count</td><td>구멍의 배치(아래 "배치 규칙" 참조). 여유는 <strong>막대의 끝에서 구멍 중심까지</strong>입니다 — 가공도에 같은 값이 나옵니다. 되접힌 부분의 구멍은 판 면의 꼭짓점에서 잽니다.</td></tr>
+</tbody></table>
+<h2>배치 규칙 (조각 · 구멍 공통)</h2>
+<p>시작(Fr. Start) 쪽은 <strong>가로 변(위 · 아래)은 왼쪽, 세로 변(왼쪽 · 오른쪽)은 위</strong>입니다(판을 바깥에서 본 방향).</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 30%;">
+    <col style="width: 70%;">
+  </colgroup>
+  <tbody><tr><th>입력</th><th>결과</th></tr>
+  <tr><td>Pitch 0 · Count 있음</td><td>두 여유(Fr. Start · Fr. End) 사이에 Count 개를 <strong>등간격</strong>으로 놓습니다. Count 1 이면 시작 쪽에 하나.</td></tr>
+  <tr><td>Pitch 있음 · Count 있음</td><td>시작 쪽 여유에서부터 <strong>Pitch 간격으로 Count 개</strong>. Fr. End 는 쓰지 않습니다(칸이 꺼집니다). 변 밖으로 나가는 것은 빼고 명령창에 알립니다.</td></tr>
+  <tr><td>Pitch 있음 · Count 0</td><td><strong>수량을 스스로 정합니다.</strong> 양 끝을 두 여유 자리에 놓고 그 사이를 Pitch 를 넘지 않게 고르게 나눕니다(Pname 의 블록 입력과 같은 방식). 예: 길이 920 · 여유 20 / 20 · Pitch 300 → 4개, 간격 293.3.</td></tr>
+  <tr><td>Pitch 0 · Count 0</td><td>놓지 않습니다.</td></tr>
 </tbody></table>
 <h2>끝 모양 (Edge)</h2>
 <p>아래 그림은 끝 모양마다의 단면 약도입니다. 모양이 잘 보이도록 <strong>두께를 크게, 폭을 짧게</strong> 그렸습니다(실제 비율이 아닙니다). 아래쪽이 판재의 보이는 면입니다.</p>
@@ -83,7 +100,9 @@
     <figcaption>Outside — 바깥쪽 되접기(스크류 구멍)</figcaption>
   </figure>
 </div>
-<div class="note">되접기(Inside · Outside)를 고르면 profile 은 붙이지 않습니다. 바깥쪽 되접기의 날개는 코너에서 직각으로 끝나고, 안쪽 되접기의 날개는 코너에서 45°로 맞닿습니다.</div>
+<div class="note"><strong>profile 은 접기만 한 변(Fold)과 Flat 인 변에만 붙습니다.</strong> 되접는 변(Inside · Outside)은 Attach Side 칸이 꺼집니다. 예: 왼쪽 · 위쪽은 Fold, 오른쪽 · 아래쪽은 Outside 로 하면 profile 은 왼쪽 · 위쪽에만 붙고, 스크류 구멍은 오른쪽 · 아래쪽의 되접힌 부분에 납니다.</div>
+<div class="note">바깥쪽 되접기의 날개는 코너에서 직각으로 끝나고, 안쪽 되접기의 날개는 코너에서 45°로 맞닿습니다. 끝 모양이 다른 두 변이 만나는 코너는 직각으로 끊깁니다. 이웃 변을 안쪽으로 되접었고 profile 이 그 되접힌 부분과 같은 깊이에 걸리면, <strong>통으로 붙이는 profile 은 되접힌 부분의 끝에서 잘립니다</strong>(그만큼 짧아지고 명령창에 알립니다). 조각(Pieces)은 자리를 옮기지 않고, 겹치는 조각이 있으면 명령창에 경고만 나옵니다.</div>
+<div class="note">끝 모양이나 되접는 길이가 변마다 다른 판재는 <strong>ShNo</strong> 가 다른 번호로 가르고, <strong>ShList</strong> 의 Edge 칸에 <code>T:Fold B:Out L:Fold R:Out</code>, Return 칸에 <code>T:17 R:20</code> 처럼 변마다 적힙니다. <strong>ShFd</strong> 의 단면 · 전개도 · 구멍 치수도 변마다의 끝 모양을 따릅니다.</div>
 <h2>붙이는 profile</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
@@ -108,8 +127,8 @@
   </colgroup>
   <tbody><tr><th>항목</th><th>설명</th></tr>
   <tr><td>profile 라이브러리</td><td><code>%LOCALAPPDATA%\RCW_V5\5.0\Templates\SheetProfiles</code> 폴더의 3dm 파일에서 읽습니다. 파일 안의 group 하나가 profile 하나입니다. 파일을 고쳐 저장하면 다음 실행부터 목록에 반영됩니다.</td></tr>
-  <tr><td>스크류 구멍 자리</td><td>라이브러리 group 안에 <code>Hole</code>(또는 <code>Hole_Center</code>) 레이어로 그은 선이 구멍의 축입니다.</td></tr>
-  <tr><td>평판에 붙이기</td><td>Flat 에도 profile 을 붙일 수 있습니다. 자리는 접힌 판재와 같습니다(판 가장자리에서 두께만큼 안쪽).</td></tr>
+  <tr><td>스크류 구멍 자리</td><td>라이브러리 group 안에 <code>Hole</code>(또는 <code>Hole_Center</code>) 레이어로 그은 선이 구멍의 축입니다. <strong>선이 없으면</strong> 창의 Hole Dist 로 정합니다 — 바깥으로 뻗은 다리의 끝에서 그 거리만큼 들어온 자리.</td></tr>
+  <tr><td>Flat 인 변에 붙이기</td><td>Flat 인 변에도 profile 을 붙일 수 있습니다. 자리는 접힌 변과 같습니다(판 가장자리에서 두께만큼 안쪽).</td></tr>
   <tr><td>길이</td><td>막대의 길이는 <strong>가장 긴 쪽</strong>으로 기록됩니다(45°로 자른 막대는 바깥쪽이 더 깁니다).</td></tr>
 </tbody></table>
 <h2>생성 결과</h2>
@@ -124,7 +143,7 @@
   <tr><td>판 면</td><td>고른 <code>Sheet_XX</code> 면은 판재로 바뀌어 남지 않습니다.</td></tr>
   <tr><td>되돌리기</td><td>Undo 한 번으로 만들기 전 상태로 돌아갑니다.</td></tr>
 </tbody></table>
-<div class="note">명령줄에서 옵션을 직접 주려면 <code>-Sht</code> 를 사용합니다(예: Thickness · Depth · Edge · ProfileNo · Ends · Pieces · Holes).</div>
+<div class="note">명령줄에서 옵션을 직접 주려면 <code>-Sht</code> 를 사용합니다(예: Thickness · Depth · Edge · ProfileNo · Ends · Pieces · Holes). 변마다의 값은 이름 뒤에 Top · Bottom · Left · Right 를 붙인 옵션으로 줍니다(예: EdgeTop · WingRight · HCountLeft).</div>
 <h2>관련 명령어</h2>
 <table class="desc-table">
   <colgroup>

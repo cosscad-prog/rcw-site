@@ -37,7 +37,6 @@
   
   
   <li>Rhino 명령창에 <code>FabNo</code>를 입력하고 Enter를 누릅니다.</li>
-  <li>필요하면 명령 옵션 <code>Data_Option</code>을 On/Off로 변경합니다.</li>
   <li><strong>Select Brep, Block, NBlock objects for FabNo</strong> 프롬프트에서 대상 객체를 선택합니다.</li>
   <li>NBlock만 선택한 경우 가공도 앞 문자를 입력합니다. 기본값은 <code>F</code>입니다.</li>
   <li>Enter를 누르면 객체 분석 후 <code>Fab_No_Text</code> 레이어에 번호 텍스트가 작성됩니다.</li>
@@ -63,7 +62,7 @@
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>옵션</th><th>On일 때 결과</th></tr>
-  <tr><td><code>Data_Option</code></td><td>Fab No가 달라지는 지점을 확인하기 위한 비교 데이터 표를 지정 위치에 추가로 출력합니다.</td></tr>
+  <tr><td><code>Diagnose</code></td><td>같은 이름인데 Fab No가 갈린 두 Profile에서 서로 다른 면을 빨간색으로 표시하고, 면마다 번호와 면적(예: <code>F1 515.86</code>)을 Dot으로 적습니다. 표시는 <code>FabNo_FaceDiff</code> 레이어에 만들어지며, 이 레이어를 지우면 없어집니다. 한 번 켜면 Rhino를 닫을 때까지 유지됩니다.</td></tr>
 </tbody></table>
 <h2>실행 결과</h2>
 <table class="desc-table">
@@ -72,6 +71,21 @@
   <tr><td>ProfileData</td><td>Brep에 Unit No, Profile Name, Fab No, 길이/형상 비교 데이터가 기록됩니다.</td></tr>
   <tr><td>번호 텍스트</td><td><code>Fab_No_Text</code> 레이어에 <code>ProfileName F1</code> 같은 확인용 텍스트가 배치됩니다.</td></tr>
   <tr><td>브라켓 번호</td><td>브라켓 객체는 별도 하위 레이어에서 더 작은 텍스트로 표시될 수 있습니다.</td></tr>
+</tbody></table>
+<h2>지운 번호 글자 다시 보기 &nbsp;—&nbsp; FabNoShow</h2>
+<p><span class="cmd-box">FabNoShow</span></p>
+<p><strong>FabNoShow</strong>는 FabNo가 화면에 쓴 번호 글자를 지웠을 때 그 글자를 다시 쓰는 명령입니다. 번호를 새로 매기지 않고, 부재에 저장되어 있는 번호를 읽어 글자만 씁니다. FabNo를 다시 실행하는 것보다 빠르고 번호가 바뀌지 않습니다.</p>
+<ol class="step-list">
+  <li>Rhino 명령창에 <code>FabNoShow</code>를 입력하고 Enter를 누릅니다.</li>
+  <li>번호를 다시 볼 Brep, 일반 Block, NBlock을 선택하고 Enter를 누릅니다.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>번호 글자</td><td>FabNo가 썼던 것과 같은 글자(<code>ProfileName F1</code>)를 같은 자리에 같은 크기로 씁니다. 레이어는 FabNo의 마지막 실행 레이어(<code>Fab_No_Text</code> 아래)입니다.</td></tr>
+  <tr><td>블록 이름</td><td>선택한 Block, NBlock의 이름도 FabNo처럼 삽입점에 빨간 글자로 다시 씁니다.</td></tr>
+  <tr><td>이미 있는 글자</td><td>같은 글자가 같은 자리에 남아 있으면 다시 쓰지 않습니다. 숨겨져 있거나 레이어가 꺼져 있으면 보이게만 합니다. 여러 번 실행해도 글자가 겹치지 않습니다.</td></tr>
+  <tr><td>번호가 없는 부재</td><td>FabNo를 한 번도 실행하지 않은 부재에는 글자를 쓰지 않고 그 개수를 명령창에 알립니다. 먼저 <code>FabNo</code>를 실행하십시오.</td></tr>
 </tbody></table>
 <h2>관련 명령어</h2>
 <table class="desc-table">

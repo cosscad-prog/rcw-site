@@ -37,7 +37,6 @@
 <h2>How to Use</h2>
 <ol class="step-list">
   <li>Type <code>FabNo</code> in the Rhino command line and press Enter.</li>
-  <li>If needed, toggle the <code>Data_Option</code> On or Off.</li>
   <li>At the <strong>Select Brep, Block, NBlock objects for FabNo</strong> prompt, select the target objects.</li>
   <li>If only NBlocks are selected, enter the drawing prefix character (default: <code>F</code>).</li>
   <li>Press Enter — after analysing objects, number text is written on the <code>Fab_No_Text</code> layer.</li>
@@ -62,7 +61,7 @@
 <table class="desc-table">
   <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
   <tbody><tr><th>Option</th><th>Result when On</th></tr>
-  <tr><td><code>Data_Option</code></td><td>Outputs an additional comparison data table at a specified location to identify where Fab No changes.</td></tr>
+  <tr><td><code>Diagnose</code></td><td>For two Profiles with the same name that received different Fab No, marks the faces that differ in red and writes a Dot with the number and area on each face (for example <code>F1 515.86</code>). The marks are created on the <code>FabNo_FaceDiff</code> layer and disappear when that layer is deleted. Once turned on, it stays on until Rhino is closed.</td></tr>
 </tbody></table>
 <h2>Result</h2>
 <table class="desc-table">
@@ -71,6 +70,21 @@
   <tr><td>ProfileData</td><td>Unit No, Profile Name, Fab No, and length/shape comparison data are recorded on the Brep.</td></tr>
   <tr><td>Number Text</td><td>Verification text such as <code>ProfileName F1</code> is placed on the <code>Fab_No_Text</code> layer.</td></tr>
   <tr><td>Bracket Numbers</td><td>Bracket objects may be shown with smaller text on a separate sub-layer.</td></tr>
+</tbody></table>
+<h2>Showing Deleted Number Text Again &nbsp;—&nbsp; FabNoShow</h2>
+<p><span class="cmd-box">FabNoShow</span></p>
+<p><strong>FabNoShow</strong> writes the number text again after the text that FabNo placed on screen has been deleted. It does not renumber anything: it reads the number stored on each member and only writes the text. It is faster than running FabNo again, and the numbers do not change.</p>
+<ol class="step-list">
+  <li>Type <code>FabNoShow</code> in the Rhino command line and press Enter.</li>
+  <li>Select the Breps, standard Blocks, and NBlocks whose numbers you want to see, then press Enter.</li>
+</ol>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Number Text</td><td>The same text that FabNo wrote (<code>ProfileName F1</code>) is written at the same position and size, on the layer of the last FabNo run (under <code>Fab_No_Text</code>).</td></tr>
+  <tr><td>Block Names</td><td>The names of the selected Blocks and NBlocks are also written again in red at their insertion points, as FabNo does.</td></tr>
+  <tr><td>Existing Text</td><td>If the same text is still at the same position it is not written again. If it is hidden, or its layer is turned off, it is only made visible. Running the command several times does not stack text.</td></tr>
+  <tr><td>Members Without a Number</td><td>No text is written for members on which FabNo has never been run; their count is reported in the command line. Run <code>FabNo</code> on them first.</td></tr>
 </tbody></table>
 <h2>Related Commands</h2>
 <table class="desc-table">

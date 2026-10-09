@@ -51,17 +51,34 @@
     <col style="width: 60%;">
   </colgroup>
   <tbody><tr><th>Area</th><th>Item</th><th>Description</th></tr>
-  <tr><td>Profile</td><td>List and preview</td><td>Choose the profile to attach. <code>(none)</code> attaches nothing. The preview shows the section of the sheet and the profile.</td></tr>
+  <tr><td>Selected Surface</td><td></td><td>Picture of the selected face. Each side shows its name (Top, Bottom, Left, Right) and the edge type chosen for it: gray = fold only, blue = inside return, orange = outside return, light dashed = Flat. When several faces are selected the first one is shown. The boxes of a side the face does not have (for example the top of a triangle) are disabled.</td></tr>
+  <tr><td>Attach Profile (left)</td><td>List and preview</td><td>Choose the profile to attach. <code>(none)</code> attaches nothing. The preview shows the section of the sheet and the profile for <strong>the side of the box you clicked last</strong>.</td></tr>
+  <tr><td>Table columns</td><td>All, Top, Bottom, Left, Right</td><td>Values are entered <strong>per side</strong>. Check <strong>All</strong> to apply the Top value to all four sides; the other three boxes are disabled. Clear it to enter each side separately.</td></tr>
   <tr><td>Sheet</td><td>Thickness</td><td>Sheet thickness in mm. Enter the value you need, such as 1.2, 2, 3, or 4.</td></tr>
-  <tr><td>Sheet</td><td>Depth</td><td>Fold depth (outer dimension). <strong>From surface</strong> uses the length of the <code>S_Center1</code> line of each side. <strong>Enter values</strong> lets you type Top, Bottom, Left, and Right.</td></tr>
-  <tr><td>Sheet</td><td>Edge</td><td>Edge type. <strong>Flat</strong> = flat plate with no fold, <strong>Fold</strong> = single fold, <strong>Inside</strong> = fold and return inward, <strong>Outside</strong> = fold and return outward.</td></tr>
-  <tr><td>Sheet</td><td>Return length</td><td>Length of the return (outer dimension, thickness included). Used with Inside and Outside.</td></tr>
-  <tr><td>Sheet</td><td>Hole Dist</td><td>Distance of the screw holes from the free end of the outside return. Used with Outside only.</td></tr>
-  <tr><td>Attach profile</td><td>Sides</td><td>Sides that receive a profile (Top, Bottom, Left, Right). <strong>All</strong> selects all four.</td></tr>
-  <tr><td>Attach profile</td><td>Placement</td><td><strong>Full length, mitred corners</strong> = full-length bars that meet at 45° in the corners.<br><strong>Full length, square ends</strong> = full-length bars cut square at both ends. The vertical bars (left, right) run through and the horizontal bars (top, bottom) fit between them.<br><strong>Pieces</strong> = several short pieces.</td></tr>
-  <tr><td>Pieces</td><td>Length, Top, Pitch, Bottom, Count</td><td>Piece length and layout. A margin (Top, Bottom, Left, Right) is measured from the corner to the end of the piece; Pitch is measured between piece centers.<br>With Pitch greater than 0, Count pieces are placed from Top (or Left) at that pitch. With Pitch 0, Count pieces are spread evenly between the two margins.</td></tr>
-  <tr><td>Screw holes</td><td>Make screw holes</td><td>Makes screw holes in the profile. With an outside return, the holes are made in the return.</td></tr>
-  <tr><td>Screw holes</td><td>Diameter, Margin, Count / Pitch</td><td>Hole diameter, margin from the end, and either the number of holes (Count) or the spacing (Pitch).</td></tr>
+  <tr><td>Sheet</td><td>Depth</td><td>Fold depth (outer dimension). <strong>From Line Length</strong> uses the length of the <code>S_Center1</code> line of each side (the boxes show those values, disabled). <strong>Enter Values</strong> lets you type each side.</td></tr>
+  <tr><td>Sheet</td><td>Edge Type</td><td>Edge type of each side. <strong>Flat</strong> = that side is not folded, <strong>Fold</strong> = single fold, <strong>Inside</strong> = fold and return inward, <strong>Outside</strong> = fold and return outward. With all four sides set to Flat the sheet is a flat plate.</td></tr>
+  <tr><td>Sheet</td><td>Wing</td><td>Length of the return (outer dimension, thickness included). Used on the Inside and Outside sides.</td></tr>
+  <tr><td>Attach Profile</td><td>Attach Side</td><td>Sides that receive a profile. <strong>All</strong> selects all four. A profile can be attached only to sides that are folded once (Fold) or Flat.</td></tr>
+  <tr><td>Attach Profile</td><td>Placement</td><td><strong>Full, Mitred Corners</strong> = full-length bars that meet at 45° in the corners.<br><strong>Full, Square Corners</strong> = full-length bars cut square at both ends. The vertical bars (left, right) run through and the horizontal bars (top, bottom) fit between them.<br><strong>Pieces</strong> = several short pieces.</td></tr>
+  <tr><td>Pieces</td><td>Length</td><td>Length of one piece.</td></tr>
+  <tr><td>Pieces</td><td>Fr. Start, Pitch, Fr. End, Count</td><td>Layout of the pieces (see "Layout Rule" below). A margin (Fr. Start, Fr. End) is measured from the corner of the panel face to the end of the piece; Pitch is measured between piece centers.</td></tr>
+  <tr><td>Screw Holes</td><td>Make Screw Holes</td><td>Makes screw holes in the attached profile. On a side with an outside return, the holes are made in the return.</td></tr>
+  <tr><td>Screw Holes</td><td>Diameter</td><td>Hole diameter.</td></tr>
+  <tr><td>Screw Holes</td><td>Hole Dist</td><td>Position across the width: <strong>from the outer end to the hole center</strong>. Used on sides with an outside return, and on sides that receive a <strong>profile without a Hole line</strong>. When the profile has a Hole line, that line sets the position and this box is disabled.</td></tr>
+  <tr><td>Screw Holes</td><td>Fr. Start, Pitch, Fr. End, Count</td><td>Layout of the holes (see "Layout Rule" below). A margin is measured <strong>from the end of the bar to the hole center</strong>, and the fabrication drawing shows the same values. Holes in a return are measured from the corner of the panel face.</td></tr>
+</tbody></table>
+<h2>Layout Rule (Pieces and Holes)</h2>
+<p>The start side (Fr. Start) is <strong>the left end of a horizontal side (top, bottom) and the top end of a vertical side (left, right)</strong>, seen from outside the panel.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 30%;">
+    <col style="width: 70%;">
+  </colgroup>
+  <tbody><tr><th>Input</th><th>Result</th></tr>
+  <tr><td>Pitch 0, Count given</td><td>Count items are placed <strong>evenly</strong> between the two margins (Fr. Start, Fr. End). With Count 1, one item at the start side.</td></tr>
+  <tr><td>Pitch given, Count given</td><td><strong>Count items at that pitch</strong> from the start margin. Fr. End is not used (the box is disabled). Items that fall outside the side are left out and reported in the command line.</td></tr>
+  <tr><td>Pitch given, Count 0</td><td><strong>The count is worked out for you.</strong> The two end items are placed at the margins and the space between them is divided evenly without exceeding the pitch (the same way as the block input of Pname). Example: length 920, margins 20 / 20, pitch 300 → 4 items at 293.3.</td></tr>
+  <tr><td>Pitch 0, Count 0</td><td>Nothing is placed.</td></tr>
 </tbody></table>
 <h2>Edge Types</h2>
 <p>The figures below are section sketches of each edge type. To make the shape readable, the <strong>thickness is exaggerated and the width shortened</strong> (not to scale). The bottom is the visible face of the sheet.</p>
@@ -83,7 +100,9 @@
     <figcaption>Outside — outside return (screw holes)</figcaption>
   </figure>
 </div>
-<div class="note">With a return (Inside or Outside) no profile is attached. The wings of an outside return end square at the corners; the wings of an inside return meet at 45° in the corners.</div>
+<div class="note"><strong>A profile is attached only to sides that are folded once (Fold) or Flat.</strong> On sides with a return (Inside or Outside) the Attach Side box is disabled. Example: with Left and Top set to Fold and Right and Bottom set to Outside, the profile goes on the left and top sides and the screw holes are made in the returns of the right and bottom sides.</div>
+<div class="note">The wings of an outside return end square at the corners; the wings of an inside return meet at 45° in the corners. A corner where two different edge types meet is cut square. When a neighboring side has an inside return and the profile reaches the same depth as that return, <strong>a full-length profile is cut at the free end of the return</strong> (it becomes that much shorter, and the command line reports it). Pieces are not moved; if a piece runs into the return, the command line only shows a warning.</div>
+<div class="note">Sheets whose edge types or return lengths differ per side get different numbers from <strong>ShNo</strong>; the Edge column of <strong>ShList</strong> lists every side, for example <code>T:Fold B:Out L:Fold R:Out</code>, and the Return column reads like <code>T:17 R:20</code>. The sections, the unfold drawing, and the hole dimensions of <strong>ShFd</strong> follow the edge type of each side.</div>
 <h2>Attached Profile</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
@@ -108,8 +127,8 @@
   </colgroup>
   <tbody><tr><th>Item</th><th>Description</th></tr>
   <tr><td>Profile library</td><td>Read from the 3dm files in <code>%LOCALAPPDATA%\RCW_V5\5.0\Templates\SheetProfiles</code>. One group in a file is one profile. Edit and save the file and the list is updated the next time the command runs.</td></tr>
-  <tr><td>Screw hole position</td><td>A line drawn on the <code>Hole</code> (or <code>Hole_Center</code>) layer inside the library group is the axis of the hole.</td></tr>
-  <tr><td>Attaching to a flat plate</td><td>A profile can be attached to a Flat sheet as well. The position is the same as on a folded sheet (one thickness in from the edge).</td></tr>
+  <tr><td>Screw hole position</td><td>A line drawn on the <code>Hole</code> (or <code>Hole_Center</code>) layer inside the library group is the axis of the hole. <strong>Without such a line</strong>, the Hole Dist value of the window sets it: that distance in from the end of the leg that points outward.</td></tr>
+  <tr><td>Attaching to a Flat side</td><td>A profile can be attached to a Flat side as well. The position is the same as on a folded side (one thickness in from the edge).</td></tr>
   <tr><td>Length</td><td>The length of a bar is recorded as its <strong>longest side</strong> (a bar cut at 45° is longer on the outside).</td></tr>
 </tbody></table>
 <h2>Result</h2>
@@ -124,7 +143,7 @@
   <tr><td>Panel face</td><td>The selected <code>Sheet_XX</code> face is replaced by the sheet and does not remain.</td></tr>
   <tr><td>Undo</td><td>A single Undo restores the state before the sheets were made.</td></tr>
 </tbody></table>
-<div class="note">To give the options in the command line, use <code>-Sht</code> (for example Thickness, Depth, Edge, ProfileNo, Ends, Pieces, Holes).</div>
+<div class="note">To give the options in the command line, use <code>-Sht</code> (for example Thickness, Depth, Edge, ProfileNo, Ends, Pieces, Holes). Per-side values use options named with Top, Bottom, Left, or Right at the end (for example EdgeTop, WingRight, HCountLeft).</div>
 <h2>Related Commands</h2>
 <table class="desc-table">
   <colgroup>
