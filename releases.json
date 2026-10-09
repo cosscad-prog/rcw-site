@@ -3,6 +3,44 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.4.3",
+      "date": "2026-10-09",
+      "items": [
+        {
+          "ko": "<b>판재 명령 Sht 의 옵션 창을 새로 만들었습니다.</b> 값을 표로 넣습니다 — 열은 <b>All · Top · Bottom · Left · Right</b> 이고, All 을 체크하면 Top 의 값이 네 변에 들어갑니다.<br><br>&bull; <b>끝 모양(Edge Type)을 변마다</b> 고릅니다 — Flat · Fold · Inside · Outside. 왼쪽 · 위쪽은 접기만 하고 오른쪽 · 아래쪽은 바깥쪽으로 되접는 판재를 한 번에 만듭니다. <b>Flat 도 변마다</b>여서 한 변만 접지 않을 수 있습니다.<br>&bull; <b>되접는 길이(Wing)</b>, 붙이는 profile 의 <b>조각</b>(길이 · 여유 · 간격 · 수량), <b>스크류 구멍</b>(지름 · Hole Dist · 여유 · 간격 · 수량)도 변마다 넣습니다.<br>&bull; 전에 저장한 값은 새 칸으로 옮겨 읽습니다.<br><br>ShNo · ShList · ShFd 도 변마다의 값을 따릅니다. 끝 모양이나 되접는 길이가 변마다 다른 판재는 다른 번호를 받고, ShList 에 <code>T:Fold B:Out L:Fold R:Out</code> 처럼 적힙니다.",
+          "en": "<b>The option window of the sheet command Sht is rebuilt.</b> Values are entered in a table with the columns <b>All, Top, Bottom, Left, Right</b>; checking All applies the Top value to all four sides.<br><br>&bull; <b>The edge type is chosen per side</b> - Flat, Fold, Inside, Outside. A sheet folded once on the left and top and returned outward on the right and bottom is made in one go. <b>Flat is per side too</b>, so a single side can be left unfolded.<br>&bull; <b>The return length (Wing)</b>, the <b>pieces</b> of an attached profile (length, margins, pitch, count) and the <b>screw holes</b> (diameter, Hole Dist, margins, pitch, count) are entered per side as well.<br>&bull; Values saved before are read into the new boxes.<br><br>ShNo, ShList and ShFd follow the per-side values. Sheets whose edge types or return lengths differ per side get different numbers, and ShList shows them like <code>T:Fold B:Out L:Fold R:Out</code>."
+        },
+        {
+          "ko": "<b>붙이는 profile 의 조각과 스크류 구멍의 배치 규칙을 하나로 맞췄습니다.</b> 둘 다 Fr. Start · Pitch · Fr. End · Count 네 칸으로 넣고, 시작 쪽은 가로 변은 왼쪽 · 세로 변은 위입니다.<br><br>&bull; <b>Pitch 만 넣고 Count 를 0 으로 두면 수량을 스스로 정합니다.</b> 양 끝을 두 여유 자리에 놓고 그 사이를 Pitch 를 넘지 않게 고르게 나눕니다(Pname 의 블록 입력과 같은 방식). 예: 길이 920 · 여유 20 / 20 · Pitch 300 → 4개, 간격 293.3.<br>&bull; Pitch 와 Count 를 둘 다 넣으면 시작 쪽에서 그 간격으로 Count 개, Pitch 가 0 이면 두 여유 사이에 Count 개를 등간격으로 놓습니다.<br>&bull; <b>구멍의 여유는 막대의 끝에서 구멍 중심까지</b>입니다. 넣은 값이 가공도에 그대로 나옵니다.<br>&bull; <b>Hole 선이 없는 profile 에도 구멍을 냅니다.</b> 창의 Hole Dist(바깥쪽 끝에서 구멍 중심까지)가 자리를 정합니다. Hole 선이 있는 profile 은 전과 같이 그 선을 따릅니다.<br><br>★ 구멍의 규칙이 달라졌으므로, <b>구멍이 있는 판재를 새로 만들면 이전 버전에서 만든 같은 모양의 판재와 다른 번호</b>를 받습니다. 한 도면 안에서는 판재를 같은 버전으로 다시 만든 뒤 ShNo 를 돌려 주십시오. 구멍이 없는 판재의 번호는 전과 같습니다.",
+          "en": "<b>Pieces of an attached profile and screw holes now share one layout rule.</b> Both use the four boxes Fr. Start, Pitch, Fr. End and Count; the start side is the left end of a horizontal side and the top end of a vertical side.<br><br>&bull; <b>With a Pitch and Count 0, the count is worked out for you.</b> The end items are placed at the two margins and the space between is divided evenly without exceeding the pitch (the same way as the block input of Pname). Example: length 920, margins 20 / 20, pitch 300 → 4 items at 293.3.<br>&bull; With both Pitch and Count, Count items are placed from the start side at that pitch; with Pitch 0, Count items are spread evenly between the margins.<br>&bull; <b>A hole margin is measured from the end of the bar to the hole center.</b> The values you enter appear unchanged in the fabrication drawing.<br>&bull; <b>Holes are now made in a profile without a Hole line too.</b> The Hole Dist value of the window (from the outer end to the hole center) sets the position. A profile with a Hole line follows that line as before.<br><br>★ Because the hole rule changed, <b>a sheet with holes made in this version gets a different number from a sheet of the same shape made in an earlier version</b>. Within one drawing, please remake the sheets in the same version and run ShNo again. Numbers of sheets without holes are unchanged."
+        },
+        {
+          "ko": "<b>판재 가공도(ShFd)의 붙인 profile 표에 Hole 칸이 생겼습니다.</b> 구멍이 있는 막대마다 세 줄로 적습니다 — <code>3-Ø3.5</code>(개수-지름), <code>20 / 5@178.4 / 20</code>(막대 끝에서 첫 구멍 / 칸 수@간격 / 반대쪽 끝까지), <code>edge 5</code>(다리의 바깥쪽 끝에서 구멍 중심까지). 값은 모델의 막대에서 읽습니다.<br><br><b>ShTable 로 놓은 표를 옮긴 뒤 ShFd 를 실행하면 그림이 갈라지던 것을 고쳤습니다.</b> 정면도는 옮긴 자리에, 치수 · 단면 · 전개도는 옮기기 전 자리에 그려졌습니다. 판재를 옮긴 뒤 ShNo 를 다시 돌리면 번호 글자가 옛 자리에 찍히던 것도 함께 고쳤습니다. (돌려서 옮긴 판재는 아직 맞지 않습니다.)",
+          "en": "<b>The attached-profile table of the sheet fabrication drawing (ShFd) has a Hole column.</b> Each bar with holes gets three lines: <code>3-Ø3.5</code> (count and diameter), <code>20 / 5@178.4 / 20</code> (from the end of the bar to the first hole / number of spaces at spacing / to the other end) and <code>edge 5</code> (from the outer end of the leg to the hole center). The values are read from the bar in the model.<br><br><b>Running ShFd after moving the table placed by ShTable no longer splits the drawing.</b> The front view was drawn at the new place while the dimensions, sections and unfold stayed at the old place. The number text of ShNo, which went to the old place after a sheet was moved, is fixed as well. (Sheets that were rotated are not handled yet.)"
+        },
+        {
+          "ko": "<b>가공도(FDwg)에서 붙어 있는 프로파일의 실선 · 숨은선 표기를 바로잡았습니다.</b> attach · bracket · sleeve 처럼 주 부재에 붙은 프로파일은 통째로 실선이거나 통째로 숨은선으로 그려져, 꺾인 부속은 보이는 면에 있어도 숨은선으로 나왔습니다. 이제 <b>주 부재에 가려진 부분만 숨은선</b>, 보이는 부분은 실선으로 그립니다. 주 부재의 선과 블록(스터드볼트 등)은 전과 같습니다.",
+          "en": "<b>Solid and hidden lines of attached profiles in the fabrication drawing (FDwg) are corrected.</b> A profile attached to the main member - an attach profile, bracket or sleeve - was drawn entirely solid or entirely hidden, so a bent part could show as hidden even on the visible face. Now <b>only the portion covered by the main member is hidden</b> and the visible portion is solid. Lines of the main member and of blocks (stud bolts and the like) are unchanged."
+        },
+        {
+          "ko": "<b>FDwg 가 \"저장단면이 실제 부재보다 큽니다\" 라고 잘못 알리던 경우를 고쳤습니다.</b> 바깥 모양은 대칭이고 안쪽만 비대칭인 단면(예: 코너 슬리브)에서, 저장한 단면을 부재에 맞춰 놓을 때 뒤집힌 방향이 골라져 이 경고가 떴습니다. 부재와 단면에는 문제가 없었습니다.",
+          "en": "<b>A false FDwg warning, \"the stored section is larger than the member\", is fixed.</b> On a section whose outline is symmetric but whose inside is not (a corner sleeve, for example), the stored section could be placed mirrored on the member, which raised the warning. Nothing was wrong with the member or the section."
+        },
+        {
+          "ko": "<b>ATC 선으로 붙인 프로파일이 그 선이 놓인 부재의 부속이 됩니다.</b> 멀리언 · 트랜섬의 일부 구간에만 붙이려고 ATC 선으로 만든 프로파일이, 부재에 따라 가공도에 나오거나 빠졌습니다. 이제 선이 놓인 멀리언 · 트랜섬의 부속으로 붙어 그 부재의 가공도에 함께 나옵니다. BMT · UDT 로 만든 유닛도 같습니다.<br><br>이미 만든 유닛은 모델링을 다시 해야 적용됩니다.",
+          "en": "<b>A profile made from an ATC line now belongs to the member that line sits on.</b> Profiles made from an ATC line - used to attach a profile along only part of a mullion or transom - appeared in the fabrication drawing of some members and were missing from others. They are now attached to the mullion or transom the line sits on and appear in that member's drawing. Units made with BMT / UDT follow the same rule.<br><br>Units already modeled need to be modeled again for this to apply."
+        },
+        {
+          "ko": "<b>새 명령 FabNoShow — 지운 FabNo 번호 글자를 다시 씁니다.</b> FabNo 가 쓴 번호 글자를 지웠을 때, 번호는 바꾸지 않고 글자만 다시 보이게 합니다.<br><br>FabNo 도 고쳤습니다. 같은 문서에서 두 번째 실행부터 블록 이름 글자가 현재 레이어에 쓰이던 것, <code>Fab_No_Text</code> 레이어를 지운 뒤 회차 레이어가 엉뚱한 자리에 생기던 것을 바로잡았고, 쓰이지 않던 옵션 <code>Data_Option</code> 을 없앴습니다.",
+          "en": "<b>New command FabNoShow - rewrites FabNo number text that was deleted.</b> When the number text written by FabNo has been erased, it brings the text back without changing the numbers.<br><br>FabNo itself is fixed too: from the second run in a document the block name text went to the current layer, and after the <code>Fab_No_Text</code> layer was deleted the run layers were created in the wrong place. The unused option <code>Data_Option</code> is removed."
+        },
+        {
+          "ko": "<b>NBlock 으로 고른 목록 · 표를 다듬었습니다.</b><br><br>&bull; <b>VtList · GrList</b> 의 Description 칸이 group 으로 고르면 비고 NBlock 으로 고르면 채워지던 것을 맞췄습니다.<br>&bull; NBlock 으로 만든 <b>BpTable · GsTable · VtTable · GrTable</b> 에 조각 위의 번호 글자가 빠지던 것을 고쳤습니다.<br>&bull; NBlock 으로 고른 <b>VtTable · GrTable</b> 이 group 으로 고를 때보다 훨씬 느리던 것을 고쳤습니다.",
+          "en": "<b>Lists and tables made from NBlocks are refined.</b><br><br>&bull; The Description column of <b>VtList and GrList</b> was empty when picking groups and filled when picking NBlocks - now the same.<br>&bull; <b>BpTable, GsTable, VtTable and GrTable</b> made from NBlocks were missing the number text on each piece - fixed.<br>&bull; <b>VtTable and GrTable</b> were much slower with NBlocks than with groups - fixed."
+        }
+      ]
+    },
+    {
       "version": "5.4.2",
       "date": "2026-10-08",
       "items": [
