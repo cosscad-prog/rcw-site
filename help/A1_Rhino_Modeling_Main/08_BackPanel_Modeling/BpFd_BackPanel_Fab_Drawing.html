@@ -92,12 +92,12 @@
   <tr>
     <td>정면/배면 2D</td>
     <td>기본 생성</td>
-    <td>백패널 정면 형상을 기준으로 폭·높이 치수선을 작성하고, 배면 방향 Hidden선을 함께 표시합니다.</td>
+    <td>백패널 정면 형상을 기준으로 폭·높이 치수선을 작성하고, 배면 방향 Hidden선을 함께 표시합니다. Type C(판 두 장)는 안쪽 판을 숨은선으로 함께 그립니다.</td>
   </tr>
   <tr>
     <td>Top/Right 단면</td>
     <td>기본 생성</td>
-    <td>상부와 우측 단면을 생성하고 단면 치수를 작성합니다. 단면 마크는 <strong>SectionLine_Mark_On</strong> 옵션에 따라 표시됩니다.</td>
+    <td>상부와 우측 단면을 생성하고 단면 치수를 작성합니다. 단면 마크는 <strong>SectionLine_Mark_On</strong> 옵션에 따라 표시됩니다. Type C 는 단열재와 두 판을 모두 그립니다.</td>
   </tr>
   <tr>
     <td>Side FabDwg</td>
@@ -112,12 +112,12 @@
   <tr>
     <td>ISO Dwg</td>
     <td><strong>ISO_Dwg_On</strong> = On</td>
-    <td>ISO 방향 보조 2D 도면을 추가 생성하고 <code>ISO Dwg</code> 텍스트를 표시합니다.</td>
+    <td>ISO 방향 보조 2D 도면을 추가 생성하고 <code>ISO Dwg</code> 텍스트를 표시합니다. Type C 는 둘째 판도 함께 그립니다.</td>
   </tr>
   <tr>
     <td>UnRoll Dwg</td>
     <td><strong>UnRoll_Dwg_On</strong> = On</td>
-    <td>백패널 전개도와 외곽 크기를 생성합니다.</td>
+    <td>백패널 전개도와 외곽 크기를 생성합니다. 전개도는 판의 <strong>바깥 면 길이대로</strong> 폅니다(판 두께를 빼지 않습니다). 바깥으로 접는 선은 실선, 안으로 접는 선은 숨은선입니다. 스크류 구멍이 있으면 전개도에 그려집니다.<br>Type C(판 두 장)는 <code>UnRoll Dwg 1</code> · <code>UnRoll Dwg 2</code> 가 나란히 놓입니다. 둘째 판은 판의 바깥에서 본 모양이라 좌우가 뒤집혀 있습니다.</td>
   </tr>
 </tbody></table>
 <h2>생성 레이어</h2>
@@ -146,6 +146,10 @@
   <tr><td><strong>BpTable</strong></td><td>백패널 제작 도면 테이블 — 가공도와 함께 사용합니다.</td></tr>
   <tr><td><strong>BpList</strong></td><td>백패널 수량 리스트 — 가공도 작성 전 수량을 확인합니다.</td></tr>
 </tbody></table>
+<div class="note">
+  같은 칸에 같은 값으로 만든 백패널과 판재(<code>Sht</code>)는 같은 판이고, <code>BpFd</code> 와 <code>ShFd</code> 의 가공도도 같은 그림입니다.<br>
+  5.4.3 이하에서 만든 백패널의 가공도는 전과 같은 방식으로 그려집니다. 새 방식의 전개도는 패널을 다시 만들어야 나옵니다.
+</div>
 <div class="warning">
   <strong>주의:</strong> 가공도가 생성된 원본 3D 백패널 객체는 <strong>자동으로 삭제</strong>됩니다.<br>
   작업 전 파일을 저장하거나 백업해 두는 것을 권장합니다.

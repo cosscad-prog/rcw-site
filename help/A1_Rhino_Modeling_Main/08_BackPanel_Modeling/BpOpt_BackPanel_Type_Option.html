@@ -121,14 +121,40 @@
     <td>백패널 내부 단열재 두께를 입력합니다.</td>
   </tr>
   <tr>
-    <td>Type A All Inside</td>
-    <td>모든 Flange가 내부를 향하는 타입입니다. 접히는 Flange 길이의 기본값은 15입니다.</td>
+    <td>Type A · B · D · E</td>
+    <td>판 한 장을 접어 만드는 종류입니다. 넷 가운데 하나를 고릅니다.<br>
+      <strong>Type A</strong> — 네 변을 모두 안쪽(Inside)으로 되접습니다.<br>
+      <strong>Type B</strong> — 네 변을 모두 바깥쪽(Outside)으로 되접습니다.<br>
+      <strong>Type D</strong> — 위 · 아래 변은 바깥쪽으로, 왼쪽 · 오른쪽 변은 안쪽으로 되접습니다.<br>
+      <strong>Type E</strong> — 위 · 아래 변은 안쪽으로, 왼쪽 · 오른쪽 변은 바깥쪽으로 되접습니다.</td>
   </tr>
   <tr>
-    <td>Type B All Outside</td>
-    <td>모든 Flange가 외부를 향하는 타입입니다. 접히는 Flange 길이의 기본값은 10입니다.</td>
+    <td>Inside length / Outside length</td>
+    <td>안쪽 · 바깥쪽으로 되접는 길이입니다. Type A 는 Inside length, Type B 는 Outside length, Type D · E 는 두 칸을 모두 씁니다. 기본값은 Inside 15, Outside 10 입니다.</td>
+  </tr>
+  <tr>
+    <td>Type C</td>
+    <td>판 두 장으로 만드는 종류입니다. 첫째 판은 유리 쪽에서 뒤로, 둘째 판은 뒷면에서 앞으로 접어 두 판의 날이 겹칩니다.<br>
+      <strong>Inter Distance</strong> — 첫째 판을 접는 깊이입니다.<br>
+      <strong>Overlap Length</strong> — 두 판의 날이 겹치는 길이입니다.<br>
+      <strong>2nd Thickness</strong> — 둘째 판의 두께입니다.<br>
+      <strong>Overlap Gap</strong> — 겹친 두 날 사이의 틈입니다. 비워 두면 3 입니다.</td>
+  </tr>
+  <tr>
+    <td>Screw Holes</td>
+    <td><strong>Make Screw Holes</strong> 를 켜면 Type B · D · E 의 바깥쪽 날개에 스크류 구멍을 냅니다(Type A · C 에는 내지 않습니다).<br>
+      <strong>Diameter</strong> — 구멍의 지름입니다. <strong>Hole Dist</strong> — 접는 선에서 구멍 중심까지의 거리입니다.<br>
+      <strong>Fr. Start · Pitch · Fr. End · Count</strong> — 변을 따라 구멍을 놓는 값이고, 판재(<code>Sht</code>)의 구멍과 같은 규칙입니다. Pitch 만 넣고 Count 를 0 으로 두면 양 끝의 여유 사이를 Pitch 를 넘지 않게 고르게 나눕니다.<br>
+      구멍은 <code>BpFd</code> 의 전개도에도 그려집니다. 날개가 따내진 자리에 놓이는 구멍은 뚫지 않고 뚫은 개수를 알립니다.</td>
+  </tr>
+  <tr>
+    <td>Type 그림</td>
+    <td>오른쪽의 그림은 고른 종류와 구멍의 켬 · 끔에 따라 바뀝니다. 가운데가 정면, 아래가 좌우 변의 단면, 오른쪽이 상하 변의 단면입니다. 안쪽으로 접는 변은 정면에 점선으로, 바깥쪽으로 접는 변은 정면 바깥의 날개로 보입니다.</td>
   </tr>
 </tbody></table>
+<div class="note">
+  Type D · E 로 저장한 종류를 5.4.3 이하의 RCW 에서 쓰면 날개 없는 판이 만들어집니다. 같은 도면을 쓰는 PC 는 같은 버전으로 맞춰 주십시오.
+</div>
 <h2>저장과 적용</h2>
 <table class="desc-table">
   <colgroup>

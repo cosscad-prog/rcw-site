@@ -69,6 +69,7 @@
   <tr><td>Bays with the line on some sides only</td><td>No face is created, and the sides without a line are reported by name (for example, bottom transom).</td></tr>
   <tr><td>Running again</td><td>Bays that already have a <code>Sheet_XX</code> face are not duplicated.</td></tr>
   <tr><td>Sloped bays</td><td>Bays with a sloped transom or mullion (trapezoid, parallelogram) are supported.</td></tr>
+  <tr><td>Members with a rotated section</td><td>A bay next to a member whose section is rotated, so that its side is not square to the panel face, is supported as well. The front position is set by the start points of the <code>S_Center1</code> lines of the <strong>sides that are not slanted</strong>; the start point of a slanted side is not used. The slant of each side is recorded on the face, and <strong>Sht</strong> folds the sheet in that direction.</td></tr>
   <tr><td>Using glass faces</td><td>A <code>Glass_XX</code> face made by GMD can be picked directly in <strong>Sht</strong>. ShMD is not needed in that case.</td></tr>
 </tbody></table>
 <h2>Related Commands</h2>

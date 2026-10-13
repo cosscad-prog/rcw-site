@@ -118,14 +118,40 @@
     <td>Enter the internal insulation thickness of the BackPanel.</td>
   </tr>
   <tr>
-    <td>Type A All Inside</td>
-    <td>All flanges face inward. Default flange fold length is 15.</td>
+    <td>Type A, B, D, E</td>
+    <td>Types made by folding a single sheet. Choose one of the four.<br>
+      <strong>Type A</strong> - all four sides return inward (Inside).<br>
+      <strong>Type B</strong> - all four sides return outward (Outside).<br>
+      <strong>Type D</strong> - the top and bottom sides return outward, the left and right sides return inward.<br>
+      <strong>Type E</strong> - the top and bottom sides return inward, the left and right sides return outward.</td>
   </tr>
   <tr>
-    <td>Type B All Outside</td>
-    <td>All flanges face outward. Default flange fold length is 10.</td>
+    <td>Inside length / Outside length</td>
+    <td>The return lengths for the inward and outward folds. Type A uses Inside length, Type B uses Outside length, and Type D and E use both. The defaults are 15 for Inside and 10 for Outside.</td>
+  </tr>
+  <tr>
+    <td>Type C</td>
+    <td>A type made of two sheets. The first sheet is folded backward from the glass side and the second sheet forward from the back, so the folds of the two sheets overlap.<br>
+      <strong>Inter Distance</strong> - the fold depth of the first sheet.<br>
+      <strong>Overlap Length</strong> - the length over which the two folds overlap.<br>
+      <strong>2nd Thickness</strong> - the thickness of the second sheet.<br>
+      <strong>Overlap Gap</strong> - the gap between the two overlapping folds. Left empty, it is 3.</td>
+  </tr>
+  <tr>
+    <td>Screw Holes</td>
+    <td>With <strong>Make Screw Holes</strong> checked, screw holes are made in the outside wings of Type B, D and E (not in Type A or C).<br>
+      <strong>Diameter</strong> - the hole diameter. <strong>Hole Dist</strong> - the distance from the fold line to the hole center.<br>
+      <strong>Fr. Start, Pitch, Fr. End, Count</strong> - the values that place the holes along a side, by the same rule as the holes of the sheet command <code>Sht</code>. With a Pitch and Count 0, the space between the two end margins is divided evenly without exceeding the pitch.<br>
+      The holes are drawn in the unfold of <code>BpFd</code> as well. A hole that falls where the wing is cut away is not made, and the number of holes made is reported.</td>
+  </tr>
+  <tr>
+    <td>Type picture</td>
+    <td>The picture on the right follows the chosen type and whether holes are on. The middle is the front view, the bottom is the section of the left and right sides, and the right is the section of the top and bottom sides. A side folded inward shows as a dashed line in the front view; a side folded outward shows as a wing outside it.</td>
   </tr>
 </tbody></table>
+<div class="note">
+  A type saved as D or E produces a panel without wings in RCW 5.4.3 or earlier. Please keep the PCs that share a drawing on the same version.
+</div>
 <h2>Save and Apply</h2>
 <table class="desc-table">
   <colgroup>

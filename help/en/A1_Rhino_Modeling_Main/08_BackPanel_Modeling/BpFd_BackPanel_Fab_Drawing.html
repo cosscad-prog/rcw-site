@@ -89,12 +89,12 @@
   <tr>
     <td>Front / Back 2D</td>
     <td>Always generated</td>
-    <td>Writes width and height dimensions based on the BackPanel front shape, and also shows the back-direction Hidden lines.</td>
+    <td>Writes width and height dimensions based on the BackPanel front shape, and also shows the back-direction Hidden lines. For Type C (two sheets) the inner sheet is drawn too, as hidden lines.</td>
   </tr>
   <tr>
     <td>Top / Right Section</td>
     <td>Always generated</td>
-    <td>Creates top and right sections and writes section dimensions. Section marks are shown according to the <strong>SectionLine_Mark_On</strong> option.</td>
+    <td>Creates top and right sections and writes section dimensions. Section marks are shown according to the <strong>SectionLine_Mark_On</strong> option. For Type C the insulation and both sheets are drawn.</td>
   </tr>
   <tr>
     <td>Side FabDwg</td>
@@ -109,12 +109,12 @@
   <tr>
     <td>ISO Dwg</td>
     <td><strong>ISO_Dwg_On</strong> = On</td>
-    <td>Creates an additional ISO-direction auxiliary 2D drawing and displays <code>ISO Dwg</code> text.</td>
+    <td>Creates an additional ISO-direction auxiliary 2D drawing and displays <code>ISO Dwg</code> text. For Type C the second sheet is drawn as well.</td>
   </tr>
   <tr>
     <td>UnRoll Dwg</td>
     <td><strong>UnRoll_Dwg_On</strong> = On</td>
-    <td>Creates the BackPanel flat pattern and overall dimensions.</td>
+    <td>Creates the BackPanel flat pattern and overall dimensions. The unfold is laid out <strong>by the outside length</strong> of the sheet (the thickness is not deducted). Lines folded outward are solid, lines folded inward are hidden. Screw holes, if any, are drawn in the unfold.<br>For Type C (two sheets), <code>UnRoll Dwg 1</code> and <code>UnRoll Dwg 2</code> are placed side by side. The second one is seen from the outside of that sheet, so it is mirrored left to right.</td>
   </tr>
 </tbody></table>
 <h2>Generated Layers</h2>
@@ -143,6 +143,10 @@
   <tr><td><strong>BpTable</strong></td><td>BackPanel fabrication drawing table — use together.</td></tr>
   <tr><td><strong>BpList</strong></td><td>BackPanel quantity list — verify quantities before generating drawings.</td></tr>
 </tbody></table>
+<div class="note">
+  A back panel and a sheet (<code>Sht</code>) made in the same bay with the same values are the same sheet, and the drawings of <code>BpFd</code> and <code>ShFd</code> are the same.<br>
+  Back panels made in 5.4.3 or earlier are drawn the previous way. The new unfold appears for panels made again.
+</div>
 <div class="warning"><strong>Caution:</strong> The original 3D BackPanel objects are <strong>automatically deleted</strong> after drawing generation. Save or back up the file before running.</div>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 

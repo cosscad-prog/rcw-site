@@ -91,7 +91,13 @@
   <tbody><tr><th>Item</th><th>Description</th></tr>
   <tr><td>Layer</td><td>Solid objects are created on the <code>BackPanel_XX</code> layer.</td></tr>
   <tr><td>Shape</td><td>A 3D solid composed of Sheet, Panel, and Insulation layers is created at the offset distance from the glass surface.</td></tr>
+  <tr><td>Panel type</td><td>The shape of the sheet is set by the Type chosen in <code>BpOpt</code> - A (all four sides Inside), B (all four sides Outside), C (two sheets), D (top and bottom Outside, left and right Inside), E (top and bottom Inside, left and right Outside). The sheet is built the same way as the sheet command <code>Sht</code>, so the same bay with the same values gives the same sheet. A bay that cannot be built that way is built the previous way, with a message in the command window.</td></tr>
+  <tr><td>Screw holes</td><td>For Type B, D and E with <strong>Make Screw Holes</strong> checked in <code>BpOpt</code>, holes are made in the outside wings.</td></tr>
+  <tr><td>Very short side</td><td>A side no longer than twice the sheet thickness gets no wall or wing, and the two neighboring walls meet in a straight line. The front face of the panel is unchanged.</td></tr>
 </tbody></table>
+<div class="note">
+  Type C (two sheets) panels made in 5.4.3 or earlier have insulation that is deeper by the sheet thickness. To correct this, please model them again. When old and new panels are mixed in one drawing, <code>BpNo</code> gives different numbers to panels of the same shape.
+</div>
 <h2>Related Commands</h2>
 <table class="desc-table">
   <colgroup>

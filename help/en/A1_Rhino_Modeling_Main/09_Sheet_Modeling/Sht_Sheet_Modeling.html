@@ -34,10 +34,11 @@
 <ol class="step-list">
   <li>Type <strong>Sht</strong> in the Rhino command line and press Enter.</li>
   <li>Select one or more panel faces (<code>Sheet_XX</code>, <code>Glass_XX</code>) and press Enter.</li>
-  <li>Set the thickness, depth, edge type, and attached profile in the option window. <strong>You can still navigate the Rhino view and measure while the window is open.</strong></li>
-  <li>Click <strong>OK</strong> to create the sheets. Closing the window or clicking Cancel changes nothing.</li>
+  <li>Set the thickness, depth, edge type, and attached profile in the option window (the Rhino panel <strong>Sheet Manager</strong>). <strong>You can still navigate the Rhino view and measure while the window is open.</strong></li>
+  <li>Click <strong>OK</strong> to create the sheets; the panel then closes. The × of the panel and Cancel both cancel, and nothing is changed.</li>
 </ol>
 <h2>Option Window</h2>
+<p>The option window opens as the Rhino panel <strong>Sheet Manager</strong>, a tab like the Profile Manager of <strong>Pname</strong>. It can be docked with other panels or floated. Where the panel is not available, it opens as a separate window.</p>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
     <img src="../../../img/Sht_option_window.png" alt="Sht option window" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
@@ -57,7 +58,7 @@
   <tr><td>Sheet</td><td>Thickness</td><td>Sheet thickness in mm. Enter the value you need, such as 1.2, 2, 3, or 4.</td></tr>
   <tr><td>Sheet</td><td>Depth</td><td>Fold depth (outer dimension). <strong>From Line Length</strong> uses the length of the <code>S_Center1</code> line of each side (the boxes show those values, disabled). <strong>Enter Values</strong> lets you type each side.</td></tr>
   <tr><td>Sheet</td><td>Edge Type</td><td>Edge type of each side. <strong>Flat</strong> = that side is not folded, <strong>Fold</strong> = single fold, <strong>Inside</strong> = fold and return inward, <strong>Outside</strong> = fold and return outward. With all four sides set to Flat the sheet is a flat plate.</td></tr>
-  <tr><td>Sheet</td><td>Wing</td><td>Length of the return (outer dimension, thickness included). Used on the Inside and Outside sides.</td></tr>
+  <tr><td>Sheet</td><td>Wing</td><td>Length of the return (outer dimension, thickness included). Used on the Inside and Outside sides. <strong>An outside return is measured from the outer face of the fold as well</strong>, the same as the wing of back panel Type B.</td></tr>
   <tr><td>Attach Profile</td><td>Attach Side</td><td>Sides that receive a profile. <strong>All</strong> selects all four. A profile can be attached only to sides that are folded once (Fold) or Flat.</td></tr>
   <tr><td>Attach Profile</td><td>Placement</td><td><strong>Full, Mitred Corners</strong> = full-length bars that meet at 45° in the corners.<br><strong>Full, Square Corners</strong> = full-length bars cut square at both ends. The vertical bars (left, right) run through and the horizontal bars (top, bottom) fit between them.<br><strong>Pieces</strong> = several short pieces.</td></tr>
   <tr><td>Pieces</td><td>Length</td><td>Length of one piece.</td></tr>
@@ -103,6 +104,10 @@
 <div class="note"><strong>A profile is attached only to sides that are folded once (Fold) or Flat.</strong> On sides with a return (Inside or Outside) the Attach Side box is disabled. Example: with Left and Top set to Fold and Right and Bottom set to Outside, the profile goes on the left and top sides and the screw holes are made in the returns of the right and bottom sides.</div>
 <div class="note">The wings of an outside return end square at the corners; the wings of an inside return meet at 45° in the corners. A corner where two different edge types meet is cut square. When a neighboring side has an inside return and the profile reaches the same depth as that return, <strong>a full-length profile is cut at the free end of the return</strong> (it becomes that much shorter, and the command line reports it). Pieces are not moved; if a piece runs into the return, the command line only shows a warning.</div>
 <div class="note">Sheets whose edge types or return lengths differ per side get different numbers from <strong>ShNo</strong>; the Edge column of <strong>ShList</strong> lists every side, for example <code>T:Fold B:Out L:Fold R:Out</code>, and the Return column reads like <code>T:17 R:20</code>. The sections, the unfold drawing, and the hole dimensions of <strong>ShFd</strong> follow the edge type of each side.</div>
+<div class="note"><strong>Sheets with an outside return made in 5.4.3 or earlier have a wing shorter by the sheet thickness</strong> (Wing 10 with thickness 2 gave 8). The value is now used as entered, and the holes in the wing move outward by the same amount. To match the fabrication drawing, make those sheets again and run <strong>ShNo</strong>.</div>
+<div class="note"><strong>On a side next to a member whose section is rotated</strong>, the fold follows the direction of the section line (<code>S_Center1</code>) and leans. The depth is still measured square to the panel face. Inside wings stay parallel to the panel face and are mitred at the corners so they meet; outside wings are folded square to the fold. No holes are made in the wings of a slanted side (a message is shown).</div>
+<div class="note"><strong>When the fold depth runs into the attached profile, that panel is not made.</strong> Example: with a Z angle attached, a wall deeper than the underside of the outer leg overlaps the angle. The command line gives the deepest value that profile allows, so reduce the depth and make the sheet again. Slanted sides and sections containing curves are not checked.</div>
+<div class="note"><strong>A very short side</strong> (no longer than twice the sheet thickness) gets no wall or wing, and the two neighboring walls meet in a straight line. The front face of the panel is unchanged. Back panels follow the same rule.</div>
 <h2>Attached Profile</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">

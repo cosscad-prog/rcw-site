@@ -70,7 +70,13 @@
   <tr><td>ProfileData</td><td>Unit No, Profile Name, Fab No, and length/shape comparison data are recorded on the Brep.</td></tr>
   <tr><td>Number Text</td><td>Verification text such as <code>ProfileName F1</code> is placed on the <code>Fab_No_Text</code> layer.</td></tr>
   <tr><td>Bracket Numbers</td><td>Bracket objects may be shown with smaller text on a separate sub-layer.</td></tr>
+  <tr><td>Numbers of the same name</td><td>When one section name is used both for attached parts (brackets, parts attached by ATC) and for main members (mullions, transoms), the main members are numbered after the last number used by the attached parts (for example, F4 onward when the attached parts took F1 to F3). A line in the command window reports each such name. An attached part and a main member are not given the same number even if their shapes match.</td></tr>
+  <tr><td>Copied units</td><td>For units copied with Rhino's Copy, FabNo finds the parts attached to the copy (brackets and the like) again and numbers from them. Parts are grouped the same way as in the original, but the numbers themselves can differ from the original.</td></tr>
+  <tr><td>Rotated or mirrored parts</td><td>Parts rotated or mirrored after numbering cannot be handled correctly by FabNo. When there are such parts a warning is shown at the end of the command, and the number and sizes of a rotated part that already has a number are not rewritten. Please <strong>number before rotating</strong>. Copying and rotating numbered units to produce <code>Fablist</code> and <code>Molist</code> works as before.</td></tr>
 </tbody></table>
+<div class="note">
+  In a document numbered in 5.4.3 or earlier where <strong>the same name was used for attached parts and for main members</strong>, numbers may overlap (<code>Molist</code> then differs with the selection). <strong>Run FabNo again</strong>, and because the numbers change, remake the lists, tables and fabrication drawings made from them. Re-running only part of a selection with the same prefix mixes old and new numbers, so select everything in one run.
+</div>
 <h2>Showing Deleted Number Text Again &nbsp;—&nbsp; FabNoShow</h2>
 <p><span class="cmd-box">FabNoShow</span></p>
 <p><strong>FabNoShow</strong> writes the number text again after the text that FabNo placed on screen has been deleted. It does not renumber anything: it reads the number stored on each member and only writes the text. It is faster than running FabNo again, and the numbers do not change.</p>

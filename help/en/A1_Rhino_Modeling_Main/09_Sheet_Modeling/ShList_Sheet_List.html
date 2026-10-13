@@ -58,7 +58,7 @@
   <tr><td>Fab_No</td><td>Sheet number (for example, <code>SH-003</code>).</td></tr>
   <tr><td>Quantity</td><td>Number of sheets with that number.</td></tr>
   <tr><td>Width, Height</td><td>Width and height of the panel face (mm).</td></tr>
-  <tr><td>Area</td><td>Width × height × quantity (m²). Folded parts are not included. The total row shows the overall area.</td></tr>
+  <tr><td>Area</td><td><strong>Area of the outer surface</strong> × quantity (m²). It is the panel face plus the outer faces of the folds and returns, the same as the area of the shape cut out in the unfold (the same meaning as the area in BpList). Holes are deducted. The total row shows the overall area. In 5.4.3 and earlier it was the width × height of the panel face, so folded sheets show a larger value than they did.</td></tr>
   <tr><td>Thickness</td><td>Sheet thickness (mm).</td></tr>
   <tr><td>Edge</td><td>Edge type (Flat, Fold, Inside, Outside). When the sides differ, every side is listed, for example <code>T:Fold B:Out L:Fold R:Out</code> (In = Inside, Out = Outside).</td></tr>
   <tr><td>Depth T/B/L/R</td><td>Fold depth of the top, bottom, left, and right sides.</td></tr>

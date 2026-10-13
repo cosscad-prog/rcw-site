@@ -34,10 +34,11 @@
 <ol class="step-list">
   <li>Rhino 명령창에 <strong>Sht</strong> 를 입력하고 Enter 를 누릅니다.</li>
   <li>판 면(<code>Sheet_XX</code> · <code>Glass_XX</code>)을 하나 이상 선택하고 Enter 를 누릅니다.</li>
-  <li>옵션 창에서 두께 · 깊이 · 끝 모양 · 붙일 profile 을 정합니다. <strong>창이 떠 있는 동안에도 Rhino 화면을 움직이거나 치수를 잴 수 있습니다.</strong></li>
-  <li><strong>OK</strong> 를 누르면 판재가 만들어집니다. 창을 닫거나 Cancel 을 누르면 아무것도 바뀌지 않습니다.</li>
+  <li>옵션 창(Rhino 패널 <strong>Sheet Manager</strong>)에서 두께 · 깊이 · 끝 모양 · 붙일 profile 을 정합니다. <strong>창이 떠 있는 동안에도 Rhino 화면을 움직이거나 치수를 잴 수 있습니다.</strong></li>
+  <li><strong>OK</strong> 를 누르면 판재가 만들어지고 패널이 닫힙니다. 패널의 × 나 Cancel 은 취소여서 아무것도 바뀌지 않습니다.</li>
 </ol>
 <h2>옵션 창</h2>
+<p>옵션 창은 <strong>Pname</strong> 의 Profile Manager 처럼 Rhino 패널 <strong>Sheet Manager</strong> 탭으로 뜹니다. 다른 패널과 함께 붙여 두거나 떼어 놓을 수 있습니다. 패널을 쓸 수 없는 경우에는 따로 뜨는 창으로 열립니다.</p>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
     <img src="../../img/Sht_option_window.png" alt="Sht 옵션 창" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
@@ -57,7 +58,7 @@
   <tr><td>Sheet</td><td>Thickness</td><td>판 두께(mm). 1.2 · 2 · 3 · 4 등 필요한 값을 넣습니다.</td></tr>
   <tr><td>Sheet</td><td>Depth</td><td>접는 깊이(바깥 치수). <strong>From Line Length</strong> = 단면의 <code>S_Center1</code> 선 길이를 변마다 그대로 씁니다(칸에 그 값이 꺼진 채 보입니다). <strong>Enter Values</strong> = 변마다 직접 넣습니다.</td></tr>
   <tr><td>Sheet</td><td>Edge Type</td><td>변마다의 끝 모양. <strong>Flat</strong> = 그 변은 접지 않음, <strong>Fold</strong> = 한 번 접기, <strong>Inside</strong> = 접은 뒤 안쪽으로 되접기, <strong>Outside</strong> = 접은 뒤 바깥쪽으로 되접기. 네 변을 모두 Flat 으로 하면 평판입니다.</td></tr>
-  <tr><td>Sheet</td><td>Wing</td><td>되접는 길이(바깥 치수, 두께 포함). Inside · Outside 인 변에 씁니다.</td></tr>
+  <tr><td>Sheet</td><td>Wing</td><td>되접는 길이(바깥 치수, 두께 포함). Inside · Outside 인 변에 씁니다. <strong>바깥쪽 되접기도 날의 바깥면에서 잽니다</strong> — 백패널 Type B 의 날개와 같습니다.</td></tr>
   <tr><td>Attach Profile</td><td>Attach Side</td><td>profile 을 붙일 변. <strong>All</strong> 은 네 변 모두. 접기만 한 변(Fold)과 Flat 인 변에만 붙일 수 있습니다.</td></tr>
   <tr><td>Attach Profile</td><td>Placement</td><td><strong>Full, Mitred Corners</strong> = 변 전체 길이로 붙이고 코너에서 45°로 맞댑니다.<br><strong>Full, Square Corners</strong> = 변 전체 길이로 붙이고 양 끝을 직각으로 자릅니다. 세로 막대(왼쪽 · 오른쪽)가 통으로 가고 가로 막대(위 · 아래)가 그 사이에 들어갑니다.<br><strong>Pieces</strong> = 짧은 조각을 여러 개 붙입니다.</td></tr>
   <tr><td>Pieces</td><td>Length</td><td>조각 하나의 길이.</td></tr>
@@ -103,6 +104,10 @@
 <div class="note"><strong>profile 은 접기만 한 변(Fold)과 Flat 인 변에만 붙습니다.</strong> 되접는 변(Inside · Outside)은 Attach Side 칸이 꺼집니다. 예: 왼쪽 · 위쪽은 Fold, 오른쪽 · 아래쪽은 Outside 로 하면 profile 은 왼쪽 · 위쪽에만 붙고, 스크류 구멍은 오른쪽 · 아래쪽의 되접힌 부분에 납니다.</div>
 <div class="note">바깥쪽 되접기의 날개는 코너에서 직각으로 끝나고, 안쪽 되접기의 날개는 코너에서 45°로 맞닿습니다. 끝 모양이 다른 두 변이 만나는 코너는 직각으로 끊깁니다. 이웃 변을 안쪽으로 되접었고 profile 이 그 되접힌 부분과 같은 깊이에 걸리면, <strong>통으로 붙이는 profile 은 되접힌 부분의 끝에서 잘립니다</strong>(그만큼 짧아지고 명령창에 알립니다). 조각(Pieces)은 자리를 옮기지 않고, 겹치는 조각이 있으면 명령창에 경고만 나옵니다.</div>
 <div class="note">끝 모양이나 되접는 길이가 변마다 다른 판재는 <strong>ShNo</strong> 가 다른 번호로 가르고, <strong>ShList</strong> 의 Edge 칸에 <code>T:Fold B:Out L:Fold R:Out</code>, Return 칸에 <code>T:17 R:20</code> 처럼 변마다 적힙니다. <strong>ShFd</strong> 의 단면 · 전개도 · 구멍 치수도 변마다의 끝 모양을 따릅니다.</div>
+<div class="note"><strong>5.4.3 이하에서 만든 바깥쪽 되접기(Outside) 판재는 날개가 판 두께만큼 짧습니다</strong>(두께 2 에 Wing 10 을 넣으면 8). 지금은 넣은 값 그대로 만들어지고, 날개의 구멍도 그만큼 밖으로 옮겨집니다. 가공도와 맞추려면 그때 만든 판재를 다시 만든 뒤 <strong>ShNo</strong> 를 돌려 주십시오.</div>
+<div class="note"><strong>단면이 돌아 놓인 부재를 낀 변</strong>은 날이 단면 선(<code>S_Center1</code>)의 방향대로 기울어 접힙니다. 깊이는 판 면에 직각으로 잰 값이고, 안쪽 날개는 판 면과 나란히 접어 코너를 사선으로 맞닿게 하며, 바깥쪽 날개는 날에 직각으로 접습니다. 기운 변의 날개에는 구멍을 내지 않습니다(알림).</div>
+<div class="note"><strong>접는 깊이가 붙이는 profile 에 걸리면 그 면은 만들지 않습니다.</strong> 예: Z 앵글을 붙일 때 벽이 앵글의 바깥 다리 아래보다 깊으면 둘이 겹칩니다. 명령창에 그 profile 이 붙을 수 있는 가장 깊은 값이 나오므로, 깊이를 줄여 다시 만듭니다. 기운 변과 곡선이 든 단면은 이 검사를 하지 않습니다.</div>
+<div class="note"><strong>아주 짧은 변</strong>(길이가 판 두께의 두 배 이하)에는 벽과 날개를 만들지 않고, 이웃한 두 벽이 곧게 만나게 합니다. 판의 앞면은 그대로입니다. 백패널과 같은 규칙입니다.</div>
 <h2>붙이는 profile</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">

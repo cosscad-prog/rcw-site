@@ -100,7 +100,13 @@
   <tbody><tr><th>항목</th><th>설명</th></tr>
   <tr><td>레이어</td><td><code>BackPanel_XX</code> 레이어에 솔리드 객체가 생성됩니다.</td></tr>
   <tr><td>형상</td><td>유리 면으로부터 이격 거리만큼 떨어진 위치에 Sheet·Panel·Insulation 층으로 구성된 3D 솔리드가 생성됩니다.</td></tr>
+  <tr><td>판의 종류</td><td>판의 모양은 <code>BpOpt</code> 에서 고른 Type 이 정합니다 — A(네 변 Inside) · B(네 변 Outside) · C(판 두 장) · D(위 · 아래 Outside, 왼쪽 · 오른쪽 Inside) · E(위 · 아래 Inside, 왼쪽 · 오른쪽 Outside). 판은 판재(<code>Sht</code>)와 같은 방식으로 만들어져, 같은 칸에 같은 값이면 판재와 같은 판이 됩니다. 그 방식으로 만들 수 없는 칸은 전의 방식으로 만들고 명령창에 알립니다.</td></tr>
+  <tr><td>스크류 구멍</td><td><code>BpOpt</code> 의 <strong>Make Screw Holes</strong> 가 켜진 Type B · D · E 는 바깥쪽 날개에 구멍이 뚫립니다.</td></tr>
+  <tr><td>아주 짧은 변</td><td>길이가 판 두께의 두 배 이하인 변에는 벽과 날개를 만들지 않고, 이웃한 두 벽이 곧게 만나게 합니다. 판의 앞면은 그대로입니다.</td></tr>
 </tbody></table>
+<div class="note">
+  5.4.3 이하에서 만든 Type C(판 두 장) 패널은 단열재가 판 두께만큼 깊게 들어가 있습니다. 맞추려면 다시 모델링해 주십시오. 옛 패널과 새 패널이 한 도면에 섞이면 모양이 같아도 <code>BpNo</code> 의 번호가 갈립니다.
+</div>
 <h2>관련 명령어</h2>
 <table class="desc-table">
   <colgroup>
