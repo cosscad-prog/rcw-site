@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What's New 5.4.5</title>
+<meta name="description" content="RCW V5.4.5 에서 달라진 것 — NBlock 이 든 도면의 저장, NBlock 으로 그린 표, 치수 스타일, 백패널 번호.">
+<style>
+  /* 설치 끝에 열리고 WhatsNew 명령으로 다시 여는 문서 — 인터넷 없이 열려야 하므로 바깥 글꼴 · 스크립트를 쓰지 않는다 */
+  :root {
+    --bg: #f6f7f9; --paper: #ffffff; --ink: #1d2330; --muted: #5b6475; --line: #e2e6ec;
+    --accent: #2f6fdb; --fix: #1f8a5b; --fix-bg: #e5f4ec; --chg: #b4661a; --chg-bg: #fbefe2;
+    --note-bg: #fff8e6; --note-line: #f0d48a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171d; --paper: #1c2028; --ink: #e7eaf0; --muted: #a2abbb; --line: #2c323d;
+      --accent: #7aa7f5; --fix: #6fd3a3; --fix-bg: #183027; --chg: #f0b06c; --chg-bg: #33261a;
+      --note-bg: #2b2516; --note-line: #6b5a2a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171d; --paper: #1c2028; --ink: #e7eaf0; --muted: #a2abbb; --line: #2c323d;
+    --accent: #7aa7f5; --fix: #6fd3a3; --fix-bg: #183027; --chg: #f0b06c; --chg-bg: #33261a;
+    --note-bg: #2b2516; --note-line: #6b5a2a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+    font-size: 16px; line-height: 1.65; word-break: keep-all;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 56px; }
+  .eyebrow { margin: 0; color: var(--muted); font-size: 14px; letter-spacing: .02em; }
+  h1 { margin: 4px 0 12px; font-size: 34px; line-height: 1.2; }
+  .lede { margin: 0 0 24px; color: var(--ink); }
+  .note {
+    background: var(--note-bg); border: 1px solid var(--note-line); border-radius: 10px;
+    padding: 14px 18px; margin: 0 0 28px;
+  }
+  .note b.lbl { display: block; margin-bottom: 2px; }
+  section {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px 22px 8px; margin: 0 0 18px;
+  }
+  section h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 4px; font-size: 21px; }
+  .no { color: var(--accent); font-weight: 700; }
+  .pill { font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+  .p-fix { color: var(--fix); background: var(--fix-bg); }
+  .p-chg { color: var(--chg); background: var(--chg-bg); }
+  .cmds { margin: 0 0 8px; color: var(--muted); font-size: 14px; }
+  ul { margin: 0 0 12px; padding-left: 20px; }
+  li { margin: 0 0 8px; }
+  .todo h2 { font-size: 19px; }
+  footer { margin-top: 26px; color: var(--muted); font-size: 14px; }
+  @media (max-width: 560px) {
+    main { padding-top: 28px; }
+    h1 { font-size: 28px; }
+    section { padding: 16px 16px 6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">RCW for Rhino · 5.4.5 에서 달라진 것</p>
+  <h1>What's New 5.4.5</h1>
+  <p class="lede">
+    <b>NBlock 이 든 도면이 다시 저장되지 않던 문제</b>를 고쳤습니다.
+    NBlock 으로 그린 표와 치수가 모델 · 설정과 맞게 나오고, 백패널 번호와 몇 가지 알림을 바로잡았습니다.
+  </p>
+
+  <div class="note">
+    <b class="lbl">먼저 보실 것</b>
+    5.4.4 에서 NBlock 이 든 도면을 저장했다가 다시 열면, 그 뒤로 저장(자동 저장 포함)이 되지 않았습니다.
+    5.4.5 로 열면 다시 저장됩니다.
+  </div>
+
+  <section>
+    <h2><span class="no">01</span> 저장과 NBlock 표 <span class="pill p-fix">고침</span></h2>
+    <p class="cmds">NBlock · BpTable · GsTable · VtTable · GrTable · 표 · 목록 명령</p>
+    <ul>
+      <li>NBlock 이 든 도면을 다시 열어도 <b>저장이 됩니다.</b></li>
+      <li>NBlock 으로 그린 표에서 판이 <b>group 으로 그린 표와 같은 자세 · 같은 자리</b>에 놓입니다(아래 트랜섬이 기운 칸의 판).</li>
+      <li>NBlock 으로 그린 표의 조각 위 <b>번호 글자가 모델과 같은 크기</b>로 나옵니다.</li>
+      <li>표 · 목록 명령에서 표 자리를 찍지 않고 Enter 하면 <b>원점에 글자가 남던 문제</b>를 고쳤습니다.</li>
+      <li>GsTable · BpTable 에 번호(GsNo · BpNo)를 매긴 것이 하나도 없으면, 표 자리를 묻기 전에 <b>무엇이 없는지 알리고</b> 끝냅니다.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="no">02</span> 치수 <span class="pill p-chg">바뀜</span></h2>
+    <p class="cmds">LDM · DSOpt · GrTable · VtTable · GsTable · BpTable · FabTable · DTT</p>
+    <ul>
+      <li>LDM 이 치수 스타일의 <b>글자 맞춤(Fit text)을 Inside</b> 로 맞춥니다. 짧은 치수의 글자 · 화살표가 바깥으로 나가지 않고, 전에 만든 스타일 중 Auto 인 것도 Inside 로 바꿉니다.</li>
+      <li>표 명령과 DTT 가 끝나면 <b>원래의 현재 치수 스타일</b>로 돌아갑니다. 같은 도면에서 둘째 표부터 글자가 아주 작아지던 문제를 고쳤습니다.</li>
+      <li>DSOpt 패널을 열지 않아도 <b>치수 간격과 글자 크기가 지금 도면의 현재 치수 스타일</b>을 따릅니다. 다른 도면을 열어도 그 도면에 맞춥니다.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="no">03</span> FSC · 백패널 · 그 밖 <span class="pill p-fix">고침</span></h2>
+    <p class="cmds">FSC · BpNo · BpFd · 옵션 패널 · 도움말</p>
+    <ul>
+      <li>FSC: 가공도를 줄여도 <b>블록 그림이 서로 겹치지 않고, 따내기 해치도 선과 함께 줄어듭니다.</b> 블록은 모양 그대로 통째로 옮기고 블록 사이를 10 mm 이상 띄웁니다.</li>
+      <li>BpNo: Rhino 의 Mirror 로 뒤집어 복사한 백패널과 처음부터 거울상으로 만든 백패널이 <b>같은 번호</b>를 받습니다.</li>
+      <li>BpFd: 표에 모델 모양대로 놓은 판을 "옛 버전이 만든 백패널" 이라고 <b>잘못 알리던 것</b>을 고쳤습니다.</li>
+      <li>옵션 패널의 Back Panel 탭: 패널이 좁을 때 맨 아래 안내 줄이 가려지던 것을 고쳤습니다.</li>
+      <li>도움말의 패널 그림 29장을 지금 화면에 맞게 다시 찍었습니다.</li>
+    </ul>
+  </section>
+
+  <section class="todo">
+    <h2>필요하면 해 주실 것</h2>
+    <ul>
+      <li>5.4.5 전에 만든 NBlock 은 표의 번호 글자를 조각 크기에 맞춰 씁니다. 모델과 같은 크기로 하려면 <b>NBlock 을 다시 실행</b>하십시오.</li>
+      <li>전에 만든 치수 스타일의 글자 맞춤을 바꾸려면 <b>LDM 을 한 번 실행</b>하십시오.</li>
+      <li>거울상 백패널이 다른 번호였던 도면은 <b>BpNo 를 다시 실행</b>하십시오. 번호가 바뀌므로 그 번호로 만든 목록 · 표 · 가공도도 다시 만들어야 합니다.</li>
+      <li>5.4.5 전에 그린 가공도는 블록 표식이 없어 FSC 가 블록을 짐작합니다(명령창에 알림). 정확하게 하려면 <b>FDwg 를 다시</b> 하십시오.</li>
+    </ul>
+  </section>
+
+  <footer>이 문서는 Rhino 에서 <b>WhatsNew</b> 명령으로 다시 열 수 있습니다. 자세한 쓰는 법은 각 명령의 도움말을 보십시오.</footer>
+</main>
+</body>
+</html>
