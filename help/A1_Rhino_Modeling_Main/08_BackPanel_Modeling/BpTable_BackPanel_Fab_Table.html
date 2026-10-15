@@ -45,6 +45,7 @@
 
 </ol>
 <div class="note"><strong>NBlock</strong>: 백패널 group 을 포함해 만든 <strong>NBlock</strong> 도 선택할 수 있습니다. NBlock 만 골라도 되고(Block Mode), 백패널과 NBlock 을 함께 고르면 한 표로 합칩니다(Mixed Mode). NBlock 안의 백패널은 <strong>블록 안에서 꺼내</strong> 표에 놓고, 수량은 배치 개수만큼 셉니다. NBlock 이 놓인 자리와는 무관합니다.<br>NBlock 에서 꺼낸 백패널의 가공도(<strong>BpFd</strong>)는 판의 면에서 꼭짓점을 구해 그립니다 — 치수는 같습니다.<br>⚠ 원본과 그것으로 만든 NBlock 을 <strong>함께 선택하면 수량을 두 번 셉니다</strong>. 정보는 NBlock 을 만들 때 복사되므로 <strong>BpNo 뒤에 NBlock</strong> 을 만드십시오. 이전 버전(5.4.1 이하)에서 만든 NBlock 에는 백패널 정보가 없습니다 — NBlock 을 다시 실행하십시오.</div>
+<div class="note"><strong>번호가 없을 때</strong>: 고른 것에 번호(<code>BpNo</code>)를 매긴 백패널 group 이 하나도 없으면, 표 자리를 묻지 않고 "번호가 매겨진 백패널 group 을 찾지 못했습니다 — [BpNo] 을 먼저 실행한 뒤 다시 실행하세요" 라고 알리고 끝납니다.<br><strong>NBlock 의 번호 글자</strong>: 표에 놓인 조각 위의 번호 글자는 모델과 같은 치수 스타일 · 크기로 나옵니다. 5.4.5 전에 만든 NBlock 은 글자의 스타일 기록이 없어 조각 크기에 맞춘 글자(짧은 변의 1/25)로 쓰고 명령창에 알립니다 — NBlock 을 다시 실행하면 모델과 같은 크기가 됩니다.</div>
 <h2>실행 예시</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
