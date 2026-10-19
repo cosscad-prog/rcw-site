@@ -3,6 +3,20 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.4.7",
+      "date": "2026-10-20",
+      "items": [
+        {
+          "ko": "<b>설치 · 업데이트 — 고침.</b><br><br>&bull; 처음 설치한 뒤나 Rhino 를 닫고 새 버전을 설치한 뒤에도 <b>Rhino 가 켜질 때 RCW 가 바로 실립니다.</b> 전에는 RCW 명령을 처음 쓸 때까지 실리지 않아 평가판 안내와 새 버전 확인이 늦어졌습니다.",
+          "en": "<b>Installing and updating - fixed.</b><br><br>&bull; After a first install, or after installing a new version with Rhino closed, <b>RCW now loads as soon as Rhino starts.</b> Before, it waited until the first RCW command, so the trial notice and the update check came late."
+        },
+        {
+          "ko": "<b>새 버전 알림 — 안내를 바로잡았습니다.</b><br><br>&bull; 설치가 끝나면 <b>Rhino 를 닫았다가 다시 켜야</b> 새 버전이 쓰인다고 알립니다. 전에는 설치 프로그램이 Rhino 를 닫고 다시 연다고 안내했지만, 실제로는 열린 Rhino 를 그대로 두고 설치합니다.",
+          "en": "<b>Update notice - wording corrected.</b><br><br>&bull; It now says to <b>close Rhino and start it again</b> after the installer finishes to use the new version. It used to say the installer would close and reopen Rhino, but the installer leaves the open Rhino as it is."
+        }
+      ]
+    },
+    {
       "version": "5.4.6",
       "date": "2026-10-19",
       "items": [

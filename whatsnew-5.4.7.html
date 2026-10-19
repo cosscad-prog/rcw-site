@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What's New 5.4.7</title>
+<meta name="description" content="RCW V5.4.7 에서 달라진 것 — 설치 · 업데이트 뒤 바로 실리는 RCW, 바로잡은 업데이트 안내.">
+<style>
+  /* 설치 끝에 열리고 WhatsNew 명령으로 다시 여는 문서 — 인터넷 없이 열려야 하므로 바깥 글꼴 · 스크립트를 쓰지 않는다 */
+  :root {
+    --bg: #f6f7f9; --paper: #ffffff; --ink: #1d2330; --muted: #5b6475; --line: #e2e6ec;
+    --accent: #2f6fdb; --fix: #1f8a5b; --fix-bg: #e5f4ec; --chg: #b4661a; --chg-bg: #fbefe2;
+    --note-bg: #fff8e6; --note-line: #f0d48a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171d; --paper: #1c2028; --ink: #e7eaf0; --muted: #a2abbb; --line: #2c323d;
+      --accent: #7aa7f5; --fix: #6fd3a3; --fix-bg: #183027; --chg: #f0b06c; --chg-bg: #33261a;
+      --note-bg: #2b2516; --note-line: #6b5a2a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171d; --paper: #1c2028; --ink: #e7eaf0; --muted: #a2abbb; --line: #2c323d;
+    --accent: #7aa7f5; --fix: #6fd3a3; --fix-bg: #183027; --chg: #f0b06c; --chg-bg: #33261a;
+    --note-bg: #2b2516; --note-line: #6b5a2a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+    font-size: 16px; line-height: 1.65; word-break: keep-all;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 56px; }
+  .eyebrow { margin: 0; color: var(--muted); font-size: 14px; letter-spacing: .02em; }
+  h1 { margin: 4px 0 12px; font-size: 34px; line-height: 1.2; }
+  .lede { margin: 0 0 24px; color: var(--ink); }
+  .note {
+    background: var(--note-bg); border: 1px solid var(--note-line); border-radius: 10px;
+    padding: 14px 18px; margin: 0 0 28px;
+  }
+  .note b.lbl { display: block; margin-bottom: 2px; }
+  section {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px 22px 8px; margin: 0 0 18px;
+  }
+  section h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 4px; font-size: 21px; }
+  .no { color: var(--accent); font-weight: 700; }
+  .pill { font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+  .p-fix { color: var(--fix); background: var(--fix-bg); }
+  .p-chg { color: var(--chg); background: var(--chg-bg); }
+  .cmds { margin: 0 0 8px; color: var(--muted); font-size: 14px; }
+  ul { margin: 0 0 12px; padding-left: 20px; }
+  li { margin: 0 0 8px; }
+  .todo h2 { font-size: 19px; }
+  footer { margin-top: 26px; color: var(--muted); font-size: 14px; }
+  @media (max-width: 560px) {
+    main { padding-top: 28px; }
+    h1 { font-size: 28px; }
+    section { padding: 16px 16px 6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">RCW for Rhino · 5.4.7 에서 달라진 것</p>
+  <h1>What's New 5.4.7</h1>
+  <p class="lede">
+    처음 설치한 뒤나 Rhino 를 닫고 업데이트한 뒤에도 <b>Rhino 가 켜질 때 RCW 가 바로 실립니다.</b>
+    새 버전 알림의 안내도 실제 동작에 맞게 바로잡았습니다.
+  </p>
+
+  <section>
+    <h2><span class="no">01</span> 설치 · 업데이트 <span class="pill p-fix">고침</span></h2>
+    <p class="cmds">설치 프로그램</p>
+    <ul>
+      <li>처음 설치한 뒤나 Rhino 를 닫고 새 버전을 설치한 뒤에도 <b>Rhino 가 켜질 때 RCW 가 바로 실립니다.</b></li>
+      <li>전에는 RCW 명령을 처음 쓸 때까지 실리지 않아 평가판 안내와 새 버전 확인이 늦어졌습니다.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="no">02</span> 새 버전 알림 <span class="pill p-fix">고침</span></h2>
+    <p class="cmds">RCWUpdate</p>
+    <ul>
+      <li>설치가 끝나면 <b>Rhino 를 닫았다가 다시 켜야</b> 새 버전이 쓰인다고 알립니다.</li>
+      <li>전에는 설치 프로그램이 Rhino 를 닫고 다시 연다고 안내했지만, 실제로는 열린 Rhino 를 그대로 두고 설치합니다.</li>
+    </ul>
+  </section>
+
+  <footer>이 문서는 Rhino 에서 <b>WhatsNew</b> 명령으로 다시 열 수 있습니다. 자세한 쓰는 법은 각 명령의 도움말을 보십시오.</footer>
+</main>
+</body>
+</html>
