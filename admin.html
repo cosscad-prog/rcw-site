@@ -107,6 +107,9 @@
                font-variant-numeric:tabular-nums; }
   ul.hist .n { min-width:34px; color:var(--muted); font-size:11.5px; font-weight:800; }
   ul.hist .last { color:var(--green); font-size:11.5px; font-weight:800; }
+  ul.hist .n.auto { color:var(--blue-dark); }
+  td.ver .pc { display:block; margin-top:4px; color:var(--ink); font-size:12px; font-weight:600; }
+  td.ver .pc .tag { margin:0 0 0 6px; }
   .empty { padding:40px 0; text-align:center; color:var(--muted); }
   .note { margin:14px 0 0; color:var(--muted); font-size:12px; }
   .sec { margin:26px 0 10px; font-size:14px; font-weight:800; }
@@ -389,18 +392,20 @@
   <table>
     <thead>
       <tr>
-        <th>받아 간 때</th><th>무엇</th><th>어느 판</th><th>어디서</th><th>설치</th>
+        <th>받아 간 때</th><th>무엇</th><th>어느 판</th><th>종류</th><th>누구</th><th>설치</th>
       </tr>
     </thead>
-    <tbody id="plrows"><tr><td colspan="5" class="empty">불러오는 중…</td></tr></tbody>
+    <tbody id="plrows"><tr><td colspan="6" class="empty">불러오는 중…</td></tr></tbody>
   </table>
 
   <p class="note">
     RCW 가 켜질 때 뜨는 <b>새 버전 알림</b>에서 [예] 를 눌러 받아 간 기록입니다.
     브라우저를 거치지 않으므로 크롬 경고와 SmartScreen 이 뜨지 않습니다.
-    <b>누가 받았는지는 알 수 없습니다</b> — 배포판 플러그인에는 고객 코드가 없어서,
-    설치할 때 그 PC 에 만들어 둔 <b>설치 번호</b>로만 구분합니다(사람이 아니라 대수를 셉니다).
+    한 줄은 그 PC 에 만들어 둔 <b>설치 번호</b>로 구분합니다(사람이 아니라 대수를 셉니다).
     그 번호를 지우고 다시 받으면 같은 PC 가 두 대로 보입니다.
+    <b>누구</b> 칸은 같은 설치 번호의 체크인이 사람과 이어져 있을 때 채워집니다(<b>5.4.7 부터</b>) —
+    유료판은 설치기가 저장한 고객 코드(없으면 머신코드)로, 평가판은 사용자가 플러그인에 넣은 신청 메일로 잇습니다.
+    비어 있으면 5.4.6 이하이거나, 평가판 사용자가 메일을 넣지 않은 것입니다.
   </p>
 
   <h3 class="sec">트라이얼 신청</h3>
@@ -484,7 +489,9 @@
     <div class="card"><b id="u-conv">0</b><span>평가판 → 정식 전환</span></div>
   </div>
   <p class="note">
-    플러그인이 하루 한 번(새 버전 확인 뒤) 보내는 <b>설치 id · 버전 · 에디션 · Rhino · 언어</b> 입니다 — 머신코드·라이선스·이름은 받지 않습니다.
+    플러그인이 하루 한 번(새 버전 확인 뒤) 보내는 <b>설치 id · 버전 · 에디션 · Rhino · 언어</b> 입니다 — 라이선스 · 도면은 받지 않습니다.
+    <b>5.4.7 부터</b> 유료판은 설치기가 저장한 고객 코드(없으면 머신코드)를, 평가판은 사용자가 넣은 신청 메일을 함께 보내 <b>누구</b> 칸이 채워집니다.
+    서버는 그 값으로 고객 · 신청을 찾아 회사 · 이름만 적고, 코드 원문 · 머신코드는 저장하지 않습니다.
     한 줄 = <b>(설치 id, Rhino)</b>. 설치 id 는 <b>Windows 사용자마다</b> 하나라 "설치 수" 가 아니라 <b>사용자 수</b>입니다.
     새 버전 알림을 끈 사용자는 보내지 않으므로 숫자는 <b>하한값</b>입니다. <b>5.4.0 부터</b> 옵니다.
   </p>
@@ -499,7 +506,7 @@
   </p>
   <table class="list"><thead><tr><th>설치한 때</th><th>회사</th><th>담당자</th><th>버전</th><th>Rhino</th><th>에디션</th></tr></thead><tbody id="u-installs"><tr><td colspan="6" class="empty">불러오는 중…</td></tr></tbody></table>
   <h3 style="margin:18px 0 6px">최근 체크인 (200줄)</h3>
-  <table class="list"><thead><tr><th>설치 id</th><th>Rhino</th><th>에디션</th><th>처음 에디션</th><th>버전</th><th>언어</th><th>처음</th><th>마지막</th><th>횟수</th></tr></thead><tbody id="u-rows"><tr><td colspan="9" class="empty">불러오는 중…</td></tr></tbody></table>
+  <table class="list"><thead><tr><th>설치 id</th><th>누구</th><th>Rhino</th><th>에디션</th><th>처음 에디션</th><th>버전</th><th>언어</th><th>처음</th><th>마지막</th><th>횟수</th></tr></thead><tbody id="u-rows"><tr><td colspan="10" class="empty">불러오는 중…</td></tr></tbody></table>
 </div>
 
 <div id="view-rel" style="display:none">
@@ -662,7 +669,7 @@
        브라우저가 남긴다. 2026-07-26~08-24 에는 뒤쪽이 통째로 막혀 있었는데
        (RLS 정책 누락 + lang NOT NULL) 신청 목록이 화면에 없어서 그 사실이
        드러나지 않았다. 이제 둘을 나란히 둔다. */
-    plRowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오는 중…</td></tr>';
+    plRowsEl.innerHTML = '<tr><td colspan="6" class="empty">불러오는 중…</td></tr>';
     Promise.all([
       api('/rest/v1/downloads?select=*&order=created_at.desc&limit=2000'),
       api('/rest/v1/trial_requests?select=*&order=created_at.desc&limit=2000'),
@@ -675,6 +682,7 @@
         all = r[0] || [];
         requests = r[1] || [];
         pluginDls = r[2] || [];
+        dlLoaded = true;
         summarize();
         render();
         renderRequests();
@@ -684,7 +692,7 @@
         console.error(err);
         rowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다. 다시 로그인해 주세요.</td></tr>';
         qRowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다.</td></tr>';
-        plRowsEl.innerHTML = '<tr><td colspan="5" class="empty">불러오지 못했습니다.</td></tr>';
+        plRowsEl.innerHTML = '<tr><td colspan="6" class="empty">불러오지 못했습니다.</td></tr>';
       });
   }
 
@@ -759,6 +767,7 @@
     return api('/rest/v1/plugin_checkins?select=*&order=last_seen.desc&limit=5000')
       .then(function (rows) {
         rows = rows || [];
+        checkinRows = rows;
         var since = Date.now() - 30 * 86400000;
         var active = rows.filter(function (r) { return new Date(r.last_seen).getTime() >= since; });
         var conv = rows.filter(function (r) { return /_Trial$/.test(r.first_edition || '') && !/_Trial$/.test(r.edition || ''); });
@@ -784,17 +793,23 @@
         document.getElementById('u-rows').innerHTML = rows.length
           ? rows.slice(0, 200).map(function (r) {
               return '<tr><td title="' + esc(r.install_id) + '">' + esc(String(r.install_id).slice(0, 8)) + '…</td>' +
+                     '<td>' + whoCell(r.customer_id || r.link_email ? r : null) + '</td>' +
                      '<td>' + esc(r.rhino) + '</td><td>' + esc(r.edition) + '</td><td>' + esc(r.first_edition) + '</td>' +
                      '<td>' + esc(r.version || '') + '</td><td>' + esc(r.lang || '') + '</td>' +
                      '<td>' + esc(fmt(r.first_seen, true)) + '</td><td>' + esc(fmt(r.last_seen, true)) + '</td>' +
                      '<td>' + esc(String(r.checkins)) + '</td></tr>';
             }).join('')
-          : '<tr><td colspan="9" class="empty">아직 체크인이 없습니다 — 5.4.0 부터 옵니다.</td></tr>';
+          : '<tr><td colspan="10" class="empty">아직 체크인이 없습니다 — 5.4.0 부터 옵니다.</td></tr>';
+
+        // 사람 · 고객 줄의 "PC 에서 쓰는 판" 과 자동 받기 표의 누구 칸은 이 값을 쓴다.
+        // 다섯 묶음이 따로 오므로, 아직 안 온 표를 빈 표로 덮지 않게 다 온 것만 다시 그린다.
+        if (dlLoaded) { render(); renderPlugin(); }
+        if (customersLoaded) renderCustomers();
       })
       .catch(function (err) {
         // 이 탭을 못 읽어도 다른 탭은 살아 있어야 한다(render 안 예외 하나가 화면을 비운 적이 있다).
         console.error('[usage]', err);
-        document.getElementById('u-rows').innerHTML = '<tr><td colspan="9" class="empty">불러오지 못했습니다.</td></tr>';
+        document.getElementById('u-rows').innerHTML = '<tr><td colspan="10" class="empty">불러오지 못했습니다.</td></tr>';
       });
   }
 
@@ -806,6 +821,7 @@
     ])
       .then(function (r) {
         customers = r[0] || [];
+        customersLoaded = true;
         summarizeCustomers();
         renderCustomers();
         if (window.rcwFillPreview) window.rcwFillPreview(customers);   // 배포 현황 탭의 [고객 화면] 선택칸
@@ -847,6 +863,15 @@
                  '<td>' + esc(a.rhino || '') + '</td><td>' + esc(String(a.edition || '').replace('_', ' ')) + '</td></tr>';
         }).join('')
       : '<tr><td colspan="6" class="empty">아직 설치 기록이 없습니다 — 5.4.0 설치기부터 옵니다.</td></tr>';
+  }
+
+  /* 체크인으로 이 고객에게 이어진 PC 의 지금 판(5.4.7~). 설치 기록은 "설치했다" 까지라 그 뒤에 쓰는지는 이것으로 본다. */
+  function customerPcLine(c) {
+    var pcs = checkinsWhere(function (r) { return r.customer_id === c.id; });
+    if (!pcs.length) return '';
+    var r = pcs[0];
+    return '<span class="sub" title="' + esc(pcTip(pcs)) + '">쓰는 판 ' + esc(r.version || '?') + ' · R' + esc(r.rhino) +
+           ' · ' + esc(fmt(r.last_seen)) + '</span>';
   }
 
   function installedLabel(a) {
@@ -972,7 +997,7 @@
         '<td>' + esc(c.email) + '</td>' +
         // 마지막 설치 + 정보확인을 한 칸에 — 두 칸이던 때 표가 틀보다 넓어져 [코드] 가 잘렸다.
         // 윗줄 설치 버전, 아랫줄 날짜 하나(설치·정보확인 중 나중 것). 둘 다는 hover 로.
-        '<td class="nw">' + lastInstallCell(c) + latestDateLine(c) + '</td>' +
+        '<td class="nw">' + lastInstallCell(c) + latestDateLine(c) + customerPcLine(c) + '</td>' +
         '<td class="mono">' + esc(c.license_id) + '</td>' +
         '<td><button class="btn mini" type="button" data-edit="' + esc(c.id) + '">고치기</button></td>' +
         '</tr>';
@@ -1201,6 +1226,64 @@
 
   function keyOf(r) { return (r.email || '').trim().toLowerCase(); }
 
+  /* ── 체크인으로 사람 잇기 (5.4.7~, docs/supabase-plugin-checkins-link.sql) ──
+     체크인 줄에 유료판은 고객(customer_id), 평가판은 사용자가 넣은 메일(link_email)이 붙어 온다.
+     같은 설치 번호의 자동 받기(plugin_downloads)는 이 줄을 거쳐 사람에게 이어진다.
+     ★ 5.4.6 이하 · 메일을 안 넣은 평가판은 비어 있다 — 비어 있으면 "모른다" 이지 "아무도 아니다" 가 아니다. */
+  var checkinRows = [];                             // plugin_checkins 전부(loadUsage 가 채운다)
+  var dlLoaded = false, customersLoaded = false;    // 먼저 온 쪽이 아직 안 온 표를 빈 표로 덮지 않게
+
+  /** 설치 번호를 이은 사람 — 가장 최근에 이은 줄. 없으면 null. */
+  function whoOfInstall(id) {
+    var best = null;
+    checkinRows.forEach(function (r) {
+      if (r.install_id !== id || !(r.customer_id || r.link_email)) return;
+      if (!best || new Date(r.linked_at || 0) > new Date(best.linked_at || 0)) best = r;
+    });
+    return best;
+  }
+
+  function whoLabel(r) {
+    if (!r) return '';
+    if (r.customer_id) return (r.who_company || '') + (r.who_name ? ' · ' + r.who_name : '');
+    if (r.request_id) return (r.who_name || '') + (r.who_company ? ' · ' + r.who_company : '');
+    return r.link_email + ' (신청 없음)';
+  }
+
+  function whoCell(r) {
+    if (!r) return '<span class="none">—</span>';
+    var tip = (r.customer_id ? '유료판 — 고객 코드로 이음' : '평가판 — 넣은 메일 ' + (r.link_email || '')) +
+              (r.linked_at ? '\n이은 때 ' + fmt(r.linked_at, true) : '');
+    return '<span title="' + esc(tip) + '">' + esc(whoLabel(r)) + '</span>';
+  }
+
+  /** 조건에 맞는 체크인 — 최근에 쓴 것 먼저. */
+  function checkinsWhere(test) {
+    return checkinRows.filter(test).sort(function (a, b) { return new Date(b.last_seen) - new Date(a.last_seen); });
+  }
+
+  /** 그 체크인들과 같은 설치 번호의 자동 받기. pluginDls 가 최신순이라 결과도 최신순이다. */
+  function autoDownloadsOf(rows) {
+    var ids = {};
+    rows.forEach(function (r) { ids[r.install_id] = 1; });
+    return pluginDls.filter(function (d) { return d.install_id && ids[d.install_id]; });
+  }
+
+  function pcTip(rows) {
+    return '체크인 ' + rows.length + '줄\n' + rows.map(function (x) {
+      return String(x.install_id).slice(0, 8) + ' · R' + x.rhino + ' · ' + (x.version || '?') + ' · 마지막 ' + fmt(x.last_seen, true);
+    }).join('\n');
+  }
+
+  /** 평가판 사람 줄의 "PC 에서 쓰는 판" — 가장 최근 체크인. 최신판이 아니면 구판 딱지. */
+  function pcLine(rows) {
+    if (!rows.length) return '';
+    var r = rows[0];
+    var old = release && release.version && r.version && r.version !== release.version;
+    return '<span class="pc" title="' + esc(pcTip(rows)) + '">PC 에서 쓰는 판 <span class="vno">' + esc(r.version || '?') +
+           '</span> · R' + esc(r.rhino) + ' · ' + esc(fmt(r.last_seen)) + (old ? '<span class="tag old">구판</span>' : '') + '</span>';
+  }
+
   function summarize() {
     var now = new Date();
     var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
@@ -1387,7 +1470,8 @@
 
     pluginDls.forEach(function (r) {
       var short = shortId(r.install_id);
-      var hay = [r.edition, r.rhino, r.version, r.kind, short].join(' ').toLowerCase();
+      var who = whoOfInstall(r.install_id);
+      var hay = [r.edition, r.rhino, r.version, r.kind, short, whoLabel(who)].join(' ').toLowerCase();
       if (q && hay.indexOf(q) === -1) { return; }
       shown++;
 
@@ -1398,11 +1482,12 @@
         '<td class="ver"><span class="vno">' + esc(r.version || '—') + '</span></td>' +
         '<td><span class="tag ' + (r.kind === 'trial' ? 'nodl' : 'gotdl') + '">' +
           (r.kind === 'trial' ? '평가판' : '유료판') + '</span></td>' +
+        '<td>' + whoCell(who) + '</td>' +
         '<td class="mono">' + esc(short) + '</td>' +
         '</tr>';
     });
 
-    plRowsEl.innerHTML = html || '<tr><td colspan="5" class="empty">' +
+    plRowsEl.innerHTML = html || '<tr><td colspan="6" class="empty">' +
       (pluginDls.length ? '검색 결과가 없습니다.' : '아직 플러그인으로 받아 간 기록이 없습니다.') + '</td></tr>';
 
     var mini = document.getElementById('pl-mini');
@@ -1633,7 +1718,7 @@
      관리자가 제일 먼저 알고 싶어 하는 값이다.
      그 아래 회색 줄은 그전에 받아 간 <b>다른 종류</b>다. 같은 것을 다섯 번 받아 갔으면
      한 번만 쓴다 - 같은 딱지로 도배되면 정작 두 종류를 받아 간 사람이 눈에 안 띈다. */
-  function verCell(g) {
+  function verCell(g, pcs) {
     var seen = {}, past = [];
     g.rows.forEach(function (r, i) {
       var k = r.edition + '|' + r.rhino + '|' + (r.version || '');
@@ -1644,10 +1729,12 @@
 
     var head = kindOf(g.last);
     // 최신판을 못 읽었으면(release=null) 딱지를 붙이지 않는다.
-    if (release && release.version && g.last.version && g.last.version !== release.version) {
+    // PC 체크인이 이어져 있으면 구판인지는 그 줄(지금 쓰는 판)이 말한다 — 페이지에서 받은 판은
+    // 그 뒤 새 버전 알림으로 바뀌었을 수 있다(2026-10-19 사용자 지적).
+    if (!pcs.length && release && release.version && g.last.version && g.last.version !== release.version) {
       head += ' <span class="tag old">구판</span>';
     }
-    return head + (past.length ? '<span class="past">그전에 ' + past.join(' · ') + '</span>' : '');
+    return head + (past.length ? '<span class="past">그전에 ' + past.join(' · ') + '</span>' : '') + pcLine(pcs);
   }
 
   function hhmm(ts) { return fmt(ts, true).slice(11); }
@@ -1662,27 +1749,39 @@
       if (q && hay.indexOf(q) === -1) { return; }
 
       var n = g.rows.length;
+      // 이 사람이 플러그인에 넣은 메일로 이어진 PC(5.4.7~)와 그 PC 가 스스로 받아 간 것
+      var pcs = checkinsWhere(function (r) { return r.link_email && r.link_email === g.key; });
+      var autos = autoDownloadsOf(pcs);
+      var total = n + autos.length;
 
-      html += '<tr class="person' + (n > 1 ? ' has-more' : '') + '">' +
+      html += '<tr class="person' + (total > 1 ? ' has-more' : '') + '">' +
         '<td class="when"><b>' + fmt(g.last.created_at) + '</b>' + hhmm(g.last.created_at) + '</td>' +
         '<td class="who"><b>' + esc(g.name || '-') + '</b>' +
           (g.company ? '<span>' + esc(g.company) + '</span>' : '') + '</td>' +
         '<td class="contact"><a href="mailto:' + esc(g.email) + '">' + esc(g.email) + '</a>' +
           (g.phone ? '<span>' + esc(g.phone) + '</span>' : '') + '</td>' +
-        '<td class="ver">' + verCell(g) + '</td>' +
-        '<td class="times">' + (n > 1
-          ? '<button class="more" type="button">' + n + '회 <i></i></button>'
+        '<td class="ver">' + verCell(g, pcs) + '</td>' +
+        '<td class="times">' + (total > 1
+          ? '<button class="more" type="button">' + n + '회' + (autos.length ? ' · 자동 ' + autos.length : '') + ' <i></i></button>'
           : '<span class="once">1회</span>') + '</td>' +
         '</tr>';
 
       // 펼침 줄은 미리 만들어 두고 숨긴다. 누를 때 새로 그리지 않으므로
       // 검색어가 걸린 상태에서 펼쳐도 줄이 어긋나지 않는다.
-      if (n > 1) {
+      // 자동 받기는 페이지 회차와 섞어 시간순으로 둔다 — 회차 번호는 페이지에서 누른 것만 센다.
+      if (total > 1) {
+        var items = g.rows.map(function (r, i) {
+          return { at: r.created_at, head: '<span class="n">' + (n - i) + '회</span>', kind: kindOf(r) };
+        }).concat(autos.map(function (d) {
+          return { at: d.created_at, head: '<span class="n auto">자동</span>',
+                   kind: kindOf({ edition: d.edition || '?', rhino: d.rhino || '?', version: d.version }) };
+        }));
+        items.sort(function (a, b) { return new Date(b.at) - new Date(a.at); });
         html += '<tr class="detail"><td></td><td colspan="4"><ul class="hist">' +
-          g.rows.map(function (r, i) {
-            return '<li><span class="n">' + (n - i) + '회</span>' +
-                   '<span class="t">' + fmt(r.created_at, true) + '</span>' +
-                   kindOf(r) +
+          items.map(function (it, i) {
+            return '<li>' + it.head +
+                   '<span class="t">' + fmt(it.at, true) + '</span>' +
+                   it.kind +
                    (i === 0 ? '<span class="last">최근</span>' : '') + '</li>';
           }).join('') + '</ul></td></tr>';
       }
