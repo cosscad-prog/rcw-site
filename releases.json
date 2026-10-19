@@ -3,6 +3,20 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.4.6",
+      "date": "2026-10-19",
+      "items": [
+        {
+          "ko": "<b>평가판 — 고침.</b><br><br>&bull; 평가 기간 중에 <b>메인보드 같은 PC 부품을 바꾸면 평가판이 \"다른 컴퓨터에서 생성된 라이선스\" 로 막히던 문제</b>를 고쳤습니다. 시작일과 남은 기간은 그대로 이어지고, 부품이 바뀐 것은 명령창에 한 줄로 알립니다.<br>&bull; 이제 평가판이 막히는 것은 <b>평가 기간이 끝났을 때</b>와 <b>PC 날짜가 평가 시작일보다 하루 넘게 이를 때</b>뿐입니다. 날짜가 이르면 시작일을 보여 주며 Windows 의 날짜와 시간을 맞추라고 알립니다.<br><br>★ 부품을 바꾸어 평가판이 막힌 PC 는 5.4.6 을 설치하면 남은 기간으로 다시 열립니다.",
+          "en": "<b>Trial - fixed.</b><br><br>&bull; <b>Replacing a PC part such as the motherboard during the trial blocked it as \"a license created on another computer\"</b> - fixed. The start date and the remaining days carry on, and the command line says in one line that the hardware changed.<br>&bull; The trial now stops only <b>when the trial period is over</b> or <b>when the PC date is more than a day earlier than the trial start date</b>. In that case it shows the start date and asks you to set the Windows date and time.<br><br>★ A PC whose trial was blocked after a part was replaced opens again with its remaining days once 5.4.6 is installed."
+        },
+        {
+          "ko": "<b>백패널 — Type F 를 더했습니다.</b><br><br>&bull; <b>뒤쪽(유리 반대쪽)에만 판이 있고 벽이 유리 쪽으로 서는 종류</b>입니다. Type A 를 앞뒤로 뒤집은 꼴입니다.<br>&bull; BpOpt 의 Back Panel 탭에서 <b>Type A 바로 아래 줄</b>에서 고릅니다. Panel = 벽 깊이(판 뒷면에서 벽 앞 끝까지), Insulation = 백패널 앞면에서 판 뒷면까지(판 포함)입니다.<br>&bull; Inside length 는 Type A 와 같이 0 이면 접기만 합니다. 단열재도 Type A 와 같은 식으로 들어갑니다. Type F 에는 아직 나사 구멍(Screw Holes)이 없습니다.",
+          "en": "<b>Back panels - Type F is added.</b><br><br>&bull; <b>A type with the sheet only at the back (away from the glass) and the walls standing toward the glass</b> - Type A turned front to back.<br>&bull; Choose it in the Back Panel tab of BpOpt, <b>on the row right under Type A</b>. Panel is the wall depth (from the back of the sheet to the front end of the walls), and Insulation is the depth from the front of the back panel to the back of the sheet (sheet included).<br>&bull; As in Type A, an Inside length of 0 means fold only, and the insulation is placed the same way as in Type A. Type F has no screw holes yet."
+        }
+      ]
+    },
+    {
       "version": "5.4.5",
       "date": "2026-10-15",
       "items": [
