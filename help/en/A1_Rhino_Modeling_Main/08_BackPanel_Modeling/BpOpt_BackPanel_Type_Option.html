@@ -111,11 +111,11 @@
   </tr>
   <tr>
     <td>Panel Thk.</td>
-    <td>Enter the thickness of the BackPanel outer sheet or the bend-shape reference thickness. When not using Type B All Outside, the flange length must equal the insulation thickness.</td>
+    <td>Enter the thickness of the BackPanel outer sheet or the bend-shape reference thickness. When not using Type B All Outside, the flange length must equal the insulation thickness. For Type F it is the <strong>wall depth</strong> (from the back of the sheet to the front end of the walls).</td>
   </tr>
   <tr>
     <td>Insulation Thk.</td>
-    <td>Enter the internal insulation thickness of the BackPanel.</td>
+    <td>Enter the internal insulation thickness of the BackPanel. <strong>The value includes the sheet thickness</strong> - the insulation itself is this value minus two sheet thicknesses (for Type C, the sheet thickness and the 2nd Thickness). For Type F it is also the depth from the front of the BackPanel to the back of the sheet.</td>
   </tr>
   <tr>
     <td>Type A, B, D, E</td>
@@ -126,8 +126,16 @@
       <strong>Type E</strong> - the top and bottom sides return inward, the left and right sides return outward.</td>
   </tr>
   <tr>
+    <td>Type F</td>
+    <td>A type with a sheet only at the back (the room side) - Type A turned front to back. The sheet face lies on the back of the BackPanel (Dist from Glass + Insulation Thk. from the glass), and the walls on all four sides fold toward the glass by <strong>Panel Thk.</strong> (wall depth = Panel Thk., sheet included). There is no sheet in front.<br>
+      Panel Thk. must be more than the sheet thickness and not more than Insulation Thk. Otherwise no panel is made and the command line says why.<br>
+      <strong>Inside length</strong> - the wing folded back from the front end of the wall toward the middle of the panel. As in Type A, <strong>0 means fold only</strong> with no wing (no wing either when it is twice the sheet thickness or less). Choosing Type F puts 0 here.<br>
+      The insulation is the same as in Type A: it lies from Dist from Glass + sheet thickness to Dist from Glass + Insulation Thk. - sheet thickness (the open front is left empty by one sheet thickness), one sheet thickness in from the panel edge on all four sides (the inside of the walls). When Insulation Thk. is more than Panel Thk., it reaches in front of the walls at the same width. There are no outside wings and no screw holes.<br>
+      The type list stores it with the Inside length only, such as <code>F0</code> (Inside 0) or <code>F15</code> (Inside 15).</td>
+  </tr>
+  <tr>
     <td>Inside length / Outside length</td>
-    <td>The return lengths for the inward and outward folds. Type A uses Inside length, Type B uses Outside length, and Type D and E use both. The defaults are 15 for Inside and 10 for Outside.</td>
+    <td>The return lengths for the inward and outward folds. Type A and F use Inside length, Type B uses Outside length, and Type D and E use both (the two fields are shared by Type A, B, D, E and F). The defaults are 15 for Inside and 10 for Outside.</td>
   </tr>
   <tr>
     <td>Type C</td>
@@ -139,14 +147,14 @@
   </tr>
   <tr>
     <td>Screw Holes</td>
-    <td>With <strong>Make Screw Holes</strong> checked, screw holes are made in the outside wings of Type B, D and E (not in Type A or C).<br>
+    <td>With <strong>Make Screw Holes</strong> checked, screw holes are made in the outside wings of Type B, D and E (not in Type A, C or F).<br>
       <strong>Diameter</strong> - the hole diameter. <strong>Hole Dist</strong> - the distance from the fold line to the hole center.<br>
       <strong>Fr. Start, Pitch, Fr. End, Count</strong> - the values that place the holes along a side, by the same rule as the holes of the sheet command <code>Sht</code>. With a Pitch and Count 0, the space between the two end margins is divided evenly without exceeding the pitch.<br>
       The holes are drawn in the unfold of <code>BpFd</code> as well. A hole that falls where the wing is cut away is not made, and the number of holes made is reported.</td>
   </tr>
   <tr>
     <td>Type picture</td>
-    <td>The picture on the right follows the chosen type and whether holes are on. The middle is the front view, the bottom is the section of the left and right sides, and the right is the section of the top and bottom sides. A side folded inward shows as a dashed line in the front view; a side folded outward shows as a wing outside it.</td>
+    <td>The picture on the right follows the chosen type and whether holes are on. The middle is the front view, the bottom is the section of the left and right sides, and the right is the section of the top and bottom sides. A side folded inward shows as a dashed line in the front view; a side folded outward shows as a wing outside it. For Type F the sections show the sheet at the end away from the glass with the walls standing toward the glass; the dashed line is the front of the BackPanel.</td>
   </tr>
 </tbody></table>
 <div class="note">
