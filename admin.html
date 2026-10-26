@@ -158,10 +158,11 @@
   /* 표가 넘치면 페이지 전체가 아니라 표 안에서만 가로로 밀린다 */
   .tscroll { overflow-x:auto; border-radius:12px; }
   .tscroll table { min-width:1080px; }
-  /* 고객 표는 열이 11개다. 기본 여백 그대로면 [고치기] 가 화면 밖으로 밀린다 */
-  #view-cust th, #view-cust td { padding:10px 8px; }
-  #view-cust th:first-child, #view-cust td:first-child { padding-left:12px; }
-  #view-cust th:last-child,  #view-cust td:last-child  { padding-right:12px; }
+  /* 고객 표는 열이 11개다. 기본 여백 그대로면 [고치기] 가 화면 밖으로 밀린다.
+     좌우 8 px(바깥 12) 일 때 1280 폭에서 표 1181 > 틀 1144 라 [고치기] 가 25 px 걸쳤다 → 6 px(바깥 10) */
+  #view-cust th, #view-cust td { padding:10px 6px; }
+  #view-cust th:first-child, #view-cust td:first-child { padding-left:10px; }
+  #view-cust th:last-child,  #view-cust td:last-child  { padding-right:10px; }
   /* 셀 아래에 덧붙는 보조 한 줄 — 이메일, 통화 메모에 함께 쓴다 */
   .sub { display:block; margin-top:3px; color:var(--muted); font-size:11.5px;
          max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
