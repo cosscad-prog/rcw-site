@@ -3,6 +3,28 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.4.8",
+      "date": "2026-10-26",
+      "items": [
+        {
+          "ko": "<b>유리 면 — 새 명령 GFace.</b><br><br>&bull; <b>GFace</b> 는 단면에 그은 유리선(G_Center1 ~ G_Center5) 자리에 유리 면(Glass_XX1 ~ Glass_XX5)을 만듭니다. GS1 ~ GS9 가 이 면을 골라 유리를 실제 자리에 만듭니다.<br>&bull; <b>Gmd</b> 는 지금처럼 칸 면(Glass_XX)을 만듭니다. 백패널 · 벤트 · 그릴 · 판재는 이 면을 씁니다.<br>&bull; vent 처럼 유리선이 붙임선(ATC) 단면에 있어도 찾습니다.",
+          "en": "<b>Glass faces - new command GFace.</b><br><br>&bull; <b>GFace</b> creates glass faces (Glass_XX1 - Glass_XX5) at the glass lines drawn in the sections (G_Center1 - G_Center5). GS1 - GS9 turn these faces into glass at the real position.<br>&bull; <b>Gmd</b> still creates the bay faces (Glass_XX) used by back panels, vents, grills and sheets.<br>&bull; Glass lines in attach-line (ATC) sections, as in vents, are found too."
+        },
+        {
+          "ko": "<b>유닛 모델링 — 고침.</b><br><br>&bull; 45° 로 놓인 모서리 멀리언에서 트랜섬 끝이 멀리언 중심선 너머로 남던 것을 고쳤습니다.<br>&bull; 붙임선(ATC) 단면의 Subtract 도 멀리언 · 트랜섬을 깎습니다.<br>&bull; Subtract · milling 선에 Length 를 위 · 아래 모두 넣으면 양 끝을 한 토막씩 깎습니다(전에는 UMD 가 멈췄습니다). Symmetric · 등간격과 함께 쓰면 Pname 창이 알리고 저장을 막습니다.<br>&bull; Front · Right 평면에서 그린 단면도 맞게 모델링합니다.<br>&bull; SSP 가 단면 group 안에서 다른 평면에 놓인 객체를 알리고, '같은 이름 · 다른 단면' 창은 상대를 유닛 이름으로 적습니다.",
+          "en": "<b>Unit modeling - fixes.</b><br><br>&bull; Fixed transom ends left past the mullion centre line at a corner mullion set at 45 degrees.<br>&bull; Subtract lines in attach-line (ATC) sections now cut mullions and transoms too.<br>&bull; A Subtract or milling line with Length at both ends now cuts one piece at each end (UMD used to stop). Combined with Symmetric or equal spacing, the Pname window warns and blocks saving.<br>&bull; Sections drawn on the Front or Right plane are modeled correctly.<br>&bull; SSP reports objects in a section group that lie off its plane, and the 'same name, different section' window names the other unit."
+        },
+        {
+          "ko": "<b>vent — F45 맞춤 고침.</b><br><br>&bull; 붙임선(ATC) 부재에도 F45(45° 맞춤)가 적용됩니다.<br>&bull; 45° 기준점이 vent 틀의 바깥 모서리로 맞습니다.<br>&bull; 짝이 붙임선 단면에 있을 때 트랜섬 vent 부재가 알림 없이 사라지던 것을 고쳤습니다.",
+          "en": "<b>Vents - F45 mitre fixes.</b><br><br>&bull; F45 (45-degree mitre) now applies to attach-line (ATC) members.<br>&bull; The 45-degree reference point is the outer corner of the vent frame.<br>&bull; Fixed transom vent members disappearing without notice when their partner was in an attach-line section."
+        },
+        {
+          "ko": "<b>판재 · 백패널 · 레이어.</b><br><br>&bull; 판재 칸 면 명령 <b>ShMD 의 이름이 ShFace</b> 로 바뀌었습니다(옛 이름은 없습니다).<br>&bull; 기운 변이 있는 백패널 Type D · E 와 판재에서 바깥 날개를 판 면과 나란히 접어, 모델이 한 장으로 만들어집니다.<br>&bull; 레이어 명령 <b>SC1 ~ SC5</b>(S_Center1 ~ 5) · <b>ATC6 ~ ATC9</b>(AT_Center6 ~ 9)를 더했습니다.<br>&bull; FSC 를 실행하면 명령창에 고르라는 안내가 나옵니다.",
+          "en": "<b>Sheets, back panels and layers.</b><br><br>&bull; The sheet bay face command <b>ShMD is renamed ShFace</b> (the old name is gone).<br>&bull; On back panel Types D and E and sheets with a slanted side, the outer wing now folds parallel to the panel face, so the model is built as one piece.<br>&bull; Added layer commands <b>SC1 - SC5</b> (S_Center1 - 5) and <b>ATC6 - ATC9</b> (AT_Center6 - 9).<br>&bull; FSC now shows a selection prompt in the command line."
+        }
+      ]
+    },
+    {
       "version": "5.4.7",
       "date": "2026-10-20",
       "items": [
