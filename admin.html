@@ -180,9 +180,11 @@
   .plan.warn { color:#b4560f; }                         /* 청구일을 안 적어 둔 줄 */
   .dim { color:var(--muted); font-size:12px; }
 
-  /* 내려받은 Rhino 버전. 태그가 셀 맨 앞에 오므로 여백을 오른쪽으로 돌린다 */
+  /* 내려받은 판. 둘 이상이면 세로로 쌓는다 — 가로로 이으면(RCW5 · Rhino 8 · Rhino 7) 이 칸이 188 px 로
+     넓어져 표가 틀보다 넓어지고 맨 오른쪽 코드 칸이 잘렸다. 배지 너비는 글자만큼(max-content). */
   td.inst { white-space:nowrap; }
-  td.inst .tag { margin:0 5px 0 0; }
+  td.inst .tag { display:block; width:max-content; margin:0 0 3px; }
+  td.inst .tag:last-child { margin-bottom:0; }
   .tag.r8 { background:var(--sky);   color:var(--blue-dark); }
   .tag.r7 { background:#eef2f5;      color:var(--muted); }
   td.inst .none { color:var(--muted); }
@@ -314,7 +316,7 @@
   <p class="note">
     <b>내려받음</b> 은 고객 페이지에서 <b>어느 Rhino 용 설치 파일을 받아 갔는지</b>입니다
     (파일 이름의 <code>Rhino7</code>/<code>Rhino8</code>). 두 개를 다 받았으면 둘 다 표시되고,
-    최근에 받은 쪽이 앞에 옵니다. <b>받은 기록이지 설치 결과는 아닙니다</b> — 카톡·메일로 직접
+    최근에 받은 쪽이 위에 옵니다. <b>받은 기록이지 설치 결과는 아닙니다</b> — 카톡·메일로 직접
     보내드린 분은 <span class="none">—</span> 로 남습니다.
     <b>[고치기]</b> 로는 회사·담당자·연락처·이메일·메모만 바꿉니다. 코드·에디션·기기코드·청구일은
     라이선스 장부 값이라 이 화면에서 열리지 않습니다.
