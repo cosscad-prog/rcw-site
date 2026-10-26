@@ -29,7 +29,7 @@
 <p>Numbers the sheets made by <strong>Sht</strong> (<code>SH-001</code>, <code>SH-002</code>, …). <strong>Identical sheets get the same number</strong>, and the number is shown as text on each sheet.</p>
 <h2>Purpose</h2>
 <p>Use it to group identical sheets under one number for counting, and as the basis of the quantity list (ShList) and the fabrication drawings (ShTable, ShFd).</p>
-<div class="note">Workflow: WVector → SSP → ShMD → Sht → <strong>ShNo</strong> → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<div class="note">Workflow: WVector → SSP → ShFace → Sht → <strong>ShNo</strong> → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
 <h2>How to Use</h2>
 <ol class="step-list">
   <li>Type <strong>ShNo</strong> in the Rhino command line and press Enter.</li>

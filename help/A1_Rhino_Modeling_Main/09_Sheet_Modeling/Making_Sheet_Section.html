@@ -26,7 +26,7 @@
 
 <h1>Making Sheet Section &nbsp;—&nbsp; 판재용 단면 만들기</h1>
 <p>판재를 만들려면 판재가 붙는 <strong>단면(Section) group 안에 <code>S_Center1</code> 레이어의 선</strong>이 있어야 합니다. 이 선 하나가 판재의 자리와 앞면, 접는 깊이를 정합니다. 이 문서는 선을 어떻게 그어야 하는지와, 그렇게 그으면 어떤 판재를 만들 수 있는지를 설명합니다.</p>
-<div class="note">작업 순서: 단면에 <code>S_Center1</code> 선 긋기 → SSP(단면 등록) → ShMD → Sht → ShNo → ShList → ShTable → ShFd</div>
+<div class="note">작업 순서: 단면에 <code>S_Center1</code> 선 긋기 → SSP(단면 등록) → ShFace → Sht → ShNo → ShList → ShTable → ShFd</div>
 <h2>선 하나가 정하는 것</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
@@ -52,7 +52,7 @@
     <col style="width: 78%;">
   </colgroup>
   <tbody><tr><th>항목</th><th>설명</th></tr>
-  <tr><td>레이어</td><td>반드시 <code>S_Center1</code> 레이어. 유리용 <code>G_Center1</code> 선과 같은 방식으로 긋습니다.</td></tr>
+  <tr><td>레이어</td><td>반드시 <code>S_Center1</code> 레이어. <strong>SC1</strong> 명령으로 이 레이어를 만들 수 있습니다. 유리용 <code>G_Center1</code> 선과 같은 방식으로 긋습니다.</td></tr>
   <tr><td>단면 group</td><td>선을 그 단면의 group 에 넣습니다. group 밖의 선은 읽지 않습니다.</td></tr>
   <tr><td>방향</td><td>선에는 방향이 있습니다. <strong>앞면(바깥)에서 시작해 안쪽으로</strong>, 판 면에 직각인 방향(유리선과 같은 방향)으로 곧게 긋습니다. 시작점이 앞면이고, 끝점까지의 길이가 깊이입니다.</td></tr>
   <tr><td>칸마다 한 줄</td><td>단면 양쪽 칸에 판재가 붙으면 <strong>칸마다 한 줄씩 두 줄</strong>을 긋습니다. 한쪽 칸에만 붙는 끝 부재는 한 줄입니다. 트랜섬도 위 칸 · 아래 칸에 각각 긋습니다.</td></tr>
@@ -72,7 +72,7 @@
     <col style="width: 60%;">
   </colgroup>
   <tbody><tr><th>경우</th><th>결과</th></tr>
-  <tr><td>칸의 모든 변에 그 칸 쪽 <code>S_Center1</code> 선이 있다</td><td>판재 칸 — ShMD 가 판 면(<code>Sheet_XX</code>)을 만듭니다.</td></tr>
+  <tr><td>칸의 모든 변에 그 칸 쪽 <code>S_Center1</code> 선이 있다</td><td>판재 칸 — ShFace 가 판 면(<code>Sheet_XX</code>)을 만듭니다.</td></tr>
   <tr><td>선이 하나도 없다</td><td>유리 칸으로 보고 건너뜁니다.</td></tr>
   <tr><td>일부 변에만 있다</td><td>만들지 않고 빠진 변을 이름으로 알립니다. 그 단면에 선을 더 긋습니다.</td></tr>
 </tbody></table>
@@ -123,7 +123,7 @@
   </colgroup>
   <tbody><tr><th>명령어</th><th>설명</th></tr>
   <tr><td><strong>SSP</strong></td><td>단면 등록 — 선을 넣은 뒤 실행합니다.</td></tr>
-  <tr><td><strong>ShMD</strong></td><td>판재 칸 면 만들기 — 선이 있는 칸에 판 면을 만듭니다.</td></tr>
+  <tr><td><strong>ShFace</strong></td><td>판재 칸 면 만들기 — 선이 있는 칸에 판 면을 만듭니다.</td></tr>
   <tr><td><strong>Sht</strong></td><td>판재 모델링 — 판 면에서 접힌 판재를 만듭니다.</td></tr>
 </tbody></table>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>

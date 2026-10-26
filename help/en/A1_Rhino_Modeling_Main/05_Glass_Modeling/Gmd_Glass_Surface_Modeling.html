@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  <title>Gmd - Glass Surface Modeling</title>
+  <title>Gmd - Bay Surface Modeling</title>
   <style>
     body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
     h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
@@ -15,65 +15,55 @@
     .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
     .step-list { padding-left:20px; }
     .step-list li { margin-bottom:6px; }
-</style>
-<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+  </style>
 <style id="rcw-editor-block-style">
 .note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
 .warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
 </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
 </head>
 <body>
 
-<h1>Gmd &nbsp;—&nbsp; Glass Surface Modeling</h1>
+<h1>Gmd &nbsp;—&nbsp; Bay Surface Modeling</h1>
 <p><span class="cmd-box">Gmd</span></p>
-<p>Automatically creates glass surfaces based on the selected Brep (solid or surface) face. Surfaces are placed on the Glass layer using the glass type information set in the <strong>GsOpt</strong> panel.</p>
+<p>For each bay of a wireframe unit, creates one face on the plane formed by the mullion and transom lines (the member centreline position). The faces are placed on the <code>Glass_XX</code> layer.</p>
 
 <h2>Purpose</h2>
-<p>Used to automatically generate glass surfaces based on curtainwall faces. Applies glass type information configured in GsOpt to quickly populate the Glass layer, making this a key step in constructing the glass model.</p>
+<p>The preparation step for <strong>commands that start from a bay face</strong> — back panel, vent, grill and sheet. Those commands run on the selected <code>Glass_XX</code> faces.<br>
+For glass, use <strong>GFace</strong>, which places the face at the glass line drawn in the sections. In a unit that mixes glass bays with back panel or sheet bays, use GFace for the glass bays and Gmd for the rest.</p>
+
+<h2>Preparation</h2>
+<table class="desc-table"><thead><tr><th>Item</th><th>Description</th></tr></thead><tbody>
+<tr><td>Wireframe</td><td>The mullion (<code>M_Center</code>) and transom (<code>T_Center</code>) lines must be in one group. A group with no M or T line is treated as not selected.</td></tr>
+</tbody></table>
 
 <h2>How to Use</h2>
 <ol class="step-list">
-  <li>First select the glass type to apply in the <strong>GsOpt</strong> panel.</li>
-  <li>Type <strong>Gmd</strong> in the Rhino command line and press Enter.</li>
-  <li>Select the Brep face (surface) on which to create glass.</li>
-  <li>Optionally choose the split method: <strong>Distance</strong> (distance-based) or <strong>Section</strong> (section-based).</li>
-  <li>Press Enter to run — surfaces are created on the Glass layer.</li>
+<li>Type <code>Gmd</code> in the Rhino command line and press Enter.</li>
+<li>Select the wireframe unit (group) and press Enter. Several units can be selected together.</li>
+<li>A face is created on the <code>Glass_XX</code> layer for each bay, and the number of faces is shown in the command line.</li>
 </ol>
+
 <h2>Example</h2>
 <video src="../../../img/Gmd_demo.mp4" autoplay muted loop playsinline aria-label="Gmd operation example" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;"></video>
 
-<h2>Options</h2>
-<table class="desc-table">
-  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
-  <tbody><tr><th>Option</th><th>Description</th></tr>
-  <tr><td><strong>Distance</strong></td><td>Splits glass faces based on the distance between Mullions.</td></tr>
-  <tr><td><strong>Section</strong></td><td>Splits glass faces based on Section data.</td></tr>
-</tbody></table>
-<h2>Result</h2>
-<table class="desc-table">
-  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
-  <tbody><tr><th>Item</th><th>Description</th></tr>
-  <tr><td>Layer</td><td>Surfaces are created on the <code>Glass_XX</code> layer. (XX = glass type number)</td></tr>
-  <tr><td>Surface</td><td>Surfaces split to match Mullions are placed based on the selected Brep face.</td></tr>
-</tbody></table>
-<h2>Related Commands</h2>
-<table class="desc-table">
-  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
-  <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>GsOpt</strong></td><td>Glass Type Option Panel — set the glass type before running.</td></tr>
-  <tr><td><strong>GMDC</strong></td><td>Clear glass surfaces — deletes all Glass_XX layer surfaces.</td></tr>
-  <tr><td><strong>GsNo</strong></td><td>Glass numbering — automatically places numbers on the created glass surfaces.</td></tr>
-  <tr><td><strong>GRV</strong></td><td>Glass transparency toggle — toggles Glass layer objects to transparent.</td></tr>
+<h2>Rules</h2>
+<table class="desc-table"><thead><tr><th>Item</th><th>Description</th></tr></thead><tbody>
+<tr><td>Finding bays</td><td>Bays are found among lines lying in the same plane. Bays with five or more sides and units bent into several planes get one face per bay.</td></tr>
+<tr><td>Skipped bays</td><td>A closed loop not bounded by both mullions and transoms is skipped, and the count is reported in the command line. Lines that share no plane with other lines are counted as well.</td></tr>
+<tr><td>Running again</td><td>Gmd does not delete existing faces. To make them again, clear them first with GMDC.</td></tr>
+<tr><td>Glass with GS</td><td>GS1 – GS9 also accept <code>Glass_XX</code> faces. If the same bay's <code>Glass_XX1</code> – <code>Glass_XX5</code> faces (GFace) are selected together, the <code>Glass_XX</code> face is skipped so the glass is not made twice.</td></tr>
 </tbody></table>
 
+<h2>Related Commands</h2>
+<table class="desc-table"><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody>
+<tr><td>GFace</td><td>Glass position surface — creates <code>Glass_XX1</code> – <code>Glass_XX5</code> at the glass lines in the sections.</td></tr>
+<tr><td>GMDC</td><td>Clear glass surfaces — deletes <code>Glass_XX</code> and <code>Glass_XX1</code> – <code>Glass_XX5</code> faces.</td></tr>
+<tr><td>ShFace</td><td>Sheet bay surface — creates sheet faces in bays that have <code>S_Center1</code> lines.</td></tr>
+<tr><td>GS1 – GS9</td><td>Glass modeling — creates glass from the selected faces.</td></tr>
+<tr><td>GsOpt</td><td>Glass type options — sets glass thickness and more.</td></tr>
+</tbody></table>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-

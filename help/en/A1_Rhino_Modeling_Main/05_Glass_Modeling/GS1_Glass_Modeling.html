@@ -65,7 +65,7 @@
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 45%; min-width:220px; max-width:45%;">
     <img src="../../../img/GS1_modeling_step.png" alt="GS1 glass face selection" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
-    <figcaption>Selecting glass face created by Gmd</figcaption>
+    <figcaption>Selecting a face made by GFace (or GMD)</figcaption>
   </figure>
   <figure style="margin:0; flex:0 1 25%; min-width:220px; max-width:25%;">
     <img src="../../../img/GS1_modeling_result.png" alt="GS1 glass solid result" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
@@ -90,7 +90,7 @@
     <col style="width: 80%;">
   </colgroup>
   <tbody><tr><th>Item</th><th>Description</th></tr>
-  <tr><td>Input Object</td><td>Select the Glass Face created by the <strong>Gmd</strong> command.</td></tr>
+  <tr><td>Input Object</td><td>Select the <code>Glass_XX1</code> – <code>Glass_XX5</code> faces made by <strong>GFace</strong>, or the <code>Glass_XX</code> faces made by <strong>GMD</strong>.</td></tr>
   <tr><td>Section Selection</td><td>The relevant Section must be selected using <strong>SSP</strong>.</td></tr>
   <tr><td>Reference Line</td><td>A reference line on the <code>G_Center1</code> layer must exist inside the selected Section.</td></tr>
 </tbody></table>
@@ -114,7 +114,7 @@
   <tr><td>Layer</td><td>Glass solid objects are created on the <code>Glass_XX</code> layer.</td></tr>
   <tr><td>Shape</td><td>A 3D solid extruded to the thickness set in GsOpt is created based on the selected Brep face.</td></tr>
 </tbody></table>
-<h2>Gmd vs GS1~GS9</h2>
+<h2>GFace · GMD vs GS1~GS9</h2>
 <table class="desc-table">
   <colgroup>
     <col style="width: 20%;">
@@ -122,7 +122,7 @@
   </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
   <tr><td><strong>GS1~GS9</strong></td><td>Creates a glass <strong>solid (3D)</strong>. A volumetric model with thickness.</td></tr>
-  <tr><td><strong>Gmd</strong></td><td>Creates a glass <strong>surface (2D)</strong>. A lightweight face-based model.</td></tr>
+  <tr><td><strong>GFace · GMD</strong></td><td>Create <strong>faces (2D)</strong> only. GS1~GS9 turn the selected faces into glass solids.</td></tr>
 </tbody></table>
 <h2>Related Commands</h2>
 <table class="desc-table">

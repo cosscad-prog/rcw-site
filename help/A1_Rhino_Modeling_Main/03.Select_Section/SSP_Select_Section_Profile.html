@@ -63,6 +63,17 @@
   <tr><td>옵션</td><td><strong>Check_Error</strong> On일 때 Profile_ID, MnT_ID, Center1 Curve 등 오류를 검사합니다.</td></tr>
   <tr><td>오류 조건</td><td>Unit_No 또는 Center1 Curve가 없으면 명령창에 오류 메시지가 표시될 수 있습니다.</td></tr>
 </tbody></table>
+<h2>단면 group 을 그리는 평면 — Top · Front · Right</h2>
+<p>단면 group 은 <b>Top · Front · Right</b> 어느 평면에서 그려도 됩니다. 압출 방향은 단면(Surface)의 법선으로 정해지므로, Front 에서 wireframe 과 함께 보면서 단면을 그려도 UMD 가 맞게 모델링합니다. 결과는 같은 단면을 Top 에서 <b>똑같이 보이게</b> 그린 것과 같습니다.</p>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>그린 평면</th><th>압출 방향(단면에서 보는 사람 쪽)</th></tr>
+  <tr><td>Top</td><td>+Z</td></tr>
+  <tr><td>Front</td><td>−Y</td></tr>
+  <tr><td>Right</td><td>+X</td></tr>
+</tbody></table>
+<p>group 안의 Surface · Polyline · Line · Text · Block 은 모두 <b>같은 평면</b>에 있어야 합니다(Block 은 삽입점 기준). SSP 는 단면들의 평면에서 문서의 기본 허용오차(Absolute tolerance)보다 멀리 떨어진 객체를 찾아 경고창에 <b>평면 밖</b> 으로 알리고, 그 자리에 <code>Off_Plane</code> 표시를 세웁니다. 등록은 멈추지 않습니다. 표시는 SSP 를 다시 실행하면 지워집니다.</p>
+<div class="note"><strong>참고:</strong> Center1 · Center0 레이어의 선은 단면에 수직이라 이 검사에서 빠집니다. 기울어진 평면(Top · Front · Right 와 나란하지 않은 평면)에 그린 단면은 아직 확인하지 않았습니다.</div>
 <h2>복사한 group 자동 수선</h2>
 <p>단면 group 을 복사하면 단면 data 도 그대로 따라와, 블록·Milling 곡선·합성 태그가 <b>원본 group 의 것</b>을 계속 가리킵니다. 그대로 모델링하면 복사본의 구멍·절삭이 원본 자리에 생깁니다. SSP 는 선택한 group 마다 이것을 찾아 <b>group 안의 짝으로 바꿉니다.</b> 바꾼 것은 명령창에 한 줄씩 남습니다.</p>
 <table class="desc-table">

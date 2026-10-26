@@ -26,7 +26,7 @@
 
 <h1>Making Sheet Section</h1>
 <p>To make a sheet panel, the <strong>section group that holds the sheet must contain a line on the <code>S_Center1</code> layer</strong>. That single line sets the position of the sheet, its front face, and the fold depth. This page explains how to draw the line and which sheets can be made from it.</p>
-<div class="note">Workflow: draw the <code>S_Center1</code> line in the section → SSP (register sections) → ShMD → Sht → ShNo → ShList → ShTable → ShFd</div>
+<div class="note">Workflow: draw the <code>S_Center1</code> line in the section → SSP (register sections) → ShFace → Sht → ShNo → ShList → ShTable → ShFd</div>
 <h2>What One Line Defines</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 60%; min-width:220px; max-width:60%;">
@@ -52,7 +52,7 @@
     <col style="width: 78%;">
   </colgroup>
   <tbody><tr><th>Item</th><th>Description</th></tr>
-  <tr><td>Layer</td><td>Must be the <code>S_Center1</code> layer. Draw it the same way as the <code>G_Center1</code> line for glass.</td></tr>
+  <tr><td>Layer</td><td>Must be the <code>S_Center1</code> layer. The <strong>SC1</strong> command creates this layer. Draw it the same way as the <code>G_Center1</code> line for glass.</td></tr>
   <tr><td>Section group</td><td>Add the line to the group of that section. Lines outside the group are not read.</td></tr>
   <tr><td>Direction</td><td>The line has a direction. Draw it <strong>from the front (outside) toward the inside</strong>, straight and perpendicular to the panel face (the same direction as the glass line). The start point is the front face, and the length to the end point is the depth.</td></tr>
   <tr><td>One line per bay</td><td>If the section has a sheet on both sides, draw <strong>two lines, one for each bay</strong>. An end member with a sheet on one side needs one line. Do the same for a transom with bays above and below.</td></tr>
@@ -72,7 +72,7 @@
     <col style="width: 60%;">
   </colgroup>
   <tbody><tr><th>Case</th><th>Result</th></tr>
-  <tr><td>Every side of the bay has an <code>S_Center1</code> line on that bay side</td><td>Sheet bay — ShMD creates the panel face (<code>Sheet_XX</code>).</td></tr>
+  <tr><td>Every side of the bay has an <code>S_Center1</code> line on that bay side</td><td>Sheet bay — ShFace creates the panel face (<code>Sheet_XX</code>).</td></tr>
   <tr><td>No line at all</td><td>Treated as a glass bay and skipped.</td></tr>
   <tr><td>Line on some sides only</td><td>Nothing is made and the missing sides are reported by name. Add the line to those sections.</td></tr>
 </tbody></table>
@@ -123,7 +123,7 @@
   </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
   <tr><td><strong>SSP</strong></td><td>Section registration — run it after adding the line.</td></tr>
-  <tr><td><strong>ShMD</strong></td><td>Sheet bay surface — creates panel faces in the bays that have the line.</td></tr>
+  <tr><td><strong>ShFace</strong></td><td>Sheet bay surface — creates panel faces in the bays that have the line.</td></tr>
   <tr><td><strong>Sht</strong></td><td>Sheet modeling — creates folded sheets from the panel faces.</td></tr>
 </tbody></table>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>

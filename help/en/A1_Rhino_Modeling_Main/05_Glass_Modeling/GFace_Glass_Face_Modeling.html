@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>GFace - Glass Position Surface</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>GFace &nbsp;—&nbsp; Glass Position Surface</h1>
+<p><span class="cmd-box">GFace</span></p>
+<p>For each bay of a wireframe unit, creates a face at the <strong>position where the glass actually sits</strong>, using the glass lines drawn in the sections.<br><code>G_Center1</code> line → <code>Glass_XX1</code> face, <code>G_Center2</code> line → <code>Glass_XX2</code> face … <code>G_Center5</code> line → <code>Glass_XX5</code> face (up to five glass positions).</p>
+<h2>Purpose</h2>
+<p>Use it to prepare the front faces of the glass before running <strong>GS1 ~ GS9</strong>. <strong>GMD</strong> makes <code>Glass_XX</code>, the bay face on the wireframe plane (member center lines), which back panels, vents, grills and sheets use. The faces made by GFace match the size and depth position of the glass.</p>
+<div class="note">Workflow: WVector → SSP → <strong>GFace</strong> → GS1 ~ GS9 → GsNo → GsList → GsTable → GsFd<br>If a unit mixes glass bays with back panel or sheet bays, use both: GFace for the glass bays and GMD for the others.</div>
+<h2>Preparation</h2>
+<p>For how to draw the glass line, see <a href="Making_Glass_Section.html">Making Glass Section</a>.</p>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td><code>G_Center1</code> line in the section</td><td>In every section (mullion or transom) that holds glass, draw a line on the <code>G_Center1</code> layer and add it to the section group.<br>Line position = edge of the glass, start point = front face of the glass. The rule is the same as the <code>S_Center1</code> line for sheets.</td></tr>
+  <tr><td><code>G_Center2</code> ~ <code>G_Center5</code> lines in the section</td><td>Draw them only in sections that have a second to fifth glass position (make the layers with <strong>GC2 ~ GC5</strong>). Without the line, no face of that number (<code>Glass_XX2</code> ~ <code>Glass_XX5</code>) is made and nothing is reported.</td></tr>
+  <tr><td>Sections with glass on both sides</td><td>For a middle mullion with glass on both sides, draw two lines, one for each bay. Do the same for a transom with glass above and below.</td></tr>
+  <tr><td>Section registration</td><td>After adding the lines, register the sections again with <strong>SSP</strong>. GFace reads the registered sections, so lines added after registration are used only after SSP is run again.</td></tr>
+  <tr><td>Wireframe</td><td>The mullion and transom lines must be one group and <strong>WVector</strong> must have been run.</td></tr>
+</tbody></table>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>GFace</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the wireframe unit (mullion and transom lines) and press Enter.</li>
+  <li>A face is created on the <code>Glass_XX1</code> (and <code>Glass_XX2</code> ~ <code>Glass_XX5</code>) layer in every bay whose sides all have a glass line on that bay side.</li>
+  <li>Run <strong>GS1 ~ GS9</strong> next and pick the faces.</li>
+</ol>
+<h2>Rules</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Glass bay</td><td>The sections on <strong>all sides</strong> of the bay must have a glass line on that bay side. If even one side is missing, no face is made.</td></tr>
+  <tr><td>Bays without lines</td><td>Treated as back panel or sheet bays and skipped. At the end the count is reported ("M of N bay(s) got no glass face"). Use <strong>GMD</strong> to make <code>Glass_XX</code> for those bays.</td></tr>
+  <tr><td>Lines on some sides only</td><td>No face is made, and the sides missing the line are reported in the command line. Add the line to that section and run SSP again.</td></tr>
+  <tr><td>Sections not registered</td><td>No face is made, and you are asked to run SSP first.</td></tr>
+  <tr><td>Running again</td><td>A bay that already has a face at the same position (within 1 mm) on the same layer does not get a second one.</td></tr>
+  <tr><td><code>Glass_XX</code></td><td>GFace does not leave <code>Glass_XX</code>. It is used briefly to find the bays and then deleted.</td></tr>
+  <tr><td>Making glass with GS</td><td>Pick <code>Glass_XX1</code> ~ <code>Glass_XX5</code> faces and the glass is made at that position; the used face is deleted. The thickness comes from the glass type in <strong>GsOpt</strong>.<br>If the <code>Glass_XX</code> of the same bay is picked too, it is skipped so the glass is not made twice.</td></tr>
+  <tr><td>Clearing</td><td><strong>GMDC</strong> deletes <code>Glass_XX1</code> ~ <code>Glass_XX5</code> faces together with <code>Glass_XX</code>.</td></tr>
+</tbody></table>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 22%;">
+    <col style="width: 78%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>GS1 ~ GS9</strong></td><td>Glass modeling — pick the faces made by GFace to make the glass.</td></tr>
+  <tr><td><strong>GMD</strong></td><td>Bay surface — makes <code>Glass_XX</code> on the wireframe plane, for back panel, vent, grill and sheet bays.</td></tr>
+  <tr><td><strong>ShFace</strong></td><td>Sheet bay surface — makes panel faces the same way in bays with an <code>S_Center1</code> line.</td></tr>
+  <tr><td><strong>SSP</strong></td><td>Section registration — run it after adding the glass lines.</td></tr>
+  <tr><td><strong>GsOpt</strong></td><td>Glass type options — sets the glass thickness and more.</td></tr>
+  <tr><td><strong>GMDC</strong></td><td>Clear glass surfaces — deletes <code>Glass_XX</code> and <code>Glass_XX1</code> ~ <code>Glass_XX5</code> faces.</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

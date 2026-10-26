@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>11.SC_Layer - 01_Layer_Making_Change</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>11.SC_Layer &nbsp;—&nbsp; 01_Layer_Making_Change</h1>
+<p><span class="cmd-box">SC1 ~ SC5</span></p>
+<p><code>S_Center</code> 계열 Layer를 만드는 명령 모음입니다. <code>GC1</code> ~ <code>GC5</code>(<code>G_Center</code>)와 같은 방식입니다.</p>
+<h2>사용 목적</h2>
+<p>판재(Sheet) 단면에 긋는 기준선의 레이어를 만듭니다. 판재 명령(<strong>ShFace</strong> · <strong>Sht</strong>)은 단면 group 안의 <code>S_Center1</code> 선을 읽어 판 면의 자리와 접는 깊이를 정합니다. 선 긋는 규칙은 <a href="../../../A1_Rhino_Modeling_Main/09_Sheet_Modeling/Making_Sheet_Section.html">판재 단면 만들기</a>를 보십시오.</p>
+<h2>포함 명령어</h2>
+<table class="desc-table">
+  <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
+  <tbody><tr><th>명령어</th><th>생성 Layer</th><th>Color / 속성</th></tr>
+  <tr><td><code>SC1</code></td><td><code>S_Center1</code> Layer를 만듭니다.</td><td>RGB(255,128,0)</td></tr>
+  <tr><td><code>SC2</code></td><td><code>S_Center2</code> Layer를 만듭니다.</td><td>RGB(255,98,0)</td></tr>
+  <tr><td><code>SC3</code></td><td><code>S_Center3</code> Layer를 만듭니다.</td><td>RGB(255,68,0)</td></tr>
+  <tr><td><code>SC4</code></td><td><code>S_Center4</code> Layer를 만듭니다.</td><td>RGB(255,38,0)</td></tr>
+  <tr><td><code>SC5</code></td><td><code>S_Center5</code> Layer를 만듭니다.</td><td>RGB(255,8,0)</td></tr>
+</tbody></table>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 필요한 명령어를 입력하고 Enter를 누릅니다.</li>
+  <li>레이어가 없으면 만들고, 있으면 그 레이어를 현재 레이어로 바꿉니다(GC1 과 같습니다).</li>
+  <li>Rhino 레이어 패널에서 Layer 이름과 Color 를 확인합니다.</li>
+</ol>
+<h2>주요 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>레이어 계열</td><td><code>S_Center</code></td></tr>
+  <tr><td>대상 명령</td><td><code>SC1</code> ~ <code>SC5</code></td></tr>
+  <tr><td>Color</td><td><code>SC1</code> 의 RGB(255,128,0)은 CAD 도면에서 단면을 만들 때 쓰는 <code>S_Center1</code> 색과 같습니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 지금 판재 명령이 읽는 선은 <code>S_Center1</code> 하나입니다. <code>S_Center2</code> ~ <code>S_Center5</code> 레이어는 만들 수 있지만, 판재 모델링에는 아직 쓰이지 않습니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

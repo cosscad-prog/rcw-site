@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  <title>ShMD - Sheet Bay Surface</title>
+  <title>ShFace - Sheet Bay Surface</title>
   <style>
     body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
     h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
@@ -24,12 +24,12 @@
 </head>
 <body>
 
-<h1>ShMD &nbsp;—&nbsp; Sheet Bay Surface</h1>
-<p><span class="cmd-box">ShMD</span></p>
+<h1>ShFace &nbsp;—&nbsp; Sheet Bay Surface</h1>
+<p><span class="cmd-box">ShFace</span></p>
 <p>Finds only the <strong>bays that take a sheet panel</strong> in a wireframe unit and creates a panel face (<code>Sheet_XX</code>) in each of them.<br>Glass bays are skipped, so you can select the whole unit and still get faces only where sheets belong.</p>
 <h2>Purpose</h2>
-<p>Use it to prepare the front faces before running <strong>Sht</strong>. Bays are found the same way as GMD finds glass bays; the difference is that faces are created only in sheet bays.</p>
-<div class="note">Workflow: WVector → SSP → <strong>ShMD</strong> → Sht → ShNo → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<p>Use it to prepare the front faces before running <strong>Sht</strong>. Bays are found the same way as GMD finds bays; the difference is that faces are created only in sheet bays.</p>
+<div class="note">Workflow: WVector → SSP → <strong>ShFace</strong> → Sht → ShNo → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
 <h2>Preparation</h2>
 <p>For how to draw the line and which shapes can be made, see <a href="Making_Sheet_Section.html">Making Sheet Section</a>.</p>
 <table class="desc-table">
@@ -45,7 +45,7 @@
 </tbody></table>
 <h2>How to Use</h2>
 <ol class="step-list">
-  <li>Type <strong>ShMD</strong> in the Rhino command line and press Enter.</li>
+  <li>Type <strong>ShFace</strong> in the Rhino command line and press Enter.</li>
   <li>Select the wireframe unit (mullion and transom lines) and press Enter.</li>
   <li>A panel face is created on the <code>Sheet_XX</code> layer in every bay whose sides all have an <code>S_Center1</code> line on that bay side.</li>
   <li>Run <strong>Sht</strong> next and pick the faces.</li>
@@ -53,7 +53,7 @@
 <h2>Example</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 70%; min-width:220px; max-width:70%;">
-    <img src="../../../img/ShMD_demo.png" alt="Sheet_XX faces created by ShMD in the sheet bays" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
+    <img src="../../../img/ShFace_demo.png" alt="Sheet_XX faces created by ShFace in the sheet bays" style="display:block; max-width:100%; height:auto; border:1px solid #ccc; background:#fff;">
     <figcaption>Select the unit and a panel face (Sheet_XX) is created in each sheet bay.</figcaption>
   </figure>
 </div>
@@ -70,7 +70,7 @@
   <tr><td>Running again</td><td>Bays that already have a <code>Sheet_XX</code> face are not duplicated.</td></tr>
   <tr><td>Sloped bays</td><td>Bays with a sloped transom or mullion (trapezoid, parallelogram) are supported.</td></tr>
   <tr><td>Members with a rotated section</td><td>A bay next to a member whose section is rotated, so that its side is not square to the panel face, is supported as well. The front position is set by the start points of the <code>S_Center1</code> lines of the <strong>sides that are not slanted</strong>; the start point of a slanted side is not used. The slant of each side is recorded on the face, and <strong>Sht</strong> folds the sheet in that direction.</td></tr>
-  <tr><td>Using glass faces</td><td>A <code>Glass_XX</code> face made by GMD can be picked directly in <strong>Sht</strong>. ShMD is not needed in that case.</td></tr>
+  <tr><td>Using bay faces (Glass_XX)</td><td>A <code>Glass_XX</code> face made by GMD can be picked directly in <strong>Sht</strong>. ShFace is not needed in that case.</td></tr>
 </tbody></table>
 <h2>Related Commands</h2>
 <table class="desc-table">
@@ -79,9 +79,9 @@
     <col style="width: 78%;">
   </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>Sht</strong></td><td>Sheet modeling — pick the faces made by ShMD and create folded sheets.</td></tr>
+  <tr><td><strong>Sht</strong></td><td>Sheet modeling — pick the faces made by ShFace and create folded sheets.</td></tr>
   <tr><td><strong>SSP</strong></td><td>Section registration — run it after adding the <code>S_Center1</code> lines.</td></tr>
-  <tr><td><strong>GMD</strong></td><td>Glass surface — creates the faces of glass bays the same way.</td></tr>
+  <tr><td><strong>GMD</strong></td><td>Bay surface — creates a <code>Glass_XX</code> face in each bay the same way.</td></tr>
 </tbody></table>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 

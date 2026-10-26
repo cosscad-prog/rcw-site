@@ -26,7 +26,7 @@
 
 <h1>Making Glass Section</h1>
 <p>To make glass by the <strong>Section</strong> method, the <strong>section group that holds the glass must contain a line on the <code>G_Center1</code> layer</strong>. The line sets the <strong>side edge</strong> of the glass (how far the glass goes into the member). The thickness of the glass is set by the glass type in <strong>GsOpt</strong>, not by the line.</p>
-<div class="note">Workflow: draw the <code>G_Center1</code> line in the section → SSP (register sections) → GsOpt (glass type settings) → GMD (glass face) → GS1 to GS9 → GsNo → GsList → GsTable → GsFd</div>
+<div class="note">Workflow: draw the <code>G_Center1</code> line in the section → SSP (register sections) → GsOpt (glass type settings) → GFace (glass position face) → GS1 to GS9 → GsNo → GsList → GsTable → GsFd</div>
 <h2>What Sets the Position of the Glass</h2>
 <div class="demo-images" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start;">
   <figure style="margin:0; flex:0 1 62%; min-width:220px; max-width:62%;">
@@ -42,7 +42,7 @@
   </colgroup>
   <tbody><tr><th>No.</th><th>What is set</th><th>Where it is set</th></tr>
   <tr><td>①</td><td><strong>Side edge</strong> of the glass</td><td>The position of the <code>G_Center1</code> line in the section. The glass ends at the distance of the line from the center line of the member.</td></tr>
-  <tr><td>②</td><td><strong>Outer face</strong> of the glass</td><td>The <strong>wireframe face</strong> (the glass face made by GMD). In the section this is the start point of the center line (<code>Center1</code>).</td></tr>
+  <tr><td>②</td><td><strong>Outer face</strong> of the glass</td><td>With <strong>GFace</strong>, the start point of the <code>G_Center1</code> line (the <code>Glass_XX1</code> face). If a <code>Glass_XX</code> face from <strong>GMD</strong> is selected, the <strong>wireframe face</strong> — in the section, the start point of the center line (<code>Center1</code>) (figure below).</td></tr>
   <tr><td>③</td><td><strong>Thickness</strong> of the glass</td><td>The glass type in <strong>GsOpt</strong> (the sum of the panes and spacers). The glass is made <strong>inward</strong> from the outer face by this thickness.</td></tr>
 </tbody></table>
 <h2>Rules for Drawing the Line</h2>
@@ -113,7 +113,8 @@
   <tr><td><strong>GC1</strong></td><td>Creates the <code>G_Center1</code> layer.</td></tr>
   <tr><td><strong>SSP</strong></td><td>Register sections — run it after adding the line.</td></tr>
   <tr><td><strong>GsOpt</strong></td><td>Glass type option — sets the thickness and makeup.</td></tr>
-  <tr><td><strong>GMD</strong></td><td>Glass face — makes a face in each bay of the wireframe.</td></tr>
+  <tr><td><strong>GFace</strong></td><td>Glass position surface — makes <code>Glass_XX1</code> – <code>Glass_XX5</code> faces at the glass lines in each bay.</td></tr>
+  <tr><td><strong>GMD</strong></td><td>Bay surface — makes a <code>Glass_XX</code> face in each bay of the wireframe.</td></tr>
   <tr><td><strong>GS1 to GS9</strong></td><td>Glass modeling — pick glass faces and make the glass (Section method).</td></tr>
 </tbody></table>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>

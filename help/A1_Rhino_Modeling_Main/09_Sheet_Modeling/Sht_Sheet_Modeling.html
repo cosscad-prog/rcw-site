@@ -29,7 +29,7 @@
 <p>판 면(<code>Sheet_XX</code> 또는 <code>Glass_XX</code>)을 골라 <strong>접힌 판재</strong>를 만듭니다. 두께, 접는 깊이, 끝 모양(평판 · 접기 · 안쪽 되접기 · 바깥쪽 되접기)을 정하고, 판 뒷면에 <strong>profile 을 붙이거나 스크류 구멍</strong>을 낼 수 있습니다.</p>
 <h2>사용 목적</h2>
 <p>유리 자리에 들어가는 금속 판재(백판 · 스팬드럴 판 등)를 모델링할 때 사용합니다. 만든 판재에는 크기와 가공 정보가 기록되어 번호(ShNo) · 수량표(ShList) · 가공도(ShFd)가 그 기록으로 만들어집니다.</p>
-<div class="note">작업 순서: WVector → SSP → ShMD → <strong>Sht</strong> → ShNo → ShList → ShTable → ShFd<br>판재 명령은 단면에 그려 둔 <code>S_Center1</code> 선과 등록된 단면(SSP), 방향이 기록된 와이어프레임(WVector)을 바탕으로 동작합니다.</div>
+<div class="note">작업 순서: WVector → SSP → ShFace → <strong>Sht</strong> → ShNo → ShList → ShTable → ShFd<br>판재 명령은 단면에 그려 둔 <code>S_Center1</code> 선과 등록된 단면(SSP), 방향이 기록된 와이어프레임(WVector)을 바탕으로 동작합니다.</div>
 <h2>사용 방법</h2>
 <ol class="step-list">
   <li>Rhino 명령창에 <strong>Sht</strong> 를 입력하고 Enter 를 누릅니다.</li>
@@ -156,7 +156,7 @@
     <col style="width: 78%;">
   </colgroup>
   <tbody><tr><th>명령어</th><th>설명</th></tr>
-  <tr><td><strong>ShMD</strong></td><td>판재 칸 면 만들기 — Sht 에서 고를 면을 만듭니다.</td></tr>
+  <tr><td><strong>ShFace</strong></td><td>판재 칸 면 만들기 — Sht 에서 고를 면을 만듭니다.</td></tr>
   <tr><td><strong>ShNo</strong></td><td>판재 번호 — 같은 판재에 같은 번호를 붙입니다.</td></tr>
   <tr><td><strong>ShList</strong></td><td>판재 수량표.</td></tr>
   <tr><td><strong>ShTable</strong> · <strong>ShFd</strong></td><td>판재 가공도 표와 가공도.</td></tr>

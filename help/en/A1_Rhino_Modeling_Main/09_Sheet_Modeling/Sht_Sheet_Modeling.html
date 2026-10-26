@@ -29,7 +29,7 @@
 <p>Pick panel faces (<code>Sheet_XX</code> or <code>Glass_XX</code>) and create <strong>folded sheet panels</strong>. Set the thickness, fold depth, and edge type (flat, fold, inside return, outside return), and optionally <strong>attach a profile or make screw holes</strong> on the back of the panel.</p>
 <h2>Purpose</h2>
 <p>Use it to model metal sheet panels (back pans, spandrel panels, and so on) that sit in a glass position. Size and fabrication data are recorded on each sheet, and numbering (ShNo), the quantity list (ShList), and the fabrication drawing (ShFd) are produced from those records.</p>
-<div class="note">Workflow: WVector → SSP → ShMD → <strong>Sht</strong> → ShNo → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<div class="note">Workflow: WVector → SSP → ShFace → <strong>Sht</strong> → ShNo → ShList → ShTable → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
 <h2>How to Use</h2>
 <ol class="step-list">
   <li>Type <strong>Sht</strong> in the Rhino command line and press Enter.</li>
@@ -156,7 +156,7 @@
     <col style="width: 78%;">
   </colgroup>
   <tbody><tr><th>Command</th><th>Description</th></tr>
-  <tr><td><strong>ShMD</strong></td><td>Sheet bay surface — creates the faces to pick in Sht.</td></tr>
+  <tr><td><strong>ShFace</strong></td><td>Sheet bay surface — creates the faces to pick in Sht.</td></tr>
   <tr><td><strong>ShNo</strong></td><td>Sheet numbering — gives the same number to identical sheets.</td></tr>
   <tr><td><strong>ShList</strong></td><td>Sheet quantity list.</td></tr>
   <tr><td><strong>ShTable</strong>, <strong>ShFd</strong></td><td>Sheet fabrication table and fabrication drawing.</td></tr>

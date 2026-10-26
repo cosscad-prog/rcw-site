@@ -29,7 +29,7 @@
 <p>Draws a <strong>fabrication drawing</strong> for each representative sheet placed by <strong>ShTable</strong>. A front view with dimensions, top and right sections, an isometric view, an unfolded view, and a table of the attached profiles are drawn in one cell.</p>
 <h2>Purpose</h2>
 <p>Use it to produce the shop drawings of the sheets. The views and dimensions are taken directly from the model, so the shape of the model (corner joints, holes, sloped sides) appears in the drawing as it is.</p>
-<div class="note">Workflow: WVector → SSP → ShMD → Sht → ShNo → ShList → ShTable → <strong>ShFd</strong><br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<div class="note">Workflow: WVector → SSP → ShFace → Sht → ShNo → ShList → ShTable → <strong>ShFd</strong><br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
 <h2>How to Use</h2>
 <ol class="step-list">
   <li>Run <strong>ShNo</strong> and then <strong>ShTable</strong> to create the table.</li>

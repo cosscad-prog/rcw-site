@@ -57,6 +57,17 @@
   <tr><td>Option</td><td>When <strong>Check_Error</strong> is On, errors such as Profile_ID, MnT_ID, and Center1 Curve are inspected.</td></tr>
   <tr><td>Error Condition</td><td>If Unit_No or Center1 Curve is missing, an error message may appear in the command line.</td></tr>
 </tbody></table>
+<h2>Drawing Plane of a Section Group — Top · Front · Right</h2>
+<p>A section group can be drawn in the <b>Top, Front or Right</b> plane. The extrusion direction follows the normal of the section surface, so you can draw sections in Front while looking at the wireframe, and UMD still models them correctly. The result is the same as drawing the section in Top so that it <b>looks the same</b>.</p>
+<table class="desc-table">
+  <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+  <tbody><tr><th>Drawn in</th><th>Extrusion direction (toward the viewer)</th></tr>
+  <tr><td>Top</td><td>+Z</td></tr>
+  <tr><td>Front</td><td>−Y</td></tr>
+  <tr><td>Right</td><td>+X</td></tr>
+</tbody></table>
+<p>Surfaces, polylines, lines, text and blocks in a group must all lie on <b>the same plane</b> (blocks by their insertion point). SSP finds objects farther from the plane of the sections than the document's absolute tolerance, lists them as <b>off plane</b> in the warning window and places an <code>Off_Plane</code> mark there. Registration is not stopped. The marks are removed when SSP runs again.</p>
+<div class="note"><strong>Note:</strong> Lines on the Center1 and Center0 layers are perpendicular to the section and are not checked. Sections drawn on a tilted plane (not parallel to Top, Front or Right) have not been verified yet.</div>
 <h2>Automatic Repair of Copied Groups</h2>
 <p>When a section group is copied, its section data comes along unchanged, so blocks, milling curves and composite tags keep pointing at <b>the original group's objects</b>. Modeled as is, the copy's holes and cuts appear at the original's place. SSP finds these in every selected group and <b>switches them to the matching object inside the group.</b> Each switch is reported on the command line.</p>
 <table class="desc-table">

@@ -29,7 +29,7 @@
 <p>Lays out one <strong>representative sheet</strong> per number as a table on the drawing plane. One row is made per thickness and one cell per number, and a copy of the sheet (with its attached profiles) is placed face-on in the cell. The table is the base for the fabrication drawing (<strong>ShFd</strong>).</p>
 <h2>Purpose</h2>
 <p>Use it to prepare the area where the sheet fabrication drawings are drawn. It works by the same rules as BpTable.</p>
-<div class="note">Workflow: WVector → SSP → ShMD → Sht → ShNo → ShList → <strong>ShTable</strong> → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
+<div class="note">Workflow: WVector → SSP → ShFace → Sht → ShNo → ShList → <strong>ShTable</strong> → ShFd<br>The sheet commands rely on the <code>S_Center1</code> line drawn in each section, on registered sections (SSP), and on a wireframe with direction data (WVector).</div>
 <h2>How to Use</h2>
 <ol class="step-list">
   <li>Number the sheets with <strong>ShNo</strong> first.</li>

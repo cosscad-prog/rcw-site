@@ -29,7 +29,7 @@
 <p>번호별 <strong>대표 판재</strong>를 도면 평면에 표로 늘어놓습니다. 두께마다 한 줄, 번호마다 한 칸이 만들어지고, 칸 안에 판재(와 붙인 profile)의 복사본이 정면으로 놓입니다. 이 표가 가공도(<strong>ShFd</strong>)를 그리는 바탕입니다.</p>
 <h2>사용 목적</h2>
 <p>판재 가공도를 그릴 자리를 만들 때 사용합니다. BpTable 과 같은 규칙으로 동작합니다.</p>
-<div class="note">작업 순서: WVector → SSP → ShMD → Sht → ShNo → ShList → <strong>ShTable</strong> → ShFd<br>판재 명령은 단면에 그려 둔 <code>S_Center1</code> 선과 등록된 단면(SSP), 방향이 기록된 와이어프레임(WVector)을 바탕으로 동작합니다.</div>
+<div class="note">작업 순서: WVector → SSP → ShFace → Sht → ShNo → ShList → <strong>ShTable</strong> → ShFd<br>판재 명령은 단면에 그려 둔 <code>S_Center1</code> 선과 등록된 단면(SSP), 방향이 기록된 와이어프레임(WVector)을 바탕으로 동작합니다.</div>
 <h2>사용 방법</h2>
 <ol class="step-list">
   <li>먼저 <strong>ShNo</strong> 로 번호를 붙입니다.</li>
