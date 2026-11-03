@@ -30,7 +30,7 @@
 <table class="desc-table">
   <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
   <tbody><tr><th>Command</th><th>Created Layer</th><th>Color / Attributes</th></tr>
-  <tr><td><code>ATCL</code></td><td>Creates an <code>AT_CenterXX</code> layer. Accepts numbers or characters.</td><td>When a number is entered, applies the CAD Color Number / AttachDot Linetype / ArrowHead</td></tr>
+  <tr><td><code>ATCL</code></td><td>Creates an <code>AT_CenterXX</code> layer. Accepts numbers or characters. Instead of typing, you can pick a section group: the group name minus <code>ATC</code> is used (<code>ATC_M3a</code> → <code>AT_Center_M3a</code>).</td><td>When a number is entered, applies the CAD Color Number / AttachDot Linetype / ArrowHead</td></tr>
   <tr><td><code>ATC1</code></td><td>Creates the <code>AT_Center1</code> layer.</td><td>Color 1 [CAD Color Number] / AttachDot Linetype / ArrowHead</td></tr>
   <tr><td><code>ATC2</code></td><td>Creates the <code>AT_Center2</code> layer.</td><td>Color 2 [CAD Color Number] / AttachDot Linetype / ArrowHead</td></tr>
   <tr><td><code>ATC3</code></td><td>Creates the <code>AT_Center3</code> layer.</td><td>Color 3 [CAD Color Number] / AttachDot Linetype / ArrowHead</td></tr>
@@ -46,6 +46,7 @@
   <li>Type the required command in the Rhino command line and press Enter.</li>
   <li>The <code>*L</code> command appends the entered number or character directly after the base layer name to create the layer.</li>
   <li>When a number is entered, it is used as the CAD Color Number. Numbers greater than 256 use the remainder when divided by 256 as the Color Number.</li>
+  <li>At the <code>ATCL</code> name prompt you can also click any object of a section group (name text, curve or surface). For the group <code>ATC_M3a</code> it creates <code>AT_Center_M3a</code> and the command line shows <code>Section group "ATC_M3a" -&gt; layer AT_Center_M3a</code>. Lines on this layer find that section group in UMD. Pressing Enter alone reuses the previous value.</li>
   <li>Check the Layer name, Color, and Linetype state in the Rhino Layer panel.</li>
 </ol>
 <h2>Key Details</h2>
@@ -63,7 +64,8 @@
   <tr><td>Layer Color</td><td>Confirm the CAD Color Number or RGB value was applied.</td></tr>
   <tr><td>Command Line</td><td>Check the guidance or completion message.</td></tr>
 </tbody></table>
-<div class="note"><strong>Note:</strong> ATCL appends the entered value directly after <code>AT_Center</code> to create a new layer. When a number is entered, the corresponding CAD Color Number is applied.</div>
+<div class="note"><strong>Note:</strong> ATCL appends the entered value directly after <code>AT_Center</code> to create a new layer. When a number is entered, the corresponding CAD Color Number is applied.<br>
+When you pick a section group, the command reports and stops without changing anything if: the picked object is not in a group · the group has no name text · it has more than one name text · the name does not start with <code>ATC</code> (e.g. <code>MC3</code> — such lines would not find the section in UMD) · the name cannot be used as a layer name.</div>
 
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 </body>

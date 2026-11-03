@@ -30,7 +30,7 @@
 <table class="desc-table">
   <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
   <tbody><tr><th>Command</th><th>Created Layer</th><th>Color / Attributes</th></tr>
-  <tr><td><code>XTCL</code></td><td>Creates an <code>XT_CenterXX</code> layer. Accepts numbers or characters.</td><td>When a number is entered, applies the CAD Color Number; characters also accepted.</td></tr>
+  <tr><td><code>XTCL</code></td><td>Creates an <code>XT_CenterXX</code> layer. Accepts numbers or characters. Instead of typing, you can pick a section group: the group name minus <code>XTC</code> is used (<code>XTC3</code> → <code>XT_Center3</code>).</td><td>When a number is entered, applies the CAD Color Number; characters also accepted.</td></tr>
   <tr><td><code>XTC1</code></td><td>Creates the <code>XT_Center1</code> layer.</td><td>RGB(255,91,0)</td></tr>
   <tr><td><code>XTC2</code></td><td>Creates the <code>XT_Center2</code> layer.</td><td>RGB(255,121,0)</td></tr>
   <tr><td><code>XTC3</code></td><td>Creates the <code>XT_Center3</code> layer.</td><td>RGB(255,151,0)</td></tr>
@@ -41,6 +41,7 @@
   <li>Type the required command in the Rhino command line and press Enter.</li>
   <li>The <code>*L</code> command appends the entered number or character directly after the base layer name to create the layer.</li>
   <li>When a number is entered, it is used as the CAD Color Number. Numbers greater than 256 use the remainder when divided by 256 as the Color Number.</li>
+  <li>At the <code>XTCL</code> name prompt you can also click any object of a section group (name text, curve or surface). For the group <code>XTC3</code> it creates <code>XT_Center3</code> and the command line shows <code>Section group "XTC3" -&gt; layer XT_Center3</code>. Lines on this layer find that section group in the Xtract commands. Only groups that give <code>XT_Center1</code> ~ <code>XT_Center9</code> can be picked (the commands that read XT_Center lines take only those). Pressing Enter alone reuses the previous value.</li>
   <li>Check the Layer name, Color, and Linetype state in the Rhino Layer panel.</li>
 </ol>
 <h2>Key Details</h2>
@@ -58,7 +59,8 @@
   <tr><td>Layer Color</td><td>Confirm the CAD Color Number or RGB value was applied.</td></tr>
   <tr><td>Command Line</td><td>Check the guidance or completion message.</td></tr>
 </tbody></table>
-<div class="note"><strong>Note:</strong> XTCL appends the entered value directly after <code>XT_Center</code> to create a new layer. When a number is entered, the corresponding CAD Color Number is applied — it is easy to align supplementary centreline numbers with colours.</div>
+<div class="note"><strong>Note:</strong> XTCL appends the entered value directly after <code>XT_Center</code> to create a new layer. When a number is entered, the corresponding CAD Color Number is applied — it is easy to align supplementary centreline numbers with colours.<br>
+When you pick a section group, the command reports and stops without changing anything if: the picked object is not in a group · the group has no name text · it has more than one name text · the name does not start with <code>XTC</code> (e.g. <code>ATC_M3a</code> — such lines would not find the section) · the name cannot be used as a layer name · the result is not <code>XT_Center1</code> ~ <code>XT_Center9</code>.</div>
 
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 </body>

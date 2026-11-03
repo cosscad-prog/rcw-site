@@ -34,7 +34,7 @@
 <table class="desc-table">
   <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
   <tbody><tr><th>명령어</th><th>생성 Layer</th><th>Color / 속성</th></tr>
-  <tr><td><code>XTCL</code></td><td><code>XT_CenterXX</code> Layer를 만듭니다. 숫자, 문자 입력이 가능합니다.</td><td>숫자 입력 시 해당 CAD Color Number, 문자 입력 가능</td></tr>
+  <tr><td><code>XTCL</code></td><td><code>XT_CenterXX</code> Layer를 만듭니다. 숫자, 문자 입력이 가능합니다. 입력 대신 단면 group 을 고르면 그 이름에서 <code>XTC</code> 를 뗀 나머지를 씁니다(<code>XTC3</code> → <code>XT_Center3</code>).</td><td>숫자 입력 시 해당 CAD Color Number, 문자 입력 가능</td></tr>
   <tr><td><code>XTC1</code></td><td><code>XT_Center1</code> Layer를 만듭니다.</td><td>RGB(255,91,0)</td></tr>
   <tr><td><code>XTC2</code></td><td><code>XT_Center2</code> Layer를 만듭니다.</td><td>RGB(255,121,0)</td></tr>
   <tr><td><code>XTC3</code></td><td><code>XT_Center3</code> Layer를 만듭니다.</td><td>RGB(255,151,0)</td></tr>
@@ -47,6 +47,7 @@
   <li>Rhino 명령창에 필요한 명령어를 입력하고 Enter를 누릅니다.</li>
   <li><code>*L</code> 형식의 명령은 입력한 숫자 또는 문자를 기준 Layer 이름 뒤에 바로 붙여 Layer를 만듭니다.</li>
   <li>숫자를 입력하는 경우 해당 숫자를 CAD Color Number로 사용합니다. 256보다 큰 숫자는 코드에서 256으로 나눈 나머지 값을 Color Number로 사용합니다.</li>
+  <li><code>XTCL</code> 은 이름을 묻는 자리에서 단면 group 의 객체(이름 글자 · 선 · 면 아무것이나)를 클릭해도 됩니다. group 이름이 <code>XTC3</code> 면 <code>XT_Center3</code> 를 만들고, 명령창에 <code>단면 group "XTC3" -&gt; 레이어 XT_Center3</code> 가 표시됩니다. 이 레이어의 선은 Xtract 명령 에서 바로 그 단면 group 을 찾습니다. <code>XT_Center1</code> ~ <code>XT_Center9</code> 가 되는 group 만 고를 수 있습니다(XT_Center 선을 읽는 명령이 그것만 받습니다). Enter 만 누르면 지난 값을 씁니다.</li>
   <li>Rhino 레이어 패널에서 Layer 이름, Color, Linetype 상태를 확인합니다.</li>
 
 
@@ -66,7 +67,8 @@
   <tr><td>Layer Color</td><td>Color / 속성 열의 CAD Color Number 또는 RGB 값이 적용되었는지 확인합니다.</td></tr>
   <tr><td>명령창</td><td>명령 실행 후 표시되는 안내 또는 완료 메시지를 확인합니다.</td></tr>
 </tbody></table>
-<div class="note"><strong>참고:</strong> XTCL은 입력값을 <code>XT_Center</code> 뒤에 바로 붙여 새 레이어를 만듭니다. 숫자 입력 시 해당 CAD Color Number가 적용되므로, 보조 중심선 번호와 색상을 함께 맞추기 좋습니다.</div>
+<div class="note"><strong>참고:</strong> XTCL은 입력값을 <code>XT_Center</code> 뒤에 바로 붙여 새 레이어를 만듭니다. 숫자 입력 시 해당 CAD Color Number가 적용되므로, 보조 중심선 번호와 색상을 함께 맞추기 좋습니다.<br>
+단면 group 을 골랐는데 아래의 경우면 알림만 남기고 아무것도 바꾸지 않고 멈춥니다: 고른 객체가 group 에 없음 · group 에 이름 글자가 없음 · 이름 글자가 둘 이상 · 이름이 <code>XTC</code> 로 시작하지 않음(예 <code>ATC_M3a</code> — 이 선은 단면을 못 찾습니다) · 레이어 이름으로 쓸 수 없는 글자 · <code>XT_Center1</code> ~ <code>XT_Center9</code> 가 아님.</div>
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 
 </body>

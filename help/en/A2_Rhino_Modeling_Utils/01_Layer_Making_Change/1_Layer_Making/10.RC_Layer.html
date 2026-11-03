@@ -34,7 +34,7 @@
 <table class="desc-table">
   <colgroup><col style="width:10%"><col style="width:40%"><col style="width:50%"></colgroup>
   <tbody><tr><th>Command</th><th>Created Layer</th><th>Color / Attributes</th></tr>
-  <tr><td><code>RCL</code></td><td>Creates an <code>R_CenterXX</code> layer. Accepts numbers or characters.</td><td>When a number is entered, applies the corresponding CAD Color Number; characters also accepted.</td></tr>
+  <tr><td><code>RCL</code></td><td>Creates an <code>R_CenterXX</code> layer. Accepts numbers or characters. Instead of typing, you can pick a section group: the group name minus <code>RC</code> is used (<code>RC2</code> → <code>R_Center2</code>).</td><td>When a number is entered, applies the corresponding CAD Color Number; characters also accepted.</td></tr>
   <tr><td><code>RC1</code></td><td>Creates the <code>R_Center1</code> layer.</td><td>Color 41 [CAD Color Number]</td></tr>
   <tr><td><code>RC2</code></td><td>Creates the <code>R_Center2</code> layer.</td><td>Color 41 [CAD Color Number]</td></tr>
   <tr><td><code>RC3</code></td><td>Creates the <code>R_Center3</code> layer.</td><td>Color 41 [CAD Color Number]</td></tr>
@@ -50,6 +50,7 @@
   <li>Type the required command in the Rhino command line and press Enter.</li>
   <li>Commands with the *L format create a Layer by appending the entered number or character directly after the base Layer name.</li>
   <li>When a number is entered, it is used as the CAD Color Number. Numbers greater than 256 use the remainder when divided by 256 as the Color Number.</li>
+  <li>At the <code>RCL</code> name prompt you can also click any object of a section group (name text, curve or surface). For the group <code>RC2</code> it creates <code>R_Center2</code> and the command line shows <code>Section group "RC2" -&gt; layer R_Center2</code>. Lines on this layer find that section group in UMD. Pressing Enter alone reuses the previous value.</li>
   <li>Check the Layer name, Color, and Linetype state in the Rhino Layer panel.</li>
 </ol>
 <h2>Key Details</h2>
@@ -67,7 +68,8 @@
   <tr><td>Layer Color</td><td>Confirm the CAD Color Number or RGB value from the Colour/Attributes column has been applied.</td></tr>
   <tr><td>Command Line</td><td>Check the guidance or completion message displayed after running the command.</td></tr>
 </tbody></table>
-<div class="note"><strong>Note:</strong> RCL appends the entered value directly after <code>R_Center</code> to create a new layer. When a number is entered, the corresponding CAD Color Number is applied — it is recommended to align the numbering scheme accordingly.</div>
+<div class="note"><strong>Note:</strong> RCL appends the entered value directly after <code>R_Center</code> to create a new layer. When a number is entered, the corresponding CAD Color Number is applied — it is recommended to align the numbering scheme accordingly.<br>
+When you pick a section group, the command reports and stops without changing anything if: the picked object is not in a group · the group has no name text · it has more than one name text · the name does not start with <code>RC</code> (e.g. <code>ATC_M3a</code> — such lines would not find the section) · the name cannot be used as a layer name.</div>
 
 <script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
 </body>

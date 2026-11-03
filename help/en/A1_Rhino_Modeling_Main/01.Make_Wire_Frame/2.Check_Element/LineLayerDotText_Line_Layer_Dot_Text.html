@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>LineLayerDotText - Show Line Layer Names</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>LineLayerDotText &nbsp;—&nbsp; Show Line Layer Names</h1>
+<p><span class="cmd-box">LineLayerDotText</span></p>
+<p>Shows the <strong>layer name</strong> of each picked curve as a dot at the middle of the curve. When editing a wireframe, you can see at a glance which layer a line is on.</p>
+<p>Unlike <strong>WVector</strong>, it works on curves that are not grouped, and even on grouped curves only the curve you click is added.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <strong>LineLayerDotText</strong> in the Rhino command line and press Enter.</li>
+  <li>Select the curves whose layer names you want to see and press Enter. You can also select them before running the command.</li>
+  <li>The layer name appears at the middle of each selected curve.</li>
+  <li>To show more curves, run <strong>LineLayerDotText</strong> again and select them. They are added to the curves already shown.</li>
+  <li>To turn it off, run <strong>LineLayerDotText</strong> and press Enter without selecting anything, or click the <strong>Off</strong> option.</li>
+</ol>
+<h2>Result</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Position</td><td>Middle of the curve length</td></tr>
+  <tr><td>Text</td><td>Layer name of the curve (for a sublayer, only its own name)</td></tr>
+  <tr><td>Dot color</td><td>The layer color, with black text on light colors and white text on dark colors</td></tr>
+  <tr><td>Layer changes</td><td>If you move the curve to another layer or rename the layer, the dot shows the new name right away without running the command again.</td></tr>
+  <tr><td>Moving curves</td><td>The dot follows the curve.</td></tr>
+  <tr><td>Not shown</td><td>Deleted curves, hidden curves and curves on layers that are off have no dot. The dot comes back when the curve is visible again.</td></tr>
+</tbody></table>
+<div class="note">The dots are drawn <strong>on screen only</strong>. No TextDot objects are added to the document, so nothing is saved to the file, printed, or recorded for Undo, and there is nothing to delete with <strong>DWVector</strong>.</div>
+<div class="warn">Copies of a selected curve are not in the list. Select the new curves again to see their layer names. Opening another file clears the list.</div>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>WVector</strong></td><td>Create Wire Vector (shows names and directions of grouped lines as TextDot objects)</td></tr>
+  <tr><td><strong>DWVector</strong></td><td>Delete Wire Vector</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>
