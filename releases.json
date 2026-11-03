@@ -3,6 +3,24 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.4.10",
+      "date": "2026-11-03",
+      "items": [
+        {
+          "ko": "<b>F2d · UF2D — 3D 가 2D 로 바뀌기 전에 묻습니다.</b><br>&bull; F2d · UF2D 는 입면 2D 를 3D 가 있던 바로 그 자리에 그리고 고른 3D(솔리드 · 블록)를 지웁니다. 이제 실행 전에 개수와 함께 알리고 묻습니다 — [아니요] 를 누르면 아무것도 바꾸지 않습니다.<br>&bull; 3D 를 남겨야 하면 유닛을 복사해 그 사본에 실행하십시오. 실행한 뒤에도 Undo 로 되돌릴 수 있습니다.",
+          "en": "<b>F2d and UF2D - asks before the 3D becomes 2D.</b><br>&bull; F2d and UF2D draw the front 2D exactly where the 3D was and delete the picked 3D (solids and blocks). They now say so first, with the counts, and ask - [No] changes nothing.<br>&bull; To keep the 3D, copy the unit and run the command on the copy. Undo also brings it back afterwards."
+        },
+        {
+          "ko": "<b>FDwg — 고침.</b><br>&bull; FabTable 사본이 아니라 UMD 부재에 바로 FDwg 를 걸면, 아무것도 그리지 않으면서 \"성공\" 으로 끝나고 작업용 사본이 도면에 남던 것을 고쳤습니다.<br>&bull; 이제 그런 group 을 알리고, FabTable 사본과 섞여 있으면 나머지만 그릴지 묻습니다. 그리지 못한 group 은 실패로 셉니다.",
+          "en": "<b>FDwg - fix.</b><br>&bull; FDwg run on UMD members (not FabTable copies) no longer ends as \"success\" while drawing nothing and leaving working copies in the drawing.<br>&bull; Such groups are now reported; mixed with FabTable copies, FDwg asks whether to draw the rest. A group it cannot draw counts as a failure."
+        },
+        {
+          "ko": "<b>Xtract — 고침.</b><br>&bull; XT 폴리라인의 세로(Z 방향) 구간이 폭 0 짜리 솔리드로 만들어지던 것을 고쳤습니다. 이제 그 구간은 만들지 않고 선 · 구간 번호를 알립니다(구간 번호 = Segment_Number_On 의 번호).",
+          "en": "<b>Xtract - fix.</b><br>&bull; Vertical (Z-direction) segments of an XT polyline no longer become zero-width solids. They are skipped and reported by line and segment number (the numbers Segment_Number_On shows)."
+        }
+      ]
+    },
+    {
       "version": "5.4.9",
       "date": "2026-11-03",
       "items": [

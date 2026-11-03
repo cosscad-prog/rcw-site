@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What's New 5.4.10</title>
+<meta name="description" content="RCW V5.4.10 에서 달라진 것 — F2d · UF2D 가 3D 를 2D 로 바꾸기 전에 묻기, FDwg 를 UMD 부재에 걸 때 알림, Xtract 세로 구간.">
+<style>
+  /* 설치 끝에 열리고 WhatsNew 명령으로 다시 여는 문서 — 인터넷 없이 열려야 하므로 바깥 글꼴 · 스크립트를 쓰지 않는다 */
+  :root {
+    --bg: #f6f7f9; --paper: #ffffff; --ink: #1d2330; --muted: #5b6475; --line: #e2e6ec;
+    --accent: #2f6fdb; --fix: #1f8a5b; --fix-bg: #e5f4ec; --chg: #b4661a; --chg-bg: #fbefe2;
+    --note-bg: #fff8e6; --note-line: #f0d48a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14171d; --paper: #1c2028; --ink: #e7eaf0; --muted: #a2abbb; --line: #2c323d;
+      --accent: #7aa7f5; --fix: #6fd3a3; --fix-bg: #183027; --chg: #f0b06c; --chg-bg: #33261a;
+      --note-bg: #2b2516; --note-line: #6b5a2a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14171d; --paper: #1c2028; --ink: #e7eaf0; --muted: #a2abbb; --line: #2c323d;
+    --accent: #7aa7f5; --fix: #6fd3a3; --fix-bg: #183027; --chg: #f0b06c; --chg-bg: #33261a;
+    --note-bg: #2b2516; --note-line: #6b5a2a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+    font-size: 16px; line-height: 1.65; word-break: keep-all;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 56px; }
+  .eyebrow { margin: 0; color: var(--muted); font-size: 14px; letter-spacing: .02em; }
+  h1 { margin: 4px 0 12px; font-size: 34px; line-height: 1.2; }
+  .lede { margin: 0 0 24px; color: var(--ink); }
+  .note {
+    background: var(--note-bg); border: 1px solid var(--note-line); border-radius: 10px;
+    padding: 14px 18px; margin: 0 0 28px;
+  }
+  .note b.lbl { display: block; margin-bottom: 2px; }
+  section {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px 22px 8px; margin: 0 0 18px;
+  }
+  section h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 4px; font-size: 21px; }
+  .no { color: var(--accent); font-weight: 700; }
+  .pill { font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+  .p-fix { color: var(--fix); background: var(--fix-bg); }
+  .p-chg { color: var(--chg); background: var(--chg-bg); }
+  .cmds { margin: 0 0 8px; color: var(--muted); font-size: 14px; }
+  ul { margin: 0 0 12px; padding-left: 20px; }
+  li { margin: 0 0 8px; }
+  .todo h2 { font-size: 19px; }
+  footer { margin-top: 26px; color: var(--muted); font-size: 14px; }
+  @media (max-width: 560px) {
+    main { padding-top: 28px; }
+    h1 { font-size: 28px; }
+    section { padding: 16px 16px 6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">RCW for Rhino · 5.4.10 에서 달라진 것</p>
+  <h1>What's New 5.4.10</h1>
+  <p class="lede">
+    <b>F2d · UF2D</b> 가 고른 3D 를 2D 로 바꾸기 전에 알리고 묻습니다. <b>FDwg</b> · <b>Xtract</b> 가 아무 말 없이
+    엉뚱한 결과를 내던 두 경우를 고쳤습니다.
+  </p>
+
+  <div class="note">
+    <b class="lbl">먼저 보실 것</b>
+    F2d · UF2D 는 입면 2D 를 3D 가 있던 <b>바로 그 자리</b>에 그리고, 고른 3D(솔리드 · 블록)를 지웁니다 — 지금까지도 그랬습니다.
+    3D 를 남겨야 하면 유닛을 복사해 그 사본에 실행하십시오. 실행한 뒤에도 Undo 로 3D 를 되돌릴 수 있습니다.
+  </div>
+
+  <section>
+    <h2><span class="no">01</span> F2d · UF2D <span class="pill p-chg">바뀜</span></h2>
+    <p class="cmds">F2d · UF2D</p>
+    <ul>
+      <li>객체를 고르면 <b>"고른 3D 가 2D 로 바뀝니다"</b> 창이 솔리드 · 블록 개수와 함께 뜹니다. [예] 는 지금처럼 진행하고, <b>[아니요]</b> 는 아무것도 바꾸지 않고 끝냅니다.</li>
+      <li>선(센터라인)은 그대로 남습니다. 선만 고르면 묻지 않습니다.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="no">02</span> FDwg <span class="pill p-fix">고침</span></h2>
+    <p class="cmds">FDwg · FabTable</p>
+    <ul>
+      <li>FabTable 사본이 아니라 <b>UMD 부재에 바로</b> FDwg 를 걸면, 아무것도 그리지 않으면서 "성공" 으로 끝나고 작업용 사본이 도면에 남던 것을 고쳤습니다.</li>
+      <li>이제 그런 group 을 이름과 함께 알리고("FabTable 로 만든 부재가 아님"), FabTable 사본과 섞여 있으면 <b>나머지만 그릴지</b> 묻습니다.</li>
+      <li>그리지 못한 group 은 실패로 세고, 작업용 사본을 지웁니다.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="no">03</span> Xtract <span class="pill p-fix">고침</span></h2>
+    <p class="cmds">Xtract · XTCL</p>
+    <ul>
+      <li>XT 폴리라인의 <b>세로(Z 방향) 구간</b>이 폭 0 짜리 솔리드로 만들어지던 것을 고쳤습니다.</li>
+      <li>이제 그 구간은 만들지 않고 <b>선 · 구간 번호</b>를 알립니다(구간 번호 = Segment_Number_On 으로 찍히는 번호). 가로 · 기운 구간은 그대로 만듭니다.</li>
+    </ul>
+  </section>
+
+  <footer>이 문서는 Rhino 에서 <b>WhatsNew</b> 명령으로 다시 열 수 있습니다. 자세한 쓰는 법은 각 명령의 도움말을 보십시오.</footer>
+</main>
+</body>
+</html>
