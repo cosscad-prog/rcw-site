@@ -28,3 +28,5 @@ alter table public.customer_access  add  constraint customer_access_rhino_check 
 -- ⚠ 대신 이 칸이 NOT NULL 이라 RCW5 를 누른 기록(rhino null)이 실패할 것이다(코드로 본 판단 — 9-30 뒤 신청 0건이라 실제로 일어난 적은 없음).
 --   내려받기는 막히지 않는다(trial.html 의 recordDownload 는 실패를 콘솔에만 적는다). 고칠 안(사용자 결정 대기):
 --   alter table public.downloads alter column rhino drop not null;   -- 기존 CHECK(7 · 8)는 null 을 통과시킨다
+-- 2026-11-03 사용자가 대시보드에서 적용(마이그레이션 이름 downloads_rhino_drop_not_null) — Claude 확인: downloads.rhino is_nullable = YES,
+--   CHECK 는 ('7','8') 그대로(null 은 통과). '9' 는 넣지 않았다 — RCW5 는 이 표에 rhino 숫자를 보내지 않는다.
