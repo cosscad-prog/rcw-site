@@ -18,3 +18,13 @@ alter table public.plugin_downloads add  constraint plugin_downloads_rhino_check
 
 alter table public.customer_access  drop constraint if exists customer_access_rhino_check;
 alter table public.customer_access  add  constraint customer_access_rhino_check  check (rhino in ('7', '8', '9'));
+
+-- ── 적용 기록 ──────────────────────────────────────────────────────────────
+-- 2026-11-03 사용자가 Supabase 대시보드 SQL Editor 에서 돌림(마이그레이션 이름 allow_rhino_9_in_check_constraints).
+-- Claude 가 pg_constraint 를 읽어 확인: 세 제약 모두 '9' 포함 · convalidated = true. 기존 행은 모두 '7' · '8'.
+--
+-- downloads(평가판 페이지 단추 기록)는 바꾸지 않았다 — RCW5.exe 는 Rhino 를 설치할 때 고르므로 이 표에 rhino 숫자를 보내지 않는다
+-- (api/trial.js: rhino = 옛 이름 파일이면 파일명의 7/8, RCW5 면 null). 그러니 '9' 는 들어갈 일이 없다.
+-- ⚠ 대신 이 칸이 NOT NULL 이라 RCW5 를 누른 기록(rhino null)이 실패할 것이다(코드로 본 판단 — 9-30 뒤 신청 0건이라 실제로 일어난 적은 없음).
+--   내려받기는 막히지 않는다(trial.html 의 recordDownload 는 실패를 콘솔에만 적는다). 고칠 안(사용자 결정 대기):
+--   alter table public.downloads alter column rhino drop not null;   -- 기존 CHECK(7 · 8)는 null 을 통과시킨다
