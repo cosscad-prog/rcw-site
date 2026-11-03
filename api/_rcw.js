@@ -149,7 +149,7 @@ async function pluginDownload(req, res, kind) {
   // 5.3.2 는 RCW5 를 받을 때 이 둘을 안 붙인다 — 그때는 칸이 빈다(기록 자체는 남는다).
   const ed = isRcw5 ? parseEdition(query.ed) : null;
   const edition = isRcw5 ? (ed ? ed.edition : null) : match[1];
-  const rhino = isRcw5 ? (/^[78]$/.test(String(query.rh || '')) ? String(query.rh) : null) : match[3];
+  const rhino = isRcw5 ? (/^[789]$/.test(String(query.rh || '')) ? String(query.rh) : null) : match[3];   // 9 = 5.4.9 부터
 
   const installId = /^[0-9a-f]{8,64}$/i.test(String(query.id || '')) ? String(query.id) : null;
   const version   = /^\d+\.\d+\.\d+$/.test(String(query.v || '')) ? String(query.v) : null;

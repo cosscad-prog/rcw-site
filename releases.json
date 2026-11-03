@@ -3,6 +3,28 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.4.9",
+      "date": "2026-11-03",
+      "items": [
+        {
+          "ko": "<b>Rhino 9 에도 설치합니다.</b><br>&bull; 설치 화면의 Rhino 고르기에 <b>Rhino 9</b> 가 생겼습니다.<br>&bull; RCW 는 한 번에 하나의 Rhino 에만 설치됩니다 — Rhino 9 를 고르면 Rhino 8 에 깔린 RCW 는 제거됩니다. Rhino 8 에서 계속 쓰시려면 Rhino 8 을 고르십시오.<br>&bull; Rhino 9 에서 받은 새 버전 알림은 Rhino 9 에 그대로 설치합니다.",
+          "en": "<b>Installs into Rhino 9.</b><br>&bull; The setup's Rhino choice now has <b>Rhino 9</b>.<br>&bull; RCW is installed into one Rhino at a time - choosing Rhino 9 removes RCW from Rhino 8. Choose Rhino 8 to keep working there.<br>&bull; An update notice received in Rhino 9 installs into Rhino 9."
+        },
+        {
+          "ko": "<b>레이어 · wireframe — 새 명령 LineLayerDotText.</b><br>&bull; <b>LineLayerDotText</b> 는 고른 선의 가운데에 그 선의 레이어 이름을 점 글자로 보여 줍니다. 레이어를 바꾸거나 이름을 고치면 바로 따라 바뀝니다(화면에만, 아무것도 고르지 않고 Enter = 끄기).<br>&bull; <b>ATCL · MCL · TCL · RCL · XTCL</b> 이 이름을 물을 때 단면 group 을 클릭하면 그 이름을 읽어 레이어를 만듭니다(ATC_M3a → AT_Center_M3a).<br>&bull; 잠긴 레이어는 회색으로 보이고, 잠금을 풀면 원래 색으로 돌아옵니다.",
+          "en": "<b>Layers and wireframes - new command LineLayerDotText.</b><br>&bull; <b>LineLayerDotText</b> shows each picked line's layer name as a dot at the middle of the line. It follows layer changes and renames at once (on screen only; Enter with nothing picked turns it off).<br>&bull; <b>ATCL, MCL, TCL, RCL and XTCL</b> take a section group pick at the name prompt and read its name (ATC_M3a -> AT_Center_M3a).<br>&bull; Locked layers turn gray and get their own color back when unlocked."
+        },
+        {
+          "ko": "<b>목록 · 표 — 고침.</b><br>&bull; 단면 Material 이 \"0. Not Select\" 인 부재가 Molist · Fablist · PMolist 표에서 말없이 빠지던 것을 고쳤습니다. 이제 명령창에 알리고 표 끝 <b>Unclassified</b> 칸에 넣습니다.<br>&bull; Pname 에서 Material 을 고르지 않고 저장하면 \"그래도 저장할까요?\" 를 묻습니다.<br>&bull; Tlist · Dotlist · LayerList · SSLayerList · BlockList 의 이름이 숫자 순서로 나옵니다(T1, T2, T10).",
+          "en": "<b>Lists and tables - fixes.</b><br>&bull; Members whose section Material is \"0. Not Select\" no longer drop silently from the Molist, Fablist and PMolist tables. They are reported on the command line and listed under <b>Unclassified</b> at the end of the table.<br>&bull; Pname asks before saving a section with no Material.<br>&bull; Tlist, Dotlist, LayerList, SSLayerList and BlockList sort names by their numbers (T1, T2, T10)."
+        },
+        {
+          "ko": "<b>모델링 · 그림 — 고침.</b><br>&bull; Pname 그림이 단면을 그 면 방향에서 본 모양으로 나옵니다 — Front · Right 에서 그린 단면이 선 하나로 보이던 것.<br>&bull; 유닛을 group 안에 group 으로 두 번 묶었으면 UMD 가 그 유닛을 멈추고 알립니다(붙임선 부재가 말없이 빠지던 것).<br>&bull; 여러 유닛을 한꺼번에 Gmd 한 뒤 유닛 경계의 칸에서 BP · GS 가 이웃 유닛의 선을 집던 것을 고쳤습니다.<br>&bull; ShFace 에서 좁은 칸에 넓은 멀리언이 붙으면 판이 멀리언 너머로 나오던 것을 고쳤습니다.",
+          "en": "<b>Modeling and pictures - fixes.</b><br>&bull; Pname pictures show the section as seen along its own face - sections drawn in Front or Right no longer show as a single line.<br>&bull; UMD stops a unit grouped twice (a group inside a group) and says so - its attach-line members were dropped silently.<br>&bull; After Gmd on several units at once, BP and GS no longer pick a neighbouring unit's line in the bays on a unit border.<br>&bull; ShFace no longer leaves the sheet beyond a wide mullion on a narrow bay."
+        }
+      ]
+    },
+    {
       "version": "5.4.8",
       "date": "2026-10-26",
       "items": [
