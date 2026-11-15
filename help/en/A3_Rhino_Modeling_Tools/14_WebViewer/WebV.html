@@ -38,7 +38,7 @@
   <li>Type <code>WebV</code> in the Rhino command line and press Enter.</li>
   <li>At the <code>Select objects to view in WebViewer (custom GLB)</code> prompt, select objects to view in the web viewer.</li>
   <li>At the <code>Polygon reduce ratio (0.5~1.0, Enter=original)</code> prompt, enter the reduce ratio. Pressing only Enter uses the original ratio <code>1.0</code>.</li>
-  <li>The selected model is converted to GLB data, and the browser opens at <code>http://localhost:8765/glb</code>.</li>
+  <li>The selected model is converted to GLB data, and the browser opens at <code>http://localhost:8765/glb</code>. If 8765 is already in use because WebV was run in another Rhino, the next free port (8766 to 8774) is used and the command line says so.</li>
 
 </ol>
 <h2>Execution Example</h2>
@@ -56,17 +56,17 @@
   <tr><td>Reduce Ratio</td><td>Can input from <code>0.5</code> to <code>1.0</code>. Default is <code>1.0</code>. Smaller values reduce polygons to make web display data lighter.</td></tr>
   <tr><td>GLB Conversion</td><td><code>RhinoMeshExporterGLB</code> converts selected objects to Progressive GLB chunks by layer. Uses render mesh cache, smooth normal, color/layer/block color inheritance, and mesh quantization.</td></tr>
   <tr><td>Transmission Method</td><td>Converted GLB chunks are registered on the local HTTP server and transmitted with gzip compression on browser request.</td></tr>
-  <tr><td>Local Server</td><td><code>WebViewerServer</code> runs on <code>localhost:8765</code>. <code>/glb</code> provides Viewer HTML, and <code>/model/count</code> and <code>/model/{index}</code> provide GLB chunks.</td></tr>
-  <tr><td>Browser Launch</td><td>After conversion, opens the default browser and navigates to <code>http://localhost:8765/glb</code>.</td></tr>
+  <tr><td>Local Server</td><td><code>WebViewerServer</code> runs on <code>localhost:8765</code>. If 8765 is in use, it takes a free port from 8766 to 8774. If all ten are in use, it stops before converting and tells you why. The server keeps the same port until that Rhino is closed. <code>/glb</code> provides Viewer HTML, and <code>/model/count</code> and <code>/model/{index}</code> provide GLB chunks.</td></tr>
+  <tr><td>Browser Launch</td><td>After conversion, opens the default browser and navigates to <code>http://localhost:8765/glb</code> (or the port opened above).</td></tr>
   
 </tbody></table>
 <h2>Web Viewer Basic Operations</h2>
 <table class="desc-table">
   <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
   <tbody><tr><th>Operation</th><th>Description</th></tr>
-  <tr><td>Orbit</td><td>With the <code>Orbit</code> button selected in the top toolbar, drag the right mouse button to rotate the model.</td></tr>
+  <tr><td>Orbit</td><td>With the <code>Orbit</code> button selected in the top toolbar, drag the right mouse button to rotate the model. The model point where you pressed the button (shown as an orange dot) is the center of rotation, so it stays still on the screen. If there is no model there, a point at the depth of the screen center is used. On touch screens the point under the first finger is the center.</td></tr>
   <tr><td>Pan</td><td>With the <code>Pan</code> button selected in the top toolbar, drag the right mouse button to pan the view.</td></tr>
-  <tr><td>Zoom</td><td>Roll the mouse wheel to zoom in/out. Camera moves based on mouse position.</td></tr>
+  <tr><td>Zoom</td><td>Roll the mouse wheel to zoom in/out. The point under the cursor stays under the cursor.</td></tr>
   <tr><td>Reset</td><td>The <code>Reset</code> button in the top toolbar resets the camera direction to initial Isometric state and fits the entire model to the screen.</td></tr>
   <tr><td>Fit</td><td>The <code>Fit</code> button in the top toolbar executes Zoom Extents to fit the entire current model in view.</td></tr>
   <tr><td>Help</td><td>Clicking the <code>Help</code> button in the top toolbar opens an operation shortcut guide panel within the WebViewer.</td></tr>

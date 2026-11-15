@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>SecTip - Section Preview on Lines</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>SecTip &nbsp;—&nbsp; Section Preview on Lines</h1>
+<p><span class="cmd-box">SecTip</span></p>
+<p>Rest the mouse for a moment (0.3 seconds) on an <strong>M_Center, T_Center or R_Center</strong> line, and a small box (100 px) next to the cursor shows <strong>the section at that spot</strong>. The sections of overlapping lines and attach lines (<strong>AT_Center</strong>) there are drawn on top, so you can check how the members meet before modeling.</p>
+<p>The preview is on from the start. The <strong>SecTip</strong> command turns it off and on.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Move the mouse onto an M_Center, T_Center or R_Center line of the wireframe and rest it there for a moment.</li>
+  <li>The section box appears next to the cursor. Move the mouse along the line and the box follows.</li>
+  <li>While the box is shown, moving to another line or another bay switches straight to the section there.</li>
+  <li>Leave the line or press a mouse button and the box disappears.</li>
+  <li>To turn the preview off, run <strong>SecTip</strong>. Run it again to turn it back on. The setting is kept when Rhino restarts.</li>
+</ol>
+<h2>What the Box Shows</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Section of the line</td><td>The Section group found by the line's layer name (registered with <strong>SSP</strong>), shown as it was drawn.</td></tr>
+  <tr><td>Overlapping lines</td><td>The sections of M, T and R lines lying parallel at the same spot (within 0.5 mm) are drawn on top at their places in the model. Example: the two half mullions of neighboring units at a unit boundary.</td></tr>
+  <tr><td>Attach lines</td><td>The sections of the AT_Center lines covering the cursor spot. Attach lines differ from bay to bay, so only the ones of the bay under the cursor are drawn.</td></tr>
+  <tr><td>Orientation</td><td>Sections are placed by the same rule <strong>UMD</strong> uses to build members (the line direction and the <strong>WVector</strong> direction).</td></tr>
+  <tr><td>Name lines</td><td>Short section names are listed below the box (for example M_Center3r → MC3r, AT_Center-MC3-Vi → ATC-MC3-Vi). Names not registered with SSP are dimmed as <code>name - no SSP</code>.</td></tr>
+</tbody></table>
+<div class="note">The box is drawn <strong>on the screen only</strong>. It creates no objects in the document, so nothing is saved in the file, printed or recorded for Undo.</div>
+<div class="warn">A line not registered with SSP shows no section (an empty box with <code>no SSP</code>). A line without a WVector is treated as having the same orientation as the line under the cursor.</div>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>SSP</strong></td><td>Registers Section groups by layer name (the sections the preview looks up)</td></tr>
+  <tr><td><strong>WVector</strong></td><td>Creates Wire Vectors (line direction and the orientation used to place sections)</td></tr>
+  <tr><td><strong>LineLayerDotText</strong></td><td>Shows the layer names of picked lines on the screen</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>AWT</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>AWT</h1>
+<p><span class="cmd-box">AWT</span></p>
+<p>Command that calculates the aluminum unit weight of each picked section Surface and writes it straight into the <code>Unit Weight</code> field of <a href="../../A1_Rhino_Modeling_Main/02.Make_Section/02_InPut_Data/Pname_Profile_Info_Input.html">Pname</a>. It is the same value as the <code>AL Weight</code> that <a href="WT.html">WT</a> writes on the screen as text.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Type <code>AWT</code> in the Rhino command line and press Enter. You can also pick the sections first and then run it.</li>
+  <li>At the <code>Select section surfaces to write the aluminum unit weight</code> prompt, pick the section Surfaces and press Enter. You can pick several at once.</li>
+  <li>The command line shows <code>AWT: name  old -&gt; new kg/m</code> for each section, and the last line shows how many were written and how many were not.</li>
+</ol>
+<h2>Calculation Details</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Unit weight</td><td><code>area (mm²) * 2.71 * 0.001</code> kg/m, 3 decimal places (the same formula as the AL Weight of WT)</td></tr>
+  <tr><td>Area</td><td>The actual (trimmed) area of the picked Surface Face. Holes are excluded.</td></tr>
+  <tr><td>Units</td><td>If the document unit is not mm, the area is converted to mm² first.</td></tr>
+</tbody></table>
+<h2>When Nothing Is Written</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>Case</th><th>Command line message</th></tr>
+  <tr><td>A Surface never saved with Pname</td><td><code>no Pname record</code> — save it with Pname first.</td></tr>
+  <tr><td>Material is Steel, Accessory or Subtracter</td><td>Reports the material, for example <code>Material is 2. Steel, not aluminum</code>, together with the aluminum value.</td></tr>
+  <tr><td>A section made of two or more faces</td><td>Shows the calculated value. Type it into Pname's Unit Weight field and press Save.</td></tr>
+  <tr><td>Already the same value</td><td>Not written; counted as <code>already the same</code>.</td></tr>
+</tbody></table>
+<h2>Code-Based Operation</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>Material Not Select</td><td>Written, with <code>(Material = Not Select)</code> at the end of the line.</td></tr>
+  <tr><td>Composite profile</td><td>Each member gets its own unit weight. If the composite has its own unit weight set, that value is kept and reported.</td></tr>
+  <tr><td>Pname panel</td><td>If an open Pname panel shows that section (or its composite), its <code>Unit Weight</code> field is updated too.</td></tr>
+  <tr><td>Undo</td><td>One <code>Undo</code> restores all sections written in that run.</td></tr>
+</tbody></table>
+<div class="note"><strong>Note:</strong> Members that are already modeled keep their old unit weight (the same as saving with Pname). Model them again to update lists and tables. An open Dtable window holds the values from when it was opened, so reopen Dtable after AWT before saving there.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

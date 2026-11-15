@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>AWT - 13_Utils</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:26px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    code { font-family:Consolas,monospace; background:#f4f7fb; padding:1px 4px; border-radius:3px; }
+  </style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>AWT &nbsp;—&nbsp; 13_Utils</h1>
+<p><span class="cmd-box">AWT</span></p>
+<p>고른 단면 Surface 마다 알루미늄 단위 중량(단중)을 계산해, <a href="../../A1_Rhino_Modeling_Main/02.Make_Section/02_InPut_Data/Pname_Profile_Info_Input.html">Pname</a> 의 <code>Unit Weight</code> 칸에 바로 기록하는 명령입니다. <a href="WT.html">WT</a> 가 화면에 글자로 보여 주는 <code>AL Weight</code> 와 같은 값입니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li>Rhino 명령창에 <code>AWT</code>를 입력하고 Enter를 누릅니다. 단면을 미리 골라 두고 실행해도 됩니다.</li>
+  <li><code>알루미늄 단중을 기록할 단면 surface 를 고르십시오</code> 프롬프트에서 단면 Surface 를 고르고 Enter를 누릅니다. 여러 개를 한꺼번에 고를 수 있습니다.</li>
+  <li>단면마다 명령창에 <code>AWT: 이름  옛 값 -&gt; 새 값 kg/m</code> 이 찍히고, 맨 끝 줄에 기록한 개수와 쓰지 않은 개수가 나옵니다.</li>
+</ol>
+<h2>계산 내용</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>단중</td><td><code>면적(mm²) * 2.71 * 0.001</code> kg/m, 소수 3자리(WT 의 AL Weight 와 같은 식)</td></tr>
+  <tr><td>면적</td><td>고른 Surface Face 의 실제(trim 된) 면적입니다. 구멍은 빠집니다.</td></tr>
+  <tr><td>단위</td><td>문서 단위가 mm 가 아니면 mm² 로 바꿔 계산합니다.</td></tr>
+</tbody></table>
+<h2>기록하지 않는 경우</h2>
+<table class="desc-table">
+  <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+  <tbody><tr><th>경우</th><th>명령창 안내</th></tr>
+  <tr><td>Pname 으로 저장한 적이 없는 Surface</td><td><code>Pname 기록 없음</code> — 먼저 Pname 으로 저장합니다.</td></tr>
+  <tr><td>Material 이 Steel · Accessory · Subtracter</td><td><code>Material 이 2. Steel 입니다(알루미늄 아님)</code> 처럼 알리고, 알루미늄이면 얼마인지 함께 적습니다.</td></tr>
+  <tr><td>면이 2개 이상인 단면</td><td>계산한 값을 알려 줍니다. Pname 의 Unit Weight 칸에 그 값을 넣고 Save 합니다.</td></tr>
+  <tr><td>이미 같은 값</td><td>쓰지 않고 <code>이미 같음</code> 으로 셉니다.</td></tr>
+</tbody></table>
+<h2>코드 기준 동작</h2>
+<table class="desc-table">
+  <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>Material Not Select</td><td>기록하고 줄 끝에 <code>(Material = Not Select)</code> 를 붙입니다.</td></tr>
+  <tr><td>합성 프로파일</td><td>구성원마다 자기 단중을 씁니다. 합성 단중을 따로 정해 두었으면 그 값은 그대로 두고 알립니다.</td></tr>
+  <tr><td>Pname 창</td><td>열린 Pname 창이 그 단면(또는 그 합성)을 보여 주고 있으면 <code>Unit Weight</code> 칸도 새 값으로 바뀝니다.</td></tr>
+  <tr><td>Undo</td><td><code>Undo</code> 한 번에 이번에 기록한 단면이 모두 되돌아갑니다.</td></tr>
+</tbody></table>
+<div class="note"><strong>참고:</strong> 이미 모델링한 부재의 단중은 바뀌지 않습니다(Pname 저장과 같습니다). 목록 · 표에 반영하려면 다시 모델링합니다. 열어 둔 Dtable 창은 연 때의 값을 들고 있으므로, AWT 뒤에는 Dtable 을 다시 열어 저장합니다.</div>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

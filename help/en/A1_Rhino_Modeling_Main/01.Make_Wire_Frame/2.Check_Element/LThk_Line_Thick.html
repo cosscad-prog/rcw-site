@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>LThk - Thick Wireframe Lines</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>LThk &nbsp;—&nbsp; Thick Wireframe Lines</h1>
+<p><span class="cmd-box">LThk</span></p>
+<p>Gives the layers whose names start with <strong>M_</strong> or <strong>T_</strong> (M_Center, T_Center and so on) the <strong>Thick</strong> linetype (continuous, 3 px), so the wireframe lines show thick. Run it again to put the original linetypes back.</p>
+<p>It is off at first. In a document where LThk is on, <strong>MC, MCL, TC and TCL</strong> also make the M_Center and T_Center layers they use thick. Turn it off and MC and TC stop doing so.</p>
+<h2>How to Use</h2>
+<ol class="step-list">
+  <li>Run <strong>LThk</strong>. There is nothing to pick - every M_ and T_ layer in the document becomes thick.</li>
+  <li>The command line shows how many layers changed.</li>
+  <li>To go back, run <strong>LThk</strong> again. Each layer returns to the linetype it had before.</li>
+</ol>
+<h2>On and Off</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Item</th><th>Description</th></tr>
+  <tr><td>When it counts as on</td><td>On when at least one M_ or T_ layer uses the Thick linetype. New documents and documents made before are off.</td></tr>
+  <tr><td>LThk while off</td><td>Gives every M_ and T_ layer the Thick linetype, noting each layer's previous linetype on the layer. Creates the "Thick" linetype if it is missing, or resets it to continuous, 3 px.</td></tr>
+  <tr><td>LThk while on</td><td>Puts the Thick layers back to the noted linetype. A layer with nothing noted (one MC or TC made thick from the start while it was on) goes to Continuous.</td></tr>
+  <tr><td>MC, MCL, TC, TCL</td><td>Only in a document where it is on, they give their layer the Thick linetype and set the picked lines to By Layer. In a document where it is off, they leave linetypes alone.</td></tr>
+  <tr><td>Saving and Undo</td><td>The layer linetypes are saved in the document. Undo puts them back.</td></tr>
+</tbody></table>
+<div class="note">Only lines whose linetype is <strong>By Layer</strong> become thick. Lines with their own linetype stay as they are, and the command line reports how many. The default Continuous linetype is never given a width - every other line using Continuous would become thick too.</div>
+<div class="warn">Works in <strong>Rhino 8 or later</strong> only. Rhino 7 linetypes have no width, so in Rhino 7 LThk only shows a message and changes nothing. Reference layers (worksession, linked blocks) are not changed.</div>
+<h2>Related Commands</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>Command</th><th>Description</th></tr>
+  <tr><td><strong>MC1 - MC20, MCL</strong></td><td>Puts the picked lines on an M_Center layer (thick when LThk is on)</td></tr>
+  <tr><td><strong>TC1 - TC20, TCL</strong></td><td>Puts the picked lines on a T_Center layer (thick when LThk is on)</td></tr>
+  <tr><td><strong>Ldir</strong></td><td>Line direction marks - arrow and point keep their size on thick lines</td></tr>
+  <tr><td><strong>LineLayerDotText</strong></td><td>Shows the layer names of picked lines on the screen</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>

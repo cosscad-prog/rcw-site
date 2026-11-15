@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+  <title>LThk - Wireframe 선 굵게</title>
+  <style>
+    body { font-family:"맑은 고딕","Malgun Gothic",sans-serif; font-size:13px; color:#222; margin:20px 30px; line-height:1.7; }
+    h1 { font-size:18px; border-bottom:2px solid #0066cc; padding-bottom:6px; color:#0066cc; }
+    h2 { font-size:14px; border-left:4px solid #0066cc; padding-left:8px; margin-top:24px; color:#003d80; }
+    .cmd-box { display:inline-block; background:#f0f4ff; border:1px solid #99bbee; border-radius:4px; padding:2px 10px; font-family:Consolas,monospace; font-size:14px; font-weight:bold; color:#003d80; margin-bottom:10px; }
+    .desc-table { border-collapse:collapse; width:100%; margin-top:8px; table-layout:fixed; }
+    .desc-table th { background:#dce8f8; border:1px solid #aac4e8; padding:5px 10px; text-align:left; font-weight:bold; }
+    .desc-table td { border:1px solid #c8d8ec; padding:5px 10px; vertical-align:top; word-break:keep-all; }
+    .desc-table tr:nth-child(even) td { background:#f7faff; }
+    .note { background:#fffbe6; border-left:4px solid #f0c040; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .warn { background:#fff1f0; border-left:4px solid #e07060; padding:8px 12px; margin-top:16px; font-size:12px; }
+    .step-list { padding-left:20px; }
+    .step-list li { margin-bottom:6px; }
+    .demo-images { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; margin:12px 0; }
+    .demo-images figure { margin:0; }
+    .demo-images img { display:block; max-width:100%; max-height:420px; width:auto; height:auto; border:1px solid #ccc; background:#fff; }
+    .demo-images figcaption { font-size:12px; color:#556; margin-top:4px; }
+  </style>
+<style id="rcw-editor-block-style">
+.note{background:#fffbe6;border-left:4px solid #f0c040;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+.warning,.warn{background:#fff2f2;border-left:4px solid #e05050;color:#7f1d1d;padding:8px 12px;margin-top:16px;margin-bottom:16px;font-size:12px}
+</style>
+<style id="rcw-font-normalize">code,[style*="font-family"]{font-family:"맑은 고딕","Malgun Gothic",sans-serif !important}</style>
+</head>
+<body>
+
+<h1>LThk &nbsp;—&nbsp; Wireframe 선 굵게</h1>
+<p><span class="cmd-box">LThk</span></p>
+<p>이름이 <strong>M_</strong> · <strong>T_</strong> 로 시작하는 layer(M_Center · T_Center 등)의 Linetype 을 <strong>Thick</strong>(실선 · 3 px)으로 바꿔 Wireframe 선을 굵게 보이게 합니다. 한 번 더 실행하면 원래 Linetype 으로 되돌립니다.</p>
+<p>처음에는 꺼져 있습니다. LThk 로 켠 문서에서는 <strong>MC · MCL · TC · TCL</strong> 이 쓰는 M_Center · T_Center layer 도 굵게 합니다. 끄면 MC · TC 도 굵게 하지 않습니다.</p>
+<h2>사용 방법</h2>
+<ol class="step-list">
+  <li><strong>LThk</strong> 를 실행합니다. 고를 것은 없습니다 — 문서의 M_ · T_ layer 가 모두 굵어집니다.</li>
+  <li>명령창에 바꾼 layer 수가 나옵니다.</li>
+  <li>되돌리려면 <strong>LThk</strong> 를 한 번 더 실행합니다. 각 layer 가 굵게 하기 전의 Linetype 으로 돌아갑니다.</li>
+</ol>
+<h2>켜짐 · 꺼짐</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>항목</th><th>설명</th></tr>
+  <tr><td>켜짐 판정</td><td>M_ · T_ layer 가운데 하나라도 Linetype 이 Thick 이면 켜진 것으로 봅니다. 새 문서와 전에 만든 문서는 꺼짐입니다.</td></tr>
+  <tr><td>꺼져 있을 때 LThk</td><td>M_ · T_ layer 를 모두 Thick 으로 바꿉니다. 바꾸기 전의 Linetype 은 layer 마다 적어 둡니다. Linetype "Thick" 이 없으면 만들고, 있으면 실선 · 3 px 로 다시 맞춥니다.</td></tr>
+  <tr><td>켜져 있을 때 LThk</td><td>Thick 인 layer 를 적어 둔 Linetype 으로 되돌립니다. 적어 둔 값이 없는 layer(켜진 동안 MC · TC 가 처음부터 굵게 만든 것)는 Continuous 로 갑니다.</td></tr>
+  <tr><td>MC · MCL · TC · TCL</td><td>켜진 문서에서만 그 layer 를 Thick 으로 하고 고른 선을 By Layer 로 바꿉니다. 꺼진 문서에서는 Linetype 을 건드리지 않습니다.</td></tr>
+  <tr><td>저장 · Undo</td><td>layer 의 Linetype 은 문서에 저장됩니다. Undo 로 되돌릴 수 있습니다.</td></tr>
+</tbody></table>
+<div class="note">굵어지는 것은 Linetype 이 <strong>By Layer</strong> 인 선입니다. 자기 Linetype 을 가진 선은 그대로이고, 그 수를 명령창에 알립니다. 기본 Continuous Linetype 에는 폭을 주지 않습니다 — Continuous 를 쓰는 다른 선까지 모두 굵어지기 때문입니다.</div>
+<div class="warn"><strong>Rhino 8 이상</strong>에서만 됩니다. Rhino 7 의 Linetype 에는 폭이 없어 LThk 는 알림만 내고 아무것도 바꾸지 않습니다. 참조 layer(worksession · 링크 블록)는 바꾸지 않습니다.</div>
+<h2>관련 명령어</h2>
+<table class="desc-table">
+  <colgroup>
+    <col style="width: 20%;">
+    <col style="width: 80%;">
+  </colgroup>
+  <tbody><tr><th>명령어</th><th>설명</th></tr>
+  <tr><td><strong>MC1 ~ MC20 · MCL</strong></td><td>고른 선을 M_Center layer 로(켜진 문서에서는 굵게)</td></tr>
+  <tr><td><strong>TC1 ~ TC20 · TCL</strong></td><td>고른 선을 T_Center layer 로(켜진 문서에서는 굵게)</td></tr>
+  <tr><td><strong>Ldir</strong></td><td>선 방향 표시 — 선을 굵게 해도 화살표 · 점 크기는 그대로</td></tr>
+  <tr><td><strong>LineLayerDotText</strong></td><td>고른 선의 Layer 이름을 화면에 표시</td></tr>
+</tbody></table>
+<script>if(window.parent!==window){window.parent.postMessage({action:"pageLoaded",href:window.location.href},"*");}</script>
+
+</body>
+</html>
