@@ -3,6 +3,52 @@
   "installer": {"file": "RCW5.exe", "repo": "rcw-releases"},
   "releases": [
     {
+      "version": "5.4.11",
+      "date": "2026-11-16",
+      "items": [
+        {
+          "ko": "<b>SecTip — 새 명령: 선 위 단면 미리보기.</b><br>&bull; M_Center · T_Center · R_Center 선 위에 마우스를 잠깐 멈추면 그 자리의 단면(붙임선 · 포개진 선 포함)이 커서 옆 작은 상자에 보입니다.<br>&bull; 처음부터 켜져 있습니다. SecTip 을 실행하면 끄고, 한 번 더 하면 다시 켭니다(Rhino 를 다시 시작해도 남습니다).",
+          "en": "<b>SecTip - new command: section preview on lines.</b><br>&bull; Rest the mouse on an M_Center, T_Center or R_Center line to see the section at that spot (with its attach lines and overlapping lines) in a small box next to the cursor.<br>&bull; It is on from the start. Run SecTip to turn it off and again to turn it back on (kept when Rhino restarts)."
+        },
+        {
+          "ko": "<b>AWT — 새 명령: 알루미늄 단중 기록.</b><br>&bull; 고른 단면 surface 마다 알루미늄 단중(넓이 mm² × 2.71 × 0.001 = kg/m)을 그 단면의 Unit Weight(Pname 의 Unit Weight 칸)에 바로 씁니다. WT 의 알루미늄 값과 같은 계산입니다.<br>&bull; Pname 기록이 없거나 재질이 알루미늄이 아니거나 면이 여러 개인 단면은 쓰지 않고 알립니다.",
+          "en": "<b>AWT - new command: aluminum unit weight.</b><br>&bull; For each picked section surface, AWT works out the aluminum unit weight (area mm² × 2.71 × 0.001 = kg/m) and writes it straight into that section's Unit Weight (the Unit Weight box in Pname). It is the same value WT shows for aluminum.<br>&bull; Sections with no Pname record, a material other than aluminum, or more than one face are skipped and reported."
+        },
+        {
+          "ko": "<b>Cuttinglist — 고침.</b><br>&bull; Rhino 8 · 9 를 한국어 설정으로 쓰면 절단 목록에서 이름순으로 맨 끝인 부재 한 묶음(같은 이름 · 같은 길이)이 통째로 빠지고, 장바 수량 · 중량도 그만큼 적게 나오던 것을 고쳤습니다.<br>&bull; Rhino 8 · 9 에서 만든 절단 목록은 다시 만들어 주십시오. Rhino 7 은 해당 없습니다.",
+          "en": "<b>Cuttinglist - fix.</b><br>&bull; With Rhino 8 or 9 in Korean regional settings, the cutting list left out the last group in name order (same name, same length), and the long-bar count and weight came out short by the same amount. Fixed.<br>&bull; Please make cutting lists made in Rhino 8 or 9 again. Rhino 7 was not affected."
+        },
+        {
+          "ko": "<b>GFace · WVector — 고침.</b><br>&bull; 칸을 덮는 붙임선(ATC) 단면의 유리선을 부재 자기 단면보다 먼저 봅니다 — vent 칸에서 유리 면이 생기지 않던 것을 고쳤습니다(GFace · ShFace · GS By Section).<br>&bull; WVector 가 0.01 ~ 1 mm 떨어진 Wireframe 선 끝을 이어 붙이고, 1 ~ 5 mm 는 알립니다. GFace 알림이 Section group 과 Wireframe 선 이름 · 거리를 함께 알립니다.",
+          "en": "<b>GFace and WVector - fix.</b><br>&bull; The glass line of an attach (ATC) section covering the bay now comes before the member's own section, so vent bays get their glass face again (GFace, ShFace, GS By Section).<br>&bull; WVector joins Wireframe line ends that miss another line by 0.01-1 mm and reports gaps of 1-5 mm. GFace messages now name the Section group and the Wireframe lines, with the distance."
+        },
+        {
+          "ko": "<b>Wireframe 선 보기 — 바뀜.</b><br>&bull; 선 방향 표시(Ldir)가 끝점 화살표 + 시작점 점이 되었습니다. 선을 굵게 해도 커지지 않고 크기는 Ldir 의 ArrowSize · PointSize 로 정합니다. ATCL · ATC1 ~ ATC9 의 AT_Center 선에도 같은 표시가 붙습니다.<br>&bull; Rhino 8 에서 MC · MCL · TC · TCL 의 M_Center · T_Center layer 에 굵은 선(Thick, 3 px)을 줍니다. LineLayerDotText 는 겹친 점 글자를 위아래로 쌓고, LayerList 는 표의 레이어 이름 글자를 그 레이어에 놓습니다.",
+          "en": "<b>Wireframe line display - change.</b><br>&bull; The line direction marks (Ldir) are now an end arrow and a start point. They no longer grow with a thick line; set the size with Ldir's ArrowSize and PointSize. AT_Center lines from ATCL and ATC1-ATC9 get the same marks.<br>&bull; In Rhino 8, MC, MCL, TC and TCL give the M_Center and T_Center layers a thick linetype (Thick, 3 px). LineLayerDotText stacks overlapping dots up and down, and LayerList puts each layer-name text of its table on that layer."
+        },
+        {
+          "ko": "<b>Sht · BackPanel — 고침.</b><br>&bull; 안쪽으로 되접은 날개가 코너에서 만날 때, 이웃 변의 깊이가 판 두께보다 적게 달라도 45° 로 맞대도록 고쳤습니다. 전에는 그런 코너가 직각으로 겹쳐 만들어졌습니다.",
+          "en": "<b>Sht and BackPanel - fix.</b><br>&bull; Inside wings now meet at 45° at a corner even when the two sides differ in depth by less than the sheet thickness. Such corners used to overlap at a right angle."
+        },
+        {
+          "ko": "<b>Dtable — 고침.</b><br>&bull; Front · Right 뷰에서 만든 단면의 그림이 선 하나로 나오던 것을 고쳤습니다. 이제 Pname 처럼 단면의 평면에서 본 모양입니다.<br>&bull; 고르기는 단면 surface 만 받습니다.",
+          "en": "<b>Dtable - fix.</b><br>&bull; Sections drawn in the Front or Right view no longer show as a single line in the picture; it is now seen from the section's own plane, as in Pname.<br>&bull; Picking takes section surfaces only."
+        },
+        {
+          "ko": "<b>SST · FSC — 고침.</b><br>&bull; SST 를 실행하면 명령창에 \"Select objects\" 가 떠서 취소된 것처럼 보이지 않습니다.<br>&bull; 끌기 상자가 끄는 동안 보이고, 모양은 Rhino 의 선택 창과 같습니다(창 = 실선, 걸침 = 점선).",
+          "en": "<b>SST and FSC - fix.</b><br>&bull; SST now shows \"Select objects\" on the command line, so it no longer looks cancelled.<br>&bull; The drag box is drawn while you drag and looks like Rhino's own selection window (window = solid, crossing = dashed)."
+        },
+        {
+          "ko": "<b>DWVector — 고침.</b><br>&bull; \"M3r\" · \"At-MC3-Vi\" · \"T_T1\" · \"DM3\" 처럼 WVector 가 찍은 점 글자 가운데 지워지지 않던 것도 지웁니다. 점이 놓인 레이어로 가려 사용자가 만든 점 글자는 남기고, 끝에 지운 수 · 남긴 수를 알립니다.",
+          "en": "<b>DWVector - fix.</b><br>&bull; DWVector now also deletes WVector dots it used to miss, such as \"M3r\", \"At-MC3-Vi\", \"T_T1\" and \"DM3\". It checks the layer each dot is on, keeps dots you made yourself, and reports how many it deleted and kept."
+        },
+        {
+          "ko": "<b>WebV (Standard) — 바뀜.</b><br>&bull; 회전의 중심이 마우스(손가락) 아래의 보이는 모델 점이 되고, 휠 · 핀치 줌이 커서 점을 그대로 지킵니다. 이미 저장한 HTML 은 WebV 로 다시 저장해야 새 조작이 됩니다.<br>&bull; 다른 Rhino 가 localhost:8765 를 쓰고 있으면 멈추지 않고 비어 있는 다음 포트(8766 ~ 8774)로 엽니다.",
+          "en": "<b>WebV (Standard) - change.</b><br>&bull; The view now orbits around the visible model point under the mouse or finger, and wheel and pinch zoom keep the cursor point in place. HTML files saved before need to be saved again with WebV to get this.<br>&bull; When another Rhino holds localhost:8765, WebV no longer stops; it opens on the next free port (8766-8774)."
+        }
+      ]
+    },
+    {
       "version": "5.4.10",
       "date": "2026-11-03",
       "items": [
