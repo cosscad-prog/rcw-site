@@ -15,6 +15,10 @@
           "en": "<b>AWT - new command: aluminum unit weight.</b><br>&bull; For each picked section surface, AWT works out the aluminum unit weight (area mm² × 2.71 × 0.001 = kg/m) and writes it straight into that section's Unit Weight (the Unit Weight box in Pname). It is the same value WT shows for aluminum.<br>&bull; Sections with no Pname record, a material other than aluminum, or more than one face are skipped and reported."
         },
         {
+          "ko": "<b>LThk — 새 명령: Wireframe 선 굵게.</b><br>&bull; Rhino 8 에서 이름이 M_ · T_ 로 시작하는 layer(M_Center · T_Center 등)를 굵은 선(Linetype Thick, 실선 3 px)으로 바꿉니다. 한 번 더 실행하면 원래 Linetype 으로 돌아갑니다.<br>&bull; 처음에는 꺼져 있습니다. LThk 로 켠 문서에서는 MC · MCL · TC · TCL 도 그 layer 를 굵게 하고, 끄면 굵게 하지 않습니다. Rhino 7 에서는 알림만 냅니다.",
+          "en": "<b>LThk - new command: thick wireframe lines.</b><br>&bull; In Rhino 8, LThk gives the layers whose names start with M_ or T_ (M_Center, T_Center and so on) a thick linetype (Thick, continuous 3 px). Run it again to put the original linetypes back.<br>&bull; It is off at first. In a document where LThk is on, MC, MCL, TC and TCL make their layers thick too; turn it off and they stop. In Rhino 7 it only shows a message."
+        },
+        {
           "ko": "<b>Cuttinglist — 고침.</b><br>&bull; Rhino 8 · 9 를 한국어 설정으로 쓰면 절단 목록에서 이름순으로 맨 끝인 부재 한 묶음(같은 이름 · 같은 길이)이 통째로 빠지고, 장바 수량 · 중량도 그만큼 적게 나오던 것을 고쳤습니다.<br>&bull; Rhino 8 · 9 에서 만든 절단 목록은 다시 만들어 주십시오. Rhino 7 은 해당 없습니다.",
           "en": "<b>Cuttinglist - fix.</b><br>&bull; With Rhino 8 or 9 in Korean regional settings, the cutting list left out the last group in name order (same name, same length), and the long-bar count and weight came out short by the same amount. Fixed.<br>&bull; Please make cutting lists made in Rhino 8 or 9 again. Rhino 7 was not affected."
         },
@@ -23,8 +27,8 @@
           "en": "<b>GFace and WVector - fix.</b><br>&bull; The glass line of an attach (ATC) section covering the bay now comes before the member's own section, so vent bays get their glass face again (GFace, ShFace, GS By Section).<br>&bull; WVector joins Wireframe line ends that miss another line by 0.01-1 mm and reports gaps of 1-5 mm. GFace messages now name the Section group and the Wireframe lines, with the distance."
         },
         {
-          "ko": "<b>Wireframe 선 보기 — 바뀜.</b><br>&bull; 선 방향 표시(Ldir)가 끝점 화살표 + 시작점 점이 되었습니다. 선을 굵게 해도 커지지 않고 크기는 Ldir 의 ArrowSize · PointSize 로 정합니다. ATCL · ATC1 ~ ATC9 의 AT_Center 선에도 같은 표시가 붙습니다.<br>&bull; Rhino 8 에서 MC · MCL · TC · TCL 의 M_Center · T_Center layer 에 굵은 선(Thick, 3 px)을 줍니다. LineLayerDotText 는 겹친 점 글자를 위아래로 쌓고, LayerList 는 표의 레이어 이름 글자를 그 레이어에 놓습니다.",
-          "en": "<b>Wireframe line display - change.</b><br>&bull; The line direction marks (Ldir) are now an end arrow and a start point. They no longer grow with a thick line; set the size with Ldir's ArrowSize and PointSize. AT_Center lines from ATCL and ATC1-ATC9 get the same marks.<br>&bull; In Rhino 8, MC, MCL, TC and TCL give the M_Center and T_Center layers a thick linetype (Thick, 3 px). LineLayerDotText stacks overlapping dots up and down, and LayerList puts each layer-name text of its table on that layer."
+          "ko": "<b>Wireframe 선 보기 — 바뀜.</b><br>&bull; 선 방향 표시(Ldir)가 끝점 화살표 + 시작점 점이 되었습니다. 선을 굵게 해도 커지지 않고 크기는 Ldir 의 ArrowSize · PointSize 로 정합니다. ATCL · ATC1 ~ ATC9 의 AT_Center 선에도 같은 표시가 붙습니다.<br>&bull; LineLayerDotText 는 겹친 점 글자를 위아래로 쌓고, LayerList 는 표의 레이어 이름 글자를 그 레이어에 놓습니다.",
+          "en": "<b>Wireframe line display - change.</b><br>&bull; The line direction marks (Ldir) are now an end arrow and a start point. They no longer grow with a thick line; set the size with Ldir's ArrowSize and PointSize. AT_Center lines from ATCL and ATC1-ATC9 get the same marks.<br>&bull; LineLayerDotText stacks overlapping dots up and down, and LayerList puts each layer-name text of its table on that layer."
         },
         {
           "ko": "<b>Sht · BackPanel — 고침.</b><br>&bull; 안쪽으로 되접은 날개가 코너에서 만날 때, 이웃 변의 깊이가 판 두께보다 적게 달라도 45° 로 맞대도록 고쳤습니다. 전에는 그런 코너가 직각으로 겹쳐 만들어졌습니다.",
