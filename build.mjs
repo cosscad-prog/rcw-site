@@ -30,7 +30,7 @@ const DIST = path.join(ROOT, 'dist');
 // 되고, _redirects 의 옛 평면 경로 전달 규칙도 이 목록에서 자동으로 만들어진다(아래).
 const ROOT_PAGES = [
   'admin.html', 'cad.html', 'contact.html', 'customer.html',
-  'guide-en.html', 'guide-ko.html', 'index.html', 'modeling.html',
+  'facader.html', 'guide-en.html', 'guide-ko.html', 'index.html', 'modeling.html',
   'output.html', 'todo.html', 'trial.html',
   'whatsnew-5.3.1.html', 'whatsnew-5.3.2.html', 'whatsnew-5.4.0.html', 'whatsnew-5.4.1.html', 'whatsnew-5.4.2.html', 'whatsnew-5.4.3.html', 'whatsnew-5.4.4.html', 'whatsnew-5.4.5.html', 'whatsnew-5.4.6.html', 'whatsnew-5.4.7.html', 'whatsnew-5.4.8.html', 'whatsnew-5.4.9.html', 'whatsnew-5.4.10.html', 'whatsnew-5.4.11.html', 'whatsnew.html'
 ];
@@ -142,6 +142,10 @@ async function main() {
   console.log(`[build] img/ ${imgCountRoot}개 파일 → dist/img/ 와 dist/rcw/img/`);
   if (imgCountRoot === 0) throw new Error('img/ 가 비었다.');
   if (imgCountRoot !== imgCountRcw) throw new Error('img/ 두 사본의 개수가 다르다 — 복사 도중 문제.');
+
+  // fcd/ → dist/rcw/fcd/ (Facader Editor 발표 자료 — facader.html 이 상대경로로 읽는다. 2026-11-17 부터 이틀만 올린다)
+  const fcdCount = await copyDir(path.join(ROOT, 'fcd'), path.join(DIST, 'rcw', 'fcd'));
+  console.log(`[build] fcd/ ${fcdCount}개 파일 → dist/rcw/fcd/`);
 
   // releases.json → 루트 + /rcw/ 둘 다 (admin.html 이 상대경로로 읽는다)
   await copyFile(path.join(ROOT, 'releases.json'), path.join(DIST, 'releases.json'));

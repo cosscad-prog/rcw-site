@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Facader Editor 소개 — 발표 자료</title>
+<style>
+* { margin: 0; box-sizing: border-box; }
+html { background: #0b1220; }
+body { font: 16px/1.5 "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; color: #e2e8f0; word-break: keep-all; }
+.top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 16px; padding: 10px 20px; background: rgba(11,18,32,.92); border-bottom: 1px solid rgba(255,255,255,.1); backdrop-filter: blur(10px); }
+.top a.home { display: flex; align-items: center; gap: 9px; color: #fff; font-weight: 800; text-decoration: none; white-space: nowrap; }
+.top .mark { display: grid; width: 29px; height: 29px; place-items: center; border-radius: 8px; background: #2667d9; color: #fff; font-size: 11px; }
+.top .ttl { flex: 1; min-width: 0; color: #cbd5e1; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top .hint { color: #94a3b8; font-size: 13px; white-space: nowrap; }
+.top button { height: 36px; padding: 0 14px; border: 1px solid #334155; border-radius: 8px; background: #2563eb; color: #fff; font: inherit; font-weight: 700; cursor: pointer; white-space: nowrap; }
+@media (max-width: 720px) { .top .hint { display: none; } }
+.deck { width: min(1280px, calc(100% - 32px)); margin: 20px auto 60px; display: flex; flex-direction: column; gap: 20px; counter-reset: page; }
+.stage { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.35); background: #f4f6fa; }
+.stage > section { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 0 0; transform: scale(var(--k, .5)); isolation: isolate; text-align: left; }
+/* 발표 모드: 한 장씩 화면 가득 */
+body.present { overflow: hidden; }
+body.present .top { display: none; }
+body.present .deck { width: 100vw; height: 100vh; margin: 0; gap: 0; display: block; background: #000; }
+body.present .stage { display: none; border-radius: 0; box-shadow: none; position: absolute; left: 50%; top: 50%; width: min(100vw, calc(100vh * 16 / 9)); transform: translate(-50%, -50%); }
+body.present .stage.on { display: block; }
+.pgn { display: none; }
+body.present .pgn { display: block; position: fixed; right: 14px; bottom: 10px; z-index: 5; color: #94a3b8; font-size: 13px; opacity: .7; }
+/* 슬라이드 바탕 규칙 */
+.stage h1 { font-size: 96px; font-weight: 600; }
+.stage h2 { font-size: 64px; font-weight: 600; }
+.stage h3 { font-size: 44px; font-weight: 600; }
+.stage p, .stage li, .stage td, .stage th { overflow-wrap: break-word; }
+.stage table { width: 100%; border-collapse: separate; border-spacing: 0; border: solid #0003; border-width: 2px 0 0 2px; }
+.stage th, .stage td { padding: .35em .6em; text-align: left; border: solid #0003; border-width: 0 2px 2px 0; }
+.stage th { font-weight: 700; }
+x-shape { display: block; }
+/* Facader Editor 소개 — RCW 디자인 시스템 토큰(project/ds/rcw/tokens.json) */
+:root {
+  --surface-page: #f4f6fa;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --surface-subtle: #f1f5f9;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --ink: #0f172a;
+  --ink-body: #1e293b;
+  --ink-secondary: #475569;
+  --ink-muted: #64748b;
+  --accent: #2563eb;
+  --accent-tint: #eff6ff;
+  --accent-border: #93c5fd;
+  --signature-red: #e11d48;
+  --red-tint: #fff1f2;
+  --red-border: #fecdd3;
+  --note-bg: #fffbeb;
+  --note-border: #fde68a;
+  --note-ink: #92400e;
+}
+
+body {
+  font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  color: #1e293b;
+}
+
+section { counter-increment: page; }
+
+/* ── 내용 슬라이드 공통 ── */
+.s {
+  background: var(--surface-page);
+  padding: 128px 128px 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  color: var(--ink-body);
+}
+.head { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font-size: 24px; font-weight: 800; letter-spacing: 2px; line-height: 1.3; color: var(--accent); }
+.s h2 { font-size: 64px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; color: var(--ink); }
+.lead { font-size: 36px; line-height: 1.45; color: var(--ink-muted); }
+.red { color: var(--signature-red); }
+.blue { color: var(--accent); }
+
+.foot { position: absolute; left: 128px; right: 128px; bottom: 64px; display: flex; justify-content: space-between; align-items: center; }
+.foot-name { font-size: 24px; font-weight: 600; line-height: 1.3; color: var(--ink-muted); }
+.pg { font-size: 24px; font-weight: 600; line-height: 1.3; color: var(--ink-muted); }
+.pg::after { content: counter(page); }
+
+/* ── 카드 ── */
+.row { display: flex; gap: 32px; }
+.col { display: flex; flex-direction: column; gap: 24px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.fill { flex: 1; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+.card h3 { font-size: 36px; font-weight: 800; line-height: 1.3; color: var(--ink); }
+.card .cmd { font-size: 28px; font-weight: 700; line-height: 1.4; color: var(--accent); }
+.card .desc { font-size: 28px; line-height: 1.5; color: var(--ink-secondary); }
+.card .small { font-size: 24px; line-height: 1.5; color: var(--ink-muted); }
+.card-tint { background: var(--accent-tint); border: 1px solid var(--accent-border); }
+.card-s { padding: 28px 36px; gap: 10px; }
+.mini { padding: 22px 28px; gap: 6px; }
+.mini .mini-t { font-size: 28px; font-weight: 800; line-height: 1.4; color: var(--ink); }
+.mini .mini-d { font-size: 24px; line-height: 1.45; color: var(--ink-secondary); }
+.num-m { font-size: 64px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; color: var(--ink); }
+.num-cap { font-size: 28px; line-height: 1.4; color: var(--ink-secondary); }
+.step-row { display: flex; gap: 16px; align-items: center; }
+.arrow { width: 56px; height: 28px; background: #93c5fd; align-self: center; }
+.rows { display: flex; flex-direction: column; gap: 8px; }
+.rows .r { font-size: 28px; line-height: 1.5; color: var(--ink-secondary); }
+.rows .k { color: var(--ink); font-weight: 800; }
+.list { font-size: 28px; line-height: 1.5; color: var(--ink-secondary); padding-left: 36px; }
+.w720 { width: 720px; }
+.w640 { width: 640px; }
+.strip { font-size: 28px; line-height: 1.5; color: var(--ink-body); }
+.legal { font-size: 24px; line-height: 1.5; color: var(--ink-muted); }
+.close-h { font-size: 64px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; color: var(--ink); }
+.dark .steps-d { font-size: 28px; line-height: 1.5; color: #e2e8f0; }
+.dark .steps-k { font-size: 28px; font-weight: 800; line-height: 1.5; color: #93c5fd; }
+
+.num { font-size: 112px; font-weight: 800; letter-spacing: -2px; line-height: 1; color: var(--ink); }
+.num-accent { font-size: 112px; font-weight: 800; letter-spacing: -2px; line-height: 1; color: var(--accent); }
+.num-unit { font-size: 36px; font-weight: 800; line-height: 1.3; color: var(--ink); }
+
+.step { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; }
+.step .step-n { font-size: 28px; font-weight: 800; line-height: 1; color: #ffffff; }
+
+.badge {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  font-size: 24px; font-weight: 700; line-height: 1.4;
+  color: var(--signature-red);
+  background: var(--red-tint);
+  border: 1px solid var(--red-border);
+  border-radius: 6px;
+  padding: 6px 18px;
+  align-self: flex-start;
+}
+.chip {
+  font-size: 24px; font-weight: 700; line-height: 1.4;
+  color: var(--accent);
+  background: var(--accent-tint);
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  padding: 6px 18px;
+  align-self: flex-start;
+}
+
+.frame {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+.frame .cap { font-size: 24px; line-height: 1.4; color: var(--ink-muted); padding: 0 8px 4px; }
+
+.note { background: var(--note-bg); border: 1px solid var(--note-border); border-radius: 10px; padding: 24px 32px; display: flex; flex-direction: column; gap: 8px; }
+.note .note-t { font-size: 28px; font-weight: 800; line-height: 1.4; color: var(--note-ink); }
+.note .note-b { font-size: 28px; line-height: 1.5; color: var(--ink-body); }
+
+.tbl { font-size: 28px; color: var(--ink-body); }
+.tbl-head { background: var(--surface-subtle); }
+.tr-w { background: var(--surface); }
+.c-accent { color: var(--accent); }
+.c-muted { color: var(--ink-muted); }
+.w16 { width: 16%; }
+.w20 { width: 20%; }
+.w34 { width: 34%; }
+.w42 { width: 42%; }
+
+/* ── 표지 · 마무리 ── */
+.cover {
+  background: var(--surface-page);
+  padding: 128px;
+  display: flex;
+  gap: 64px;
+  align-items: center;
+  font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  color: var(--ink-body);
+}
+.cover-l { width: 720px; display: flex; flex-direction: column; gap: 28px; }
+.cover h1 { font-size: 112px; font-weight: 800; letter-spacing: -2px; line-height: 1.05; color: var(--ink); }
+.cover-lead { font-size: 36px; font-weight: 700; line-height: 1.45; color: var(--ink); }
+.cover-sub { font-size: 28px; line-height: 1.5; color: var(--ink-muted); }
+.cover-date { position: absolute; left: 128px; bottom: 64px; width: 900px; font-size: 24px; font-weight: 600; line-height: 1.3; color: var(--ink-muted); }
+
+/* ── 어두운 슬라이드(동영상 · 한 문장) ── */
+.dark {
+  background: var(--ink);
+  padding: 96px 128px 128px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  color: #e2e8f0;
+}
+.dark h2 { font-size: 64px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; color: #ffffff; }
+.dark .eyebrow { color: #93c5fd; }
+.dark .lead { color: #cbd5e1; }
+.dark .cap { font-size: 24px; line-height: 1.4; color: #94a3b8; }
+
+.dark .hl { color: #93c5fd; }
+.dark .dcard { background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 36px 40px; display: flex; flex-direction: column; gap: 12px; }
+.dark .dcard h3 { font-size: 36px; font-weight: 800; line-height: 1.3; color: #ffffff; }
+.dark .dcard .ddesc { font-size: 28px; line-height: 1.5; color: #cbd5e1; }
+.dark .dcard .dchip { font-size: 24px; font-weight: 700; line-height: 1.4; color: #0f172a; background: #93c5fd; border-radius: 6px; padding: 6px 18px; align-self: flex-start; }
+.dark .punch { font-size: 36px; font-weight: 800; line-height: 1.45; color: #ffffff; }
+.dark .punch-big { font-size: 64px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; color: #93c5fd; }
+.pcol { display: flex; flex-direction: column; gap: 12px; }
+
+/* ── 등장(RCW: fade + rise, 0.56 s, 차례로) ── */
+@keyframes rise { from { opacity: 0; transform: translateY(28px); } }
+.rise { animation: rise 0.56s cubic-bezier(0.2, 0.75, 0.2, 1) both; animation-delay: calc(var(--i) * 90ms); }
+
+.arrow { clip-path: polygon(0 28%, 60% 28%, 60% 0, 100% 50%, 60% 100%, 60% 72%, 0 72%); }
+.rise { animation: none; }
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="home" href="./"><span class="mark">RCW</span> RCW V5</a>
+  <p class="ttl">Facader Editor 소개 — 발표 자료 · 0.1.6-preview</p>
+  <span class="hint">발표 모드에서 ← → 로 넘기기 · Esc 로 나가기</span>
+  <button type="button" id="go">발표 모드</button>
+</div>
+<main class="deck" id="deck">
+<div class="stage" id="s-cover"><section id="cover" class="cover" data-transition="fade">
+<div class="cover-l">
+<p class="badge">0.1.6-preview</p>
+<h1><span class="red">Facader</span><br>Editor</h1>
+<p class="cover-lead">Rhino 없이, 빠르게, 대용량으로 —<br>커튼월 전용 CAD</p>
+<p class="cover-sub">와이어프레임 입력에서 3D 모델 · 번호 · 자재 목록 · 가공도까지 한 프로그램에서</p>
+</div>
+<div class="frame fill">
+<img src="fcd/still-3d.jpg" alt="Facader Editor 화면 — 견본 유닛 여섯 개의 3D 모델" style="width:856px; height:482px; object-fit:contain">
+</div>
+<p class="cover-date">2026. 11. 17 · 제품 소개</p>
+</section></div>
+<div class="stage" id="s-why"><section id="why" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">왜 만들었나</p>
+<h2>느린 것은 계산이 아니라 화면과 파일이었다</h2>
+<p class="lead">RCW 로 만든 완성 입면을 Rhino 8 에서 재 본 값입니다.</p>
+</div>
+<div class="grid3">
+<div class="card rise" style="--i:0">
+<p class="num">1.09</p>
+<p class="num-unit">fps — Shaded 전체 보기</p>
+<p class="desc">삼각형 8,001만 개를 화면에 그릴 때</p>
+</div>
+<div class="card rise" style="--i:1">
+<p class="num">8.5</p>
+<p class="num-unit">분 — 3dm 열기</p>
+<p class="desc">완성 형상을 모두 담은 파일 1,204 MB</p>
+</div>
+<div class="card rise" style="--i:2">
+<p class="num">57.8</p>
+<p class="num-unit">초 — 유닛 블록 50개 복사</p>
+<p class="desc">화면 갱신을 끄면 같은 일이 1 ms</p>
+</div>
+</div>
+<div class="card card-tint card-s rise" style="--i:3">
+<p class="strip"><b>그래서 방향을 바꿨습니다.</b> 형상을 문서에 쌓아 두지 않고, 규칙(조리법)만 저장했다가 필요할 때 만든다 — Rhino 밖의 독립 프로그램으로.</p>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-overview"><section id="overview" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">한눈에</p>
+<h2>입력에서 제작 산출물까지, <span class="red">Rhino 없이</span> 한 프로그램</h2>
+<p class="lead">편집기에서 그리고, 엔진이 만들고, 화면과 산출물이 같은 데이터에서 나옵니다.</p>
+</div>
+<div class="row">
+<div class="card fill rise" style="--i:0">
+<h3>① 자체 입력</h3>
+<p class="cmd">Facader Editor</p>
+<p class="desc">Rhino 처럼 쓰는 커튼월 전용 편집기. 3dm · DWG · DXF 를 그대로 가져온다</p>
+</div>
+<x-shape kind="arrow-right" class="arrow"></x-shape>
+<div class="card fill rise" style="--i:1">
+<h3>② 엔진</h3>
+<p class="cmd">규칙 → 조리법 → 형상</p>
+<p class="desc">와이어프레임과 단면에서 부재 · 가공을 정하고, 필요할 때 3D 를 만든다</p>
+</div>
+<x-shape kind="arrow-right" class="arrow"></x-shape>
+<div class="card fill rise" style="--i:2">
+<h3>③ 뷰어 · 산출물</h3>
+<p class="cmd">3D · 번호 · 목록 · 가공도</p>
+<p class="desc">화면, 번호, 자재 목록 xlsx, 가공도, 3D 내보내기가 같은 조리법에서</p>
+</div>
+</div>
+<div class="card card-tint card-s rise" style="--i:3">
+<p class="strip"><b>경계 규칙 — 계산은 엔진, 결과물은 화면.</b> 저장되는 진짜는 입력 표이고, 3D 메시는 언제든 다시 만들 수 있는 사본입니다.</p>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-recipe"><section id="recipe" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">핵심 개념</p>
+<h2>기하가 아니라 <span class="blue">조리법</span>을 저장한다</h2>
+<p class="lead">부재 하나 = 단면 + 축선 + 구간 + 가공 목록. 형상은 필요할 때 만듭니다.</p>
+</div>
+<div class="grid2">
+<div class="card rise" style="--i:0">
+<h3>완성 모델은 네 가지 형상</h3>
+<div class="rows">
+<p class="r"><span class="k">A 가공된 프리즘</span> — 멀리언 · 트랜섬 등 프레임 부재</p>
+<p class="r"><span class="k">B 슬래브</span> — 유리 · 단열재 · 면판</p>
+<p class="r"><span class="k">C 접은 판</span> — 백판넬 팬 · 판재</p>
+<p class="r"><span class="k">D 강체</span> — 브래킷 · 슬리브 · 앵커</p>
+</div>
+</div>
+<div class="card rise" style="--i:1">
+<h3>가공은 여섯 종류</h3>
+<div class="rows">
+<p class="r"><span class="k">EndCut</span> 단부 절단 · <span class="k">Coping</span> 접합</p>
+<p class="r"><span class="k">Notch</span> 블록 노치 · <span class="k">Slot</span> 밀링</p>
+<p class="r"><span class="k">HolePattern</span> 구멍 · <span class="k">EndDam</span></p>
+<p class="r">B-rep 커널 없이 2D 폴리곤 연산 + 삼각화로 만든다</p>
+</div>
+</div>
+</div>
+<div class="grid3">
+<div class="card mini rise" style="--i:2"><p class="mini-t">파일이 작다</p><p class="mini-d">형상 대신 입력 표(SQLite)를 저장</p></div>
+<div class="card mini rise" style="--i:3"><p class="mini-t">번호가 빠르다</p><p class="mini-d">조리법 지문이 같으면 같은 번호</p></div>
+<div class="card mini rise" style="--i:4"><p class="mini-t">가공도가 바로 나온다</p><p class="mini-d">숨은선 계산 없이 해석적 2D</p></div>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-editor"><section id="editor" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">주요 기능 1 · 편집기</p>
+<h2>Rhino 처럼 쓰고, AutoCAD 처럼 고르는 CAD</h2>
+<p class="lead">화면 · 조작 · 명령 이름이 익숙한 그대로라 새로 배울 것이 적습니다.</p>
+</div>
+<div class="row">
+<div class="frame rise" style="--i:0">
+<img src="fcd/still-wire4.jpg" alt="Facader Editor 화면 — 네 개의 뷰에 와이어프레임, 오른쪽에 패널" style="width:920px; height:518px; object-fit:contain">
+</div>
+<div class="col fill">
+<div class="card mini rise" style="--i:1"><p class="mini-t">Rhino 식 화면</p><p class="mini-d">네 뷰 · 명령 줄 · 패널 · 별칭, 보기 방식 세 가지</p></div>
+<div class="card mini rise" style="--i:2"><p class="mini-t">AutoCAD 식 고르기 · 명령 줄</p><p class="mini-d">클릭 더하기 · 창 · 올가미 · 커서 옆 동적 입력</p></div>
+<div class="card mini rise" style="--i:3"><p class="mini-t">2D CAD 기본기 + 자동화</p><p class="mini-d">스냅 · 레이어 · 블록 · 치수 · 해치 · 다이나믹 블록, AutoLISP · SCRIPT</p></div>
+</div>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-workflow"><section id="workflow" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">주요 기능 2 · 커튼월 명령</p>
+<h2>RCW 명령 이름 · 순서 그대로</h2>
+<p class="lead">와이어프레임에서 목록까지, RCW 사용자가 아는 흐름을 그대로 따릅니다.</p>
+</div>
+<div class="grid3">
+<div class="card card-s rise" style="--i:0">
+<div class="step-row"><div class="step"><p class="step-n">1</p></div><h3>Wire Frame</h3></div>
+<p class="cmd">L0~L50 · WVector</p>
+<p class="desc">멀리언 · 트랜섬 중심선으로 유닛을 그린다</p>
+</div>
+<div class="card card-s rise" style="--i:1">
+<div class="step-row"><div class="step"><p class="step-n">2</p></div><h3>Section 정의</h3></div>
+<p class="cmd">Pname · Dtable</p>
+<p class="desc">단면 데이터를 패널에서 바로 넣고 고친다</p>
+</div>
+<div class="card card-s rise" style="--i:2">
+<div class="step-row"><div class="step"><p class="step-n">3</p></div><h3>Section 선택</h3></div>
+<p class="cmd">SSP · GS · BP</p>
+<p class="desc">쓸 단면 세트, 칸마다 유리와 백판넬 유형</p>
+</div>
+<div class="card card-s rise" style="--i:3">
+<div class="step-row"><div class="step"><p class="step-n">4</p></div><h3>3D 모델링</h3></div>
+<p class="cmd">UMD · UMDLive</p>
+<p class="desc">유닛 3D 생성 — 고친 유닛만 다시 만든다</p>
+</div>
+<div class="card card-s rise" style="--i:4">
+<div class="step-row"><div class="step"><p class="step-n">5</p></div><h3>번호 부여</h3></div>
+<p class="cmd">FabNo · FabTable</p>
+<p class="desc">같은 조리법이면 같은 번호를 매긴다</p>
+</div>
+<div class="card card-s rise" style="--i:5">
+<div class="step-row"><div class="step"><p class="step-n">6</p></div><h3>리스트 &amp; 도면</h3></div>
+<p class="cmd">Molist · Cuttinglist · FDwg</p>
+<p class="desc">자재 · 절단 목록 xlsx 와 가공도</p>
+</div>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-engine"><section id="engine" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">주요 기능 3 · 3D 엔진</p>
+<h2>명령 한 번에 입면 전체가 3D 로</h2>
+<p class="lead">예제 입면을 0.1.6 설치판에서 UMD 로 돌린 값입니다.</p>
+</div>
+<div class="row">
+<div class="col w720">
+<div class="grid2">
+<div class="card card-s rise" style="--i:0"><p class="num-m">31</p><p class="num-cap">유닛</p></div>
+<div class="card card-s rise" style="--i:1"><p class="num-m">1,594</p><p class="num-cap">부재</p></div>
+<div class="card card-s rise" style="--i:2"><p class="num-m">2,704만</p><p class="num-cap">삼각형</p></div>
+<div class="card card-s rise" style="--i:3"><p class="num-m">약 10 초</p><p class="num-cap">계산 · 9.3 ~ 14.3 초</p></div>
+</div>
+<div class="card card-tint mini rise" style="--i:4"><p class="mini-t">UMDLive — 즉시 연동</p><p class="mini-d">와이어를 고치면 그 유닛만 다시 만든다</p></div>
+</div>
+<div class="frame fill rise" style="--i:2">
+<img src="fcd/still-bracket.jpg" alt="예제 입면 유닛의 위 모서리 3D — 프레임 · 브래킷 · 가공" style="width:888px; height:500px; object-fit:contain">
+</div>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-outputs"><section id="outputs" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">주요 기능 4 · 산출물</p>
+<h2>번호 · 목록 · 가공도가 모델에서 바로</h2>
+<p class="lead">산출물은 화면을 거치지 않고 엔진의 조리법에서 나옵니다.</p>
+</div>
+<div class="grid3">
+<div class="card card-s rise" style="--i:0">
+<p class="cmd">FabNo · FabTable</p>
+<p class="desc">부재 번호 — 조리법 지문이 같으면 같은 번호</p>
+</div>
+<div class="card card-s rise" style="--i:1">
+<p class="cmd">Molist · Cuttinglist</p>
+<p class="desc">자재 · 절단 목록 xlsx, RCW 와 같은 양식</p>
+</div>
+<div class="card card-s rise" style="--i:2">
+<p class="cmd">UnitList · UnitTable</p>
+<p class="desc">유닛 목록과 표 — 입면의 유닛 블록 기준</p>
+</div>
+<div class="card card-s rise" style="--i:3">
+<p class="cmd">FDwg · F2d · U2D</p>
+<p class="desc">가공도 · 유닛 2D — 조리법에서 바로 그린다</p>
+</div>
+<div class="card card-s rise" style="--i:4">
+<p class="cmd">GsNo · BpNo · ShNo</p>
+<p class="desc">유리 · 백판넬 · 판재의 번호와 목록</p>
+</div>
+<div class="card card-s rise" style="--i:5">
+<p class="cmd">Export</p>
+<p class="desc">3dm · DWG · DXF · STEP 으로 3D 내보내기</p>
+</div>
+</div>
+<div class="note rise" style="--i:6">
+<p class="note-b">★ 0.1.6 기준 — 가공도 · 유리 · 백판넬 · 판재 산출은 작은 모형으로 확인한 단계, NC · IFC 는 다음 차례</p>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-files"><section id="files" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">주요 기능 5 · 파일 호환</p>
+<h2>3dm · DWG · DXF 를 그 형태 그대로</h2>
+<p class="lead">가져온 객체는 원래 형상과 데이터째 들어오고, 내보낼 때도 지킵니다.</p>
+</div>
+<table class="tbl rise" style="--i:0">
+<tr class="tbl-head"><th class="w16">형식</th><th class="w42">가져오기</th><th class="w42">저장 · 내보내기</th></tr>
+<tr class="tr-w"><td class="c-accent">Rhino 3dm</td><td>Rhino 객체 그대로 — 와이어 · 단면 · 3D 몸체와 RCW 데이터까지</td><td>안 바뀐 객체는 원래 형상 그대로, 만든 3D 는 닫힌 Brep 으로</td></tr>
+<tr class="tr-w"><td class="c-accent">DWG · DXF</td><td>블록 · 치수 · 해치 · 다이나믹 블록 · 3DSOLID 를 CAD 객체 그대로</td><td>원본 + 바뀐 것만 다시 쓴다 — AutoCAD AUDIT 로 확인</td></tr>
+<tr class="tr-w"><td class="c-accent">.rcw</td><td>편집기 작업 파일 — 원본 3dm 없이 혼자 열린다</td><td>입력 표 + 화면 사본을 한 파일에 저장</td></tr>
+<tr class="tr-w"><td class="c-accent">.ffd · STEP</td><td>.ffd = 입력 표만 담은 가벼운 전송용 파일</td><td>3D 를 STEP 으로 내보내 다른 CAD 에서 연다</td></tr>
+</table>
+<div class="card card-tint card-s rise" style="--i:1">
+<p class="strip"><b>원칙.</b> 가져오기는 그 파일의 형태 그대로, 내보내기는 그들의 방식으로 새로 쓴다.</p>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-scale"><section id="scale" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">주요 기능 6 · 대용량 · 속도</p>
+<h2>큰 입면도, 큰 도면도 가볍게</h2>
+<p class="lead">보이는 것만, 필요한 만큼만 그립니다 — 사본 배치 · 세밀도 단계 · GPU 셰이더.</p>
+</div>
+<div class="grid3">
+<div class="card rise" style="--i:0">
+<p class="num-accent">60</p>
+<p class="num-unit">fps — 유닛 5,016개 입면</p>
+<p class="desc">뷰어에서 전체를 볼 때. 다시 열기 3초</p>
+</div>
+<div class="card rise" style="--i:1">
+<p class="num">4</p>
+<p class="num-unit">초 — 17.9 MB DWG 열기</p>
+<p class="desc">이전 판 11초에서 약 2.5배 빨라짐</p>
+</div>
+<div class="card rise" style="--i:2">
+<p class="num">1.5</p>
+<p class="num-unit">GB — DWG 최대 메모리</p>
+<p class="desc">이전 2.8 GB — 해치 · 글자를 GPU 로</p>
+</div>
+</div>
+<div class="grid2">
+<div class="card mini rise" style="--i:3"><p class="mini-t">편집 반응</p><p class="mini-d">선 20,000개 도면에서 그리기 · 편집 명령 60 fps</p></div>
+<div class="card mini rise" style="--i:4"><p class="mini-t">0.1.6 에서</p><p class="mini-d">복사 · 지우기 · 창 고르기 약 4배 빨라짐</p></div>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-demo"><section id="demo" class="dark" data-transition="fade">
+<div class="head">
+<p class="eyebrow">구동 동영상</p>
+<h2>와이어프레임에서 3D · 번호 · 목록까지</h2>
+</div>
+<div class="row">
+<video controls playsinline preload="metadata" poster="fcd/still-3d.jpg" src="fcd/fcd-demo.mp4" aria-label="Facader Editor 구동 동영상 — 와이어프레임, UMD 3D 생성, 돌려 보기, FabNo, Molist" style="width:1216px; height:684px; object-fit:contain; background:#000"></video>
+<div class="col fill">
+<p class="steps-d"><span class="steps-k">1</span> 와이어프레임 입력</p>
+<p class="steps-d"><span class="steps-k">2</span> UMD — 유닛 3D 생성</p>
+<p class="steps-d"><span class="steps-k">3</span> 돌려 보기 · 확대</p>
+<p class="steps-d"><span class="steps-k">4</span> FabNo — 부재 번호</p>
+<p class="steps-d"><span class="steps-k">5</span> Molist — 자재 목록</p>
+<p class="steps-d"><span class="steps-k">6</span> 예제 입면 — 유닛 31</p>
+<p class="cap">0.1.6 설치판 화면 · 약 1분. 캡션과 목록 카드는 덧붙인 것</p>
+</div>
+</div>
+</section></div>
+<div class="stage" id="s-accuracy"><section id="accuracy" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">검증</p>
+<h2>RCW 결과를 정답으로 놓고 견줍니다</h2>
+<p class="lead">단계마다 같은 입력으로 RCW 가 낸 결과와 수치로 비교합니다.</p>
+</div>
+<div class="grid3">
+<div class="card rise" style="--i:0">
+<p class="num-accent">824/824</p>
+<p class="num-unit">부재 형상 통과</p>
+<p class="desc">RCW 대비 부피 0.1 % · 표면 거리 0.5 mm 안</p>
+</div>
+<div class="card rise" style="--i:1">
+<p class="num">39</p>
+<p class="num-unit">종 — DWG 요소 왕복 시험</p>
+<p class="desc">내보낸 도면을 AutoCAD 에서 검사</p>
+</div>
+<div class="card rise" style="--i:2">
+<p class="num">781</p>
+<p class="num-unit">개 — 자동 시험</p>
+<p class="desc">단위 시험 675 · 화면 시험 스크립트 106</p>
+</div>
+</div>
+<div class="card card-tint card-s rise" style="--i:3">
+<p class="strip"><b>정답 먼저.</b> 통과 기준(부피 0.1 % · 표면 0.5 mm · 목록 행 단위 일치)을 먼저 정하고, 설계 결정은 기록 문서(ADR) 30건으로 남겼습니다.</p>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-compare"><section id="compare" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">장점 요약</p>
+<h2>Rhino + RCW 와 무엇이 다른가</h2>
+</div>
+<table class="tbl rise" style="--i:0">
+<tr class="tbl-head"><th class="w20">기준</th><th class="w34">Rhino + RCW</th><th>Facader Editor</th></tr>
+<tr class="tr-w"><td class="c-muted">실행 환경</td><td>Rhino + 플러그인</td><td class="c-accent">독립 프로그램 — 설치 파일 72 MB, 관리자 권한 불필요</td></tr>
+<tr class="tr-w"><td class="c-muted">모델 저장</td><td>완성 형상을 3dm 에</td><td class="c-accent">조리법(입력 표) + 다시 만들 수 있는 화면 사본</td></tr>
+<tr class="tr-w"><td class="c-muted">큰 입면 표시</td><td>Shaded 1.09 fps</td><td class="c-accent">뷰어 60 fps (유닛 5,016개)</td></tr>
+<tr class="tr-w"><td class="c-muted">번호 매기기</td><td>부재 형상(모서리) 비교</td><td class="c-accent">조리법 지문 먼저, 처음 보는 것만 형상 비교</td></tr>
+<tr class="tr-w"><td class="c-muted">가공도</td><td>3D 에서 숨은선 계산</td><td class="c-accent">조리법에서 바로 그리는 해석적 2D</td></tr>
+<tr class="tr-w"><td class="c-muted">2D 도면</td><td>별도 CAD 에서</td><td class="c-accent">같은 프로그램에서 DWG · DXF 편집</td></tr>
+</table>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-status"><section id="status" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">현황 · 0.1.6-preview</p>
+<h2>지금은 미리보기판 — 된 것과 남은 것</h2>
+<p class="lead">2026-11-16 설치 프로그램으로 처음 묶은 사내 미리보기판입니다.</p>
+</div>
+<div class="grid2">
+<div class="card rise" style="--i:0">
+<h3>된 것</h3>
+<ul class="list">
+<li>설치 프로그램 — Windows 10 · 11, 관리자 권한 없이</li>
+<li>2D CAD 와 3dm · DWG · DXF 왕복</li>
+<li>UMD 3D — 프레임 · 유리 · 백판넬 · 브래킷</li>
+<li>번호 · 자재 목록 · 유닛 목록 xlsx</li>
+<li>큰 입면 뷰어</li>
+</ul>
+</div>
+<div class="card rise" style="--i:1">
+<h3>남은 것</h3>
+<ul class="list">
+<li>번호 · 목록을 RCW 와 행 단위로 맞추기</li>
+<li>지금: 번호 글자 359/710 · Molist 128/172 일치</li>
+<li>벤트 · 그릴</li>
+<li>NC · IFC 출력</li>
+<li>새 산출 명령의 실제 모형 검증</li>
+</ul>
+</div>
+</div>
+<div class="note rise" style="--i:2">
+<p class="note-b">★ 미리보기판의 결과는 검토용입니다 — 제작 발주에는 RCW 결과를 씁니다.</p>
+</div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-roadmap"><section id="roadmap" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">다음 단계</p>
+<h2>미리보기판에서 판매판까지</h2>
+<p class="lead">먼저 RCW 와 같은 결과, 그다음 RCW 에 없던 것.</p>
+</div>
+<div class="grid3">
+<div class="card rise" style="--i:0">
+<div class="step-row"><div class="step"><p class="step-n">1</p></div><h3>가까운 것</h3></div>
+<ul class="list">
+<li>번호 · 목록 RCW 일치</li>
+<li>실제 모형으로 시험</li>
+<li>벤트 · 그릴</li>
+</ul>
+</div>
+<div class="card rise" style="--i:1">
+<div class="step-row"><div class="step"><p class="step-n">2</p></div><h3>그다음</h3></div>
+<ul class="list">
+<li>NC · IFC 출력</li>
+<li>편집기에서 직접 모델링</li>
+<li>Revit 연결 — 조리법 전달</li>
+</ul>
+</div>
+<div class="card rise" style="--i:2">
+<div class="step-row"><div class="step"><p class="step-n">3</p></div><h3>판매판</h3></div>
+<ul class="list">
+<li>코드 서명 · 사용권 관리</li>
+<li>자동 업데이트 · 설명서</li>
+<li>한국어 화면 · .NET 10</li>
+</ul>
+</div>
+</div>
+<div class="card card-tint mini rise" style="--i:3"><p class="mini-t">그리고 이 모든 것 위에 — AI 패널</p><p class="mini-d">말로 지시하면 AI 가 모델을 읽고 스스로 만들어 간다. 가야 할 방향은 다음 장에서</p></div>
+<div class="foot"><p class="foot-name">Facader Editor</p><div class="pg"></div></div>
+</section></div>
+<div class="stage" id="s-ai"><section id="ai" class="dark" data-transition="fade">
+<div class="head">
+<p class="eyebrow">가야 할 방향 · AI 패널</p>
+<h2>명령을 치는 CAD 에서, <span class="hl">일을 맡기는 CAD</span> 로</h2>
+<p class="lead">편집기 안의 AI 패널에 말로 지시하면, AI 가 모델을 직접 읽고 만들어 갑니다.</p>
+</div>
+<div class="grid3">
+<div class="dcard rise" style="--i:0">
+<p class="dchip">시험 중</p>
+<h3>Shop 도면에서 Section group 까지</h3>
+<p class="ddesc">Shop 도면을 읽어 단면 묶음(Section group)을 바로 뽑아낸다</p>
+</div>
+<div class="dcard rise" style="--i:1">
+<p class="dchip">11-16 시연 · 다음 장 영상</p>
+<h3>보고 배워서 스스로 모델링</h3>
+<p class="ddesc">이미 만든 모델을 참조 · 분석해, 같은 방식으로 다음 모델을 스스로 만들어 나간다</p>
+</div>
+<div class="dcard rise" style="--i:2">
+<p class="dchip">지금 동작</p>
+<h3>사람은 지시하고 확인한다</h3>
+<p class="ddesc">문서를 바꾸는 단계는 실행 · 거절로 확인하고, 작업 일지를 남겨 이어서 한다</p>
+</div>
+</div>
+<div class="pcol rise" style="--i:3">
+<p class="punch">이것이 Facader 가 가야 할 방향입니다</p>
+<p class="punch-big">사람이 그리는 모델에서, AI 가 함께 만드는 모델로</p>
+</div>
+<p class="cap">11-16 시연: 4층 55유닛 · 칸 183개를 약 3분 25초에 — 지우기 전 모델과 칸 종류 181 / 183 일치</p>
+</section></div>
+<div class="stage" id="s-aidemo1"><section id="aidemo1" class="dark" data-transition="fade">
+<div class="head">
+<p class="eyebrow">AI 패널 시연 ① 만들기</p>
+<h2>3층을 참조해 <span class="hl">4층을 스스로 모델링</span></h2>
+</div>
+<div class="row">
+<video controls playsinline preload="metadata" poster="fcd/poster-ai-build.jpg" src="fcd/fcd-ai-build.mp4" aria-label="AI 패널 시연 동영상 — 지시 한 번으로 AI 가 도면을 읽고 4층 입면 다섯 곳의 3D 모델을 만든다" style="width:1216px; height:684px; object-fit:contain; background:#000"></video>
+<div class="col fill">
+<p class="steps-d"><span class="steps-k">1</span> 한 문장으로 지시</p>
+<p class="steps-d"><span class="steps-k">2</span> 도면 · 3층 모델 읽기</p>
+<p class="steps-d"><span class="steps-k">3</span> 제안 표 → 진행</p>
+<p class="steps-d"><span class="steps-k">4</span> 입면마다 3D 생성</p>
+<p class="punch">55 유닛 · 칸 183개</p>
+<p class="steps-d">실제 약 3분 25초</p>
+<p class="cap">개발판 화면 그대로 · 배속 재생</p>
+</div>
+</div>
+</section></div>
+<div class="stage" id="s-aidemo2"><section id="aidemo2" class="dark" data-transition="fade">
+<div class="head">
+<p class="eyebrow">AI 패널 시연 ② 확인</p>
+<h2>만든 모델을 <span class="hl">돌려 보고 확대해</span> 확인</h2>
+</div>
+<div class="row">
+<video controls playsinline preload="metadata" poster="fcd/poster-ai-verify.jpg" src="fcd/fcd-ai-verify.mp4" aria-label="AI 패널이 만든 4층 모델 확인 동영상 — 모델만 남기고 한 바퀴 돌려 뒷면까지 보고 상세를 확대한다" style="width:1216px; height:684px; object-fit:contain; background:#000"></video>
+<div class="col fill">
+<p class="steps-d"><span class="steps-k">1</span> 모델만 남기고 끔</p>
+<p class="steps-d"><span class="steps-k">2</span> 한 바퀴 — 뒷면까지</p>
+<p class="steps-d"><span class="steps-k">3</span> 상세 확대</p>
+<p class="punch">181 / 183 칸 일치</p>
+<p class="steps-d">지우기 전 모델과 대조</p>
+<p class="cap">다른 2칸은 예외 처리가 필요한 작은 칸(W148 · W152)</p>
+</div>
+</div>
+</section></div>
+<div class="stage" id="s-close"><section id="close" class="s" data-transition="fade">
+<div class="head">
+<p class="eyebrow">요약</p>
+<p class="close-h"><span class="red">Rhino 없이</span>, 빠르게, 대용량으로</p>
+</div>
+<div class="grid3">
+<div class="card rise" style="--i:0">
+<h3>조리법을 저장한다</h3>
+<p class="desc">파일은 작고 화면은 빠르다 — 형상은 필요할 때 만든다</p>
+</div>
+<div class="card rise" style="--i:1">
+<h3>익숙한 조작</h3>
+<p class="desc">Rhino 화면 · AutoCAD 고르기 · RCW 명령 그대로</p>
+</div>
+<div class="card rise" style="--i:2">
+<h3>한 프로그램에서 끝까지</h3>
+<p class="desc">입력 → 3D → 번호 · 목록 · 가공도, 그리고 2D 도면</p>
+</div>
+</div>
+<div class="card card-tint card-s rise" style="--i:3">
+<p class="strip"><b>그리고 가야 할 방향</b> — 도면을 읽고, 기존 모델을 보고 배워, 스스로 만들어 가는 <b>AI 패널</b>.</p>
+</div>
+<p class="lead">감사합니다 — 질문 받겠습니다.</p>
+<p class="legal">Rhinoceros® 및 Rhino® 는 TLM, Inc.(Robert McNeel &amp; Associates) 의 등록 상표이고, AutoCAD® 와 DWG 는 Autodesk, Inc. 의 상표입니다. Facader 는 독립적으로 개발된 프로그램입니다.</p>
+<div class="foot"><p class="foot-name">Facader Editor · 0.1.6-preview</p><div class="pg"></div></div>
+</section></div>
+</main>
+<div class="pgn" id="pgn"></div>
+<script>
+(function () {
+  var stages = [].slice.call(document.querySelectorAll('.stage')), cur = 0, pgn = document.getElementById('pgn');
+  function fit() { stages.forEach(function (s) { if (s.clientWidth) s.style.setProperty('--k', s.clientWidth / 1920); }); }
+  function show(i) {
+    cur = Math.max(0, Math.min(stages.length - 1, i));
+    stages.forEach(function (s, k) {
+      s.classList.toggle('on', k === cur);
+      if (k !== cur) { var v = s.querySelector('video'); if (v) v.pause(); }
+    });
+    pgn.textContent = (cur + 1) + ' / ' + stages.length;
+    fit();
+  }
+  function present(on) {
+    document.body.classList.toggle('present', on);
+    if (on) {
+      show(cur);
+      if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(function () {});
+    } else {
+      stages.forEach(function (s) { s.classList.remove('on'); });
+      if (document.fullscreenElement) document.exitFullscreen();
+      fit();
+      stages[cur].scrollIntoView({ block: 'center' });
+    }
+  }
+  document.getElementById('go').addEventListener('click', function () {
+    var y = window.scrollY + window.innerHeight / 2; cur = 0;
+    stages.forEach(function (s, k) { if (s.offsetTop <= y) cur = k; });
+    present(true);
+  });
+  document.addEventListener('keydown', function (e) {
+    var on = document.body.classList.contains('present');
+    if (!on) { if (e.key === 'f' || e.key === 'F') present(true); return; }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { show(cur + 1); e.preventDefault(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { show(cur - 1); e.preventDefault(); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(stages.length - 1);
+    else if (e.key === 'Escape') present(false);
+  });
+  document.addEventListener('fullscreenchange', function () {
+    if (!document.fullscreenElement && document.body.classList.contains('present')) present(false); else fit();
+  });
+  window.addEventListener('resize', fit);
+  fit();
+})();
+</script>
+</body>
+</html>
