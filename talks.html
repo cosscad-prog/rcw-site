@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>발표 자료 — Beimptech</title>
+<style>
+:root{--surface-page:#f4f6fa;--surface:#fff;--border:#e2e8f0;--ink:#0f172a;--ink-secondary:#475569;--ink-muted:#64748b;--accent:#2563eb;--accent-tint:#eff6ff;--accent-border:#93c5fd;--signature-red:#e11d48;--red-tint:#fff1f2;--red-border:#fecdd3}
+*{margin:0;box-sizing:border-box}
+body{background:var(--surface-page);color:#1e293b;font:16px/1.5 "Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Segoe UI",sans-serif;word-break:keep-all}
+.top{display:flex;align-items:center;gap:16px;padding:14px 24px;background:#0b1220;border-bottom:1px solid rgba(255,255,255,.1)}
+.top a.home{display:flex;align-items:center;gap:9px;color:#fff;font-weight:800;text-decoration:none}
+.top .mark{display:grid;width:29px;height:29px;place-items:center;border-radius:8px;background:#2667d9;color:#fff;font-size:11px}
+.top .ttl{color:#cbd5e1;font-size:14px}
+.wrap{width:min(1100px,calc(100% - 48px));margin:56px auto 80px}
+h1{font-size:40px;font-weight:800;letter-spacing:-1px;color:var(--ink)}
+.sub{margin-top:12px;font-size:18px;color:var(--ink-muted)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:36px}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.card{display:flex;flex-direction:column;gap:12px;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:14px;text-decoration:none;color:inherit;box-shadow:0 4px 18px rgba(15,23,42,.04);transition:border-color .15s,box-shadow .15s,transform .15s}
+.card:hover{border-color:var(--accent-border);box-shadow:0 10px 28px rgba(15,23,42,.10);transform:translateY(-2px)}
+.badge{align-self:flex-start;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:700;color:var(--accent);background:var(--accent-tint);border:1px solid var(--accent-border)}
+.card h2{font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--ink)}
+.ver{font-size:15px;font-weight:700;color:var(--signature-red)}
+.desc{font-size:16px;line-height:1.6;color:var(--ink-secondary)}
+.meta{margin-top:4px;font-size:14px;color:var(--ink-muted)}
+.go{margin-top:8px;font-size:15px;font-weight:700;color:var(--accent)}
+.hint{margin-top:32px;padding:18px 24px;background:var(--accent-tint);border:1px solid var(--accent-border);border-radius:10px;font-size:15px;line-height:1.6;color:#1e293b}
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="home" href="/rcw/"><span class="mark">RCW</span> Beimptech</a>
+  <p class="ttl">발표 자료</p>
+</div>
+<div class="wrap">
+  <h1>발표 자료</h1>
+  <p class="sub">순서대로 진행합니다. 각 자료는 새 창에서 열리고, <b>발표 모드</b> 버튼을 누르면 전체 화면으로 한 장씩 넘길 수 있습니다.</p>
+
+  <div class="grid">
+    <a class="card" href="facader.html" target="_blank" rel="noopener">
+      <p class="badge">발표자료 1</p>
+      <h2>Facader Editor 소개</h2>
+      <p class="ver">0.1.6-preview</p>
+      <p class="desc">Rhino 없이, 빠르게, 대용량으로 — 커튼월 전용 편집기와 3D 엔진, 그리고 AI 패널이 가야 할 방향.</p>
+      <p class="meta">20장 · 구동 동영상 3편</p>
+      <p class="go">열기 →</p>
+    </a>
+
+    <a class="card" href="rcwv5.html" target="_blank" rel="noopener">
+      <p class="badge">발표자료 2</p>
+      <h2>RCW V5 소개</h2>
+      <p class="ver">5.4.11</p>
+      <p class="desc">더 쉽고, 빠르고, 정확하게 — Shop 2D 단면과 Wire Frame 에서 3D 모델 · 번호 · 자재표 · 절단 리스트 · 가공도까지.</p>
+      <p class="meta">15장 · 구동 동영상 4편</p>
+      <p class="go">열기 →</p>
+    </a>
+  </div>
+
+  <p class="hint"><b>발표 중 조작</b> — 발표 모드에서 <b>←</b> <b>→</b> 로 장을 넘기고, <b>Esc</b> 로 빠져나옵니다. 자료를 바꿀 때는 이 페이지로 돌아와 다른 쪽을 엽니다.</p>
+</div>
+</body>
+</html>

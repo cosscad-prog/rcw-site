@@ -31,7 +31,7 @@ const DIST = path.join(ROOT, 'dist');
 const ROOT_PAGES = [
   'admin.html', 'cad.html', 'contact.html', 'customer.html',
   'facader.html', 'guide-en.html', 'guide-ko.html', 'index.html', 'modeling.html',
-  'output.html', 'todo.html', 'trial.html',
+  'output.html', 'rcwv5.html', 'talks.html', 'todo.html', 'trial.html',
   'whatsnew-5.3.1.html', 'whatsnew-5.3.2.html', 'whatsnew-5.4.0.html', 'whatsnew-5.4.1.html', 'whatsnew-5.4.2.html', 'whatsnew-5.4.3.html', 'whatsnew-5.4.4.html', 'whatsnew-5.4.5.html', 'whatsnew-5.4.6.html', 'whatsnew-5.4.7.html', 'whatsnew-5.4.8.html', 'whatsnew-5.4.9.html', 'whatsnew-5.4.10.html', 'whatsnew-5.4.11.html', 'whatsnew.html'
 ];
 const ROOT_ASSETS = ['changes.js'];
@@ -144,6 +144,8 @@ async function main() {
   if (imgCountRoot !== imgCountRcw) throw new Error('img/ 두 사본의 개수가 다르다 — 복사 도중 문제.');
 
   // fcd/ → dist/rcw/fcd/ (Facader Editor 발표 자료 — facader.html 이 상대경로로 읽는다. 2026-11-17 부터 이틀만 올린다)
+  // 발표 자료 목록 = talks.html(메뉴 '발표 자료') → facader.html · rcwv5.html. rcwv5.html 은 영상까지 든 한 파일(18.6 MB) —
+  // CF Pages 는 파일 하나 25 MiB 까지라 영상을 더 넣으면 fcd/ 처럼 폴더로 빼야 한다.
   const fcdCount = await copyDir(path.join(ROOT, 'fcd'), path.join(DIST, 'rcw', 'fcd'));
   console.log(`[build] fcd/ ${fcdCount}개 파일 → dist/rcw/fcd/`);
 
